@@ -3,11 +3,33 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import RKttf from "./fonts/RK.ttf";
+import CssBaseline from "@material-ui/core/CssBaseline";
+
+const rk = {
+  fontFamily: "Recipe Korea",
+  src: `url(${RKttf}) format('truetype')`,
+};
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: "Recipe Korea",
+  },
+  overrides: {
+    MuiCssBaseline: {
+      "@global": {
+        "@font-face": [rk],
+      },
+    },
+  },
+});
 
 ReactDOM.render(
-  <React.StrictMode>
+  <MuiThemeProvider theme={theme}>
+    <CssBaseline />
     <App />
-  </React.StrictMode>,
+  </MuiThemeProvider>,
   document.getElementById("root")
 );
 

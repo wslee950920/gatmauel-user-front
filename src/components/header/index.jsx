@@ -9,10 +9,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
-const useStyles = makeStyles((theme) => ({
+const useClasses = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
@@ -21,45 +20,31 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     display: "block",
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
-    },
+    color: "black",
   },
   sectionMobile: {
     display: "flex",
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
+  },
+  appBar: {
+    backgroundColor: "#feffff",
   },
 }));
 
 const Header = () => {
-  const classes = useStyles();
+  const classes = useClasses();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const menuId = "primary-search-account-menu";
-  const renderMenu = (
+  const renderProfileMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -74,55 +59,13 @@ const Header = () => {
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
-
   return (
     <div className={classes.grow}>
-      <AppBar position="static" color="#feffff">
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar>
           <IconButton
             edge="start"
             className={classes.menuButton}
-            color="inherit"
             aria-label="open drawer"
           >
             <MenuIcon />
@@ -132,7 +75,11 @@ const Header = () => {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionMobile}>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
+            {/*TODO:추후 알림이 있을 때만 검은색(classes.title)으로 강조되게끔한다.*/}
+            <IconButton
+              aria-label="show 17 new notifications"
+              className={classes.title}
+            >
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
               </Badge>
@@ -143,15 +90,14 @@ const Header = () => {
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
-              color="inherit"
+              className={classes.title}
             >
               <AccountCircle />
             </IconButton>
           </div>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
+      {renderProfileMenu}
     </div>
   );
 };
