@@ -16,3 +16,16 @@ workbox.routing.registerRoute(
     ],
   })
 );
+
+workbox.routing.registerRoute(
+  new RegExp("images/*"),
+  new workbox.strategies.CacheFirst({
+    cacheName: "public-images",
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 60,
+        maxAgeSeconds: 365 * 24 * 60 * 60,
+      }),
+    ],
+  })
+);
