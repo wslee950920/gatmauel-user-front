@@ -43,7 +43,7 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  const menuId = "primary-search-account-menu";
+  const menuId = "account-menu";
   const renderProfileMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -77,7 +77,7 @@ const Header = () => {
           <div className={classes.sectionMobile}>
             {/*TODO:추후 알림이 있을 때만 검은색(classes.title)으로 강조되게끔한다.*/}
             <IconButton
-              aria-label="show 17 new notifications"
+              aria-label="show new notifications"
               className={classes.title}
             >
               <Badge badgeContent={17} color="secondary">
