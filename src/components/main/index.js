@@ -1,13 +1,15 @@
 import React from "react";
 
-import CarouselPage from "./CarouselPage";
+import CarouselView from "./CarouselView";
 import ReviewList from "./ReviewList";
+import CarouselMenu from "./CarouselMenu";
 
 const Main = () => {
   return (
     <>
-      <CarouselPage />
+      <CarouselView />
       <ReviewList />
+      <CarouselMenu />
     </>
   );
 };

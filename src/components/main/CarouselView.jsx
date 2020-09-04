@@ -7,7 +7,7 @@ import {
   //MDBContainer,
 } from "mdbreact";
 
-const CarouselPage = () => {
+const CarouselView = () => {
   return (
     <MDBCarousel
       activeItem={1}
@@ -49,4 +49,4 @@ const CarouselPage = () => {
   );
 };
 
-export default CarouselPage;
+export default CarouselView;

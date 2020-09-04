@@ -23,7 +23,7 @@ workbox.routing.registerRoute(
     cacheName: "public-images",
     plugins: [
       new workbox.expiration.Plugin({
-        maxEntries: 60,
+        maxEntries: 20,
         maxAgeSeconds: 365 * 24 * 60 * 60,
       }),
     ],
