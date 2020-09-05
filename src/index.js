@@ -11,12 +11,11 @@ import "mdbreact/dist/css/mdb.css";
 
 //material ui font 설정
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import RKttf from "./fonts/RK.ttf";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 const rk = {
   fontFamily: "Recipe Korea",
-  src: `url(${RKttf}) format('truetype')`,
+  src: `url('fonts/RK.ttf') format('truetype')`,
 };
 
 const theme = createMuiTheme({

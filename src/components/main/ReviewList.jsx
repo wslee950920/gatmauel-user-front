@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "baseline",
   },
+  primary: {
+    fontFamily: "MaplestoryOTFBold",
+  },
 }));
 
 function generate(element) {
@@ -62,6 +65,7 @@ const ReviewList = () => {
                       variant: "body2",
                       color: "textSecondary",
                     }}
+                    classes={{ primary: classes.primary }}
                   />
                 </ListItem>
               )}

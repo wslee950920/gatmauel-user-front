@@ -5,6 +5,8 @@ import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import Container from "@material-ui/core/Container";
 
+import { tileData } from "./TileData.json";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -19,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     transform: "translateZ(0)",
   },
   title: {
-    color: theme.palette.primary.light,
+    color: "#FDFEFE",
   },
   titleBar: {
     background:
@@ -34,59 +36,6 @@ const useStyles = makeStyles((theme) => ({
   tileRoot: { display: "flex", alignItems: "center" },
 }));
 
-const tileData = [
-  {
-    img: "images/test/IMG_1097.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "images/test/IMG_1752.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "images/test/IMG_1822.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "images/test/IMG_2083.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "images/test/IMG_2090.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "images/test/IMG_2112.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "images/test/IMG_2143.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "images/test/IMG_2144.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "images/test/IMG_2158.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "images/test/IMG_2159.jpg",
-    title: "Image",
-    author: "author",
-  },
-];
-
 const CarouselMenu = () => {
   const classes = useStyles();
 
@@ -98,7 +47,7 @@ const CarouselMenu = () => {
             <GridListTile
               key={tile.img}
               classes={{ tile: classes.tile, root: classes.tileRoot }}
-              style={{ height: "66.6667vw" }}
+              style={{ height: "66.666vw" }}
             >
               <img src={tile.img} alt={tile.title} />
               <GridListTileBar

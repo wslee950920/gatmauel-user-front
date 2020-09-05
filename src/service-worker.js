@@ -29,3 +29,16 @@ workbox.routing.registerRoute(
     ],
   })
 );
+
+workbox.routing.registerRoute(
+  new RegExp("fonts/*"),
+  new workbox.strategies.CacheFirst({
+    cacheName: "public-fonts",
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 10,
+        maxAgeSeconds: 365 * 24 * 60 * 60,
+      }),
+    ],
+  })
+);
