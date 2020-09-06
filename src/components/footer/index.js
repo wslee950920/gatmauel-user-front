@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
-  info: { fontFamily: "Noto Sans KR" },
+  info: { fontFamily: "Roboto" },
 }));
 
 const Footer = () => {
