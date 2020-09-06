@@ -9,6 +9,11 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    [theme.breakpoints.up("md")]: {
+      flex: 1,
+    },
+  },
   background: {
     backgroundColor: "white",
     border: "solid #dcdcdc",
@@ -28,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   primary: {
     fontFamily: "MaplestoryOTFBold",
+    fontSize: "1rem",
   },
 }));
 
@@ -43,7 +49,7 @@ const ReviewList = () => {
   const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.root}>
       <CssBaseline />
       <div style={{ padding: "0.4rem" }}>
         <Container maxWidth="xl" className={classes.background}>

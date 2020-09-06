@@ -1,4 +1,6 @@
 import React from "react";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { makeStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
@@ -15,6 +17,10 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
     padding: "0.4rem",
+
+    [theme.breakpoints.up("md")]: {
+      flex: 1,
+    },
   },
   gridList: {
     flexWrap: "nowrap",
@@ -32,12 +38,17 @@ const useStyles = makeStyles((theme) => ({
     border: "solid #dcdcdc",
     borderRadius: "8px",
   },
-  tile: { height: "90%" },
   tileRoot: { display: "flex", alignItems: "center" },
+  imgFull: {
+    width: "100%",
+    height: "100%",
+  },
 }));
 
 const CarouselMenu = () => {
   const classes = useStyles();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <div className={classes.root}>
@@ -46,8 +57,15 @@ const CarouselMenu = () => {
           {tileData.map((tile) => (
             <GridListTile
               key={tile.img}
-              classes={{ tile: classes.tile, root: classes.tileRoot }}
-              style={{ height: "66.666vw" }}
+              classes={{
+                root: classes.tileRoot,
+                imgFullHeight: classes.imgFull,
+                imgFullWidth: classes.imgFull,
+              }}
+              style={{
+                height: matches ? "auto" : "66.6667vw",
+                margin: "0.5rem 0",
+              }}
             >
               <img src={tile.img} alt={tile.title} />
               <GridListTileBar
