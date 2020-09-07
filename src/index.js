@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -15,7 +16,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 
 const rk = {
   fontFamily: "Recipe Korea",
-  src: `url('fonts/RK.ttf') format('truetype')`,
+  src: `url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/Recipekorea.woff') format('woff')`,
+  fontWeight: "normal",
+  fontStyle: "normal",
 };
 
 const theme = createMuiTheme({
@@ -42,7 +45,9 @@ if (navigator.platform) {
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <CssBaseline />
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </MuiThemeProvider>,
   document.getElementById("root")
 );

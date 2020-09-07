@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
   },
   primary: {
     fontFamily: "MaplestoryOTFBold",
-    fontSize: "1rem",
   },
 }));
 
@@ -68,7 +67,6 @@ const ReviewList = () => {
                   <ListItemText
                     primary="맛잇어요!!!"
                     primaryTypographyProps={{
-                      variant: "body2",
                       color: "textSecondary",
                     }}
                     classes={{ primary: classes.primary }}

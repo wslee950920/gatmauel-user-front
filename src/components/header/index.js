@@ -1,4 +1,6 @@
 import React, { useState, useCallback } from "react";
+import loadable from "@loadable/component";
+
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -9,7 +11,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
-import ProfileMenu from "./ProfileMenu";
+const AccountMenu = loadable(() => import("./AccountMenu"));
+const Drawer = loadable(() => import("./Drawer"));
 
 const useClasses = makeStyles((theme) => ({
   grow: {
@@ -32,25 +35,49 @@ const useClasses = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useClasses();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const isMenuOpen = Boolean(anchorEl);
-  const menuId = "profile-menu";
+  const [accountEl, setAccountEl] = useState(null);
+  const [drawer, setDrawer] = useState(false);
+  const isMenuOpen = Boolean(accountEl);
+  const menuId = "account-menu";
 
   const handleMenuOpen = useCallback((event) => {
-    setAnchorEl(event.currentTarget);
+    setAccountEl(event.currentTarget);
   }, []);
   const handleMenuClose = useCallback(() => {
-    setAnchorEl(null);
+    setAccountEl(null);
+  }, []);
+  const accountMouseOver = useCallback(() => {
+    AccountMenu.preload();
+  }, []);
+
+  const toggleDrawer = useCallback(
+    (open) => (event) => {
+      if (
+        event &&
+        event.type === "keydown" &&
+        (event.key === "Tab" || event.key === "Shift")
+      ) {
+        return;
+      }
+
+      setDrawer(open);
+    },
+    []
+  );
+  const drawerMouseOver = useCallback(() => {
+    Drawer.preload();
   }, []);
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
             edge="start"
             className={classes.menuButton}
             aria-label="open drawer"
+            onClick={toggleDrawer(true)}
+            onMouseOver={drawerMouseOver}
           >
             <MenuIcon />
           </IconButton>
@@ -74,6 +101,7 @@ const Header = () => {
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleMenuOpen}
+              onMouseOver={accountMouseOver}
               className={classes.title}
             >
               <AccountCircle />
@@ -81,14 +109,16 @@ const Header = () => {
           </div>
         </Toolbar>
       </AppBar>
+      <Toolbar />
       {isMenuOpen && (
-        <ProfileMenu
+        <AccountMenu
           menuId={menuId}
-          anchorEl={anchorEl}
+          accountEl={accountEl}
           handleMenuClose={handleMenuClose}
           isMenuOpen={isMenuOpen}
         />
       )}
+      {drawer && <Drawer open={drawer} toggleDrawer={toggleDrawer} />}
     </div>
   );
 };
