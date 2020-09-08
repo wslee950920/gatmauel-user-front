@@ -1,20 +1,23 @@
-import React from "react";
+import React, { useState, useCallback, useMemo } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
-import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import RemoveIcon from "@material-ui/icons/Remove";
+import AddIcon from "@material-ui/icons/Add";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import CloseIcon from "@material-ui/icons/Close";
+import TextField from "@material-ui/core/TextField";
+
+const checkRange = (num) => {
+  if (num > 10 || num < 1) return true;
+  else return false;
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,79 +25,84 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 0,
-    paddingTop: "56.25%", // 16:9
+    paddingTop: "100%", // 1:1
+    width: 300,
   },
-  expand: {
-    transform: "rotate(0deg)",
+  cart: {
     marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
   },
-  expandOpen: {
-    transform: "rotate(180deg)",
-  },
-  avatar: {
-    backgroundColor: red[500],
+  textField: {
+    width: "1.5rem",
   },
 }));
 
-const MenuCard = () => {
+const MenuCard = ({ handleClose }) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const [num, setNum] = useState(1);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const addOnClick = useCallback(() => {
+    if (num < 10 && num >= 1) setNum(num + 1);
+    else if (num < 1) setNum(1);
+    else setNum(10);
+  }, [num]);
+  const removeOnClick = useCallback(() => {
+    if (num > 1 && num <= 10) setNum(num - 1);
+    else if (num > 10) setNum(10);
+    else setNum(1);
+  }, [num]);
+  const onChange = useCallback((e) => {
+    const curValue = e.target.value;
+    const newValue = curValue.replace(/[^0-9]/g, "");
+
+    setNum(newValue);
+  }, []);
+  const ck = useMemo(() => checkRange(num), [num]);
 
   return (
     <Card className={classes.root}>
       <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
-        }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
+          <IconButton aria-label="close" onClick={handleClose}>
+            <CloseIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title="칼국수"
+        subheader="7000원"
       />
-      <CardMedia
-        className={classes.media}
-        image="/static/images/cards/paella.jpg"
-        title="Paella dish"
-      />
+      <CardMedia className={classes.media} image="images/menu/1.jpg" />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          칼국수 + 겉절이 + 고추다데기
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton aria-label="remove" onClick={removeOnClick}>
+          <RemoveIcon />
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+        <TextField
+          size="small"
+          className={classes.textField}
+          inputProps={{
+            maxLength: 2,
+            style: { textAlign: "center", fontFamily: "Roboto" },
+          }}
+          value={num}
+          onChange={onChange}
+          error={ck}
+        />
+        <IconButton aria-label="add" onClick={addOnClick}>
+          <AddIcon />
         </IconButton>
         <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
+          className={classes.cart}
+          aria-label="cart"
+          onClick={handleClose}
         >
-          <ExpandMoreIcon />
+          <AddShoppingCartIcon />
         </IconButton>
       </CardActions>
     </Card>
   );
 };
 
-export default MenuCard;
+export default React.memo(MenuCard);

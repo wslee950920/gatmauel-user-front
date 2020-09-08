@@ -6,7 +6,7 @@ import Home from "./page/Home";
 const App = () => {
   return (
     <>
-      <Route path="/home" component={Home} />
+      <Route path={["/", "/home"]} component={Home} />
     </>
   );
 };

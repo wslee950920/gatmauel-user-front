@@ -13,7 +13,7 @@ const CardDialog = ({ open, handleClose }) => {
         aria-labelledby="menu card"
         aria-describedby="menu detail"
       >
-        <MenuCard />
+        <MenuCard handleClose={handleClose} />
       </Dialog>
     </div>
   );
