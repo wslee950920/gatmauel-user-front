@@ -1,4 +1,5 @@
 import React from "react";
+
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,8 +7,9 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import Container from "@material-ui/core/Container";
+import { MDBView } from "mdbreact";
 
-import { tileData } from "./TileData.json";
+import tileData from "./TileData";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CarouselMenu = () => {
+const CarouselMenu = ({ handleOpen, onMouseOver }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -67,14 +69,26 @@ const CarouselMenu = () => {
                 margin: "0.5rem 0",
               }}
             >
-              <img src={tile.img} alt={tile.title} />
-              <GridListTileBar
-                title={tile.title}
-                classes={{
-                  root: classes.titleBar,
-                  title: classes.title,
-                }}
-              />
+              <MDBView hover zoom>
+                <img
+                  src={tile.img}
+                  alt={tile.title}
+                  onClick={handleOpen}
+                  className="img-fluid"
+                  style={{
+                    height: matches ? "auto" : "66.6667vw",
+                    cursor: "pointer",
+                  }}
+                  onMouseOver={onMouseOver}
+                />
+                <GridListTileBar
+                  title={tile.title}
+                  classes={{
+                    root: classes.titleBar,
+                    title: classes.title,
+                  }}
+                />
+              </MDBView>
             </GridListTile>
           ))}
         </GridList>
@@ -83,4 +97,4 @@ const CarouselMenu = () => {
   );
 };
 
-export default CarouselMenu;
+export default React.memo(CarouselMenu);

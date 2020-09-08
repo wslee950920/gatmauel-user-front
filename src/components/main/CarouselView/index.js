@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   MDBCarousel,
   MDBCarouselInner,
@@ -7,7 +8,7 @@ import {
   //MDBContainer,
 } from "mdbreact";
 
-import { CarouselItem } from "./CarouselItem.json";
+import carouselItem from "./CarouselItem";
 
 const CarouselView = () => {
   return (
@@ -19,7 +20,7 @@ const CarouselView = () => {
       className="z-depth-1"
     >
       <MDBCarouselInner>
-        {CarouselItem.map((item) => (
+        {carouselItem.map((item) => (
           <MDBCarouselItem itemId={item.id} key={item.src}>
             <MDBView>
               <img className="d-block w-100" src={item.src} alt={item.alt} />

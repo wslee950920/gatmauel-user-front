@@ -1,12 +1,14 @@
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import Link from "@material-ui/core/Link";
+
+import ListItemLink from "./ListItemLink";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,23 +58,18 @@ const ReviewList = () => {
             <Typography variant="subtitle1" className={classes.title} noWrap>
               Review
             </Typography>
-            <Link href="#" color="secondary" variant="caption">
+            <Link
+              component={RouterLink}
+              to="#"
+              color="secondary"
+              variant="caption"
+            >
               더 보기{">"}
             </Link>
           </div>
           <div>
             <List>
-              {generate(
-                <ListItem>
-                  <ListItemText
-                    primary="맛잇어요!!!"
-                    primaryTypographyProps={{
-                      color: "textSecondary",
-                    }}
-                    classes={{ primary: classes.primary }}
-                  />
-                </ListItem>
-              )}
+              {generate(<ListItemLink primary="맛있어요!!!" to="#" />)}
             </List>
           </div>
         </Container>

@@ -1,15 +1,12 @@
 import React from "react";
+import { Route } from "react-router-dom";
 
-import Header from "./components/header";
-import Main from "./components/main";
-import Footer from "./components/footer";
+import Home from "./page/Home";
 
 const App = () => {
   return (
     <>
-      <Header />
-      <Main />
-      <Footer />
+      <Route path="/home" component={Home} />
     </>
   );
 };

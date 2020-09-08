@@ -46,7 +46,7 @@ const Header = () => {
   const handleMenuClose = useCallback(() => {
     setAccountEl(null);
   }, []);
-  const accountMouseOver = useCallback(() => {
+  const menuMouseOver = useCallback(() => {
     AccountMenu.preload();
   }, []);
 
@@ -97,11 +97,11 @@ const Header = () => {
             </IconButton>
             <IconButton
               edge="end"
-              aria-label="account of current user"
+              aria-label="user menu"
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleMenuOpen}
-              onMouseOver={accountMouseOver}
+              onMouseOver={menuMouseOver}
               className={classes.title}
             >
               <AccountCircle />

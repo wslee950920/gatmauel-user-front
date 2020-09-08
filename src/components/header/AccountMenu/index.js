@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -11,13 +12,16 @@ const AccountMenu = ({ menuId, accountEl, isMenuOpen, handleMenuClose }) => {
       anchorEl={accountEl}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={menuId}
-      keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem component={Link} to="#" onClick={handleMenuClose}>
+        Profile
+      </MenuItem>
+      <MenuItem component={Link} to="#" onClick={handleMenuClose}>
+        My account
+      </MenuItem>
     </Menu>
   );
 };
