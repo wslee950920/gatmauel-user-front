@@ -40,7 +40,7 @@ const Main = () => {
         <ReviewList />
         <CarouselMenu handleOpen={handleOpen} onMouseOver={onMouseOver} />
       </div>
-      {open && <CardDialog open={open} handleClose={handleClose} />}
+      <CardDialog open={open} handleClose={handleClose} />
     </>
   );
 };

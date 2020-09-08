@@ -5,6 +5,8 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import PhoneForwardedIcon from "@material-ui/icons/PhoneForwarded";
 import Link from "@material-ui/core/Link";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -17,6 +19,15 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  footer: {
+    display: "flex",
+    alignItems: "flex-end",
+
+    [theme.breakpoints.up("xs")]: {
+      display: "block",
+      alignItems: "stretch",
+    },
+  },
   info: { fontFamily: "Roboto" },
   link: {
     display: "flex",
@@ -26,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Footer = () => {
   const classes = useStyles();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("xs"));
 
   return (
     <Container maxWidth="xl" className={classes.background}>
@@ -35,17 +48,19 @@ const Footer = () => {
           031.415.9300
         </Typography>
       </Link>
-      <footer>
+      <footer className={classes.footer}>
         <div className={classes.typo}>
           <Typography variant="caption" className={classes.info}>
             Gatmauel made by WSL
           </Typography>
         </div>
-        <div className={classes.typo}>
-          <Typography variant="caption" className={classes.info}>
-            Plz feedback to. wslee950920@gmail.com
-          </Typography>
-        </div>
+        {matches && (
+          <div className={classes.typo}>
+            <Typography variant="caption" className={classes.info}>
+              Plz feedback to. wslee950920@gmail.com
+            </Typography>
+          </div>
+        )}
       </footer>
     </Container>
   );

@@ -32,6 +32,12 @@ const theme = createMuiTheme({
       },
     },
   },
+  breakpoints: {
+    values: {
+      xs: 350,
+      md: 960,
+    },
+  },
 });
 
 const filter = "win16|win32|win64|macintel|mac|"; // PC일 경우 가능한 값

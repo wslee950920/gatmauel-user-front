@@ -2,7 +2,6 @@ workbox.setConfig({
   debug: true,
 });
 
-console.log(self.__precacheManifest);
 workbox.precaching.precacheAndRoute(self.__precacheManifest);
 
 workbox.routing.registerRoute(

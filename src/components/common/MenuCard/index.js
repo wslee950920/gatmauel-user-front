@@ -20,13 +20,17 @@ const checkRange = (num) => {
 };
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 345,
-  },
   media: {
     height: 0,
     paddingTop: "100%", // 1:1
-    width: 300,
+    width: 250,
+
+    [theme.breakpoints.up("xs")]: {
+      width: 300,
+    },
+    [theme.breakpoints.up("md")]: {
+      width: 350,
+    },
   },
   cart: {
     marginLeft: "auto",
@@ -59,7 +63,7 @@ const MenuCard = ({ handleClose }) => {
   const ck = useMemo(() => checkRange(num), [num]);
 
   return (
-    <Card className={classes.root}>
+    <Card>
       <CardHeader
         action={
           <IconButton aria-label="close" onClick={handleClose}>

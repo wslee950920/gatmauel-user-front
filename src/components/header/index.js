@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import loadable from "@loadable/component";
+import Link from "@material-ui/core/Link";
 
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -40,6 +41,7 @@ const Header = () => {
   const isMenuOpen = Boolean(accountEl);
   const menuId = "account-menu";
 
+  const preventDefault = (event) => event.preventDefault();
   const handleMenuOpen = useCallback((event) => {
     setAccountEl(event.currentTarget);
   }, []);
@@ -82,7 +84,9 @@ const Header = () => {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            갯마을
+            <Link href="/" onClick={preventDefault} color="inherit">
+              갯마을
+            </Link>
           </Typography>
           <div className={classes.grow} />
           <div className={classes.section}>
@@ -110,15 +114,13 @@ const Header = () => {
         </Toolbar>
       </AppBar>
       <Toolbar />
-      {isMenuOpen && (
-        <AccountMenu
-          menuId={menuId}
-          accountEl={accountEl}
-          handleMenuClose={handleMenuClose}
-          isMenuOpen={isMenuOpen}
-        />
-      )}
-      {drawer && <Drawer open={drawer} toggleDrawer={toggleDrawer} />}
+      <AccountMenu
+        menuId={menuId}
+        accountEl={accountEl}
+        handleMenuClose={handleMenuClose}
+        isMenuOpen={isMenuOpen}
+      />
+      <Drawer open={drawer} toggleDrawer={toggleDrawer} />
     </div>
   );
 };
