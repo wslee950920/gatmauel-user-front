@@ -20,7 +20,7 @@ const CardDialog = ({ open, handleClose }) => {
         keepMounted
         TransitionComponent={Transition}
         TransitionProps={{
-          timeout: { enter: 0, exit: 500 },
+          timeout: { exit: 500 },
           style: { transformOrigin: "bottom right" },
         }}
       >

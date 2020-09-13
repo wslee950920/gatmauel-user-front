@@ -25,17 +25,25 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: "Recipe Korea",
   },
-  overrides: {
-    MuiCssBaseline: {
-      "@global": {
-        "@font-face": [rk],
-      },
+  palette: {
+    primary: {
+      main: "#2196f3",
+      light: "#4dabf5",
+      dark: "#1769aa",
+      contrastText: "#fff",
     },
   },
   breakpoints: {
     values: {
       xs: 350,
       md: 960,
+    },
+  },
+  overrides: {
+    MuiCssBaseline: {
+      "@global": {
+        "@font-face": [rk],
+      },
     },
   },
 });

@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 
     [theme.breakpoints.up("xs")]: {
       display: "block",
-      alignItems: "stretch",
     },
   },
   info: { fontFamily: "Roboto" },
