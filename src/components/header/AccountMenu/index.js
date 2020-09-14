@@ -5,8 +5,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 
 const AccountMenu = ({ menuId, accountEl, isMenuOpen, handleMenuClose }) => {
-  //props의 기본값은 true이다.
-  //따라서 Menu컴포넌트에 keepMounted={true}를 넘겨준 것과 같다.
   return (
     <Menu
       anchorEl={accountEl}
@@ -19,7 +17,7 @@ const AccountMenu = ({ menuId, accountEl, isMenuOpen, handleMenuClose }) => {
       <MenuItem component={Link} to="#" onClick={handleMenuClose}>
         Profile
       </MenuItem>
-      <MenuItem component={Link} to="#" onClick={handleMenuClose}>
+      <MenuItem component={Link} to="/login" onClick={handleMenuClose}>
         My account
       </MenuItem>
     </Menu>

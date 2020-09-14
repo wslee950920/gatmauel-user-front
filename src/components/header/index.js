@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
-import loadable from "@loadable/component";
-import Link from "@material-ui/core/Link";
+import { Link as RouterLink } from "react-router-dom";
 
+import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -12,8 +12,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
-const AccountMenu = loadable(() => import("./AccountMenu"));
-const Drawer = loadable(() => import("./Drawer"));
+import AccountMenu from "./AccountMenu";
+import Drawer from "./Drawer";
 
 const useClasses = makeStyles((theme) => ({
   grow: {
@@ -48,9 +48,6 @@ const Header = () => {
   const handleMenuClose = useCallback(() => {
     setAccountEl(null);
   }, []);
-  const menuMouseOver = useCallback(() => {
-    AccountMenu.preload();
-  }, []);
 
   const toggleDrawer = useCallback(
     (open) => (event) => {
@@ -66,10 +63,13 @@ const Header = () => {
     },
     []
   );
-  const drawerMouseOver = useCallback(() => {
-    Drawer.preload();
-  }, []);
 
+  //{bool&&<Commponent/>}처럼 하면 bool값이 false가 되는 순간
+  //Component가 사라져 버리기 때문에 애니메이션 효과 적용이 되지 않는다.
+  //그리고 Drawer, AccountMenu 컴포넌트는 Header를 렌더링 할 때 이미 포함되어서
+  //렌더링 되므로 코드 스플리팅 의미가 없다. 코드 스플리팅 효과를 보려면
+  //{bool&&<Component/>} 방식으로 렌더링 해야 하는데 그러면
+  //애니메이션 효과가 적용되지 않는 딜레마가 생긴다.
   return (
     <div className={classes.grow}>
       <AppBar position="fixed" className={classes.appBar}>
@@ -79,12 +79,16 @@ const Header = () => {
             className={classes.menuButton}
             aria-label="open drawer"
             onClick={toggleDrawer(true)}
-            onMouseOver={drawerMouseOver}
           >
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            <Link href="/" onClick={preventDefault} color="inherit">
+            <Link
+              component={RouterLink}
+              to="/"
+              onClick={preventDefault}
+              color="inherit"
+            >
               갯마을
             </Link>
           </Typography>
@@ -105,7 +109,6 @@ const Header = () => {
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleMenuOpen}
-              onMouseOver={menuMouseOver}
               className={classes.title}
             >
               <AccountCircle />

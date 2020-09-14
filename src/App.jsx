@@ -1,8 +1,9 @@
 import React from "react";
 import { Route } from "react-router-dom";
+import loadable from "@loadable/component";
 
 import MainPage from "./page/Main";
-import LoginPage from "./page/Login";
+const LoginPage = loadable(() => import("./page/Login"));
 
 const App = () => {
   return (
