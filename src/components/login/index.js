@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
@@ -13,8 +13,10 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
+import Divider from "@material-ui/core/Divider";
 
 import Copyright from "../common/Copyright";
+import KakaoBtn from "./KakaoBtn";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(1, 0, 2),
     backgroundColor: theme.palette.primary.light,
   },
   formCtrLabel: {
@@ -46,10 +48,20 @@ const useStyles = makeStyles((theme) => ({
   outlined: {
     fontFamily: "Roboto",
   },
+  kakaoBtn: {
+    padding: 0,
+  },
+  divider: {
+    margin: theme.spacing(2),
+  },
 }));
 
 const LogIn = () => {
   const classes = useStyles();
+
+  const onSubmit = useCallback((e) => {
+    e.preventDefault();
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,7 +71,7 @@ const LogIn = () => {
         <Typography component="h1" variant="h5">
           갯마을
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={onSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -71,6 +83,7 @@ const LogIn = () => {
             autoComplete="email"
             autoFocus
             size="small"
+            type="email"
             InputProps={{ className: classes.outlined }}
           />
           <TextField
@@ -97,8 +110,6 @@ const LogIn = () => {
             variant="contained"
             className={classes.submit}
             color="primary"
-            component={RouterLink}
-            to="#"
           >
             로그인
           </Button>
@@ -129,6 +140,8 @@ const LogIn = () => {
           </Grid>
         </form>
       </div>
+      <Divider variant="middle" className={classes.divider} />
+      <KakaoBtn />
       <Box mt={8}>
         <Copyright />
       </Box>
