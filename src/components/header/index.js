@@ -41,7 +41,6 @@ const Header = () => {
   const isMenuOpen = Boolean(accountEl);
   const menuId = "account-menu";
 
-  const preventDefault = (event) => event.preventDefault();
   const handleMenuOpen = useCallback((event) => {
     setAccountEl(event.currentTarget);
   }, []);
@@ -83,12 +82,7 @@ const Header = () => {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            <Link
-              component={RouterLink}
-              to="/"
-              onClick={preventDefault}
-              color="inherit"
-            >
+            <Link component={RouterLink} to="/" color="inherit">
               갯마을
             </Link>
           </Typography>

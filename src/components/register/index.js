@@ -5,18 +5,14 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
 
 import Copyright from "../common/Copyright";
-import KakaoBtn from "./KakaoBtn";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,25 +31,16 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(1, 0, 2),
+    margin: theme.spacing(5, 0, 2),
     backgroundColor: theme.palette.primary.light,
   },
-  formCtrLabel: {
-    fontSize: "0.8rem",
-    color: "#707070",
-  },
+
   fontFam: {
     fontFamily: "Roboto",
   },
-  kakaoBtn: {
-    padding: 0,
-  },
-  divider: {
-    margin: theme.spacing(2),
-  },
 }));
 
-const LogIn = () => {
+const Register = () => {
   const classes = useStyles();
 
   const onSubmit = useCallback((e) => {
@@ -76,11 +63,22 @@ const LogIn = () => {
             margin="normal"
             required
             fullWidth
+            id="nickname"
+            label="별명"
+            name="nickname"
+            autoFocus
+            size="small"
+            InputProps={{ className: classes.fontFam }}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
             id="email"
             label="이메일"
             name="email"
             autoComplete="email"
-            autoFocus
             size="small"
             type="email"
             InputProps={{ className: classes.fontFam }}
@@ -97,10 +95,16 @@ const LogIn = () => {
             autoComplete="current-password"
             size="small"
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="로그인 유지"
-            classes={{ label: classes.formCtrLabel }}
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="confirm"
+            label="비밀번호 확인"
+            type="password"
+            id="confirm"
+            size="small"
           />
           <Button
             type="submit"
@@ -109,42 +113,28 @@ const LogIn = () => {
             className={classes.submit}
             color="primary"
           >
-            로그인
+            회원가입
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
               <Link
                 component={RouterLink}
-                to="/"
+                to="/login"
                 variant="caption"
                 color="textSecondary"
                 TypographyClasses={{ caption: classes.fontFam }}
               >
-                비밀번호 찾기
-              </Link>
-            </Grid>
-            <span style={{ fontFamily: "Roboto", color: "#707070" }}>/</span>
-            <Grid item>
-              <Link
-                component={RouterLink}
-                to="/register"
-                variant="caption"
-                color="textSecondary"
-                TypographyClasses={{ caption: classes.fontFam }}
-              >
-                회원가입
+                이미 회원이신가요?
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Divider variant="middle" className={classes.divider} />
-      <KakaoBtn />
-      <Box mt={8}>
+      <Box mt={5}>
         <Copyright />
       </Box>
     </Container>
   );
 };
 
-export default LogIn;
+export default Register;
