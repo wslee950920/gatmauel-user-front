@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -9,12 +10,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
 
 import Copyright from "../common/Copyright";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(5),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -29,11 +32,14 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(5, 0, 2),
+    margin: theme.spacing(3, 0, 2),
     backgroundColor: theme.palette.primary.light,
   },
-  fontFam: {
+  fontMaple: {
     fontFamily: "MaplestoryOTFBold",
+  },
+  fontRobo: {
+    fontFamily: "Roboto",
   },
   divider: {
     margin: theme.spacing(2),
@@ -86,7 +92,7 @@ const Profile = () => {
             label="별명"
             name="nickname"
             size="small"
-            InputProps={{ className: classes.fontFam }}
+            InputProps={{ className: classes.fontMaple }}
             value="맨유경비원"
           />
           <TextField
@@ -100,7 +106,7 @@ const Profile = () => {
             autoComplete="email"
             size="small"
             type="email"
-            InputProps={{ className: classes.fontFam }}
+            InputProps={{ className: classes.fontMaple }}
             value="amicusadaras6@gmail.com"
             disabled
           />
@@ -112,7 +118,7 @@ const Profile = () => {
             label="시/군/구"
             id="address"
             size="small"
-            InputProps={{ className: classes.fontFam }}
+            InputProps={{ className: classes.fontMaple }}
             InputLabelProps={{ classes: { root: classes.disabled } }}
             disabled
           />
@@ -124,7 +130,7 @@ const Profile = () => {
             label="상세주소"
             id="detail"
             size="small"
-            InputProps={{ className: classes.fontFam }}
+            InputProps={{ className: classes.fontMaple }}
             InputLabelProps={{ classes: { root: classes.disabled } }}
             disabled
           />
@@ -137,7 +143,7 @@ const Profile = () => {
               label="전화번호"
               id="phone"
               size="small"
-              InputProps={{ className: classes.fontFam }}
+              InputProps={{ className: classes.fontMaple }}
               InputLabelProps={{ classes: { root: classes.disabled } }}
               type="tel"
               disabled
@@ -155,6 +161,19 @@ const Profile = () => {
           >
             저장
           </Button>
+          <Grid container justify="flex-end">
+            <Grid item>
+              <Link
+                component={RouterLink}
+                to="/login"
+                variant="caption"
+                color="textSecondary"
+                TypographyClasses={{ caption: classes.fontRobo }}
+              >
+                로그아웃
+              </Link>
+            </Grid>
+          </Grid>
         </form>
       </div>
       <Box mt={3}>

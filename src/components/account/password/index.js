@@ -12,13 +12,14 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(5, 0, 2),
     backgroundColor: theme.palette.primary.light,
   },
-  fontFam: {
+  fontMaple: {
     fontFamily: "MaplestoryOTFBold",
   },
 }));
 
 const Password = () => {
   const classes = useStyles();
+
   const onSubmit = useCallback((e) => {
     e.preventDefault();
   }, []);
@@ -34,7 +35,7 @@ const Password = () => {
         label="현재 PW"
         name="old"
         size="small"
-        InputProps={{ className: classes.fontFam }}
+        InputProps={{ className: classes.fontMaple }}
         type="password"
       />
       <TextField
@@ -46,7 +47,7 @@ const Password = () => {
         label="새 PW"
         name="new"
         size="small"
-        InputProps={{ className: classes.fontFam }}
+        InputProps={{ className: classes.fontMaple }}
         type="password"
       />
       <TextField
@@ -57,7 +58,7 @@ const Password = () => {
         label="PW 확인"
         id="confirm"
         size="small"
-        InputProps={{ className: classes.fontFam }}
+        InputProps={{ className: classes.fontMaple }}
         type="password"
       />
       <Button

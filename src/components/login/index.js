@@ -20,7 +20,7 @@ import KakaoBtn from "./KakaoBtn";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(5),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.8rem",
     color: "#707070",
   },
-  fontFam: {
+  fontRobo: {
     fontFamily: "Roboto",
   },
   kakaoBtn: {
@@ -83,7 +83,7 @@ const LogIn = () => {
             autoFocus
             size="small"
             type="email"
-            InputProps={{ className: classes.fontFam }}
+            InputProps={{ className: classes.fontRobo }}
           />
           <TextField
             variant="outlined"
@@ -118,7 +118,7 @@ const LogIn = () => {
                 to="/"
                 variant="caption"
                 color="textSecondary"
-                TypographyClasses={{ caption: classes.fontFam }}
+                TypographyClasses={{ caption: classes.fontRobo }}
               >
                 비밀번호 찾기
               </Link>
@@ -130,7 +130,7 @@ const LogIn = () => {
                 to="/register"
                 variant="caption"
                 color="textSecondary"
-                TypographyClasses={{ caption: classes.fontFam }}
+                TypographyClasses={{ caption: classes.fontRobo }}
               >
                 회원가입
               </Link>

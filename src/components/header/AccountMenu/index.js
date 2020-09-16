@@ -17,7 +17,7 @@ const AccountMenu = ({ menuId, accountEl, isMenuOpen, handleMenuClose }) => {
       <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
         Profile
       </MenuItem>
-      <MenuItem component={Link} to="/login" onClick={handleMenuClose}>
+      <MenuItem component={Link} to="/account" onClick={handleMenuClose}>
         My account
       </MenuItem>
     </Menu>

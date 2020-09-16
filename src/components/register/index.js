@@ -16,7 +16,7 @@ import Copyright from "../common/Copyright";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(5),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.light,
   },
 
-  fontFam: {
+  fontRobo: {
     fontFamily: "Roboto",
   },
 }));
@@ -68,7 +68,7 @@ const Register = () => {
             name="nickname"
             autoFocus
             size="small"
-            InputProps={{ className: classes.fontFam }}
+            InputProps={{ className: classes.fontRobo }}
           />
           <TextField
             variant="outlined"
@@ -81,7 +81,7 @@ const Register = () => {
             autoComplete="email"
             size="small"
             type="email"
-            InputProps={{ className: classes.fontFam }}
+            InputProps={{ className: classes.fontRobo }}
           />
           <TextField
             variant="outlined"
@@ -122,7 +122,7 @@ const Register = () => {
                 to="/login"
                 variant="caption"
                 color="textSecondary"
-                TypographyClasses={{ caption: classes.fontFam }}
+                TypographyClasses={{ caption: classes.fontRobo }}
               >
                 이미 회원이신가요?
               </Link>

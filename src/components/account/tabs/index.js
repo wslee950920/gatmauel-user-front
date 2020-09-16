@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -27,8 +28,8 @@ const FullWidthTabs = ({ handleChange, value }) => {
         <Tabs
           value={value}
           onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
+          indicatorColor={clsx(value === 1 ? "secondary" : "primary")}
+          textColor={clsx(value === 1 ? "secondary" : "primary")}
           variant="fullWidth"
           aria-label="full width tabs example"
         >

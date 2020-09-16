@@ -12,6 +12,7 @@ import Copyright from "../common/Copyright";
 import FullWidthTabs from "./tabs";
 import Password from "./password";
 import TabPanel from "./tabs/TabPanel";
+import Withdraw from "./withdraw";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,7 +49,7 @@ const Profile = () => {
           <Password />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <Withdraw />
         </TabPanel>
       </div>
       <Box mt={5}>
