@@ -1,15 +1,15 @@
 import React from "react";
 
-import Profile from "../../components/profile";
+import Find from "../../components/find";
 import Header from "../../components/header";
 
-const ProfilePage = () => {
+const FindPage = () => {
   return (
     <>
       <Header />
-      <Profile />
+      <Find />
     </>
   );
 };
 
-export default ProfilePage;
+export default FindPage;

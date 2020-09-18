@@ -1,7 +1,7 @@
 export default [
   {
     text: "홈",
-    to: "#",
+    to: "/main",
   },
   {
     text: "리뷰",

@@ -1,9 +1,15 @@
 import React from "react";
 
 import Register from "../../components/register";
+import Header from "../../components/header";
 
 const RegisterPage = () => {
-  return <Register />;
+  return (
+    <>
+      <Header />
+      <Register />
+    </>
+  );
 };
 
 export default RegisterPage;

@@ -1,9 +1,15 @@
 import React from "react";
 
 import Login from "../../components/login";
+import Header from "../../components/header";
 
 const LoginPage = () => {
-  return <Login />;
+  return (
+    <>
+      <Header />
+      <Login />
+    </>
+  );
 };
 
 export default LoginPage;

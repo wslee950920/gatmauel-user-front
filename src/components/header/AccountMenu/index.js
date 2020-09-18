@@ -15,10 +15,10 @@ const AccountMenu = ({ menuId, accountEl, isMenuOpen, handleMenuClose }) => {
       onClose={handleMenuClose}
     >
       <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
-        Profile
+        프로필
       </MenuItem>
       <MenuItem component={Link} to="/account" onClick={handleMenuClose}>
-        My account
+        내 계정
       </MenuItem>
     </Menu>
   );

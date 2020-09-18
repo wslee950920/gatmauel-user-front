@@ -53,6 +53,7 @@ const Password = () => {
       <TextField
         variant="outlined"
         margin="normal"
+        required
         fullWidth
         name="confirm"
         label="PW 확인"

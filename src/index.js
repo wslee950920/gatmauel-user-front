@@ -57,12 +57,12 @@ if (navigator.platform) {
 }
 
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <CssBaseline />
-    <BrowserRouter>
+  <BrowserRouter>
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
       <App />
-    </BrowserRouter>
-  </MuiThemeProvider>,
+    </MuiThemeProvider>
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

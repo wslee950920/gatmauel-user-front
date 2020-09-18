@@ -32,7 +32,7 @@ const Main = () => {
     <>
       <CarouselView />
       <div className={classes.resp}>
-        <ReviewList />
+        <ReviewList desktop />
         <CarouselMenu handleOpen={handleOpen} />
       </div>
       <CardDialog open={open} handleClose={handleClose} />

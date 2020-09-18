@@ -7,7 +7,7 @@ import Confirm from "./Confirm";
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    margin: theme.spacing(2, 0, 10),
+    margin: theme.spacing(5, 0, 10),
     color: "white",
   },
 }));

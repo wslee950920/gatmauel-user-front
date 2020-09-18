@@ -40,9 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 function generate(element) {
   return [0, 1, 2, 3].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    })
+    React.cloneElement(element, { key: value })
   );
 }
 

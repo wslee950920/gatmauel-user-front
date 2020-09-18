@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 
-import AccessibilityIcon from "@material-ui/icons/Accessibility";
+import LockIcon from "@material-ui/icons/Lock";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Typography from "@material-ui/core/Typography";
@@ -11,9 +11,9 @@ import Tab from "@material-ui/core/Tab";
 
 import Copyright from "../common/Copyright";
 import FullWidthTabs from "../common/Tabs";
-import Password from "./password";
+import FindID from "./findID";
 import TabPanel from "../common/Tabs/TabPanel";
-import Withdraw from "./withdraw";
+import FindPW from "./findPW";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,7 +36,7 @@ const a11yProps = (index) => {
   };
 };
 
-const Account = () => {
+const FindInfo = () => {
   const classes = useStyles();
   const [value, setValue] = useState(0);
 
@@ -48,23 +48,19 @@ const Account = () => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <AccessibilityIcon
-          fontSize="large"
-          color="action"
-          className={classes.icon}
-        />
+        <LockIcon fontSize="large" color="action" className={classes.icon} />
         <Typography component="h1" variant="h5">
           내 계정
         </Typography>
-        <FullWidthTabs handleChange={handleChange} value={value} account>
-          <Tab label="PW변경" {...a11yProps(0)} />
-          <Tab label="탈퇴" {...a11yProps(1)} />
+        <FullWidthTabs handleChange={handleChange} value={value}>
+          <Tab label="ID찾기" {...a11yProps(0)} />
+          <Tab label="PW찾기" {...a11yProps(1)} />
         </FullWidthTabs>
         <TabPanel value={value} index={0}>
-          <Password />
+          <FindID />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Withdraw />
+          <FindPW />
         </TabPanel>
       </div>
       <Box mt={5}>
@@ -74,4 +70,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default FindInfo;

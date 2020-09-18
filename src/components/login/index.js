@@ -115,15 +115,15 @@ const LogIn = () => {
             <Grid item>
               <Link
                 component={RouterLink}
-                to="/"
+                to="/find"
                 variant="caption"
                 color="textSecondary"
                 TypographyClasses={{ caption: classes.fontRobo }}
               >
-                비밀번호 찾기
+                ID/PW찾기
               </Link>
             </Grid>
-            <span style={{ fontFamily: "Roboto", color: "#707070" }}>/</span>
+            &nbsp;&nbsp;&nbsp;
             <Grid item>
               <Link
                 component={RouterLink}
@@ -140,7 +140,7 @@ const LogIn = () => {
       </div>
       <Divider variant="middle" className={classes.divider} />
       <KakaoBtn />
-      <Box mt={8}>
+      <Box mt={5}>
         <Copyright />
       </Box>
     </Container>
