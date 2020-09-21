@@ -12,7 +12,7 @@ const Copyright = () => {
       component={"p"}
     >
       {"Copyright 2020. "}
-      <Link color="inherit" href="mailto:wslee950920@gmail.com">
+      <Link color="inherit" href="mailto:gatmauel9300@gmail.com">
         WSL
       </Link>
       {". All rights reserved."}

@@ -9,7 +9,7 @@ import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Tab from "@material-ui/core/Tab";
 
-import Copyright from "../common/Copyright";
+import Copyright from "../footer/Copyright";
 import FullWidthTabs from "../common/Tabs";
 import FindID from "./findID";
 import TabPanel from "../common/Tabs/TabPanel";

@@ -13,7 +13,7 @@ import Divider from "@material-ui/core/Divider";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 
-import Copyright from "../common/Copyright";
+import Copyright from "../footer/Copyright";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

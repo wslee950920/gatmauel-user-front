@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("xs")]: {
       width: 300,
     },
-    [theme.breakpoints.up("md")]: {
-      width: 350,
+    [theme.breakpoints.up("sm")]: {
+      width: 400,
     },
   },
   cart: {

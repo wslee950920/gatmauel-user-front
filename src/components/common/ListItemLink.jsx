@@ -7,12 +7,15 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
 const useStyles = makeStyles(() => ({
-  primary: {
+  fontMaple: {
     fontFamily: "MaplestoryOTFBold",
+  },
+  fontRobo: {
+    fontFamily: "Roboto",
   },
 }));
 
-const ListItemLink = ({ primary, to }) => {
+const ListItemLink = ({ primary, to, secondary, review }) => {
   const classes = useStyles();
 
   const renderLink = useMemo(
@@ -28,10 +31,20 @@ const ListItemLink = ({ primary, to }) => {
       <ListItem button component={renderLink}>
         <ListItemText
           primary={primary}
-          primaryTypographyProps={{
+          secondaryTypographyProps={{
             color: "textSecondary",
+            noWrap: true,
           }}
-          classes={{ primary: classes.primary }}
+          primaryTypographyProps={
+            review && {
+              color: "textSecondary",
+            }
+          }
+          classes={{
+            secondary: classes.fontRobo,
+            primary: classes.fontMaple,
+          }}
+          secondary={secondary}
         />
       </ListItem>
     </li>
@@ -39,8 +52,10 @@ const ListItemLink = ({ primary, to }) => {
 };
 
 ListItemLink.propTypes = {
-  primary: PropTypes.string.isRequired,
+  primary: PropTypes.string,
   to: PropTypes.string.isRequired,
+  secondary: PropTypes.string,
+  review: PropTypes.bool,
 };
 
 export default React.memo(ListItemLink);

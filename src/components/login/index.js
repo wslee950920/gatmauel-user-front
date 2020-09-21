@@ -15,7 +15,7 @@ import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 
-import Copyright from "../common/Copyright";
+import Copyright from "../footer/Copyright";
 import KakaoBtn from "./KakaoBtn";
 
 const useStyles = makeStyles((theme) => ({

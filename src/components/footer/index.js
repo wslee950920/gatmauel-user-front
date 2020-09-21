@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
 
     [theme.breakpoints.up("xs")]: {
       display: "flex",
@@ -41,7 +41,7 @@ const Footer = () => {
         <div>
           <ScheduleIcon fontSize="small" />
           <Typography variant="caption" className={classes.info}>
-            11:00~21:30/매월 셋째주 수요일 휴무
+            11:00~22:00/매월 셋째주 수요일 휴무
           </Typography>
         </div>
         {matches && (
@@ -69,9 +69,9 @@ const Footer = () => {
               variant="caption"
               className={classes.info}
               component={Link}
-              href="mailto:wslee950920@gmail.com"
+              href="mailto:gatmauel9300@gmail.com"
             >
-              Plz feedback to. wslee950920@gmail.com
+              Plz feedback to. gatmauel9300@gmail.com
             </Typography>
           </div>
         )}

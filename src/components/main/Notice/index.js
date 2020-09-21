@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
+import pink from "@material-ui/core/colors/pink";
 
 import ListItemLink from "../../common/ListItemLink";
 
@@ -21,30 +22,25 @@ const useStyles = makeStyles((theme) => ({
     border: "solid #dcdcdc",
     borderRadius: "8px",
   },
-  title: {
+  info: {
     margin: theme.spacing(2, 1, 0),
     flex: 1,
-  },
-  content: {
-    fontSize: "0.7rem",
-    color: "#808080",
+    color: pink[700],
   },
   box: {
     display: "flex",
     alignItems: "baseline",
   },
-  primary: {
-    fontFamily: "MaplestoryOTFBold",
+  fontRobo: {
+    fontFamily: "Roboto",
   },
 }));
 
 function generate(element) {
-  return [0, 1, 2, 3].map((value) =>
-    React.cloneElement(element, { key: value })
-  );
+  return [0, 1].map((value) => React.cloneElement(element, { key: value }));
 }
 
-const ReviewList = () => {
+const Notice = () => {
   const classes = useStyles();
 
   return (
@@ -53,8 +49,8 @@ const ReviewList = () => {
       <div style={{ padding: "0.4rem" }}>
         <Container maxWidth="xl" className={classes.background}>
           <div className={classes.box}>
-            <Typography variant="subtitle1" className={classes.title} noWrap>
-              Review
+            <Typography variant="subtitle1" className={classes.info}>
+              Notice
             </Typography>
             <Link
               component={RouterLink}
@@ -67,7 +63,13 @@ const ReviewList = () => {
           </div>
           <div>
             <List>
-              {generate(<ListItemLink primary="맛있어요!!!" to="#" review />)}
+              {generate(
+                <ListItemLink
+                  primary="공지사항 제목"
+                  to="#"
+                  secondary="19/09/22"
+                />
+              )}
             </List>
           </div>
         </Container>
@@ -76,4 +78,4 @@ const ReviewList = () => {
   );
 };
 
-export default ReviewList;
+export default Notice;

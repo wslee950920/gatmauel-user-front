@@ -1,8 +1,7 @@
 import React from "react";
 
-import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
@@ -19,10 +18,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
     padding: "0.4rem",
-
-    [theme.breakpoints.up("md")]: {
-      flex: 1,
-    },
   },
   gridList: {
     flexWrap: "nowrap",
@@ -55,7 +50,7 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
   return (
     <div className={classes.root}>
       <Container maxWidth="xl" className={classes.background}>
-        <GridList className={classes.gridList} cols={1.5}>
+        <GridList className={classes.gridList} cols={1.465}>
           {tileData.map((tile) => (
             <GridListTile
               key={tile.img}
@@ -65,7 +60,7 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
                 imgFullWidth: classes.imgFull,
               }}
               style={{
-                height: matches ? "auto" : "66.6667vw",
+                height: matches ? "auto" : "68.2594vw",
                 margin: "0.5rem 0",
               }}
             >
@@ -76,7 +71,7 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
                   onClick={handleOpen}
                   className="img-fluid"
                   style={{
-                    height: matches ? "auto" : "66.6667vw",
+                    height: matches ? "auto" : "68.2594vw",
                     cursor: "pointer",
                   }}
                   onMouseOver={onMouseOver}
