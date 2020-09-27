@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   info: {
     margin: theme.spacing(2, 1, 0),
     flex: 1,
-    color: pink[700],
+    color: pink[800],
   },
   box: {
     display: "flex",
@@ -47,14 +47,14 @@ const Notice = () => {
     <div className={classes.root}>
       <CssBaseline />
       <div style={{ padding: "0.4rem" }}>
-        <Container maxWidth="xl" className={classes.background}>
+        <Container className={classes.background}>
           <div className={classes.box}>
             <Typography variant="subtitle1" className={classes.info}>
               Notice
             </Typography>
             <Link
               component={RouterLink}
-              to="#"
+              to="/notice"
               color="secondary"
               variant="caption"
             >

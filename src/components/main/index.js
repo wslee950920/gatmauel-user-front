@@ -6,7 +6,7 @@ import CarouselView from "./CarouselView";
 import ReviewList from "./ReviewList";
 import CarouselMenu from "./CarouselMenu";
 import CardDialog from "./CardDialog";
-import Notice from "./Notice";
+import NoticeList from "./NoticeList";
 
 const Main = () => {
   const [open, setOpen] = useState(false);
@@ -23,7 +23,7 @@ const Main = () => {
       <CarouselView />
       <Grid container>
         <Grid item xs={12} md={6}>
-          <Notice />
+          <NoticeList />
           <ReviewList />
         </Grid>
         <Grid item xs={12} md={6}>

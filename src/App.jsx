@@ -8,6 +8,7 @@ const RegisterPage = loadable(() => import("./page/Register"));
 const ProfilePage = loadable(() => import("./page/Profile"));
 const AccountPage = loadable(() => import("./page/Account"));
 const FindPage = loadable(() => import("./page/Find"));
+const NoticePage = loadable(() => import("./page/Notice"));
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
       <Route path={"/profile"} component={ProfilePage} exact />
       <Route path={"/account"} component={AccountPage} exact />
       <Route path={"/find"} component={FindPage} exact />
+      <Route path={"/notice"} component={NoticePage} exact />
       <Route
         render={() => (
           <div>

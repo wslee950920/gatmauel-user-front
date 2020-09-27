@@ -4,6 +4,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import RateReviewIcon from "@material-ui/icons/RateReview";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import MapIcon from "@material-ui/icons/Map";
+import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 
 const selectIcon = (text) => {
   if (text === "홈") {
@@ -14,6 +15,8 @@ const selectIcon = (text) => {
     return <LocalShippingIcon />;
   } else if (text === "오시는길") {
     return <MapIcon />;
+  } else if (text === "메뉴") {
+    return <RestaurantMenuIcon />;
   }
 };
 

@@ -4,6 +4,10 @@ export default [
     to: "/main",
   },
   {
+    text: "메뉴",
+    to: "#",
+  },
+  {
     text: "리뷰",
     to: "#",
   },

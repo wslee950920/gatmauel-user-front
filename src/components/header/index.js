@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import Link from "@material-ui/core/Link";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,9 +11,13 @@ import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import SearchIcon from "@material-ui/icons/Search";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import ScopedCssBaseline from "@material-ui/core/ScopedCssBaseline";
 
 import AccountMenu from "./AccountMenu";
 import Drawer from "./Drawer";
+import SearchBar from "../common/SearchBar";
 
 const useClasses = makeStyles((theme) => ({
   grow: {
@@ -22,7 +26,7 @@ const useClasses = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  title: {
+  icon: {
     display: "block",
     color: "black",
   },
@@ -32,14 +36,24 @@ const useClasses = makeStyles((theme) => ({
   appBar: {
     backgroundColor: "#feffff",
   },
+  base: {
+    background: "#feffff",
+  },
 }));
 
 const Header = () => {
   const classes = useClasses();
   const [accountEl, setAccountEl] = useState(null);
   const [drawer, setDrawer] = useState(false);
+  const [search, setSearch] = useState(false);
   const isMenuOpen = Boolean(accountEl);
   const menuId = "account-menu";
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+
+  const handleSearch = useCallback(() => {
+    setSearch(!search);
+  }, [search]);
 
   const handleMenuOpen = useCallback((event) => {
     setAccountEl(event.currentTarget);
@@ -81,17 +95,32 @@ const Header = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography className={classes.icon} variant="h6" noWrap>
             <Link component={RouterLink} to="/" color="inherit">
               갯마을
             </Link>
           </Typography>
           <div className={classes.grow} />
           <div className={classes.section}>
-            {/*TODO:추후 알림이 있을 때만 검은색(classes.title)으로 강조되게끔한다.*/}
+            {search ? (
+              <ScopedCssBaseline classes={{ root: classes.base }}>
+                <SearchBar handleSearch={handleSearch} />
+              </ScopedCssBaseline>
+            ) : (
+              matches && (
+                <IconButton
+                  aria-label="search"
+                  className={classes.icon}
+                  onClick={handleSearch}
+                >
+                  <SearchIcon />
+                </IconButton>
+              )
+            )}
+            {/*TODO:추후 알림이 있을 때만 검은색(classes.icon)으로 강조되게끔한다.*/}
             <IconButton
               aria-label="show new notifications"
-              className={classes.title}
+              className={classes.icon}
             >
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
@@ -103,7 +132,7 @@ const Header = () => {
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleMenuOpen}
-              className={classes.title}
+              className={classes.icon}
             >
               <AccountCircle />
             </IconButton>

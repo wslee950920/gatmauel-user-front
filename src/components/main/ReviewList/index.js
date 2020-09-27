@@ -51,7 +51,7 @@ const ReviewList = () => {
     <div className={classes.root}>
       <CssBaseline />
       <div style={{ padding: "0.4rem" }}>
-        <Container maxWidth="xl" className={classes.background}>
+        <Container className={classes.background}>
           <div className={classes.box}>
             <Typography variant="subtitle1" className={classes.title} noWrap>
               Review
