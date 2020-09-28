@@ -41,7 +41,7 @@ const useClasses = makeStyles((theme) => ({
   },
 }));
 
-const Header = () => {
+const Header = ({ main }) => {
   const classes = useClasses();
   const [accountEl, setAccountEl] = useState(null);
   const [drawer, setDrawer] = useState(false);
@@ -52,8 +52,8 @@ const Header = () => {
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   const handleSearch = useCallback(() => {
-    setSearch(!search);
-  }, [search]);
+    setSearch((prev) => !prev);
+  }, []);
 
   const handleMenuOpen = useCallback((event) => {
     setAccountEl(event.currentTarget);
@@ -107,6 +107,7 @@ const Header = () => {
                 <SearchBar handleSearch={handleSearch} />
               </ScopedCssBaseline>
             ) : (
+              !main &&
               matches && (
                 <IconButton
                   aria-label="search"
@@ -151,4 +152,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

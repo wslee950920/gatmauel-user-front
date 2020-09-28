@@ -45,15 +45,19 @@ const MenuCard = ({ handleClose }) => {
   const [num, setNum] = useState(1);
 
   const addOnClick = useCallback(() => {
-    if (num < 10 && num >= 1) setNum(num + 1);
-    else if (num < 1) setNum(1);
-    else setNum(10);
-  }, [num]);
+    setNum((prevNum) => {
+      if (prevNum < 10 && prevNum >= 1) return prevNum + 1;
+      else if (prevNum < 1) return 1;
+      else return 10;
+    });
+  }, []);
   const removeOnClick = useCallback(() => {
-    if (num > 1 && num <= 10) setNum(num - 1);
-    else if (num > 10) setNum(10);
-    else setNum(1);
-  }, [num]);
+    setNum((prevNum) => {
+      if (prevNum > 1 && prevNum <= 10) return prevNum - 1;
+      else if (prevNum > 10) return 10;
+      else return 1;
+    });
+  }, []);
   const onChange = useCallback((e) => {
     const curValue = e.target.value;
     const newValue = curValue.replace(/[^0-9]/g, "");

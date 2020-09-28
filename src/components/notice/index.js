@@ -1,20 +1,18 @@
-import React from "react";
+import React, { useRef, useCallback } from "react";
+import { FixedSizeList as List } from "react-window";
+import useWindowDimensions from "../../lib/windowDimensions";
+import clsx from "clsx";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
+
+//import List from "@material-ui/core/List";
 
 import SearchBar from "../common/SearchBar";
 import Footer from "../footer";
+import NoticeLitemLink from "./NoticeLitemLink";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,33 +21,27 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
-  inline: {
-    display: "inline",
-    fontFamily: "Roboto",
-  },
   paper: {
     marginTop: theme.spacing(1),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  content: {
-    fontFamily: "MaplestoryOTFBold",
-    whiteSpace: "pre-wrap",
-  },
 }));
 
-function generate(element) {
-  return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) =>
-    React.cloneElement(element, { key: value })
-  );
-}
-
-const Register = () => {
+const Notice = () => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
-  const text = `Wish I could come, but I'm out of town this…\n주방 공사합니다.`; // prettier-ignore
+  const { height, width } = useWindowDimensions();
+  const data = useRef({
+    text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
+    to: "#",
+  });
+
+  const Row = useCallback(({ index, style, data }) => {
+    return <NoticeLitemLink data={data} index={index} style={style} />;
+  }, []);
 
   return (
     <>
@@ -57,38 +49,15 @@ const Register = () => {
       <Container component="main" maxWidth="sm">
         <CssBaseline />
         <div className={classes.paper}>
-          <List className={classes.root}>
-            {generate(
-              <>
-                <ListItem alignItems="flex-start">
-                  <ListItemAvatar>
-                    <Avatar alt="갯마을" src="logo192.png" />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="공지사항 제목"
-                    secondary={
-                      <>
-                        <Typography
-                          component="span"
-                          variant="caption"
-                          className={classes.inline}
-                          color="textPrimary"
-                        >
-                          20/09/27
-                        </Typography>
-                        <br />
-                        {text}
-                      </>
-                    }
-                    secondaryTypographyProps={{
-                      variant: "body2",
-                      className: classes.content,
-                    }}
-                  />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-              </>
-            )}
+          <List
+            className={classes.root}
+            height={height - 56 - 8 - clsx(matches ? 0 : 37.09) - 8 - 57.43}
+            itemCount={1000}
+            itemSize={100}
+            width={clsx(matches ? theme.breakpoints.values.sm : width)}
+            itemData={data.current}
+          >
+            {Row}
           </List>
         </div>
       </Container>
@@ -97,4 +66,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Notice;

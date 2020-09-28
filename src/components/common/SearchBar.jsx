@@ -71,7 +71,9 @@ const SearchBar = ({ handleSearch }) => {
             input: classes.inputInput,
           }}
           inputProps={{ "aria-label": "search" }}
-          onBlur={handleSearch}
+          onBlur={() =>
+            setTimeout(handleSearch, theme.transitions.duration.shortest)
+          }
           autoFocus
         />
       </div>

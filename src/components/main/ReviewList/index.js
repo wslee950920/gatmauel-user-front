@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 
-import ListItemLink from "../../common/ListItemLink";
+import ListItemLink from "../../common/MainLists/ListItemLink";
 
 const useStyles = makeStyles((theme) => ({
   root: {

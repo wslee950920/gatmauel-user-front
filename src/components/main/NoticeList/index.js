@@ -9,7 +9,7 @@ import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 import pink from "@material-ui/core/colors/pink";
 
-import ListItemLink from "../../common/ListItemLink";
+import ListItemLink from "../../common/MainLists/ListItemLink";
 
 const useStyles = makeStyles((theme) => ({
   root: {
