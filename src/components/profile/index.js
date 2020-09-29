@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     margin: theme.spacing(1),
-    width: theme.spacing(10),
-    height: theme.spacing(10),
+    width: "5rem",
+    height: "5rem",
   },
   form: {
     width: "100%", // Fix IE 11 issue.

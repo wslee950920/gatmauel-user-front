@@ -60,7 +60,7 @@ if (navigator.platform) {
 }
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename="gatmauel-user-front">
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <App />

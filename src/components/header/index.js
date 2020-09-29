@@ -102,7 +102,7 @@ const Header = ({ main }) => {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.section}>
-            {search ? (
+            {search ? ( //matches의 기준을 header의 길이로 해야하기 때문에 matches를 props로 넘겨준다.
               <ScopedCssBaseline classes={{ root: classes.base }}>
                 <SearchBar handleSearch={handleSearch} matches={matches} />
               </ScopedCssBaseline>

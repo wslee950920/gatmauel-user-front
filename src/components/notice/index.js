@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useMemo } from "react";
 import { FixedSizeList as List } from "react-window";
 import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
@@ -9,8 +9,8 @@ import Container from "@material-ui/core/Container";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import SearchBar from "../common/SearchBar";
-import Footer from "../footer";
 import NoticeLitemLink from "./NoticeLitemLink";
+import Footer from "../footer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,11 +38,18 @@ const Notice = () => {
       to: "#",
     })
   );
+  const filter = useRef("win16|win32|win64|macintel|mac|"); // PC일 경우 가능한 값
 
   const Row = useCallback(({ index, style, data }) => {
     const d = data[index];
 
     return <NoticeLitemLink data={d} style={style} />;
+  }, []);
+  const platform = useMemo(() => {
+    return (
+      navigator.platform &&
+      filter.current.indexOf(navigator.platform.toLowerCase()) < 0
+    );
   }, []);
 
   return (
@@ -53,7 +60,14 @@ const Notice = () => {
         <div className={classes.paper}>
           <List
             className={classes.root}
-            height={height - 56 - 8 - clsx(matches ? 0 : 37.09) - 8 - 57.43}
+            height={
+              height -
+              56 -
+              8 -
+              clsx(matches ? 0 : 37.09) -
+              8 -
+              clsx(platform ? 0 : 57.43)
+            }
             itemCount={datas.current.length}
             itemSize={100}
             width={clsx(matches ? theme.breakpoints.values.sm : width)}
@@ -63,7 +77,10 @@ const Notice = () => {
           </List>
         </div>
       </Container>
-      <Footer />
+      {navigator.platform &&
+      filter.current.indexOf(navigator.platform.toLowerCase()) < 0 ? null : (
+        <Footer />
+      )}
     </>
   );
 };

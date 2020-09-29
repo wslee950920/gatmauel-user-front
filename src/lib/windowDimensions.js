@@ -20,6 +20,7 @@ export default function useWindowDimensions() {
     }
 
     window.addEventListener("resize", handleResize);
+    //뒷정리
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 

@@ -11,7 +11,7 @@ import ScheduleIcon from "@material-ui/icons/Schedule";
 const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: "#dcdcdc",
-    padding: "0.5rem",
+    padding: theme.spacing(1),
     width: "100%",
     position: "absolute",
     bottom: -57.43,

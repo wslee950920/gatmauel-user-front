@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
     overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
-    padding: "0.4rem",
+    padding: theme.spacing(0.8),
   },
   gridList: {
     flexWrap: "nowrap",
@@ -61,7 +61,7 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
               }}
               style={{
                 height: matches ? "auto" : "68.2594vw",
-                margin: "0.5rem 0",
+                margin: theme.spacing(1, 0),
               }}
             >
               <MDBView hover zoom>
