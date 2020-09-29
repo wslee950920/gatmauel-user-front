@@ -1,0 +1,27 @@
+{
+  "short_name": "갯마을",
+  "name": "Gatmauel by WSL",
+  "description": "갯마을 바지락 칼국수 보쌈 홈페이지",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#feffff",
+  "background_color": "#feffff"
+}
