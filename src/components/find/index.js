@@ -6,7 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
+
 import Tab from "@material-ui/core/Tab";
 
 import Copyright from "../footer/Copyright";
@@ -63,9 +63,7 @@ const FindInfo = () => {
           <FindPW />
         </TabPanel>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+      <Copyright />
     </Container>
   );
 };

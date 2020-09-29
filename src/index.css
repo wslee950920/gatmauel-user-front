@@ -8,6 +8,7 @@ body {
 
   box-sizing: border-box;
   min-height: 100%;
+  position: relative;
 }
 
 @font-face {

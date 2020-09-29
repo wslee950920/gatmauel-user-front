@@ -10,7 +10,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
 
 import Copyright from "../footer/Copyright";
 
@@ -130,9 +129,7 @@ const Register = () => {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+      <Copyright />
     </Container>
   );
 };

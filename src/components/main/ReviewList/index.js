@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   primary: {
     fontFamily: "MaplestoryOTFBold",
   },
+  write: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 function generate(element) {
@@ -54,15 +57,18 @@ const ReviewList = () => {
         <Container className={classes.background}>
           <div className={classes.box}>
             <Typography variant="subtitle1" className={classes.title} noWrap>
-              Review
+              <Link component={RouterLink} to="/review" color="textPrimary">
+                Review
+              </Link>
             </Typography>
             <Link
               component={RouterLink}
               to="#"
               color="secondary"
               variant="caption"
+              className={classes.write}
             >
-              더 보기{">"}
+              글 쓰기{">"}
             </Link>
           </div>
           <div>

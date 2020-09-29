@@ -8,7 +8,6 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
@@ -93,7 +92,7 @@ const Profile = () => {
             name="nickname"
             size="small"
             InputProps={{ className: classes.fontMaple }}
-            value="맨유경비원"
+            defaultValue="맨유경비원"
           />
           <TextField
             variant="outlined"
@@ -176,9 +175,7 @@ const Profile = () => {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+      <Copyright />
     </Container>
   );
 };

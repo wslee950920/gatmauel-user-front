@@ -12,7 +12,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 
 import Copyright from "../footer/Copyright";
@@ -140,9 +139,7 @@ const LogIn = () => {
       </div>
       <Divider variant="middle" className={classes.divider} />
       <KakaoBtn />
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+      <Copyright />
     </Container>
   );
 };

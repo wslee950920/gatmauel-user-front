@@ -10,7 +10,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import SearchBar from "../common/SearchBar";
 import Footer from "../footer";
-import NoticeLitemLink from "./NoticeLitemLink";
+import ReviewItem from "./ReviewItem";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Notice = () => {
+const Review = () => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const { height, width } = useWindowDimensions();
-  const datas = useRef(
+  const data = useRef(
     new Array(1000).fill({
       text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
       to: "#",
@@ -42,7 +42,7 @@ const Notice = () => {
   const Row = useCallback(({ index, style, data }) => {
     const d = data[index];
 
-    return <NoticeLitemLink data={d} style={style} />;
+    return <ReviewItem data={d} style={style} />;
   }, []);
 
   return (
@@ -54,10 +54,10 @@ const Notice = () => {
           <List
             className={classes.root}
             height={height - 56 - 8 - clsx(matches ? 0 : 37.09) - 8 - 57.43}
-            itemCount={datas.current.length}
+            itemCount={data.current.length}
             itemSize={100}
             width={clsx(matches ? theme.breakpoints.values.sm : width)}
-            itemData={datas.current}
+            itemData={data.current}
           >
             {Row}
           </List>
@@ -68,4 +68,4 @@ const Notice = () => {
   );
 };
 
-export default Notice;
+export default Review;

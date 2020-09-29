@@ -4,7 +4,6 @@ import clsx from "clsx";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,10 +52,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchBar = ({ handleSearch }) => {
+const SearchBar = ({ handleSearch, matches }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
     <div className={classes.root}>
@@ -74,7 +72,7 @@ const SearchBar = ({ handleSearch }) => {
           onBlur={() =>
             setTimeout(handleSearch, theme.transitions.duration.shortest)
           }
-          autoFocus
+          autoFocus={matches}
         />
       </div>
     </div>

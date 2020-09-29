@@ -1,7 +1,6 @@
 import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import PhoneForwardedIcon from "@material-ui/icons/PhoneForwarded";
 import Link from "@material-ui/core/Link";
@@ -13,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: "#dcdcdc",
     padding: "0.5rem",
+    width: "100%",
+    position: "absolute",
+    bottom: -57.43,
   },
   footer: {
     display: "flex",
@@ -36,8 +38,8 @@ const Footer = () => {
   const matches = useMediaQuery(theme.breakpoints.up("xs"));
 
   return (
-    <Container maxWidth="xl" className={classes.background}>
-      <footer className={classes.footer}>
+    <footer className={classes.background}>
+      <div className={classes.footer}>
         <div>
           <ScheduleIcon fontSize="small" />
           <Typography variant="caption" className={classes.info}>
@@ -51,8 +53,8 @@ const Footer = () => {
             </Typography>
           </div>
         )}
-      </footer>
-      <footer className={classes.footer}>
+      </div>
+      <div className={classes.footer}>
         <Link
           href="tel:0314159300"
           className={classes.link}
@@ -75,8 +77,8 @@ const Footer = () => {
             </Typography>
           </div>
         )}
-      </footer>
-    </Container>
+      </div>
+    </footer>
   );
 };
 

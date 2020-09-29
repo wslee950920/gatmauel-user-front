@@ -1,7 +1,8 @@
-import React, { useMemo } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import React from "react";
 
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,20 +17,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NoticeLitemLink = ({ data, style }) => {
+const ReviewItem = ({ data, style }) => {
   const classes = useStyles();
-
-  const renderLink = useMemo(
-    () =>
-      React.forwardRef((itemProps, ref) => (
-        <RouterLink to={data.to} ref={ref} {...itemProps} />
-      )),
-    [data.to]
-  );
 
   return (
     <div style={style}>
-      <ListItem alignItems="flex-start" divider button component={renderLink}>
+      <ListItem alignItems="center">
+        <ListItemAvatar>
+          <Avatar alt="갯마을" src="logo192.png" />
+        </ListItemAvatar>
         <ListItemText
           primary="공지사항 제목"
           secondary={
@@ -57,4 +53,4 @@ const NoticeLitemLink = ({ data, style }) => {
   );
 };
 
-export default React.memo(NoticeLitemLink);
+export default React.memo(ReviewItem);

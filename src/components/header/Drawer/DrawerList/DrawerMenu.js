@@ -9,7 +9,11 @@ export default [
   },
   {
     text: "리뷰",
-    to: "#",
+    to: "/review",
+  },
+  {
+    text: "공지사항",
+    to: "/notice",
   },
   {
     text: "주문하기",

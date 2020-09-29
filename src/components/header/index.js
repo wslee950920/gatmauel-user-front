@@ -104,7 +104,7 @@ const Header = ({ main }) => {
           <div className={classes.section}>
             {search ? (
               <ScopedCssBaseline classes={{ root: classes.base }}>
-                <SearchBar handleSearch={handleSearch} />
+                <SearchBar handleSearch={handleSearch} matches={matches} />
               </ScopedCssBaseline>
             ) : (
               !main &&
