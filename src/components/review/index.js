@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useMemo } from "react";
-import { FixedSizeList as List } from "react-window";
+import { List } from "react-virtualized";
 import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
 
@@ -10,12 +10,6 @@ import ReviewItem from "./ReviewItem";
 import SearchBar from "../common/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    "&>li:last-child": {
-      display: "none",
-    },
-  },
   paper: {
     marginTop: theme.spacing(1),
   },
@@ -28,43 +22,43 @@ const Review = () => {
   const small = useMediaQuery(theme.breakpoints.up("sm"));
   const bSmall = useMediaQuery(theme.breakpoints.between(400, "sm"));
   const { height, width } = useWindowDimensions();
-  const data = useRef(
-    new Array(1000).fill({
+  const datas = useRef(
+    new Array(10).fill({
       text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
     })
   );
 
-  const itemSize = useMemo(() => {
+  const rowHeight = useMemo(() => {
     if (small) {
-      return 850;
+      return 700;
     } else if (bSmall) {
-      return 665;
+      return 650;
     } else if (xSmall) {
-      return 620;
-    } else return 560;
+      return 600;
+    } else return 550;
   }, [small, bSmall, xSmall]);
 
-  const Row = useCallback(({ index, style, data }) => {
-    const d = data[index];
+  const rowRenderer = useCallback(
+    ({ index, key, style }) => {
+      const data = datas.current[index];
 
-    return <ReviewItem data={d} style={style} />;
-  }, []);
+      return <ReviewItem data={data} style={style} key={key} />;
+    },
+    [datas]
+  );
 
   return (
     <>
       {!small && <SearchBar />}
-      <div className={classes.paper}>
-        <List
-          className={classes.root}
-          height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
-          itemCount={data.current.length}
-          itemSize={itemSize}
-          width={clsx(small ? theme.breakpoints.values.sm : width)}
-          itemData={data.current}
-        >
-          {Row}
-        </List>
-      </div>
+      <List
+        className={classes.paper}
+        height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
+        rowCount={datas.current.length}
+        rowHeight={rowHeight}
+        width={parseInt(width)}
+        rowRenderer={rowRenderer}
+        list={datas}
+      />
     </>
   );
 };

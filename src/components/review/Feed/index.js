@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import useWindowDimensions from "../../../lib/windowDimensions";
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -16,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 0,
     paddingTop: "100%", // 1:1
+  },
+  card: {
+    maxWidth: theme.breakpoints.values.sm,
   },
   subHeader: {
     fontFamily: "Roboto",
@@ -35,16 +37,9 @@ const useStyles = makeStyles((theme) => ({
 const Feed = ({ data }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-  const { height, width } = useWindowDimensions();
-  const theme = useTheme();
 
   return (
-    <Card
-      style={{
-        width: width - theme.spacing(2),
-        maxWidth: theme.breakpoints.values.sm,
-      }}
-    >
+    <Card className={classes.card}>
       <CardHeader
         avatar={<Avatar aria-label="avatar" />}
         action={

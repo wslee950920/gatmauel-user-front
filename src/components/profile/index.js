@@ -67,116 +67,118 @@ const Profile = () => {
   }, []);
 
   return (
-    <Container component="main" maxWidth="xs">
+    <>
       <CssBaseline />
-      <div className={classes.paper}>
-        <AccountCircleIcon
-          fontSize="large"
-          color="action"
-          className={classes.icon}
-        />
-        <Typography component="h1" variant="h5">
-          내 정보
-        </Typography>
-        <div style={{ width: "100%" }} className={classes.divider}>
-          <Divider variant="fullWidth" />
-        </div>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="nickname"
-            label="별명"
-            name="nickname"
-            size="small"
-            InputProps={{ className: classes.fontMaple }}
-            defaultValue="맨유경비원"
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paper}>
+          <AccountCircleIcon
+            fontSize="large"
+            color="action"
+            className={classes.icon}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="이메일"
-            name="email"
-            autoComplete="email"
-            size="small"
-            type="email"
-            InputProps={{ className: classes.fontMaple }}
-            value="amicusadaras6@gmail.com"
-            disabled
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            name="address"
-            label="시/군/구"
-            id="address"
-            size="small"
-            InputProps={{ className: classes.fontMaple }}
-            InputLabelProps={{ classes: { root: classes.disabled } }}
-            disabled
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            name="detail"
-            label="상세주소"
-            id="detail"
-            size="small"
-            InputProps={{ className: classes.fontMaple }}
-            InputLabelProps={{ classes: { root: classes.disabled } }}
-            disabled
-          />
-          <div className={classes.field}>
+          <Typography component="h1" variant="h5">
+            내 정보
+          </Typography>
+          <div style={{ width: "100%" }} className={classes.divider}>
+            <Divider variant="fullWidth" />
+          </div>
+          <form className={classes.form} noValidate onSubmit={onSubmit}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="nickname"
+              label="별명"
+              name="nickname"
+              size="small"
+              InputProps={{ className: classes.fontMaple }}
+              defaultValue="맨유경비원"
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="이메일"
+              name="email"
+              autoComplete="email"
+              size="small"
+              type="email"
+              InputProps={{ className: classes.fontMaple }}
+              value="amicusadaras6@gmail.com"
+              disabled
+            />
             <TextField
               variant="outlined"
               margin="normal"
               fullWidth
-              name="phone"
-              label="전화번호"
-              id="phone"
+              name="address"
+              label="시/군/구"
+              id="address"
               size="small"
               InputProps={{ className: classes.fontMaple }}
               InputLabelProps={{ classes: { root: classes.disabled } }}
-              type="tel"
               disabled
             />
-            <Button variant="contained" className={classes.button} disabled>
-              인증
+            <TextField
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              name="detail"
+              label="상세주소"
+              id="detail"
+              size="small"
+              InputProps={{ className: classes.fontMaple }}
+              InputLabelProps={{ classes: { root: classes.disabled } }}
+              disabled
+            />
+            <div className={classes.field}>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name="phone"
+                label="전화번호"
+                id="phone"
+                size="small"
+                InputProps={{ className: classes.fontMaple }}
+                InputLabelProps={{ classes: { root: classes.disabled } }}
+                type="tel"
+                disabled
+              />
+              <Button variant="contained" className={classes.button} disabled>
+                인증
+              </Button>
+            </div>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              className={classes.submit}
+              color="primary"
+            >
+              저장
             </Button>
-          </div>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            className={classes.submit}
-            color="primary"
-          >
-            저장
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link
-                component={RouterLink}
-                to="/login"
-                variant="caption"
-                color="textSecondary"
-                TypographyClasses={{ caption: classes.fontRobo }}
-              >
-                로그아웃
-              </Link>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link
+                  component={RouterLink}
+                  to="/login"
+                  variant="caption"
+                  color="textSecondary"
+                  TypographyClasses={{ caption: classes.fontRobo }}
+                >
+                  로그아웃
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Copyright />
-    </Container>
+          </form>
+        </div>
+        <Copyright />
+      </Container>
+    </>
   );
 };
 

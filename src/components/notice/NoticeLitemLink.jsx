@@ -5,6 +5,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 const useStyles = makeStyles((theme) => ({
   inline: {
@@ -16,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NoticeLitemLink = ({ data, style }) => {
+const NoticeLitemLink = ({ data, style, index, length }) => {
   const classes = useStyles();
 
   const renderLink = useMemo(
@@ -26,33 +28,40 @@ const NoticeLitemLink = ({ data, style }) => {
       )),
     [data.to]
   );
+  const divider = useMemo(() => {
+    if (index !== length - 1) return true;
+    else return false;
+  }, [index, length]);
 
   return (
     <div style={style}>
-      <ListItem alignItems="flex-start" divider button component={renderLink}>
-        <ListItemText
-          primary="공지사항 제목"
-          secondary={
-            <>
-              <Typography
-                component="span"
-                variant="caption"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                20/09/27
-              </Typography>
-              <br />
-              {data.text}
-            </>
-          }
-          secondaryTypographyProps={{
-            variant: "body2",
-            className: classes.content,
-            noWrap: true,
-          }}
-        />
-      </ListItem>
+      <CssBaseline />
+      <Container maxWidth="sm">
+        <ListItem divider={divider} button component={renderLink}>
+          <ListItemText
+            primary="공지사항 제목"
+            secondary={
+              <>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.inline}
+                  color="textPrimary"
+                >
+                  20/09/27
+                </Typography>
+                <br />
+                {data.text}
+              </>
+            }
+            secondaryTypographyProps={{
+              variant: "body2",
+              className: classes.content,
+              noWrap: true,
+            }}
+          />
+        </ListItem>
+      </Container>
     </div>
   );
 };

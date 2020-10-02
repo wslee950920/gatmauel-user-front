@@ -44,30 +44,32 @@ const Account = () => {
   }, []);
 
   return (
-    <Container component="main" maxWidth="xs">
+    <>
       <CssBaseline />
-      <div className={classes.paper}>
-        <AccessibilityIcon
-          fontSize="large"
-          color="action"
-          className={classes.icon}
-        />
-        <Typography component="h1" variant="h5">
-          내 계정
-        </Typography>
-        <FullWidthTabs handleChange={handleChange} value={value} account>
-          <Tab label="PW변경" {...a11yProps(0)} />
-          <Tab label="탈퇴" {...a11yProps(1)} />
-        </FullWidthTabs>
-        <TabPanel value={value} index={0}>
-          <Password />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Withdraw />
-        </TabPanel>
-      </div>
-      <Copyright />
-    </Container>
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paper}>
+          <AccessibilityIcon
+            fontSize="large"
+            color="action"
+            className={classes.icon}
+          />
+          <Typography component="h1" variant="h5">
+            내 계정
+          </Typography>
+          <FullWidthTabs handleChange={handleChange} value={value} account>
+            <Tab label="PW변경" {...a11yProps(0)} />
+            <Tab label="탈퇴" {...a11yProps(1)} />
+          </FullWidthTabs>
+          <TabPanel value={value} index={0}>
+            <Password />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Withdraw />
+          </TabPanel>
+        </div>
+        <Copyright />
+      </Container>
+    </>
   );
 };
 

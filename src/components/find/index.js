@@ -45,26 +45,28 @@ const FindInfo = () => {
   }, []);
 
   return (
-    <Container component="main" maxWidth="xs">
+    <>
       <CssBaseline />
-      <div className={classes.paper}>
-        <LockIcon fontSize="large" color="action" className={classes.icon} />
-        <Typography component="h1" variant="h5">
-          내 계정
-        </Typography>
-        <FullWidthTabs handleChange={handleChange} value={value}>
-          <Tab label="ID찾기" {...a11yProps(0)} />
-          <Tab label="PW찾기" {...a11yProps(1)} />
-        </FullWidthTabs>
-        <TabPanel value={value} index={0}>
-          <FindID />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <FindPW />
-        </TabPanel>
-      </div>
-      <Copyright />
-    </Container>
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paper}>
+          <LockIcon fontSize="large" color="action" className={classes.icon} />
+          <Typography component="h1" variant="h5">
+            내 계정
+          </Typography>
+          <FullWidthTabs handleChange={handleChange} value={value}>
+            <Tab label="ID찾기" {...a11yProps(0)} />
+            <Tab label="PW찾기" {...a11yProps(1)} />
+          </FullWidthTabs>
+          <TabPanel value={value} index={0}>
+            <FindID />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <FindPW />
+          </TabPanel>
+        </div>
+        <Copyright />
+      </Container>
+    </>
   );
 };
 

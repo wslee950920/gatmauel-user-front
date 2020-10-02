@@ -6,19 +6,18 @@ import { makeStyles } from "@material-ui/core/styles";
 import Feed from "./Feed";
 
 const useStyles = makeStyles((theme) => ({
-  item: {
+  root: {
     flexDirection: "column",
   },
 }));
 
 const ReviewItem = ({ data, style }) => {
   const classes = useStyles();
+
   return (
-    <div style={style}>
-      <ListItem alignItems="center" className={classes.item}>
-        <Feed data={data} />
-      </ListItem>
-    </div>
+    <ListItem style={style} classes={{ root: classes.root }}>
+      <Feed data={data} />
+    </ListItem>
   );
 };
 
