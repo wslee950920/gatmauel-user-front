@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = () => {
+const Feed = ({ data }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const { height, width } = useWindowDimensions();
@@ -41,7 +41,7 @@ const Feed = () => {
   return (
     <Card
       style={{
-        width: width - theme.spacing(1),
+        width: width - theme.spacing(2),
         maxWidth: theme.breakpoints.values.sm,
       }}
     >
@@ -69,7 +69,7 @@ const Feed = () => {
           className={classes.stepper}
         />
         <Typography variant="body2" color="textSecondary">
-          맛잇어요!!!짱이예요!!!최고예요!!!또올게요!!!안녕히계세요!!!
+          {data.text}
         </Typography>
       </CardContent>
     </Card>

@@ -7,6 +7,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import ReviewItem from "./ReviewItem";
+import SearchBar from "../common/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +31,6 @@ const Review = () => {
   const data = useRef(
     new Array(1000).fill({
       text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
-      to: "#",
     })
   );
 
@@ -51,18 +51,21 @@ const Review = () => {
   }, []);
 
   return (
-    <div className={classes.paper}>
-      <List
-        className={classes.root}
-        height={height - 56 - 8}
-        itemCount={data.current.length}
-        itemSize={itemSize}
-        width={clsx(small ? theme.breakpoints.values.sm : width)}
-        itemData={data.current}
-      >
-        {Row}
-      </List>
-    </div>
+    <>
+      {!small && <SearchBar />}
+      <div className={classes.paper}>
+        <List
+          className={classes.root}
+          height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
+          itemCount={data.current.length}
+          itemSize={itemSize}
+          width={clsx(small ? theme.breakpoints.values.sm : width)}
+          itemData={data.current}
+        >
+          {Row}
+        </List>
+      </div>
+    </>
   );
 };
 

@@ -16,7 +16,7 @@ const ReviewItem = ({ data, style }) => {
   return (
     <div style={style}>
       <ListItem alignItems="center" className={classes.item}>
-        <Feed />
+        <Feed data={data} />
       </ListItem>
     </div>
   );
