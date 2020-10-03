@@ -1,4 +1,4 @@
-importScripts("/gatmauel-user-front/precache-manifest.106b7b7e48ed6e1697316b92e5276e1d.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+importScripts("/gatmauel-user-front/precache-manifest.8759aa8440ec4d447c9dae75eb1cb707.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 workbox.setConfig({
   debug: true,
