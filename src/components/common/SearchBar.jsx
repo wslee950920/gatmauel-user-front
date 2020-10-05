@@ -1,9 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
-import clsx from "clsx";
-//import useWindowDimensions from "../../lib/windowDimensions";
-=======
->>>>>>> search-v1.0
 
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
@@ -55,10 +50,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     fontFamily: "Roboto",
     transition: theme.transitions.create("width"),
-<<<<<<< HEAD
-=======
-    fontSize: "1rem",
->>>>>>> search-v1.0
 
     [theme.breakpoints.up("sm")]: {
       width: "0ch",
@@ -101,27 +92,9 @@ const SearchBar = ({ handleSearch, matches }) => {
             autoFocus={matches}
           />
         </div>
-<<<<<<< HEAD
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
-          inputProps={{ "aria-label": "search" }}
-          onBlur={() => {
-            //zoomOutMobile();
-            setTimeout(handleSearch, theme.transitions.duration.shortest);
-          }}
-          autoFocus={matches}
-        />
-      </div>
-    </div>
-=======
       </Toolbar>
       {!matches && <Toolbar />}
     </>
->>>>>>> search-v1.0
   );
 };
 
