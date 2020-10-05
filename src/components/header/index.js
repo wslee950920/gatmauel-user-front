@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import Link from "@material-ui/core/Link";
@@ -47,7 +47,7 @@ const Header = ({ main }) => {
   const [drawer, setDrawer] = useState(false);
   const [search, setSearch] = useState(false);
   const isMenuOpen = Boolean(accountEl);
-  const menuId = "account-menu";
+  const menuId = useRef("account-menu");
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -130,7 +130,7 @@ const Header = ({ main }) => {
             <IconButton
               edge="end"
               aria-label="user menu"
-              aria-controls={menuId}
+              aria-controls={menuId.current}
               aria-haspopup="true"
               onClick={handleMenuOpen}
               className={classes.icon}
@@ -142,7 +142,7 @@ const Header = ({ main }) => {
       </AppBar>
       <Toolbar />
       <AccountMenu
-        menuId={menuId}
+        menuId={menuId.current}
         accountEl={accountEl}
         handleMenuClose={handleMenuClose}
         isMenuOpen={isMenuOpen}

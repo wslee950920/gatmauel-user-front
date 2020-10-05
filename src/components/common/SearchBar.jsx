@@ -1,19 +1,27 @@
 import React from "react";
-import clsx from "clsx";
 
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(0, 0.8),
+    width: "100%",
+    padding: theme.spacing(0, 1),
+    position: "fixed",
+    zIndex: theme.zIndex.appBar,
+    backgroundColor: "#fafafa",
+
+    [theme.breakpoints.up("sm")]: {
+      backgroundColor: "#fff",
+      position: "static",
+    },
   },
   search: {
     position: "relative",
     borderRadius: "25rem",
     border: "solid #dcdcdc",
-    marginTop: theme.spacing(1),
     width: "100%",
 
     [theme.breakpoints.up("sm")]: {
@@ -42,12 +50,11 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     fontFamily: "Roboto",
     transition: theme.transitions.create("width"),
-    fontSize: "0.9rem",
+    fontSize: "1rem",
 
     [theme.breakpoints.up("sm")]: {
       width: "0ch",
       "&:focus": { width: "20ch" },
-      fontSize: "1rem",
     },
   },
 }));
@@ -57,25 +64,28 @@ const SearchBar = ({ handleSearch, matches }) => {
   const theme = useTheme();
 
   return (
-    <div className={classes.root}>
-      <div className={classes.search}>
-        <div className={classes.searchIcon}>
-          <SearchIcon fontSize={clsx(matches ? "default" : "small")} />
+    <>
+      <Toolbar className={classes.root} disableGutters>
+        <div className={classes.search}>
+          <div className={classes.searchIcon}>
+            <SearchIcon fontSize={"default"} />
+          </div>
+          <InputBase
+            placeholder="Search…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput,
+            }}
+            inputProps={{ "aria-label": "search" }}
+            onBlur={() =>
+              setTimeout(handleSearch, theme.transitions.duration.shortest)
+            }
+            autoFocus={matches}
+          />
         </div>
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
-          inputProps={{ "aria-label": "search" }}
-          onBlur={() =>
-            setTimeout(handleSearch, theme.transitions.duration.shortest)
-          }
-          autoFocus={matches}
-        />
-      </div>
-    </div>
+      </Toolbar>
+      {!matches && <Toolbar />}
+    </>
   );
 };
 

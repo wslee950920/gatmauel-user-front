@@ -1,17 +1,22 @@
 import React, { useRef, useCallback, useMemo } from "react";
-import { List } from "react-virtualized";
+import { List, WindowScroller } from "react-virtualized";
 import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
+import "react-virtualized/styles.css"; // only needs to be imported once
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import ReviewItem from "./ReviewItem";
-import SearchBar from "../common/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(1),
+  },
+  write: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 }));
 
@@ -21,7 +26,7 @@ const Review = () => {
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
   const small = useMediaQuery(theme.breakpoints.up("sm"));
   const bSmall = useMediaQuery(theme.breakpoints.between(400, "sm"));
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const datas = useRef(
     new Array(10).fill({
       text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
@@ -49,16 +54,28 @@ const Review = () => {
 
   return (
     <>
-      {!small && <SearchBar />}
-      <List
-        className={classes.paper}
-        height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
-        rowCount={datas.current.length}
-        rowHeight={rowHeight}
-        width={parseInt(width)}
-        rowRenderer={rowRenderer}
-        list={datas}
-      />
+      <WindowScroller>
+        {({ height, isScrolling, registerChild, scrollTop }) => (
+          <div className={classes.paper}>
+            <div className={classes.write}>
+              <div>리뷰쓰기</div>
+            </div>
+            <div ref={registerChild}>
+              <List
+                autoHeight
+                height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
+                rowCount={datas.current.length}
+                rowHeight={rowHeight}
+                width={parseInt(width)}
+                rowRenderer={rowRenderer}
+                list={datas}
+                scrollTop={scrollTop}
+                isScrolling={isScrolling}
+              />
+            </div>
+          </div>
+        )}
+      </WindowScroller>
     </>
   );
 };
