@@ -6,7 +6,6 @@ import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import SearchBar from "../common/SearchBar";
 import NoticeLitemLink from "./NoticeLitemLink";
 import Footer from "../footer";
 
@@ -52,7 +51,6 @@ const Notice = () => {
 
   return (
     <>
-      {!matches && <SearchBar />}
       <List
         className={classes.root}
         height={
