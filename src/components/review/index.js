@@ -8,15 +8,11 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import ReviewItem from "./ReviewItem";
+import Write from "./Write";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(1),
-  },
-  write: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
   },
 }));
 
@@ -35,7 +31,7 @@ const Review = () => {
 
   const rowHeight = useMemo(() => {
     if (small) {
-      return 700;
+      return 800;
     } else if (bSmall) {
       return 650;
     } else if (xSmall) {
@@ -53,30 +49,26 @@ const Review = () => {
   );
 
   return (
-    <>
-      <WindowScroller>
-        {({ height, isScrolling, registerChild, scrollTop }) => (
-          <div className={classes.paper}>
-            <div className={classes.write}>
-              <div>리뷰쓰기</div>
-            </div>
-            <div ref={registerChild}>
-              <List
-                autoHeight
-                height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
-                rowCount={datas.current.length}
-                rowHeight={rowHeight}
-                width={parseInt(width)}
-                rowRenderer={rowRenderer}
-                list={datas}
-                scrollTop={scrollTop}
-                isScrolling={isScrolling}
-              />
-            </div>
+    <WindowScroller>
+      {({ height, isScrolling, registerChild, scrollTop }) => (
+        <div className={classes.paper}>
+          <Write />
+          <div ref={registerChild}>
+            <List
+              autoHeight
+              height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
+              rowCount={datas.current.length}
+              rowHeight={rowHeight}
+              width={parseInt(width)}
+              rowRenderer={rowRenderer}
+              list={datas}
+              scrollTop={scrollTop}
+              isScrolling={isScrolling}
+            />
           </div>
-        )}
-      </WindowScroller>
-    </>
+        </div>
+      )}
+    </WindowScroller>
   );
 };
 

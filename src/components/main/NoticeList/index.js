@@ -26,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 1, 0),
     flex: 1,
     color: pink[800],
-    "&:hover": {
-      color: theme.palette.info.dark,
-    },
   },
   box: {
     display: "flex",
@@ -36,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
   },
   fontRobo: {
     fontFamily: "Roboto",
+  },
+  more: {
+    marginRight: theme.spacing(1),
   },
 }));
 
@@ -53,10 +53,17 @@ const Notice = () => {
       <div style={{ padding: theme.spacing(0.8) }}>
         <Container className={classes.background}>
           <div className={classes.box}>
-            <Link component={RouterLink} to="/notice">
-              <Typography variant="subtitle1" className={classes.info}>
-                Notice
-              </Typography>
+            <Typography variant="subtitle1" className={classes.info}>
+              Notice
+            </Typography>
+            <Link
+              component={RouterLink}
+              to="/notice"
+              color="secondary"
+              variant="caption"
+              className={classes.more}
+            >
+              더 보기{">"}
             </Link>
           </div>
           <div>
