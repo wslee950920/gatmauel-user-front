@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "25rem",
     border: "solid #dcdcdc",
     width: "100%",
+    backgroundColor: "white",
 
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(1),

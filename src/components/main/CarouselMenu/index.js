@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -45,12 +45,26 @@ const useStyles = makeStyles((theme) => ({
 const CarouselMenu = ({ handleOpen, onMouseOver }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("md"));
+  const medium = useMediaQuery(theme.breakpoints.up("md"));
+  const large = useMediaQuery(theme.breakpoints.up("lg"));
+  const xlarge = useMediaQuery(theme.breakpoints.up("xl"));
+
+  const tileWidth = useMemo(() => {
+    if (xlarge) {
+      return 2.65;
+    } else if (large) {
+      return 1.465;
+    } else if (medium) {
+      return 0.98;
+    } else {
+      return 1.26;
+    }
+  }, [xlarge, large, medium]);
 
   return (
     <div className={classes.root}>
       <Container maxWidth="xl" className={classes.background}>
-        <GridList className={classes.gridList} cols={1.465}>
+        <GridList className={classes.gridList} cols={tileWidth}>
           {tileData.map((tile) => (
             <GridListTile
               key={tile.img}
@@ -60,7 +74,7 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
                 imgFullWidth: classes.imgFull,
               }}
               style={{
-                height: matches ? "auto" : "68.2594vw",
+                height: medium ? "auto" : "68.2594vw",
                 margin: theme.spacing(1, 0),
               }}
             >
@@ -71,7 +85,7 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
                   onClick={handleOpen}
                   className="img-fluid"
                   style={{
-                    height: matches ? "auto" : "68.2594vw",
+                    height: medium ? "auto" : "68.2594vw",
                     cursor: "pointer",
                   }}
                   onMouseOver={onMouseOver}
