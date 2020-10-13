@@ -1,5 +1,6 @@
 import React from "react";
 import useWindowDimensions from "../../../lib/windowDimensions";
+import clsx from "clsx";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -23,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   textArea: {
     width: "100%",
     border: "none",
+    fontSize: "1rem",
+    fontFamily: "MaplestoryOTFBold",
+    backgroundColor: "white",
   },
   box: {
     display: "flex",
@@ -36,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Write = () => {
+const Write = ({ handleClickOpen, dialog }) => {
   const classes = useStyles();
   const { width } = useWindowDimensions();
 
@@ -48,7 +52,10 @@ const Write = () => {
           <TextareaAutosize
             aria-label="write review"
             rowsMin={4}
+            rowsMax={clsx(dialog ? 12 : 4)}
             className={classes.textArea}
+            onClick={handleClickOpen}
+            readOnly={!dialog}
           />
           <Divider variant="middle" />
           <List className={classes.box}>
@@ -66,9 +73,11 @@ const Write = () => {
             </div>
             <div>
               <ListItem>
-                <IconButton size="small">
-                  <CreateIcon color="action" />
-                </IconButton>
+                {!dialog && (
+                  <IconButton size="small">
+                    <CreateIcon color="action" />
+                  </IconButton>
+                )}
               </ListItem>
             </div>
           </List>
@@ -78,4 +87,4 @@ const Write = () => {
   );
 };
 
-export default Write;
+export default React.memo(Write);

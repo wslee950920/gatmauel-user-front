@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MobileStepper from "@material-ui/core/MobileStepper";
+
+import FeedMenu from "./FeedMenu";
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -37,37 +39,52 @@ const useStyles = makeStyles((theme) => ({
 const Feed = ({ data }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = useCallback((e) => {
+    setAnchorEl(e.currentTarget);
+  }, []);
+  const handleClose = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
 
   return (
-    <Card className={classes.card}>
-      <CardHeader
-        avatar={<Avatar aria-label="avatar" />}
-        action={
-          <IconButton aria-label="more">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="맨유경비원"
-        subheader="20/09/29"
-        subheaderTypographyProps={{
-          variant: "caption",
-          className: classes.subHeader,
-        }}
-      />
-      <CardMedia className={classes.media} image="images/menu/1.jpg" />
-      <CardContent classes={{ root: classes.content }}>
-        <MobileStepper
-          variant="dots"
-          steps={3}
-          position="static"
-          activeStep={activeStep}
-          className={classes.stepper}
+    <>
+      <Card className={classes.card}>
+        <CardHeader
+          avatar={<Avatar aria-label="avatar" />}
+          action={
+            <IconButton
+              aria-label="more"
+              aria-haspopup="true"
+              onClick={handleClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title="맨유경비원"
+          subheader="20/09/29"
+          subheaderTypographyProps={{
+            variant: "caption",
+            className: classes.subHeader,
+          }}
         />
-        <Typography variant="body2" color="textSecondary">
-          {data.text}
-        </Typography>
-      </CardContent>
-    </Card>
+        <CardMedia className={classes.media} image="images/menu/1.jpg" />
+        <CardContent classes={{ root: classes.content }}>
+          <MobileStepper
+            variant="dots"
+            steps={3}
+            position="static"
+            activeStep={activeStep}
+            className={classes.stepper}
+          />
+          <Typography variant="body2" color="textSecondary">
+            {data.text}
+          </Typography>
+        </CardContent>
+      </Card>
+      <FeedMenu handleClose={handleClose} anchorEl={anchorEl} />
+    </>
   );
 };
 

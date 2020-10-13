@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useMemo } from "react";
+import React, { useRef, useCallback, useMemo, useState } from "react";
 import { List, WindowScroller } from "react-virtualized";
 import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
@@ -9,10 +9,13 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import ReviewItem from "./ReviewItem";
 import Write from "./Write";
+import FullScreenDialog from "./FullScreenDialog";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(1),
+    [theme.breakpoints.up("sm")]: {
+      marginTop: theme.spacing(1),
+    },
   },
 }));
 
@@ -28,6 +31,7 @@ const Review = () => {
       text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
     })
   );
+  const [open, setOpen] = useState(false);
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -47,28 +51,37 @@ const Review = () => {
     },
     [datas]
   );
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+  const handleClickOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
 
   return (
-    <WindowScroller>
-      {({ height, isScrolling, registerChild, scrollTop }) => (
-        <div className={classes.paper}>
-          <Write />
-          <div ref={registerChild}>
-            <List
-              autoHeight
-              height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
-              rowCount={datas.current.length}
-              rowHeight={rowHeight}
-              width={parseInt(width)}
-              rowRenderer={rowRenderer}
-              list={datas}
-              scrollTop={scrollTop}
-              isScrolling={isScrolling}
-            />
+    <>
+      <WindowScroller>
+        {({ height, isScrolling, registerChild, scrollTop }) => (
+          <div className={classes.paper}>
+            <Write handleClickOpen={handleClickOpen} />
+            <div ref={registerChild}>
+              <List
+                autoHeight
+                height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
+                rowCount={datas.current.length}
+                rowHeight={rowHeight}
+                width={parseInt(width)}
+                rowRenderer={rowRenderer}
+                list={datas}
+                scrollTop={scrollTop}
+                isScrolling={isScrolling}
+              />
+            </div>
           </div>
-        </div>
-      )}
-    </WindowScroller>
+        )}
+      </WindowScroller>
+      <FullScreenDialog open={open} handleClose={handleClose} />
+    </>
   );
 };
 
