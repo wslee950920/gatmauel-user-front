@@ -31,9 +31,6 @@ const Review = () => {
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
   const small = useMediaQuery(theme.breakpoints.up("sm"));
   const bSmall = useMediaQuery(theme.breakpoints.between(400, "sm"));
-  const medium = useMediaQuery(theme.breakpoints.up("md"));
-  const large = useMediaQuery(theme.breakpoints.up("lg"));
-  const xlarge = useMediaQuery(theme.breakpoints.up("xl"));
   const { width } = useWindowDimensions();
   const datas = useRef(
     new Array(10).fill({
@@ -69,9 +66,10 @@ const Review = () => {
     setOpen(true);
   }, []);
 
+  // eslint-disable-next-line
   useEffect(() => {
     setpWidth(paper.current.getBoundingClientRect().width);
-  }, [medium, large, xlarge]);
+  });
 
   return (
     <>

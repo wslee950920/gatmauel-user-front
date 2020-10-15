@@ -10,11 +10,12 @@ const AccountPage = loadable(() => import("./page/Account"));
 const FindPage = loadable(() => import("./page/Find"));
 const NoticePage = loadable(() => import("./page/Notice"));
 const ReviewPage = loadable(() => import("./page/Review"));
+const MenuPage = loadable(()=>import('./page/Menu'));
 
 const App = () => {
   return (
     <Switch>
-      <Route path={["/", "/main"]} component={MainPage} exact={true} />
+      <Route path={"/"} component={MainPage} exact={true} />
       <Route path={"/login"} component={LoginPage} exact />
       <Route path={"/register"} component={RegisterPage} exact />
       <Route path={"/profile"} component={ProfilePage} exact />
@@ -22,6 +23,7 @@ const App = () => {
       <Route path={"/find"} component={FindPage} exact />
       <Route path={"/notice"} component={NoticePage} exact />
       <Route path={"/review"} component={ReviewPage} exact />
+      <Route path={'/menu'} component={MenuPage} exact/>
       <Route
         render={() => (
           <div>

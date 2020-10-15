@@ -49,33 +49,15 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
   const theme = useTheme();
   const small = useMediaQuery(theme.breakpoints.up("sm"));
   const medium = useMediaQuery(theme.breakpoints.up("md"));
-  const large = useMediaQuery(theme.breakpoints.up("lg"));
-  const xlarge = useMediaQuery(theme.breakpoints.up("xl"));
   const conRef = useRef(null);
   const [ratio, setRatio] = useState(1.25);
-  const [scrHeight, setScrHeight] = useState(16);
 
+  // eslint-disable-next-line
   useEffect(() => {
-    setScrHeight(conRef.current.offsetHeight - conRef.current.clientHeight);
-  }, []);
-  useEffect(() => {
-    const width =
-      conRef.current.getBoundingClientRect().width -
-      parseFloat(window.getComputedStyle(conRef.current, null).paddingLeft) -
-      parseFloat(window.getComputedStyle(conRef.current, null).paddingRight);
-    const height =
-      conRef.current.getBoundingClientRect().height -
-      2 * theme.spacing(1) -
-      scrHeight -
-      parseFloat(window.getComputedStyle(conRef.current, null).borderTopWidth) -
-      parseFloat(
-        window.getComputedStyle(conRef.current, null).borderBottomWidth
-      ) -
-      parseFloat(
-        window.getComputedStyle(conRef.current, null).borderBottomWidth
-      ); //스크롤바에 border가 겹쳐서 그런듯
+    const width = conRef.current.getBoundingClientRect().width;
+    const height = conRef.current.getBoundingClientRect().height;
     setRatio(width / height);
-  }, [theme, scrHeight, medium, large, xlarge]);
+  });
 
   return (
     <div className={classes.root}>

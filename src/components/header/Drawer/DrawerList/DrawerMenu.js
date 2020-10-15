@@ -1,7 +1,7 @@
 export default [
   {
     text: "홈",
-    to: "/main",
+    to: "/",
   },
   {
     text: "메뉴",
