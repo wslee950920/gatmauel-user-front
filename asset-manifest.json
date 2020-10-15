@@ -5,10 +5,10 @@
     "static/js/1.ed02fb20.chunk.js": "/gatmauel-user-front/static/js/1.ed02fb20.chunk.js",
     "static/js/1.ed02fb20.chunk.js.map": "/gatmauel-user-front/static/js/1.ed02fb20.chunk.js.map",
     "main.css": "/gatmauel-user-front/static/css/main.414c52c5.chunk.css",
-    "main.js": "/gatmauel-user-front/static/js/main.b90010e2.chunk.js",
-    "main.js.map": "/gatmauel-user-front/static/js/main.b90010e2.chunk.js.map",
-    "runtime-main.js": "/gatmauel-user-front/static/js/runtime-main.3bbcd187.js",
-    "runtime-main.js.map": "/gatmauel-user-front/static/js/runtime-main.3bbcd187.js.map",
+    "main.js": "/gatmauel-user-front/static/js/main.6448513b.chunk.js",
+    "main.js.map": "/gatmauel-user-front/static/js/main.6448513b.chunk.js.map",
+    "runtime-main.js": "/gatmauel-user-front/static/js/runtime-main.8ab1d6d4.js",
+    "runtime-main.js.map": "/gatmauel-user-front/static/js/runtime-main.8ab1d6d4.js.map",
     "static/css/4.9359fd7b.chunk.css": "/gatmauel-user-front/static/css/4.9359fd7b.chunk.css",
     "static/js/4.b1c8b1f5.chunk.js": "/gatmauel-user-front/static/js/4.b1c8b1f5.chunk.js",
     "static/js/4.b1c8b1f5.chunk.js.map": "/gatmauel-user-front/static/js/4.b1c8b1f5.chunk.js.map",
@@ -29,12 +29,12 @@
     "static/js/11.fb1ce940.chunk.js.map": "/gatmauel-user-front/static/js/11.fb1ce940.chunk.js.map",
     "static/js/12.b0114447.chunk.js": "/gatmauel-user-front/static/js/12.b0114447.chunk.js",
     "static/js/12.b0114447.chunk.js.map": "/gatmauel-user-front/static/js/12.b0114447.chunk.js.map",
-    "static/js/13.8323b0c2.chunk.js": "/gatmauel-user-front/static/js/13.8323b0c2.chunk.js",
-    "static/js/13.8323b0c2.chunk.js.map": "/gatmauel-user-front/static/js/13.8323b0c2.chunk.js.map",
+    "static/js/13.644b12fd.chunk.js": "/gatmauel-user-front/static/js/13.644b12fd.chunk.js",
+    "static/js/13.644b12fd.chunk.js.map": "/gatmauel-user-front/static/js/13.644b12fd.chunk.js.map",
     "static/js/14.4eb77f97.chunk.js": "/gatmauel-user-front/static/js/14.4eb77f97.chunk.js",
     "static/js/14.4eb77f97.chunk.js.map": "/gatmauel-user-front/static/js/14.4eb77f97.chunk.js.map",
     "index.html": "/gatmauel-user-front/index.html",
-    "precache-manifest.2861cc6d709547ad3dc0e1cf37db4ced.js": "/gatmauel-user-front/precache-manifest.2861cc6d709547ad3dc0e1cf37db4ced.js",
+    "precache-manifest.c6ee5e3ccb7b6250b0d951b545a7150d.js": "/gatmauel-user-front/precache-manifest.c6ee5e3ccb7b6250b0d951b545a7150d.js",
     "service-worker.js": "/gatmauel-user-front/service-worker.js",
     "static/css/4.9359fd7b.chunk.css.map": "/gatmauel-user-front/static/css/4.9359fd7b.chunk.css.map",
     "static/css/5.6db69bf1.chunk.css.map": "/gatmauel-user-front/static/css/5.6db69bf1.chunk.css.map",
@@ -44,10 +44,10 @@
     "static/media/all.min.css": "/gatmauel-user-front/static/media/fa-solid-900.ee09ad75.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.3bbcd187.js",
+    "static/js/runtime-main.8ab1d6d4.js",
     "static/css/4.9359fd7b.chunk.css",
     "static/js/4.b1c8b1f5.chunk.js",
     "static/css/main.414c52c5.chunk.css",
-    "static/js/main.b90010e2.chunk.js"
+    "static/js/main.6448513b.chunk.js"
   ]
 }
