@@ -129,7 +129,7 @@ const Header = ({ main }) => {
             </IconButton>
             <IconButton
               edge="end"
-              aria-label="user menu"
+              aria-label="user-menu"
               aria-controls={menuId.current}
               aria-haspopup="true"
               onClick={handleMenuOpen}

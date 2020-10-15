@@ -43,7 +43,7 @@ const FullScreenDialog = ({ open, handleClose }) => {
             <Button onClick={handleClose} color="secondary">
               취소
             </Button>
-            <Button>완료</Button>
+            <div />
           </div>
           <Divider />
         </Container>

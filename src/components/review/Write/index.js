@@ -1,5 +1,4 @@
 import React from "react";
-import useWindowDimensions from "../../../lib/windowDimensions";
 import clsx from "clsx";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -42,10 +41,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Write = ({ handleClickOpen, dialog }) => {
   const classes = useStyles();
-  const { width } = useWindowDimensions();
 
   return (
-    <div style={{ width: width }}>
+    <div style={{ width: "100%" }}>
       <CssBaseline />
       <Container maxWidth="sm">
         <div className={classes.background}>
@@ -73,11 +71,9 @@ const Write = ({ handleClickOpen, dialog }) => {
             </div>
             <div>
               <ListItem>
-                {!dialog && (
-                  <IconButton size="small">
-                    <CreateIcon color="action" />
-                  </IconButton>
-                )}
+                <IconButton size="small">
+                  <CreateIcon color="action" />
+                </IconButton>
               </ListItem>
             </div>
           </List>

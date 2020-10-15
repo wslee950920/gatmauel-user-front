@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import clsx from "clsx";
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -17,7 +18,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
     overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
+
     padding: theme.spacing(0.8),
+    height: "100%",
   },
   gridList: {
     flexWrap: "nowrap",
@@ -30,51 +33,62 @@ const useStyles = makeStyles((theme) => ({
     background:
       "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
   },
+
   background: {
     backgroundColor: "white",
     border: "solid #dcdcdc",
     borderRadius: "8px",
-  },
-  tileRoot: { display: "flex", alignItems: "center" },
-  imgFull: {
-    width: "100%",
     height: "100%",
+    alignItems: "center",
+    display: "flex",
   },
 }));
 
 const CarouselMenu = ({ handleOpen, onMouseOver }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const small = useMediaQuery(theme.breakpoints.up("sm"));
   const medium = useMediaQuery(theme.breakpoints.up("md"));
   const large = useMediaQuery(theme.breakpoints.up("lg"));
   const xlarge = useMediaQuery(theme.breakpoints.up("xl"));
+  const conRef = useRef(null);
+  const [ratio, setRatio] = useState(1.25);
+  const [scrHeight, setScrHeight] = useState(16);
 
-  const tileWidth = useMemo(() => {
-    if (xlarge) {
-      return 2.65;
-    } else if (large) {
-      return 1.465;
-    } else if (medium) {
-      return 0.98;
-    } else {
-      return 1.26;
-    }
-  }, [xlarge, large, medium]);
+  useEffect(() => {
+    setScrHeight(conRef.current.offsetHeight - conRef.current.clientHeight);
+  }, []);
+  useEffect(() => {
+    const width =
+      conRef.current.getBoundingClientRect().width -
+      parseFloat(window.getComputedStyle(conRef.current, null).paddingLeft) -
+      parseFloat(window.getComputedStyle(conRef.current, null).paddingRight);
+    const height =
+      conRef.current.getBoundingClientRect().height -
+      2 * theme.spacing(1) -
+      scrHeight -
+      parseFloat(window.getComputedStyle(conRef.current, null).borderTopWidth) -
+      parseFloat(
+        window.getComputedStyle(conRef.current, null).borderBottomWidth
+      ) -
+      parseFloat(
+        window.getComputedStyle(conRef.current, null).borderBottomWidth
+      ); //스크롤바에 border가 겹쳐서 그런듯
+    setRatio(width / height);
+  }, [theme, scrHeight, medium, large, xlarge]);
 
   return (
     <div className={classes.root}>
-      <Container maxWidth="xl" className={classes.background}>
-        <GridList className={classes.gridList} cols={tileWidth}>
+      <Container className={classes.background} ref={conRef}>
+        <GridList
+          className={classes.gridList}
+          cols={parseFloat(clsx(medium ? ratio : small ? 2.25 : 1.25))}
+        >
           {tileData.map((tile) => (
             <GridListTile
               key={tile.img}
-              classes={{
-                root: classes.tileRoot,
-                imgFullHeight: classes.imgFull,
-                imgFullWidth: classes.imgFull,
-              }}
               style={{
-                height: medium ? "auto" : "68.2594vw",
+                height: "auto",
                 margin: theme.spacing(1, 0),
               }}
             >
@@ -85,7 +99,6 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
                   onClick={handleOpen}
                   className="img-fluid"
                   style={{
-                    height: medium ? "auto" : "68.2594vw",
                     cursor: "pointer",
                   }}
                   onMouseOver={onMouseOver}

@@ -1,4 +1,10 @@
-import React, { useRef, useCallback, useMemo, useState } from "react";
+import React, {
+  useRef,
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+} from "react";
 import { List, WindowScroller } from "react-virtualized";
 import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
@@ -25,6 +31,9 @@ const Review = () => {
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
   const small = useMediaQuery(theme.breakpoints.up("sm"));
   const bSmall = useMediaQuery(theme.breakpoints.between(400, "sm"));
+  const medium = useMediaQuery(theme.breakpoints.up("md"));
+  const large = useMediaQuery(theme.breakpoints.up("lg"));
+  const xlarge = useMediaQuery(theme.breakpoints.up("xl"));
   const { width } = useWindowDimensions();
   const datas = useRef(
     new Array(10).fill({
@@ -32,6 +41,8 @@ const Review = () => {
     })
   );
   const [open, setOpen] = useState(false);
+  const paper = useRef(null);
+  const [pWidth, setpWidth] = useState(width);
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -58,11 +69,15 @@ const Review = () => {
     setOpen(true);
   }, []);
 
+  useEffect(() => {
+    setpWidth(paper.current.getBoundingClientRect().width);
+  }, [medium, large, xlarge]);
+
   return (
     <>
       <WindowScroller>
         {({ height, isScrolling, registerChild, scrollTop }) => (
-          <div className={classes.paper}>
+          <div className={classes.paper} ref={paper}>
             <Write handleClickOpen={handleClickOpen} />
             <div ref={registerChild}>
               <List
@@ -70,7 +85,7 @@ const Review = () => {
                 height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
                 rowCount={datas.current.length}
                 rowHeight={rowHeight}
-                width={parseInt(width)}
+                width={parseFloat(pWidth)}
                 rowRenderer={rowRenderer}
                 list={datas}
                 scrollTop={scrollTop}
