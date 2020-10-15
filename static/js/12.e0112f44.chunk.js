@@ -1,0 +1,2 @@
+(this["webpackJsonpuser-front"]=this["webpackJsonpuser-front"]||[]).push([[12],{301:function(e,n){},316:function(e,n,t){"use strict";t.r(n);var a=t(1),r=t.n(a),u=t(89),l=t(301),c=t.n(l);n.default=function(){return r.a.createElement(r.a.Fragment,null,r.a.createElement(u.a,null),r.a.createElement(c.a,null))}}}]);
+//# sourceMappingURL=12.e0112f44.chunk.js.map
