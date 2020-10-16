@@ -3,7 +3,7 @@ import React from "react";
 import Dialog from "@material-ui/core/Dialog";
 import Grow from "@material-ui/core/Grow";
 
-import MenuCard from "../../common/MenuCard";
+import MenuCard from "../MenuCard";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Grow ref={ref} {...props} />;

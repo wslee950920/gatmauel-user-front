@@ -5,7 +5,7 @@ export default [
   },
   {
     text: "메뉴",
-    to: "#",
+    to: "/menu",
   },
   {
     text: "리뷰",

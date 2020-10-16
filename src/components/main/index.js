@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import CarouselView from "./CarouselView";
 import ReviewList from "./ReviewList";
 import CarouselMenu from "./CarouselMenu";
-import CardDialog from "./CardDialog";
+import CardDialog from "../common/CardDialog";
 import NoticeList from "./NoticeList";
 
 const Main = () => {

@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CarouselMenu = ({ handleOpen, onMouseOver }) => {
+const CarouselMenu = ({ handleOpen }) => {
   const classes = useStyles();
   const theme = useTheme();
   const small = useMediaQuery(theme.breakpoints.up("sm"));
@@ -52,12 +52,11 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
   const conRef = useRef(null);
   const [ratio, setRatio] = useState(1.25);
 
-  // eslint-disable-next-line
   useEffect(() => {
     const width = conRef.current.getBoundingClientRect().width;
     const height = conRef.current.getBoundingClientRect().height;
     setRatio(width / height);
-  });
+  }, [ratio]); //이렇게나마 dependency array를 넣어주니까 경고가 안뜨긴 한다.
 
   return (
     <div className={classes.root}>
@@ -77,16 +76,15 @@ const CarouselMenu = ({ handleOpen, onMouseOver }) => {
               <MDBView hover zoom>
                 <img
                   src={tile.img}
-                  alt={tile.title}
+                  alt={tile.name}
                   onClick={handleOpen}
                   className="img-fluid"
                   style={{
                     cursor: "pointer",
                   }}
-                  onMouseOver={onMouseOver}
                 />
                 <GridListTileBar
-                  title={tile.title}
+                  title={tile.name}
                   classes={{
                     root: classes.titleBar,
                     title: classes.title,

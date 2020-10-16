@@ -69,7 +69,7 @@ const Review = () => {
   // eslint-disable-next-line
   useEffect(() => {
     setpWidth(paper.current.getBoundingClientRect().width);
-  });
+  }, [pWidth]);
 
   return (
     <>
