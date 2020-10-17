@@ -25,10 +25,40 @@ const KakaoBtn=({platform})=>{
     const classes=useStyles();
     
     const naverMap=useCallback(()=>{
-      window.location.href=`nmap://search?dlat=37.29274&dlng=126.941063&query=${encodeURI('갯마을바지락칼국수보쌈')}&appname=https://wslee950920.github.io/gatmauel-user-front/`
+      const clickedAt = +new Date();
+      const IorA = navigator.userAgent.toLowerCase();
+
+      if(IorA.indexOf("android") !== -1){
+        // android 일 때
+        window.location.href=`intent://search?query=${encodeURI('갯마을바지락칼국수보쌈')}&appname=https://wslee950920.github.io/gatmauel-user-front#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;end`
+      }else if(IorA.indexOf("iphone") !== -1){
+        // iphone 일 때
+        window.location.href = `nmap://search?query=${encodeURI('갯마을바지락칼국수보쌈')}&appname=https://wslee950920.github.io/gatmauel-user-front`;
+      }
+
+      setTimeout(function() {
+        if (+new Date() - clickedAt < 2000) {
+          window.location.href = 'http://itunes.apple.com/app/id311867728?mt=8';
+        }
+      }, 1500);
     }, [])
     const kakaoMap=useCallback(()=>{
-      window.location.href='kakaomap://place?id=1299223701'
+      const clickedAt = +new Date();
+      const IorA = navigator.userAgent.toLowerCase();
+
+      window.location.href='kakaomap://place?id=1299223701';
+
+      setTimeout(function() {
+        if (+new Date() - clickedAt < 2000) {
+          if(IorA.indexOf("android") !== -1){
+            // android 일 때
+            window.location.href='market://details?id=net.daum.android.map'
+          }else if(IorA.indexOf("iphone") !== -1){
+            // iphone 일 때
+            window.location.href = 'https://apps.apple.com/us/app/id304608425';
+          }
+        }
+      }, 1500);
     }, [])
 
     useEffect(()=>{
