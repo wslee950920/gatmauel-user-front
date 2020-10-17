@@ -12,6 +12,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MobileStepper from "@material-ui/core/MobileStepper";
 
 import FeedMenu from "./FeedMenu";
+import CarouselImg from "./CarouselImg";
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -47,6 +48,9 @@ const Feed = ({ data }) => {
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
+  const handleSelect = useCallback((selectedIndex, e) => {
+    setActiveStep(selectedIndex);
+  }, []);
 
   return (
     <>
@@ -69,7 +73,13 @@ const Feed = ({ data }) => {
             className: classes.subHeader,
           }}
         />
-        <CardMedia className={classes.media} image="images/menu/1.jpg" />
+        {/**CardMedia에 props를 줬더니 CarouselImg컴포넌트가 받더라... */}
+        <CardMedia
+          className={classes.media}
+          component={CarouselImg}
+          index={activeStep}
+          handleSelect={handleSelect}
+        />
         <CardContent classes={{ root: classes.content }}>
           <MobileStepper
             variant="dots"
