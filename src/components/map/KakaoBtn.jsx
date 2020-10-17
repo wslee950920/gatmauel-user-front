@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useMemo, useRef} from 'react';
+import React, {useEffect, useCallback}  from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
@@ -21,16 +21,8 @@ const useStyles=makeStyles((theme)=>({
   }
 }))
 
-const KakaoBtn=()=>{
+const KakaoBtn=({platform})=>{
     const classes=useStyles();
-    const filter = useRef("win16|win32|win64|macintel|mac|");
-
-    const platform = useMemo(() => {
-      return (
-        navigator.platform &&
-        filter.current.indexOf(navigator.platform.toLowerCase()) < 0
-      );
-    }, []);
     
     const naverMap=useCallback(()=>{
       window.location.href=`nmap://search?dlat=37.29274&dlng=126.941063&query=${encodeURI('갯마을바지락칼국수보쌈')}&appname=https://wslee950920.github.io/gatmauel-user-front/`
@@ -53,7 +45,7 @@ const KakaoBtn=()=>{
           content: {
             title: '갯마을바지락칼국수보쌈',
             description: '#칼국수 #보쌈 #당수동 #맛집',
-            imageUrl: 'images/icons/logo192.png', //추후 s3에서 가져오자
+            imageUrl: 'https://raw.githubusercontent.com/wslee950920/gatmauel-user-front/master/public/images/icons/logo192.png', //추후 s3에서 가져오자
             link: {
               mobileWebUrl: process.env.REACT_APP_COMM_URL,
               webUrl: process.env.REACT_APP_COMM_URL,
@@ -131,4 +123,4 @@ const KakaoBtn=()=>{
     )
 }
 
-export default KakaoBtn;
+export default React.memo(KakaoBtn);

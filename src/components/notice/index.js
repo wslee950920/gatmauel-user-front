@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useMemo } from "react";
+import React, { useRef, useCallback } from "react";
 import { FixedSizeList as List } from "react-window";
 import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
@@ -8,6 +8,8 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import NoticeLitemLink from "./NoticeLitemLink";
 import Footer from "../footer";
+
+import usePlatform from "../../lib/usePlatform";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +30,7 @@ const Notice = () => {
       to: "#",
     })
   );
-  const filter = useRef("win16|win32|win64|macintel|mac|"); // PC일 경우 가능한 값
+  const platform = usePlatform();
 
   //https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
   //새로운 변수 이름으로 할당하기(data->datas)
@@ -42,12 +44,6 @@ const Notice = () => {
         index={index}
         length={datas.length}
       />
-    );
-  }, []);
-  const platform = useMemo(() => {
-    return (
-      navigator.platform &&
-      filter.current.indexOf(navigator.platform.toLowerCase()) < 0
     );
   }, []);
 

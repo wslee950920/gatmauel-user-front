@@ -11,6 +11,8 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import KakaoBtn from "./KakaoBtn";
 import Footer from "../../components/footer";
 
+import usePlatform from "../../lib/usePlatform";
+
 const useStyles = makeStyles((theme) => ({
   map: {
     width: "100%", // 네이버지도 가로 길이
@@ -24,6 +26,7 @@ const Map = () => {
   const { height } = useWindowDimensions();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const platform = usePlatform();
 
   return (
     <>
@@ -48,7 +51,7 @@ const Map = () => {
             animation={2}
           />
         </NaverMap>
-        <KakaoBtn />
+        <KakaoBtn platform={platform} />
       </Container>
       <Footer />
     </>
