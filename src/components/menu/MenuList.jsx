@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MenuList =({handleOpen, categories, forwardedRef, value})=> {
+const MenuList =({handleOpen, categories, listRefs})=> {
   const classes = useStyles();
   const theme=useTheme();
 
@@ -43,7 +43,7 @@ const MenuList =({handleOpen, categories, forwardedRef, value})=> {
         <div 
           className={classes.root} 
           key={category} 
-          ref={index===value?forwardedRef:null}
+          ref={listRefs.current[index]}
         >
           <GridList cellHeight={window.innerWidth/3} cols={3}>
             <GridListTile key="Subheader" cols={3} style={{ height: 'auto' }}>

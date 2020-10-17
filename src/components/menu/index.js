@@ -5,15 +5,6 @@ import MenuList from "./MenuList";
 import CardDialog from "../common/CardDialog";
 import Footer from "../footer";
 
-//Forwarding refs in higher-order components
-//https://ko.reactjs.org/docs/forwarding-refs.html#forwarding-refs-in-higher-order-components
-const RenderMenuBar = React.forwardRef((props, ref) => (
-  <MenuBar forwardedRef={ref} {...props} />
-));
-const RenderMenuList = React.forwardRef((props, ref) => (
-  <MenuList forwardedRef={ref} {...props} />
-));
-
 const Menu = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0);
@@ -25,8 +16,8 @@ const Menu = () => {
     "계절메뉴",
     "추가메뉴",
   ]);
-  const list = useRef(null);
   const [yOffset, setYoffset] = useState(0);
+  const listRefs = useRef(categories.current.map(() => React.createRef()));
 
   const handleOpen = useCallback(() => {
     setOpen(true);
@@ -34,33 +25,34 @@ const Menu = () => {
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
-  const handleChange = useCallback((event, newValue) => {
-    setValue(newValue);
-  }, []);
+  const handleClick = useCallback(
+    (event, newValue) => {
+      setValue(newValue);
+      const y =
+        listRefs.current[newValue].current.getBoundingClientRect().top +
+        window.pageYOffset -
+        yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    },
+    [yOffset]
+  );
 
-  //listitem으로 스크롤하기
-  //https://stackoverflow.com/questions/24665602/scrollintoview-scrolls-just-too-far
   useEffect(() => {
-    setYoffset(list.current.getBoundingClientRect().top);
+    setYoffset(listRefs.current[0].current.getBoundingClientRect().top);
   }, []);
-  useEffect(() => {
-    const y =
-      list.current.getBoundingClientRect().top + window.pageYOffset - yOffset;
-    window.scrollTo({ top: y, behavior: "smooth" });
-  }, [value, yOffset]);
 
   return (
     <>
-      <RenderMenuBar
+      <MenuBar
         categories={categories.current}
-        handleChange={handleChange}
+        handleClick={handleClick}
         value={value}
       />
-      <RenderMenuList
+      <MenuList
         handleOpen={handleOpen}
         categories={categories.current}
-        ref={list}
         value={value}
+        listRefs={listRefs}
       />
       <Footer />
       <CardDialog open={open} handleClose={handleClose} />

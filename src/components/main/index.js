@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import Grid from "@material-ui/core/Grid";
 
@@ -16,6 +16,10 @@ const Main = () => {
   }, []);
   const handleClose = useCallback(() => {
     setOpen(false);
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   return (

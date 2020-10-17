@@ -11,7 +11,6 @@ function a11yProps(index) {
   return {
     id: `scrollable-auto-tab-${index}`,
     "aria-controls": `scrollable-auto-tabpanel-${index}`,
-    value:index
   };
 }
 
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MenuBar=({categories, handleChange, value})=> {
+const MenuBar=({categories, handleClick, value})=> {
   const classes = useStyles();
 
   return (
@@ -44,8 +43,7 @@ const MenuBar=({categories, handleChange, value})=> {
         <Container maxWidth="md" className={classes.root} disableGutters>
            <AppBar position="static" color="default">
               <Tabs
-                value={value}
-                onChange={handleChange}
+                value={value}    
                 indicatorColor="primary"
                 textColor="primary"
                 variant="scrollable"
@@ -53,7 +51,12 @@ const MenuBar=({categories, handleChange, value})=> {
                 aria-label="scrollable auto tabs"
               >
                 {categories.map((category, index)=>(
-                  <Tab label={category} {...a11yProps(index)} key={index}/>
+                  <Tab 
+                    label={category} 
+                    {...a11yProps(index)} 
+                    key={index} 
+                    onClick={(e)=>handleClick(e, index)}
+                  />
                 ))}
               </Tabs>
             </AppBar>
