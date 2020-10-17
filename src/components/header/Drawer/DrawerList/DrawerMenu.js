@@ -21,6 +21,6 @@ export default [
   },
   {
     text: "오시는길",
-    to: "#",
+    to: "/map",
   },
 ];

@@ -10,12 +10,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CircularIndeterminate() {
+const Circular = ({ height }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{ height: height }}>
       <CircularProgress />
     </div>
   );
-}
+};
+
+export default React.memo(Circular);

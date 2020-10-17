@@ -11,6 +11,7 @@ const FindPage = loadable(() => import("./page/Find"));
 const NoticePage = loadable(() => import("./page/Notice"));
 const ReviewPage = loadable(() => import("./page/Review"));
 const MenuPage = loadable(()=>import('./page/Menu'));
+const MapPage=loadable(()=>import('./page/Map'));
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
       <Route path={"/notice"} component={NoticePage} exact />
       <Route path={"/review"} component={ReviewPage} exact />
       <Route path={'/menu'} component={MenuPage} exact/>
+      <Route path={'/map'} component={MapPage} exact/>
       <Route
         render={() => (
           <div>

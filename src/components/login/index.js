@@ -64,7 +64,7 @@ const LogIn = () => {
       <CssBaseline />
       <Container component="main" maxWidth="xs">
         <div className={classes.paper}>
-          <Avatar className={classes.avatar} src="logo192.png" />
+          <Avatar className={classes.avatar} src="images/icons/logo192.png" />
           <Typography component="h1" variant="h5">
             <Link component={RouterLink} to="/" color="inherit">
               갯마을
