@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 
-import { useTheme } from "@material-ui/core/styles";
-
 import MenuBar from "./MenuBar";
 import MenuList from "./MenuList";
 import CardDialog from "../common/CardDialog";
+import MenuFooter from "./MenuFooter";
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
@@ -19,7 +18,7 @@ const Menu = () => {
   ]);
   const [yOffset, setYoffset] = useState(0);
   const listRefs = useRef(categories.current.map(() => React.createRef()));
-  const theme = useTheme();
+  const cb = useRef(null);
 
   const handleOpen = useCallback(() => {
     setOpen(true);
@@ -43,15 +42,22 @@ const Menu = () => {
     setYoffset(listRefs.current[0].current.getBoundingClientRect().top);
   }, []);
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      listRefs.current.forEach((item, index) => {
-        if (
-          item.current.getBoundingClientRect().top <= yOffset * 1.2 &&
-          item.current.getBoundingClientRect().top >= 0
-        )
-          setValue(index);
-      });
-    });
+    window.addEventListener(
+      "scroll",
+      (cb.current = () => {
+        listRefs.current.forEach((item, index) => {
+          if (
+            item.current.getBoundingClientRect().top <= yOffset * 1.2 &&
+            item.current.getBoundingClientRect().top >= 0
+          )
+            setValue(index);
+        });
+      })
+    );
+
+    return () => {
+      window.removeEventListener("scroll", cb.current);
+    };
   }, [yOffset]);
 
   return (
@@ -68,14 +74,13 @@ const Menu = () => {
         listRefs={listRefs}
       />
       {listRefs.current[5].current && (
-        <div
-          style={{
-            height:
-              window.innerHeight -
-              listRefs.current[5].current.getBoundingClientRect().height -
-              yOffset +
-              (window.innerWidth - document.documentElement.clientWidth),
-          }}
+        <MenuFooter
+          height={
+            window.innerHeight -
+            listRefs.current[5].current.getBoundingClientRect().height -
+            yOffset +
+            (window.innerWidth - document.documentElement.clientWidth)
+          }
         />
       )}
       <CardDialog open={open} handleClose={handleClose} />

@@ -7,7 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
-import pink from "@material-ui/core/colors/pink";
 
 import ListItemLink from "../../common/MainLists/ListItemLink";
 
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   info: {
     margin: theme.spacing(2, 1, 0),
     flex: 1,
-    color: pink[800],
+    color: theme.palette.secondary.dark,
   },
   box: {
     display: "flex",
