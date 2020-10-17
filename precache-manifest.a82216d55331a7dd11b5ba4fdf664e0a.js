@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "42485b644bd2285ec2575911fc61a467",
+    "revision": "972e975780dc0d8323d2612304e4c783",
     "url": "/gatmauel-user-front/index.html"
   },
   {
@@ -48,8 +48,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gatmauel-user-front/static/js/15.98809d51.chunk.js"
   },
   {
-    "revision": "5a84005cacb3cca3ead7",
-    "url": "/gatmauel-user-front/static/js/16.e75daa41.chunk.js"
+    "revision": "63c088fb0cb5c0a5b088",
+    "url": "/gatmauel-user-front/static/js/16.573f2b66.chunk.js"
   },
   {
     "revision": "746a90db1cb1ecda46f0",
@@ -88,8 +88,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gatmauel-user-front/static/js/main.8f89222e.chunk.js"
   },
   {
-    "revision": "c9a06c331b2c7e1f5610",
-    "url": "/gatmauel-user-front/static/js/runtime-main.76bbdf66.js"
+    "revision": "bac3a204504f46aabbcf",
+    "url": "/gatmauel-user-front/static/js/runtime-main.9630fb93.js"
   },
   {
     "revision": "11911410dca2de148f30954eb2fd5eab",
