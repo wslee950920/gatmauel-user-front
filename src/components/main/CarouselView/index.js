@@ -21,7 +21,7 @@ const CarouselView = () => {
     >
       <MDBCarouselInner>
         {carouselItem.map((item) => (
-          <MDBCarouselItem itemId={item.id} key={item.src}>
+          <MDBCarouselItem itemId={item.id} key={item.id}>
             <MDBView>
               <img className="d-block w-100" src={item.src} alt={item.alt} />
             </MDBView>

@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
+import StepContext from "../context/step";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: "#fff",
     justifyContent: "center",
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1),
   },
   content: {
     padding: theme.spacing(0.5, 1.5),
@@ -37,10 +38,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = ({ data }) => {
+const Feed = ({ data, index }) => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
+  const { state, action } = useContext(StepContext);
+  const [activeStep, setActiveStep] = useState(state.steps[index]);
 
   const handleClick = useCallback((e) => {
     setAnchorEl(e.currentTarget);
@@ -48,9 +50,15 @@ const Feed = ({ data }) => {
   const handleClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
-  const handleSelect = useCallback((selectedIndex, e) => {
-    setActiveStep(selectedIndex);
-  }, []);
+  const handleSelect = useCallback(
+    (selectedIndex, e) => {
+      setActiveStep(selectedIndex);
+      action.setSteps((steps) =>
+        steps.map((step, i) => (i === index ? (step = selectedIndex) : step))
+      );
+    },
+    [index, action]
+  );
 
   return (
     <>
@@ -77,7 +85,7 @@ const Feed = ({ data }) => {
         <CardMedia
           className={classes.media}
           component={CarouselImg}
-          index={activeStep}
+          activeIndex={activeStep}
           handleSelect={handleSelect}
         />
         <CardContent classes={{ root: classes.content }}>

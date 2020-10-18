@@ -9,6 +9,7 @@ import { List, WindowScroller } from "react-virtualized";
 import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
 import "react-virtualized/styles.css"; // only needs to be imported once
+import { StepProvider } from "./context/step";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -32,14 +33,14 @@ const Review = () => {
   const small = useMediaQuery(theme.breakpoints.up("sm"));
   const bSmall = useMediaQuery(theme.breakpoints.between(400, "sm"));
   const { width } = useWindowDimensions();
+  const [open, setOpen] = useState(false);
+  const paper = useRef(null);
+  const [pWidth, setpWidth] = useState(width);
   const datas = useRef(
     new Array(10).fill({
       text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
     })
   );
-  const [open, setOpen] = useState(false);
-  const paper = useRef(null);
-  const [pWidth, setpWidth] = useState(width);
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -55,7 +56,7 @@ const Review = () => {
     ({ index, key, style }) => {
       const data = datas.current[index];
 
-      return <ReviewItem data={data} style={style} key={key} />;
+      return <ReviewItem data={data} style={style} key={key} index={index} />;
     },
     [datas]
   );
@@ -72,7 +73,7 @@ const Review = () => {
   }, [pWidth]);
 
   return (
-    <>
+    <StepProvider datas={datas.current}>
       <WindowScroller>
         {({ height, isScrolling, registerChild, scrollTop }) => (
           <div className={classes.paper} ref={paper}>
@@ -85,7 +86,6 @@ const Review = () => {
                 rowHeight={rowHeight}
                 width={parseFloat(pWidth)}
                 rowRenderer={rowRenderer}
-                list={datas}
                 scrollTop={scrollTop}
                 isScrolling={isScrolling}
               />
@@ -94,7 +94,7 @@ const Review = () => {
         )}
       </WindowScroller>
       <FullScreenDialog open={open} handleClose={handleClose} />
-    </>
+    </StepProvider>
   );
 };
 

@@ -5,13 +5,13 @@ import Container from "@material-ui/core/Container";
 
 import carouselItem from "./CarouselItem";
 
-const CarouselImg = ({ index, handleSelect }) => {
+const CarouselImg = ({ activeIndex, handleSelect }) => {
   return (
     <Container>
       <Carousel
         indicators={false}
         interval={20000}
-        activeIndex={index}
+        activeIndex={activeIndex}
         onSelect={handleSelect}
       >
         {carouselItem.map((item) => (

@@ -67,7 +67,7 @@ const CarouselMenu = ({ handleOpen }) => {
         >
           {tileData.map((tile) => (
             <GridListTile
-              key={tile.img}
+              key={tile.name}
               style={{
                 height: "auto",
                 margin: theme.spacing(1, 0),
