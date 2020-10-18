@@ -8,7 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 
-import Write from "../Write";
+import RWView from "../../common/RWView";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -48,7 +48,7 @@ const FullScreenDialog = ({ open, handleClose }) => {
           <Divider />
         </Container>
       </div>
-      <Write dialog />
+      <RWView />
     </Dialog>
   );
 };

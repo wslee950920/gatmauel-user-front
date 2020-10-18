@@ -15,8 +15,8 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import ReviewItem from "./ReviewItem";
-import Write from "./Write";
 import FullScreenDialog from "./FullScreenDialog";
+import RWView from "../common/RWView";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -77,7 +77,7 @@ const Review = () => {
       <WindowScroller>
         {({ height, isScrolling, registerChild, scrollTop }) => (
           <div className={classes.paper} ref={paper}>
-            <Write handleClickOpen={handleClickOpen} />
+            <RWView handleClickOpen={handleClickOpen} rOnly />
             <div ref={registerChild}>
               <List
                 autoHeight
