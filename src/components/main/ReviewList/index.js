@@ -72,7 +72,9 @@ const ReviewList = () => {
           </div>
           <div>
             <List>
-              {generate(<ListItemLink primary="맛있어요!!!" to="#" review />)}
+              {generate(
+                <ListItemLink primary="맛있어요!!!" to="/review?id=2" review />
+              )}
             </List>
           </div>
         </Container>

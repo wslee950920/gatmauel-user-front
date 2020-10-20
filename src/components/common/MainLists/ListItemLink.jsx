@@ -6,9 +6,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   fontMaple: {
     fontFamily: "MaplestoryOTFBold",
+    '&:active,&:hover':{
+      color:theme.palette.primary.dark
+    }
   },
   fontRobo: {
     fontFamily: "Roboto",

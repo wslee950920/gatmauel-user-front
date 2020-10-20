@@ -27,7 +27,7 @@ const Notice = () => {
   const datas = useRef(
     new Array(20).fill({
       text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
-      to: "/notice/read",
+      to: "/notice/1",
     })
   );
   const platform = usePlatform();

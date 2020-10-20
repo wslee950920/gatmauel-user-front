@@ -8,13 +8,13 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import Feed from "./Feed";
 
-const ReviewItem = ({ data, style, index }) => {
+const ReviewItem = ({ data, style, index, forwardedRef }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
     <>
-      <ListItem style={style} >
+      <ListItem style={style} ref={forwardedRef}>
         <CssBaseline />
         <Container maxWidth="sm" disableGutters={!matches}>
           <Feed data={data} index={index}/>

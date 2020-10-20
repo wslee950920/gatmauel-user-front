@@ -70,7 +70,7 @@ const Notice = () => {
               {generate(
                 <ListItemLink
                   primary="공지사항 제목"
-                  to="#"
+                  to="/notice/1"
                   secondary="19/09/22"
                 />
               )}

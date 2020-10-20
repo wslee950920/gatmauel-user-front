@@ -10,6 +10,7 @@ import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
 import "react-virtualized/styles.css"; // only needs to be imported once
 import { StepProvider } from "./context/step";
+import querystring from "querystring";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -26,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const RenderReviewItem = React.forwardRef((props, ref) => (
+  <ReviewItem forwardedRef={ref} {...props} />
+));
+
 const Review = () => {
   const classes = useStyles();
   const theme = useTheme();
@@ -41,6 +46,32 @@ const Review = () => {
       text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
     })
   );
+  const itemRefs = useRef(Array.from({ length: 4 }, () => React.createRef()));
+
+  useEffect(() => {
+    const str =
+      window.location.search[0] === "?"
+        ? window.location.search.substr(1, window.location.search.length)
+        : window.location.search;
+    const query = querystring.parse(str);
+    const empty =
+      Object.keys(query).length === 0 && query.constructor === Object;
+    if (!empty) {
+      window.scrollTo({
+        top: small
+          ? itemRefs.current[parseInt(query.id)].current.getBoundingClientRect()
+              .height *
+              parseInt(query.id) +
+            itemRefs.current[0].current.getBoundingClientRect().top -
+            paper.current.getBoundingClientRect().top +
+            theme.spacing(4)
+          : itemRefs.current[parseInt(query.id)].current.getBoundingClientRect()
+              .top -
+            56 -
+            theme.spacing(3),
+      });
+    }
+  }, [small, theme]);
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -56,7 +87,15 @@ const Review = () => {
     ({ index, key, style }) => {
       const data = datas.current[index];
 
-      return <ReviewItem data={data} style={style} key={key} index={index} />;
+      return (
+        <RenderReviewItem
+          data={data}
+          style={style}
+          key={key}
+          index={index}
+          ref={index < 4 ? itemRefs.current[index] : null}
+        />
+      );
     },
     [datas]
   );
@@ -67,7 +106,6 @@ const Review = () => {
     setOpen(true);
   }, []);
 
-  // eslint-disable-next-line
   useEffect(() => {
     setpWidth(paper.current.getBoundingClientRect().width);
   }, [pWidth]);
@@ -88,6 +126,7 @@ const Review = () => {
                 rowRenderer={rowRenderer}
                 scrollTop={scrollTop}
                 isScrolling={isScrolling}
+                overscanRowCount={4}
               />
             </div>
           </div>
