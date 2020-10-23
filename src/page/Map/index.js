@@ -19,7 +19,7 @@ const MapPage = () => {
 
   return (
     <>
-      <Header />
+      <Header main />
       <RenderAfterNavermapsLoaded
         ncpClientId={process.env.REACT_APP_NAVER_MAP_CLIENT}
         error={<p>Maps Load Error</p>}

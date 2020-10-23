@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   content: {
-    padding: theme.spacing(0.5, 1.5),
+    padding: theme.spacing(0.5, 1),
     height: "10rem",
   },
 }));

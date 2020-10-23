@@ -6,7 +6,7 @@ import Menu from "../../components/menu";
 const MenuPage = () => {
   return (
     <>
-      <Header />
+      <Header main />
       <Menu />
     </>
   );

@@ -11,6 +11,7 @@ import clsx from "clsx";
 import "react-virtualized/styles.css"; // only needs to be imported once
 import { StepProvider } from "./context/step";
 import querystring from "querystring";
+import url from "url";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -74,11 +75,9 @@ const Review = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const str =
-      window.location.search[0] === "?"
-        ? window.location.search.substr(1, window.location.search.length)
-        : window.location.search;
-    const query = querystring.parse(str);
+
+    const parsedUrl = url.parse(window.location.href);
+    const query = querystring.parse(parsedUrl.query);
     const empty =
       Object.keys(query).length === 0 && query.constructor === Object;
     if (!empty) {

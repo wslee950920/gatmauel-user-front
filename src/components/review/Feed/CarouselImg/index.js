@@ -1,26 +1,23 @@
 import React from "react";
 
 import Carousel from "react-bootstrap/Carousel";
-import Container from "@material-ui/core/Container";
 
 import carouselItem from "./CarouselItem";
 
 const CarouselImg = ({ activeIndex, handleSelect }) => {
   return (
-    <Container>
-      <Carousel
-        indicators={false}
-        interval={20000}
-        activeIndex={activeIndex}
-        onSelect={handleSelect}
-      >
-        {carouselItem.map((item) => (
-          <Carousel.Item key={item.id}>
-            <img className="d-block w-100" src={item.src} alt={item.alt} />
-          </Carousel.Item>
-        ))}
-      </Carousel>
-    </Container>
+    <Carousel
+      indicators={false}
+      interval={20000}
+      activeIndex={activeIndex}
+      onSelect={handleSelect}
+    >
+      {carouselItem.map((item) => (
+        <Carousel.Item key={item.id}>
+          <img className="d-block w-100" src={item.src} alt={item.alt} />
+        </Carousel.Item>
+      ))}
+    </Carousel>
   );
 };
 
