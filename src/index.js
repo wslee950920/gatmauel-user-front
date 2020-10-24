@@ -13,46 +13,13 @@ import "mdbreact/dist/css/mdb.css";
 //react-bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 
-//material ui font 설정
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+//material ui
+import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import theme from "./theme";
 
-const rk = {
-  fontFamily: "Recipe Korea",
-  src: `url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/Recipekorea.woff') format('woff')`,
-  fontWeight: "normal",
-  fontStyle: "normal",
-};
-
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: "Recipe Korea",
-  },
-  palette: {
-    primary: {
-      main: "#2196f3",
-      light: "#4dabf5",
-      dark: "#1769aa",
-      contrastText: "#fff",
-    },
-  },
-  breakpoints: {
-    values: {
-      xs: 350,
-      sm: 600,
-      md: 960,
-      lg: 1280,
-      xl: 1920,
-    },
-  },
-  overrides: {
-    MuiCssBaseline: {
-      "@global": {
-        "@font-face": [rk],
-      },
-    },
-  },
-});
+//ssr
+import { loadableReady } from "@loadable/component";
 
 const filter = "win16|win32|win64|macintel|mac|"; // PC일 경우 가능한 값
 if (navigator.platform) {
@@ -62,15 +29,32 @@ if (navigator.platform) {
   }
 }
 
-ReactDOM.render(
-  <BrowserRouter basename="gatmauel-user-front">
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      <App />
-    </MuiThemeProvider>
-  </BrowserRouter>,
-  document.getElementById("root")
-);
+const Root = () => {
+  React.useEffect(() => {
+    const jssStyles = document.querySelector("#jss-server-side");
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </BrowserRouter>
+  );
+};
+const root = document.getElementById("root");
+
+if (process.env.NODE_ENV === "production") {
+  loadableReady(() => {
+    ReactDOM.hydrate(<Root />, root);
+  });
+} else {
+  ReactDOM.hydrate(<Root />, root);
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

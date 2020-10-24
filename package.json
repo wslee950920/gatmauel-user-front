@@ -4,7 +4,10 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.9.0",
+    "@loadable/babel-plugin": "^5.13.2",
     "@loadable/component": "^5.13.1",
+    "@loadable/server": "^5.14.0",
+    "@loadable/webpack-plugin": "^5.14.0",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@svgr/webpack": "4.3.3",
@@ -34,6 +37,7 @@
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "^1.6.1",
+    "express": "^4.17.1",
     "file-loader": "4.3.0",
     "fs-extra": "^8.1.0",
     "html-webpack-plugin": "4.0.0-beta.11",
@@ -82,7 +86,9 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "predeploy": "node scripts/build.js",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "start:server": "node dist/server.js",
+    "build:server": "node scripts/build.server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -152,9 +158,11 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      "@loadable/babel-plugin"
     ]
   },
-  "homepage": "https://wslee950920.github.io/gatmauel-user-front/",
   "devDependencies": {
     "gh-pages": "^3.1.0"
   }
