@@ -2,14 +2,14 @@
   "errors": [],
   "warnings": [],
   "version": "4.42.0",
-  "hash": "7fcaa398b65634b33747",
-  "publicPath": "/",
+  "hash": "976ee35d11937f28884c",
+  "publicPath": "/gatmauel-user-front/",
   "outputPath": "/home/qkdrnvhrrur/project/gatmauel/front/user-front/build",
   "assetsByChunkName": {
     "main": [
       "static/css/main.414c52c5.chunk.css",
-      "static/js/main.4aa8fec9.chunk.js",
-      "static/js/main.4aa8fec9.chunk.js.map"
+      "static/js/main.52d5fb39.chunk.js",
+      "static/js/main.52d5fb39.chunk.js.map"
     ],
     "page-Account": [
       "static/js/page-Account.af7a0ddc.chunk.js",
@@ -48,14 +48,14 @@
       "static/js/page-Review.5af96025.chunk.js.map"
     ],
     "runtime-main": [
-      "static/js/runtime-main.d9cc0434.js",
-      "static/js/runtime-main.d9cc0434.js.map"
+      "static/js/runtime-main.9c3c57cc.js",
+      "static/js/runtime-main.9c3c57cc.js.map"
     ]
   },
   "assets": [
     {
-      "name": "static/css/13.5e9d0cfe.chunk.css",
-      "size": 458087,
+      "name": "static/css/13.94d8d3f0.chunk.css",
+      "size": 458487,
       "chunks": [
         13
       ],
@@ -66,8 +66,8 @@
       "emitted": false
     },
     {
-      "name": "static/css/13.5e9d0cfe.chunk.css.map",
-      "size": 1634657,
+      "name": "static/css/13.94d8d3f0.chunk.css.map",
+      "size": 1634884,
       "chunks": [],
       "chunkNames": [],
       "info": {},
@@ -300,8 +300,8 @@
       "emitted": false
     },
     {
-      "name": "static/js/main.4aa8fec9.chunk.js",
-      "size": 24508,
+      "name": "static/js/main.52d5fb39.chunk.js",
+      "size": 24548,
       "chunks": [
         2
       ],
@@ -314,8 +314,8 @@
       "emitted": false
     },
     {
-      "name": "static/js/main.4aa8fec9.chunk.js.map",
-      "size": 61671,
+      "name": "static/js/main.52d5fb39.chunk.js.map",
+      "size": 61673,
       "chunks": [
         2
       ],
@@ -580,8 +580,8 @@
       "emitted": false
     },
     {
-      "name": "static/js/runtime-main.d9cc0434.js",
-      "size": 3896,
+      "name": "static/js/runtime-main.9c3c57cc.js",
+      "size": 3916,
       "chunks": [
         12
       ],
@@ -594,8 +594,8 @@
       "emitted": false
     },
     {
-      "name": "static/js/runtime-main.d9cc0434.js.map",
-      "size": 17297,
+      "name": "static/js/runtime-main.9c3c57cc.js.map",
+      "size": 17318,
       "chunks": [
         12
       ],
@@ -753,14 +753,14 @@
         2
       ],
       "assets": [
-        "static/js/runtime-main.d9cc0434.js",
-        "static/js/runtime-main.d9cc0434.js.map",
-        "static/css/13.5e9d0cfe.chunk.css",
+        "static/js/runtime-main.9c3c57cc.js",
+        "static/js/runtime-main.9c3c57cc.js.map",
+        "static/css/13.94d8d3f0.chunk.css",
         "static/js/13.aa8fa2db.chunk.js",
         "static/js/13.aa8fa2db.chunk.js.map",
         "static/css/main.414c52c5.chunk.css",
-        "static/js/main.4aa8fec9.chunk.js",
-        "static/js/main.4aa8fec9.chunk.js.map"
+        "static/js/main.52d5fb39.chunk.js",
+        "static/js/main.52d5fb39.chunk.js.map"
       ],
       "children": {},
       "childAssets": {}
@@ -774,14 +774,14 @@
         2
       ],
       "assets": [
-        "static/js/runtime-main.d9cc0434.js",
-        "static/js/runtime-main.d9cc0434.js.map",
-        "static/css/13.5e9d0cfe.chunk.css",
+        "static/js/runtime-main.9c3c57cc.js",
+        "static/js/runtime-main.9c3c57cc.js.map",
+        "static/css/13.94d8d3f0.chunk.css",
         "static/js/13.aa8fa2db.chunk.js",
         "static/js/13.aa8fa2db.chunk.js.map",
         "static/css/main.414c52c5.chunk.css",
-        "static/js/main.4aa8fec9.chunk.js",
-        "static/js/main.4aa8fec9.chunk.js.map"
+        "static/js/main.52d5fb39.chunk.js",
+        "static/js/main.52d5fb39.chunk.js.map"
       ],
       "children": {},
       "childAssets": {}
@@ -934,7 +934,7 @@
     {
       "errors": [],
       "warnings": [],
-      "publicPath": "/",
+      "publicPath": "/gatmauel-user-front/",
       "outputPath": "/home/qkdrnvhrrur/project/gatmauel/front/user-front/build",
       "assetsByChunkName": {
         "HtmlWebpackPlugin_0": "__child-HtmlWebpackPlugin_0"
@@ -942,7 +942,7 @@
       "assets": [
         {
           "name": "__child-HtmlWebpackPlugin_0",
-          "size": 6445,
+          "size": 6465,
           "chunks": [
             0
           ],
@@ -991,7 +991,7 @@
     {
       "errors": [],
       "warnings": [],
-      "publicPath": "/",
+      "publicPath": "/gatmauel-user-front/",
       "outputPath": "/home/qkdrnvhrrur/project/gatmauel/front/user-front/build",
       "assetsByChunkName": {},
       "assets": [],
@@ -1033,7 +1033,7 @@
     {
       "errors": [],
       "warnings": [],
-      "publicPath": "/",
+      "publicPath": "/gatmauel-user-front/",
       "outputPath": "/home/qkdrnvhrrur/project/gatmauel/front/user-front/build",
       "assetsByChunkName": {},
       "assets": [],
@@ -1075,7 +1075,7 @@
     {
       "errors": [],
       "warnings": [],
-      "publicPath": "/",
+      "publicPath": "/gatmauel-user-front/",
       "outputPath": "/home/qkdrnvhrrur/project/gatmauel/front/user-front/build",
       "assetsByChunkName": {},
       "assets": [],
@@ -1117,7 +1117,7 @@
     {
       "errors": [],
       "warnings": [],
-      "publicPath": "/",
+      "publicPath": "/gatmauel-user-front/",
       "outputPath": "/home/qkdrnvhrrur/project/gatmauel/front/user-front/build",
       "assetsByChunkName": {},
       "assets": [],
@@ -1159,7 +1159,7 @@
     {
       "errors": [],
       "warnings": [],
-      "publicPath": "/",
+      "publicPath": "/gatmauel-user-front/",
       "outputPath": "/home/qkdrnvhrrur/project/gatmauel/front/user-front/build",
       "assetsByChunkName": {},
       "assets": [],
@@ -1201,7 +1201,7 @@
     {
       "errors": [],
       "warnings": [],
-      "publicPath": "/",
+      "publicPath": "/gatmauel-user-front/",
       "outputPath": "/home/qkdrnvhrrur/project/gatmauel/front/user-front/build",
       "assetsByChunkName": {},
       "assets": [],
