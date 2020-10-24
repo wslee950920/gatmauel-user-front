@@ -2,14 +2,14 @@
   "errors": [],
   "warnings": [],
   "version": "4.42.0",
-  "hash": "a3121c9b93543d1c9d09",
+  "hash": "091ca5b43ede1681af05",
   "publicPath": "/",
   "outputPath": "/home/qkdrnvhrrur/project/gatmauel/front/user-front/build",
   "assetsByChunkName": {
     "main": [
       "static/css/main.414c52c5.chunk.css",
-      "static/js/main.2f458e54.chunk.js",
-      "static/js/main.2f458e54.chunk.js.map"
+      "static/js/main.bf9106b7.chunk.js",
+      "static/js/main.bf9106b7.chunk.js.map"
     ],
     "page-Account": [
       "static/js/page-Account.af7a0ddc.chunk.js",
@@ -300,8 +300,8 @@
       "emitted": false
     },
     {
-      "name": "static/js/main.2f458e54.chunk.js",
-      "size": 24480,
+      "name": "static/js/main.bf9106b7.chunk.js",
+      "size": 24509,
       "chunks": [
         2
       ],
@@ -314,8 +314,8 @@
       "emitted": false
     },
     {
-      "name": "static/js/main.2f458e54.chunk.js.map",
-      "size": 61614,
+      "name": "static/js/main.bf9106b7.chunk.js.map",
+      "size": 61674,
       "chunks": [
         2
       ],
@@ -759,8 +759,8 @@
         "static/js/13.aa8fa2db.chunk.js",
         "static/js/13.aa8fa2db.chunk.js.map",
         "static/css/main.414c52c5.chunk.css",
-        "static/js/main.2f458e54.chunk.js",
-        "static/js/main.2f458e54.chunk.js.map"
+        "static/js/main.bf9106b7.chunk.js",
+        "static/js/main.bf9106b7.chunk.js.map"
       ],
       "children": {},
       "childAssets": {}
@@ -780,8 +780,8 @@
         "static/js/13.aa8fa2db.chunk.js",
         "static/js/13.aa8fa2db.chunk.js.map",
         "static/css/main.414c52c5.chunk.css",
-        "static/js/main.2f458e54.chunk.js",
-        "static/js/main.2f458e54.chunk.js.map"
+        "static/js/main.bf9106b7.chunk.js",
+        "static/js/main.bf9106b7.chunk.js.map"
       ],
       "children": {},
       "childAssets": {}
