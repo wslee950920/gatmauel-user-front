@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useRef } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import loadable from "@loadable/component";
 
 import Link from "@material-ui/core/Link";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -16,9 +15,9 @@ import SearchIcon from "@material-ui/icons/Search";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ScopedCssBaseline from "@material-ui/core/ScopedCssBaseline";
 
+import AccountMenu from "./AccountMenu";
 import Drawer from "./Drawer";
 import SearchBar from "../common/SearchBar";
-const AccountMenu = loadable(() => import("./AccountMenu"));
 
 const useClasses = makeStyles((theme) => ({
   grow: {
@@ -78,10 +77,6 @@ const Header = ({ main }) => {
     []
   );
 
-  const onMouseOver = useCallback(() => {
-    AccountMenu.preload();
-  }, []);
-
   //{bool&&<Commponent/>}처럼 하면 bool값이 false가 되는 순간
   //Component가 사라져 버리기 때문에 애니메이션 효과 적용이 되지 않는다.
   //그리고 Drawer, AccountMenu 컴포넌트는 Header를 렌더링 할 때 이미 포함되어서
@@ -139,7 +134,6 @@ const Header = ({ main }) => {
               aria-haspopup="true"
               onClick={handleMenuOpen}
               className={classes.icon}
-              onMouseOver={onMouseOver}
             >
               <AccountCircle />
             </IconButton>

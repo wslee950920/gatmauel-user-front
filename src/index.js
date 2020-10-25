@@ -42,12 +42,10 @@ const Root = () => {
 const root = document.getElementById("root");
 
 if (process.env.NODE_ENV === "production") {
-  console.log(process.env.NODE_ENV);
   loadableReady(() => {
     ReactDOM.hydrate(<Root />, root);
   });
 } else {
-  console.log(process.env.NODE_ENV);
   ReactDOM.render(<Root />, root);
 }
 

@@ -6,7 +6,7 @@ import Header from "../../components/header";
 const RegisterPage = () => {
   return (
     <>
-      <Header />
+      <Header main />
       <Register />
     </>
   );

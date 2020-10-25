@@ -6,7 +6,7 @@ import Header from "../../components/header";
 const AccountPage = () => {
   return (
     <>
-      <Header />
+      <Header main />
       <Account />
     </>
   );

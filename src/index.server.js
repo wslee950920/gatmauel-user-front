@@ -4,8 +4,8 @@ import { StaticRouter } from "react-router-dom";
 import Main from "./page/Main";
 //import App from './App'
 //ssr이란, 화면을 서버에서 렌더링하여 클라이언트로 보내주는 것이다.
-//그런데, App컴포넌트는 자체 화면이 없는, 라우터 컴포넌트(?)이기 때문에
-//ssr에 적합하지 않다.
+//그런데, 현재 App컴포넌트는 자체 화면이 없는, 오직 라우터 기능만 있는
+// 라우터 컴포넌트(?)이기 때문에 ssr에 적합하지 않다.
 //아래에서 html템플릿에 주입하는 tags의 속성 값들은 Main페이지의 것이다.
 //그래서 App을 jsx에 넣어 렌더링하면 스타일 등이 제대로 적용되지 않는다.
 
@@ -109,5 +109,5 @@ app.use(serve);
 app.use(serverRender);
 
 app.listen(5000, () => {
-  console.log(process.env.NODE_ENV, "Running on http://localhost:5000");
+  console.log("Running on http://localhost:5000");
 });

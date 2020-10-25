@@ -6,7 +6,7 @@ import Header from "../../components/header";
 const LoginPage = () => {
   return (
     <>
-      <Header />
+      <Header main />
       <Login />
     </>
   );

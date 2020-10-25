@@ -6,7 +6,7 @@ import Header from "../../components/header";
 const FindPage = () => {
   return (
     <>
-      <Header />
+      <Header main />
       <Find />
     </>
   );

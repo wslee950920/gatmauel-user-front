@@ -6,7 +6,7 @@ import Header from "../../components/header";
 const ProfilePage = () => {
   return (
     <>
-      <Header />
+      <Header main />
       <Profile />
     </>
   );
