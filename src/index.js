@@ -30,13 +30,6 @@ if (navigator.platform) {
 }
 
 const Root = () => {
-  React.useEffect(() => {
-    const jssStyles = document.querySelector("#jss-server-side");
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
-
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
@@ -49,11 +42,13 @@ const Root = () => {
 const root = document.getElementById("root");
 
 if (process.env.NODE_ENV === "production") {
+  console.log(process.env.NODE_ENV);
   loadableReady(() => {
     ReactDOM.hydrate(<Root />, root);
   });
 } else {
-  ReactDOM.hydrate(<Root />, root);
+  console.log(process.env.NODE_ENV);
+  ReactDOM.render(<Root />, root);
 }
 
 // If you want your app to work offline and load faster, you can change

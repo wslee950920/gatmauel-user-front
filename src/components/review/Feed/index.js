@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0.5, 1),
     height: "10rem",
   },
+  ns: {
+    fontFamily: "NanumSquare",
+  },
 }));
 
 const Feed = ({ data, index }) => {
@@ -96,7 +99,7 @@ const Feed = ({ data, index }) => {
             activeStep={activeStep}
             className={classes.stepper}
           />
-          <Typography variant="body2" color="textSecondary">
+          <Typography variant="body1" className={classes.ns}>
             {data.text}
           </Typography>
         </CardContent>

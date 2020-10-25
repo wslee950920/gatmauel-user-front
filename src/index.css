@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+    "NanumSquare", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -11,13 +11,14 @@ body {
   position: relative;
 }
 
-@font-face {
+/*여기에 두면 mui theme에 적용이 안 되더라*/
+/*@font-face {
   font-family: "MaplestoryOTFBold";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff")
     format("woff");
   font-weight: normal;
   font-style: normal;
-}
+}*/
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

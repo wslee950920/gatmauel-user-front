@@ -87,7 +87,7 @@
     "test": "node scripts/test.js",
     "predeploy": "node scripts/build.js",
     "deploy": "gh-pages -d build",
-    "start:server": "node dist/server.js",
+    "start:server": "NODE_ENV=production node dist/server.js",
     "build:server": "node scripts/build.server.js"
   },
   "eslintConfig": {

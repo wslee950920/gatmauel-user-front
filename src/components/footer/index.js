@@ -47,11 +47,9 @@ const Footer = () => {
           </Typography>
         </div>
         {matches && (
-          <div>
-            <Typography variant="caption" className={classes.info}>
-              Gatmauel made by WSL
-            </Typography>
-          </div>
+          <Typography variant="caption" className={classes.info}>
+            Gatmauel made by WSL
+          </Typography>
         )}
       </div>
       <div className={classes.footer}>
@@ -66,16 +64,15 @@ const Footer = () => {
           </Typography>
         </Link>
         {matches && (
-          <div>
-            <Typography
-              variant="caption"
-              className={classes.info}
-              component={Link}
-              href="mailto:gatmauel9300@gmail.com"
-            >
+          <Link
+            href="mailto:gatmauel9300@gmail.com"
+            color="textPrimary"
+            className={classes.link}
+          >
+            <Typography variant="caption" className={classes.info}>
               Plz feedback to. gatmauel9300@gmail.com
             </Typography>
-          </div>
+          </Link>
         )}
       </div>
     </footer>

@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import loadable from "@loadable/component";
 
-import MainPage from "./page/Main";
+const MainPage=loadable(()=>import('./page/Main'));
 const LoginPage = loadable(() => import("./page/Login"));
 const RegisterPage = loadable(() => import("./page/Register"));
 const ProfilePage = loadable(() => import("./page/Profile"));
