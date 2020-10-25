@@ -17,6 +17,7 @@ const Drawer = ({ open, toggleDrawer }) => {
       disableBackdropTransition={!iOS.current}
       disableDiscovery={iOS.current}
       ModalProps={{ keepMounted: true }}
+      keepMounted
     >
       <DrawerList toggleDrawer={toggleDrawer} />
     </SwipeableDrawer>
