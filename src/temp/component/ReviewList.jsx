@@ -8,8 +8,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 
-import ListItemLink from "../../common/MainLists/ListItemLink";
-import Circular from "../../common/Cirular";
+import ListItemLink from "../../components/common/MainLists/ListItemLink";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +44,13 @@ const useStyles = makeStyles((theme) => ({
 const ReviewList = ({ reviews }) => {
   const classes = useStyles();
   const theme = useTheme();
+  //평소하던대로 &&연산자를 활용하여 렌더링하면 ssr에 포함되지 않아
+  //브라우저 렌더링 화면이 깨진다.
+  //그렇다고 아래에 null외에 다른 컴포넌트를 렌더링하면 ssr에 ListItem링크 외에
+  //다른게 렌더링 되어 브라우저가 렌더링 할 때 화면이 깨진다.
+  if (!reviews) {
+    return null;
+  }
 
   return (
     <div className={classes.root}>
@@ -67,20 +73,14 @@ const ReviewList = ({ reviews }) => {
           </div>
           <div>
             <List>
-              {reviews ? (
-                reviews
-                  .slice(0, 4)
-                  .map((review) => (
-                    <ListItemLink
-                      key={review.id}
-                      primary={review.content}
-                      to="/review?id=2"
-                      review
-                    />
-                  ))
-              ) : (
-                <Circular height={192} />
-              )}
+              {reviews.slice(0, 4).map((review) => (
+                <ListItemLink
+                  key={review.id}
+                  primary={review.content}
+                  to="/review?id=2"
+                  review
+                />
+              ))}
             </List>
           </div>
         </Container>

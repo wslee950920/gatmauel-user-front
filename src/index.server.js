@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
-import Main from "./page/Main";
+import Templete from "./temp";
 //import App from './App'
 //App컴포넌트는 자체 화면을 가지지 않는, 오직 라우터 기능만 있는
 //라우터 컴포넌트이기 때문에 전역 css를 그대로 가지고 있다.
@@ -105,7 +105,7 @@ const serverRender = async (req, res, next) => {
           <StaticRouter location={req.url} context={context}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <Main />
+              <Templete />
             </ThemeProvider>
           </StaticRouter>
         </Provider>

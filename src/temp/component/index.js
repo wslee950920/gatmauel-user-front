@@ -2,13 +2,13 @@ import React, { useState, useCallback, useEffect } from "react";
 
 import Grid from "@material-ui/core/Grid";
 
-import CarouselView from "./CarouselView";
+import CarouselView from "../../components/main/CarouselView";
 import ReviewList from "./ReviewList";
-import CarouselMenu from "./CarouselMenu";
-import CardDialog from "../common/CardDialog";
-import NoticeList from "./NoticeList";
+import CarouselMenu from "../../components/main/CarouselMenu";
+import CardDialog from "../../components/common/CardDialog";
+import NoticeList from "../../components/main/NoticeList";
 
-const Main = ({ reviews }) => {
+const Temp = ({ reviews }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = useCallback(() => {
@@ -39,4 +39,4 @@ const Main = ({ reviews }) => {
   );
 };
 
-export default React.memo(Main);
+export default React.memo(Temp);
