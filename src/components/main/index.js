@@ -8,7 +8,7 @@ import CarouselMenu from "./CarouselMenu";
 import CardDialog from "../common/CardDialog";
 import NoticeList from "./NoticeList";
 
-const Main = () => {
+const Main = ({ reviews }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = useCallback(() => {
@@ -28,7 +28,9 @@ const Main = () => {
       <Grid container>
         <Grid item xs={12} md={6}>
           <NoticeList />
-          <ReviewList />
+          <div style={{ height: 268.79 }}>
+            <ReviewList reviews={reviews} />
+          </div>
         </Grid>
         <Grid item xs={12} md={6}>
           <CarouselMenu handleOpen={handleOpen} />
@@ -39,4 +41,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default React.memo(Main);

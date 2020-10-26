@@ -6,12 +6,6 @@ const rk = {
   fontWeight: "normal",
   fontStyle: "normal",
 };
-const maple = {
-  fontFamily: "MaplestoryOTFBold",
-  src: `url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff") format('woff')`,
-  fontWeight: "normal",
-  fontStyle: "normal",
-};
 
 const theme = createMuiTheme({
   typography: {
@@ -37,7 +31,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiCssBaseline: {
       "@global": {
-        "@font-face": [rk, maple],
+        "@font-face": [rk],
       },
     },
   },

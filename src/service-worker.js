@@ -1,5 +1,5 @@
 workbox.setConfig({
-  debug: true,
+  debug: false,
 });
 
 workbox.precaching.precacheAndRoute(self.__precacheManifest);
@@ -18,7 +18,7 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-  new RegExp(`(.*?)\.(woff)$`, "i"),
+  new RegExp(`(.*?)\.(woff|eot|woff2|ttf|svg)$`, "i"),
   new workbox.strategies.CacheFirst({
     cacheName: "cdn-fonts",
     plugins: [

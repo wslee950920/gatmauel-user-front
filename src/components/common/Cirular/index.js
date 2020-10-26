@@ -15,7 +15,7 @@ const Circular = ({ height }) => {
 
   return (
     <div className={classes.root} style={{ height: height }}>
-      <CircularProgress />
+      <CircularProgress size={30} />
     </div>
   );
 };

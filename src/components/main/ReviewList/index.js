@@ -41,15 +41,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function generate(element) {
-  return [0, 1, 2, 3].map((value) =>
-    React.cloneElement(element, { key: value })
-  );
-}
-
-const ReviewList = () => {
+const ReviewList = ({ reviews }) => {
   const classes = useStyles();
   const theme = useTheme();
+  //평소하던대로 &&연산자를 활용하여 렌더링하면 ssr에 포함되지 않아
+  //브라우저 렌더링 화면이 깨진다.
+  //그렇다고 아래에 null외에 다른 컴포넌트를 렌더링하면 ssr에 ListItem링크 외에
+  //다른게 렌더링 되어 브라우저가 렌더링 할 때 화면이 깨진다.
+  if (!reviews) {
+    return null;
+  }
 
   return (
     <div className={classes.root}>
@@ -72,9 +73,14 @@ const ReviewList = () => {
           </div>
           <div>
             <List>
-              {generate(
-                <ListItemLink primary="맛있어요!!!" to="/review?id=2" review />
-              )}
+              {reviews.slice(0, 4).map((review) => (
+                <ListItemLink
+                  key={review.id}
+                  primary={review.content}
+                  to="/review?id=2"
+                  review
+                />
+              ))}
             </List>
           </div>
         </Container>
@@ -83,4 +89,4 @@ const ReviewList = () => {
   );
 };
 
-export default ReviewList;
+export default React.memo(ReviewList);

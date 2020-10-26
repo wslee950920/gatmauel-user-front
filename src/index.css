@@ -11,14 +11,13 @@ body {
   position: relative;
 }
 
-/*여기에 두면 mui theme에 적용이 안 되더라*/
-/*@font-face {
+@font-face {
   font-family: "MaplestoryOTFBold";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff")
     format("woff");
   font-weight: normal;
   font-style: normal;
-}*/
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

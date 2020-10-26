@@ -21,24 +21,34 @@ import theme from "./theme";
 //ssr
 import { loadableReady } from "@loadable/component";
 
-const filter = "win16|win32|win64|macintel|mac|"; // PC일 경우 가능한 값
-if (navigator.platform) {
-  if (filter.indexOf(navigator.platform.toLowerCase()) < 0);
-  else {
-    alert("이 앱은 모바일 환경에 최적화되어 있습니다.");
-  }
-}
+//redux
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import rootReducer from "./module";
+import { composeWithDevTools } from "redux-devtools-extension";
+
+const preloadedState = window.__PRELOADED_STATE__;
+delete window.__PRELOADED_STATE__;
+const store = createStore(
+  rootReducer,
+  preloadedState,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 const Root = () => {
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
   );
 };
+
 const root = document.getElementById("root");
 
 if (process.env.NODE_ENV === "production") {

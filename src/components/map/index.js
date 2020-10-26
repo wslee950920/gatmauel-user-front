@@ -8,7 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import KakaoBtn from "./KakaoBtn";
+import ShareBtn from "./ShareBtn";
 import Footer from "../../components/footer";
 
 import usePlatform from "../../lib/usePlatform";
@@ -51,7 +51,7 @@ const Map = () => {
             animation={2}
           />
         </NaverMap>
-        <KakaoBtn platform={platform} />
+        <ShareBtn platform={platform} />
       </Container>
       <Footer />
     </>
