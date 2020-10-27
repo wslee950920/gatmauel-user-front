@@ -4,11 +4,11 @@ import Grid from "@material-ui/core/Grid";
 
 import CarouselView from "../../components/main/CarouselView";
 import ReviewList from "./ReviewList";
+import NoticeList from "./NoticesList";
 import CarouselMenu from "../../components/main/CarouselMenu";
 import CardDialog from "../../components/common/CardDialog";
-import NoticeList from "../../components/main/NoticeList";
 
-const Temp = ({ reviews }) => {
+const Temp = ({ reviews, notices }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = useCallback(() => {
@@ -27,7 +27,7 @@ const Temp = ({ reviews }) => {
       <CarouselView />
       <Grid container>
         <Grid item xs={12} md={6}>
-          <NoticeList />
+          <NoticeList notices={notices} />
           <ReviewList reviews={reviews} />
         </Grid>
         <Grid item xs={12} md={6}>

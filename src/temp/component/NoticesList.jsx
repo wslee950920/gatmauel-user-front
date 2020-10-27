@@ -21,20 +21,17 @@ const useStyles = makeStyles((theme) => ({
     border: "solid #dcdcdc",
     borderRadius: "8px",
   },
-  title: {
+  info: {
     margin: theme.spacing(2, 1, 0),
     flex: 1,
-  },
-  content: {
-    fontSize: "0.7rem",
-    color: "#808080",
+    color: theme.palette.secondary.dark,
   },
   box: {
     display: "flex",
     alignItems: "baseline",
   },
-  primary: {
-    fontFamily: "MaplestoryOTFBold",
+  fontRobo: {
+    fontFamily: "Roboto",
   },
   more: {
     marginRight: theme.spacing(1),
@@ -42,27 +39,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function generate(element) {
-  return [0, 1, 2, 3].map((value) =>
+  return [0, 1].map((value) =>
     React.cloneElement(element, { key: value })
   );
 }
 
-const ReviewList = ({ reviews }) => {
+const NoticeList = ({notices}) => {
   const classes = useStyles();
   const theme = useTheme();
-  
+
   return (
     <div className={classes.root}>
       <CssBaseline />
       <div style={{ padding: theme.spacing(0.8) }}>
         <Container className={classes.background}>
           <div className={classes.box}>
-            <Typography variant="subtitle1" className={classes.title} noWrap>
-              Review
+            <Typography variant="subtitle1" className={classes.info}>
+              Notice
             </Typography>
             <Link
               component={RouterLink}
-              to="/review"
+              to="/notice"
               color="secondary"
               variant="caption"
               className={classes.more}
@@ -72,19 +69,23 @@ const ReviewList = ({ reviews }) => {
           </div>
           <div>
             {
-              reviews ? (
+              notices ? (
                 <List>
-                  {reviews.slice(0, 4).map((review, index) => (
+                  {notices.slice(0, 2).map((notice, index)=>(
                     <ListItemLink
-                      key={review.id}
-                      primary={review.content}
-                      to={`/review?index=${index}`}
-                      review
+                      key={notice.id}
+                      primary={notice.title}
+                      to={`/notice/${index}`}
+                      secondary={'20/10/28'}
                     />
                   ))}
                 </List>
               ) : generate(
-                <ListItemLink primary="리뷰 내용" to="#" review />
+                <ListItemLink
+                  primary="공지사항 제목"
+                  to="#"
+                  secondary="00/00/00"
+                />
               )
             }
           </div>
@@ -94,4 +95,4 @@ const ReviewList = ({ reviews }) => {
   );
 };
 
-export default React.memo(ReviewList);
+export default React.memo(NoticeList);

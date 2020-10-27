@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import Templete from "./temp";
-//import App from './App'
+import App from "./App";
 //App컴포넌트는 자체 화면을 가지지 않는, 오직 라우터 기능만 있는
 //라우터 컴포넌트이기 때문에 전역 css를 그대로 가지고 있다.
 //App컴포넌트를 jsx에 넣으면 App컴포넌트의 style, script, link들을 추출한다.
@@ -20,6 +20,7 @@ import Templete from "./temp";
 import express from "express";
 import path from "path";
 import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
+import createPage from "./createPage";
 
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
@@ -33,71 +34,16 @@ import PreloadContext from "./lib/PreloadContext";
 
 const statsFile = path.resolve("./build/loadable-stats.json");
 
-const createPage = (root, tags) => {
-  return `
-        <!DOCTYPE html>
-        <html lang="ko">
-        <head>
-          <meta charset="utf-8" />
-          <link rel="icon" href="/images/icons/favicon.ico" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta name="theme-color" content="#000000" />
-          <meta name="description" content="갯마을 바지락 칼국수 보쌈 홈페이지" />
-          <meta name="author" content="WSL" />
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-title" content="갯마을" />
-          <link rel="apple-touch-icon" href="/images/icons/favicon.ico" />
-          <link rel="manifest" href="/manifest.json" />
-          <!-- Google Fonts -->
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-          />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          />
-          <!-- Font Awesome -->
-          <link 
-            rel="stylesheet" 
-            href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-          />
-          <!-- Bootstrap core CSS -->
-          <link 
-            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" 
-            rel="stylesheet"
-          />
-          <!-- Material Design Bootstrap -->
-          <link 
-            href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" 
-            rel="stylesheet"
-          />
-          <title>갯마을</title>
-          ${tags.styles}
-          ${tags.links}
-        </head>
-        <body>
-          <noscript>You need to enable JavaScript to run this app.</noscript>
-          <div id="root">
-            ${root}
-          </div>
-          ${tags.scripts}
-        </body>
-    </html>
-    `;
-};
-
 const app = express();
 
 const serverRender = async (req, res, next) => {
   const context = {};
   const store = createStore(rootReducer, applyMiddleware(thunk));
-  const extractor = new ChunkExtractor({ statsFile });
   const preloadContext = {
     done: false,
     promises: [],
   };
+  const extractor = new ChunkExtractor({ statsFile });
   const jsx = (
     <ChunkExtractorManager extractor={extractor}>
       <PreloadContext.Provider value={preloadContext}>
@@ -113,6 +59,7 @@ const serverRender = async (req, res, next) => {
     </ChunkExtractorManager>
   );
   ReactDOMServer.renderToStaticMarkup(jsx);
+
   try {
     await Promise.all(preloadContext.promises);
   } catch (e) {

@@ -9,6 +9,7 @@ import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 
 import ListItemLink from "../../common/MainLists/ListItemLink";
+import Circular from "../../common/Cirular";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,11 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function generate(element) {
-  return [0, 1].map((value) => React.cloneElement(element, { key: value }));
-}
-
-const Notice = () => {
+const NoticeList = ({ notices }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -67,12 +64,19 @@ const Notice = () => {
           </div>
           <div>
             <List>
-              {generate(
-                <ListItemLink
-                  primary="공지사항 제목"
-                  to="/notice/1"
-                  secondary="19/09/22"
-                />
+              {notices ? (
+                notices
+                  .slice(0, 2)
+                  .map((notice, index) => (
+                    <ListItemLink
+                      key={notice.id}
+                      primary={notice.title}
+                      to={`/notice/${index}`}
+                      secondary={notice.createdAt}
+                    />
+                  ))
+              ) : (
+                <Circular height={144} />
               )}
             </List>
           </div>
@@ -82,4 +86,4 @@ const Notice = () => {
   );
 };
 
-export default Notice;
+export default React.memo(NoticeList);

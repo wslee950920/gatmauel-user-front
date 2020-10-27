@@ -82,7 +82,7 @@ const Review = () => {
       Object.keys(query).length === 0 && query.constructor === Object;
     if (!empty) {
       window.scrollTo({
-        top: rowHeight * parseInt(query.id) + 181 + theme.spacing(4),
+        top: rowHeight * parseInt(query.index) + 181 + theme.spacing(4),
       });
     }
   }, [theme, rowHeight]);

@@ -8,7 +8,7 @@ import CarouselMenu from "./CarouselMenu";
 import CardDialog from "../common/CardDialog";
 import NoticeList from "./NoticeList";
 
-const Main = ({ reviews }) => {
+const Main = ({ reviews, notices }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = useCallback(() => {
@@ -27,7 +27,7 @@ const Main = ({ reviews }) => {
       <CarouselView />
       <Grid container>
         <Grid item xs={12} md={6}>
-          <NoticeList />
+          <NoticeList notices={notices} />
           <ReviewList reviews={reviews} />
         </Grid>
         <Grid item xs={12} md={6}>

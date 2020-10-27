@@ -70,11 +70,11 @@ const ReviewList = ({ reviews }) => {
               {reviews ? (
                 reviews
                   .slice(0, 4)
-                  .map((review) => (
+                  .map((review, index) => (
                     <ListItemLink
                       key={review.id}
                       primary={review.content}
-                      to="/review?id=2"
+                      to={`/review?index=${index}`}
                       review
                     />
                   ))

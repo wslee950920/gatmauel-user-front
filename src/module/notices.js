@@ -1,5 +1,4 @@
 import * as noticesAPI from "../lib/api/notices";
-import { call, put, takeEvery } from "redux-saga/effects";
 
 const GET_NOTICES_PENDING = "notices/GET_NOTICES_PENDING";
 const GET_NOTICES_SUCCESS = "notices/GET_NOTICES_SUCCESS";
@@ -16,15 +15,48 @@ const getNoticesFailure = (error) => ({
   payload: error,
 });
 
-const getNotices = () => noticesAPI.notices();
-
-function* getNoticesSaga(action) {
+export const getNotices = () => async (dispatch) => {
   try {
-    yield put(getNoticesPending());
+    dispatch(getNoticesPending());
 
-    const response = yield call(getNotices);
-    yield put(getNoticesSuccess(response.data));
+    const response = await noticesAPI.notices();
+    dispatch(getNoticesSuccess(response.data));
   } catch (e) {
-    yield put(getNoticesFailure(e));
+    dispatch(getNoticesFailure(e));
+
+    throw e;
   }
-}
+};
+
+const initialState = {
+  notices: null,
+  loading: false,
+  error: null,
+};
+
+const notices = (state = initialState, action) => {
+  switch (action.type) {
+    case GET_NOTICES_PENDING:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case GET_NOTICES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        notices: action.payload,
+      };
+    case GET_NOTICES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export default notices;
