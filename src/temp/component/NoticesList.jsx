@@ -76,7 +76,7 @@ const NoticeList = ({notices}) => {
                       key={notice.id}
                       primary={notice.title}
                       to={`/notice/${index}`}
-                      secondary={'20/10/28'}
+                      secondary={notice.createdAt}
                     />
                   ))}
                 </List>

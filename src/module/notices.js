@@ -1,4 +1,5 @@
 import * as noticesAPI from "../lib/api/notices";
+import { call, put, takeEvery } from "redux-saga/effects";
 
 const GET_NOTICES_PENDING = "notices/GET_NOTICES_PENDING";
 const GET_NOTICES_SUCCESS = "notices/GET_NOTICES_SUCCESS";
@@ -15,18 +16,21 @@ const getNoticesFailure = (error) => ({
   payload: error,
 });
 
-export const getNotices = () => async (dispatch) => {
+export const getNotices = () => async (dispatch) =>
+  await dispatch(getNoticesPending());
+
+function* getNoticesSaga(action) {
   try {
-    dispatch(getNoticesPending());
-
-    const response = await noticesAPI.notices();
-    dispatch(getNoticesSuccess(response.data));
+    const response = yield call(noticesAPI.notices);
+    yield put(getNoticesSuccess(response.data));
   } catch (e) {
-    dispatch(getNoticesFailure(e));
-
-    throw e;
+    yield put(getNoticesFailure(e));
   }
-};
+}
+
+export function* noticesSaga() {
+  yield takeEvery(GET_NOTICES_PENDING, getNoticesSaga);
+}
 
 const initialState = {
   notices: null,

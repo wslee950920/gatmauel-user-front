@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getReviews } from "../../module/reviews";
 import { getNotices } from "../../module/notices";
-import { Preloader } from "../../lib/PreloadContext";
+import { Preloader, usePreloader } from "../../lib/PreloadContext";
 
 import Temp from "../component";
 
@@ -12,12 +12,12 @@ const TempContainer = ({ reviews, getReviews, notices, getNotices }) => {
     getReviews();
     getNotices();
   }, [getReviews, getNotices]);
+  usePreloader(getNotices);
 
   return (
     <>
       <Temp reviews={reviews} notices={notices} />
       <Preloader resolve={getReviews} />
-      <Preloader resolve={getNotices} />
     </>
   );
 };
