@@ -31,9 +31,6 @@ const Notice = () => {
     })
   );
   const platform = usePlatform();
-
-  //https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
-  //새로운 변수 이름으로 할당하기(data->datas)
   const Row = useCallback(({ index, style, data: datas }) => {
     const data = datas[index];
 

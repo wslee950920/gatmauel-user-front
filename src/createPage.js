@@ -54,10 +54,6 @@ const createPage = (root, tags) => {
               rel="stylesheet"
             />
             <style>
-              .ssr-root {
-                visibility: hidden;
-              }
-
               .ssr-loading {
                 position: fixed;
                 z-index: 99;
@@ -89,7 +85,7 @@ const createPage = (root, tags) => {
           </head>
           <body>
             <noscript>You need to enable JavaScript to run this app.</noscript>
-            <div id="root" class="ssr-root">
+            <div id="root">
               ${root}
             </div>
             <div class="ssr-loading" id="ssr-loading">
@@ -99,10 +95,12 @@ const createPage = (root, tags) => {
             <script>
               window.addEventListener("load", function () {
                 const loading = document.getElementById("ssr-loading");
-                const root = document.getElementById("root");
 
-                root.className -= "ssr-root"
                 loading.className += " hidden"; // class "loader hidden"
+                setTimeout(()=>{
+                  const body=document.body;
+                  body.removeChild(loading);
+                }, 1100)  
               });
             </script>
           </body>

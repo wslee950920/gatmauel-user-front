@@ -77,12 +77,6 @@ const Header = ({ main }) => {
     []
   );
 
-  //{bool&&<Commponent/>}처럼 하면 bool값이 false가 되는 순간
-  //Component가 사라져 버리기 때문에 애니메이션 효과 적용이 되지 않는다.
-  //그리고 Drawer, AccountMenu 컴포넌트는 Header를 렌더링 할 때 이미 포함되어서
-  //렌더링 되므로 코드 스플리팅 의미가 없다. 코드 스플리팅 효과를 보려면
-  //{bool&&<Component/>} 방식으로 렌더링 해야 하는데 그러면
-  //애니메이션 효과가 적용되지 않는 딜레마가 생긴다.
   return (
     <div className={classes.grow}>
       <AppBar position="fixed" className={classes.appBar}>

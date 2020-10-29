@@ -10,8 +10,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const CardDialog = ({ open, handleClose }) => {
-  //props의 기본값은 true이다.
-  //따라서 Menu컴포넌트에 keepMounted={true}를 넘겨준 것과 같다.
   return (
     <div>
       <Dialog

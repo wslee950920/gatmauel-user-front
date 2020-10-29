@@ -62,16 +62,6 @@ const useStyles = makeStyles((theme) => ({
 const SearchBar = ({ handleSearch, matches }) => {
   const classes = useStyles();
   const theme = useTheme();
-  //const { height, width } = useWindowDimensions();
-
-  /*const zoomOutMobile = useCallback(() => {
-    var viewport = document.querySelector('meta[name="viewport"]');
-
-    if (viewport) {
-      viewport.setAttribute("content", `width=${width}`);
-      viewport.setAttribute("content", "initial-scale=1");
-    }
-  }, [width]);*/
 
   return (
     <>

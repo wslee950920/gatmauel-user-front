@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -13,11 +13,6 @@ import AddIcon from "@material-ui/icons/Add";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
-
-const checkRange = (num) => {
-  if (num > 10 || num < 1) return true;
-  else return false;
-};
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -64,7 +59,11 @@ const MenuCard = ({ handleClose }) => {
 
     setNum(newValue);
   }, []);
-  const ck = useMemo(() => checkRange(num), [num]);
+
+  const checkRange = useCallback((n) => {
+    if (n > 10 || n < 1) return true;
+    else return false;
+  }, []);
 
   return (
     <Card>
@@ -96,7 +95,7 @@ const MenuCard = ({ handleClose }) => {
           }}
           value={num}
           onChange={onChange}
-          error={ck}
+          error={checkRange(num)}
         />
         <IconButton aria-label="add" onClick={addOnClick}>
           <AddIcon />

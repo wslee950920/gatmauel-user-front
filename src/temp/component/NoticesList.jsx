@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -48,6 +48,15 @@ const NoticeList = ({notices}) => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const kTime = useCallback((time) => {
+    const temp=new Date(time);
+    const year=temp.getFullYear().toString().substr(2, 2);
+    const month=temp.getMonth()+1;
+    const date=temp.getDate();
+    
+    return `${year}/${month}/${date}`;
+  }, []);
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -76,7 +85,7 @@ const NoticeList = ({notices}) => {
                       key={notice.id}
                       primary={notice.title}
                       to={`/notice/${index}`}
-                      secondary={notice.createdAt}
+                      secondary={kTime(notice.createdAt)}
                     />
                   ))}
                 </List>
