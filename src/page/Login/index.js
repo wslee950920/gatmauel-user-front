@@ -1,13 +1,15 @@
 import React from "react";
 
-import Login from "../../components/login";
+import LoginCon from "../../containers/auth/LoginCon";
 import Header from "../../components/header";
+import Copyright from "../../components/footer/Copyright";
 
 const LoginPage = () => {
   return (
     <>
       <Header main />
-      <Login />
+      <LoginCon />
+      <Copyright />
     </>
   );
 };

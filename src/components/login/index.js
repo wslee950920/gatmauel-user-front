@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
@@ -14,7 +14,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 
-import Copyright from "../footer/Copyright";
 import KakaoBtn from "./KakaoBtn";
 
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   formCtrLabel: {
     fontSize: "0.8rem",
     color: "#707070",
+    textDecoration: "line-through",
   },
   fontRobo: {
     fontFamily: "Roboto",
@@ -52,12 +52,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LogIn = () => {
+const LogIn = ({
+  email,
+  password,
+  checked,
+  onChange,
+  onToggle,
+  onSubmit,
+  error,
+  empty,
+}) => {
   const classes = useStyles();
-
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
-  }, []);
 
   return (
     <>
@@ -84,6 +89,13 @@ const LogIn = () => {
               size="small"
               type="email"
               InputProps={{ className: classes.fontRobo }}
+              onChange={onChange}
+              value={email}
+              error={!!error || !!empty.email}
+              helperText={empty.email}
+              FormHelperTextProps={{
+                classes: { root: classes.fontRobo },
+              }}
             />
             <TextField
               variant="outlined"
@@ -96,9 +108,23 @@ const LogIn = () => {
               id="password"
               autoComplete="current-password"
               size="small"
+              onChange={onChange}
+              value={password}
+              error={!!error || !!empty.password}
+              helperText={empty.password}
+              FormHelperTextProps={{
+                classes: { root: classes.fontRobo },
+              }}
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={
+                <Checkbox
+                  color="primary"
+                  checked={checked}
+                  onChange={onToggle}
+                  disabled
+                />
+              }
               label="로그인 유지"
               classes={{ label: classes.formCtrLabel }}
             />
@@ -140,10 +166,9 @@ const LogIn = () => {
         </div>
         <Divider variant="middle" className={classes.divider} />
         <KakaoBtn />
-        <Copyright />
       </Container>
     </>
   );
 };
 
-export default LogIn;
+export default React.memo(LogIn);

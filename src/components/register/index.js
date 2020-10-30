@@ -11,8 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import Copyright from "../footer/Copyright";
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(5),
@@ -130,7 +128,6 @@ const Register = () => {
             </Grid>
           </form>
         </div>
-        <Copyright />
       </Container>
     </>
   );

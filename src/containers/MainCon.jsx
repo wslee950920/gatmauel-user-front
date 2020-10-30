@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
-import {getReviews} from '../module/reviews';
-import {getNotices} from '../module/notices';
+import {getReviews} from '../modules/reviews';
+import {getNotices} from '../modules/notices';
 import {useSelector, useDispatch} from 'react-redux';
 
 import Main from '../components/main';
