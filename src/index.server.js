@@ -15,7 +15,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import rootReducer, { rootSaga } from "./module";
+import rootReducer, { rootSaga } from "./modules";
 import PreloadContext from "./lib/PreloadContext";
 import createSagaMiddleware from "redux-saga";
 import { END } from "redux-saga";

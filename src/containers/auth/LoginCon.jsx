@@ -12,8 +12,8 @@ const LoginCon=({history})=>{
     const [password, setPassword]=useState('');
     const [checked, setChecked]=useState(false);
     const [empty, setEmpty]=useState({
-        email:'',
-        password:''
+        email:false,
+        password:false
     });
     const dispatch=useDispatch();
     const {auth, authError, user}=useSelector(({auth, user})=>({
@@ -39,17 +39,23 @@ const LoginCon=({history})=>{
         event.preventDefault();
 
         if(email===''){
-            setEmpty(prev=>({...prev, email:'이메일을 입력해주세요'}));
+            setEmpty(prev=>({...prev, email:true}));
+
+            if(password===''){
+                setEmpty(prev=>({...prev, password:true}));
+                
+                return;
+            }
 
             return;
         }
         if(password===''){
-            setEmpty(prev=>({...prev, email:'', password:'비밀번호를 입력해주세요.'}));
-
+            setEmpty(prev=>({...prev, password:true}));
+            
             return;
         }
 
-        setEmpty({email:'', password:''})
+        setEmpty({email:false, password:false})
         dispatch(login({email, password}));
     }, [email, password, dispatch]);
 
@@ -68,6 +74,12 @@ const LoginCon=({history})=>{
     useEffect(()=>{
         if(user){
             history.push('/');
+        }
+
+        try{
+            localStorage.setItem('user', JSON.stringify(user));
+        } catch(e){
+            console.error('localStorage is not working');
         }
     }, [user, history]);
 

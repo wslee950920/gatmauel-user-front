@@ -1,6 +1,6 @@
 import React from "react";
 
-import Register from "../../components/register";
+import RegisterCon from "../../containers/auth/RegisterCon";
 import Header from "../../components/header";
 import Copyright from "../../components/footer/Copyright";
 
@@ -8,7 +8,7 @@ const RegisterPage = () => {
   return (
     <>
       <Header main />
-      <Register />
+      <RegisterCon />
       <Copyright />
     </>
   );

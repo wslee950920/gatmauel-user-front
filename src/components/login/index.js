@@ -92,10 +92,6 @@ const LogIn = ({
               onChange={onChange}
               value={email}
               error={!!error || !!empty.email}
-              helperText={empty.email}
-              FormHelperTextProps={{
-                classes: { root: classes.fontRobo },
-              }}
             />
             <TextField
               variant="outlined"
@@ -111,10 +107,6 @@ const LogIn = ({
               onChange={onChange}
               value={password}
               error={!!error || !!empty.password}
-              helperText={empty.password}
-              FormHelperTextProps={{
-                classes: { root: classes.fontRobo },
-              }}
             />
             <FormControlLabel
               control={

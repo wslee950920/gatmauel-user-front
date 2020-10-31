@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
@@ -37,12 +37,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Register = () => {
+const Register = ({
+  nickname,
+  email,
+  password,
+  confirm,
+  onSubmit,
+  onChange,
+  error,
+}) => {
   const classes = useStyles();
-
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
-  }, []);
 
   return (
     <>
@@ -67,6 +71,9 @@ const Register = () => {
               autoFocus
               size="small"
               InputProps={{ className: classes.fontRobo }}
+              value={nickname}
+              onChange={onChange}
+              error={error.nick}
             />
             <TextField
               variant="outlined"
@@ -80,6 +87,9 @@ const Register = () => {
               size="small"
               type="email"
               InputProps={{ className: classes.fontRobo }}
+              value={email}
+              onChange={onChange}
+              error={error.email}
             />
             <TextField
               variant="outlined"
@@ -92,6 +102,9 @@ const Register = () => {
               id="password"
               autoComplete="current-password"
               size="small"
+              value={password}
+              onChange={onChange}
+              error={error.same}
             />
             <TextField
               variant="outlined"
@@ -103,6 +116,9 @@ const Register = () => {
               type="password"
               id="confirm"
               size="small"
+              value={confirm}
+              onChange={onChange}
+              error={error.same}
             />
             <Button
               type="submit"
@@ -133,4 +149,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default React.memo(Register);

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { getReviews } from "../../module/reviews";
-import { getNotices } from "../../module/notices";
+import { getReviews } from "../../modules/reviews";
+import { getNotices } from "../../modules/notices";
 import { Preloader, usePreloader } from "../../lib/PreloadContext";
 
 import Temp from "../component";
