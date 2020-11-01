@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import loadable from "@loadable/component";
 
 import Link from "@material-ui/core/Link";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -15,9 +16,9 @@ import SearchIcon from "@material-ui/icons/Search";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ScopedCssBaseline from "@material-ui/core/ScopedCssBaseline";
 
-import AccountMenu from "./AccountMenu";
 import Drawer from "./Drawer";
 import SearchBar from "../common/SearchBar";
+const AccountMenu = loadable(() => import("./AccountMenu"));
 
 const useClasses = makeStyles((theme) => ({
   grow: {
@@ -41,7 +42,7 @@ const useClasses = makeStyles((theme) => ({
   },
 }));
 
-const Header = ({ main }) => {
+const Header = ({ main, user }) => {
   const classes = useClasses();
   const [accountEl, setAccountEl] = useState(null);
   const [drawer, setDrawer] = useState(false);
@@ -107,6 +108,7 @@ const Header = ({ main }) => {
                   aria-label="search"
                   className={classes.icon}
                   onClick={handleSearch}
+                  disabled
                 >
                   <SearchIcon />
                 </IconButton>
@@ -116,18 +118,23 @@ const Header = ({ main }) => {
             <IconButton
               aria-label="show new notifications"
               className={classes.icon}
+              disabled
             >
-              <Badge badgeContent={17} color="secondary">
+              <Badge badgeContent={0} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
             <IconButton
               edge="end"
-              aria-label="user-menu"
+              aria-label="account-menu"
               aria-controls={menuId.current}
               aria-haspopup="true"
               onClick={handleMenuOpen}
               className={classes.icon}
+              {...(!user && {
+                component: RouterLink,
+                to: "/login",
+              })}
             >
               <AccountCircle />
             </IconButton>
@@ -135,12 +142,14 @@ const Header = ({ main }) => {
         </Toolbar>
       </AppBar>
       <Toolbar />
-      <AccountMenu
-        menuId={menuId.current}
-        accountEl={accountEl}
-        handleMenuClose={handleMenuClose}
-        isMenuOpen={isMenuOpen}
-      />
+      {user && (
+        <AccountMenu
+          menuId={menuId.current}
+          accountEl={accountEl}
+          handleMenuClose={handleMenuClose}
+          isMenuOpen={isMenuOpen}
+        />
+      )}
       <Drawer open={drawer} toggleDrawer={toggleDrawer} />
     </div>
   );

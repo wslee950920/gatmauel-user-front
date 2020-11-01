@@ -3,7 +3,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import MenuBar from "./MenuBar";
 import MenuList from "./MenuList";
 import CardDialog from "../common/CardDialog";
-import MenuFooter from "./MenuFooter";
+import MenuFooter from "../footer/MenuFooter";
 
 const Menu = () => {
   const [open, setOpen] = useState(false);

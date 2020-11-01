@@ -1,15 +1,9 @@
 import React from "react";
 
-import Account from "../../components/account";
-import Header from "../../components/header";
+import AccountCon from "../../containers/user/AccountCon";
 
 const AccountPage = () => {
-  return (
-    <>
-      <Header main />
-      <Account />
-    </>
-  );
+  return <AccountCon />;
 };
 
 export default AccountPage;

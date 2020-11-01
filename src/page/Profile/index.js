@@ -1,15 +1,9 @@
 import React from "react";
 
-import Profile from "../../components/profile";
-import Header from "../../components/header";
+import ProfileCon from "../../containers/user/ProfileCon";
 
 const ProfilePage = () => {
-  return (
-    <>
-      <Header main />
-      <Profile />
-    </>
-  );
+  return <ProfileCon />;
 };
 
 export default ProfilePage;

@@ -14,3 +14,6 @@ export const checkNick = ({ nick }) =>
 
 export const check = () =>
   client.get("/api/auth/check", { withCredentials: true });
+
+export const logout = () =>
+  client.get("/api/auth/logout", { withCredentials: true });

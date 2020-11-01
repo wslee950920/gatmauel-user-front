@@ -4,12 +4,15 @@ import {getNotices} from '../modules/notices';
 import {useSelector, useDispatch} from 'react-redux';
 
 import Main from '../components/main';
+import Header from "../components/header";
+import Footer from "../components/footer";
 
 const MainContainer=()=>{
-    const {reviews, notices}=useSelector(state=>(
+    const {reviews, notices, user}=useSelector(state=>(
         {
             reviews:state.reviews.reviews, 
-            notices:state.notices.notices
+            notices:state.notices.notices,
+            user:state.user.user
         }
     ));
     const dispatch=useDispatch();
@@ -28,7 +31,13 @@ const MainContainer=()=>{
 
     //ssr과 csr을 위한 jsx를 분리하였기 때문에 csr에서는 
     //Preloader를 사용할 필요가 없다.
-    return  <Main reviews={reviews} notices={notices}/>;
+    return(
+        <>
+            <Header main user={user}/>
+            <Main reviews={reviews} notices={notices}/>
+            <Footer/>
+        </>
+    )  
 };
 
 export default MainContainer;

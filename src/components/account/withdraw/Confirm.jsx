@@ -8,7 +8,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-const Confirm = ({ open, handleClose }) => {
+const Confirm = ({ open, handleClose, email }) => {
   return (
     <div>
       <Dialog

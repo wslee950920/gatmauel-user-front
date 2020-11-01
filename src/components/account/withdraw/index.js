@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Withdraw = () => {
+const Withdraw = ({ email }) => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
@@ -34,9 +34,9 @@ const Withdraw = () => {
       >
         회원 탈퇴
       </Button>
-      <Confirm open={open} handleClose={handleClose} />
+      <Confirm open={open} handleClose={handleClose} email={email} />
     </>
   );
 };
 
-export default Withdraw;
+export default React.memo(Withdraw);

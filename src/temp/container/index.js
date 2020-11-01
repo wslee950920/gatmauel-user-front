@@ -5,6 +5,8 @@ import { getNotices } from "../../modules/notices";
 import { Preloader, usePreloader } from "../../lib/PreloadContext";
 
 import Temp from "../component";
+import Header from "../../components/header";
+import Footer from "../../components/footer";
 
 const TempContainer = ({ reviews, getReviews, notices, getNotices }) => {
   useEffect(() => {
@@ -16,7 +18,9 @@ const TempContainer = ({ reviews, getReviews, notices, getNotices }) => {
 
   return (
     <>
+      <Header main />
       <Temp reviews={reviews} notices={notices} />
+      <Footer />
       <Preloader resolve={getReviews} />
     </>
   );
