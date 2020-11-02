@@ -3,8 +3,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
 import LogIn from '../../components/login';
-import Header from "../../components/header";
-import Copyright from "../../components/footer/Copyright";
 
 import {login} from '../../modules/auth';
 import {check} from '../../modules/user';
@@ -85,10 +83,7 @@ const LoginCon=({history})=>{
         }
     }, [user, history]);
 
-    return (
-        <>
-            <Header main user={user}/>
-            <LogIn 
+    return  <LogIn 
                 onChange={onChange} 
                 onToggle={onToggle} 
                 onSubmit={onSubmit} 
@@ -98,9 +93,6 @@ const LoginCon=({history})=>{
                 error={authError}
                 empty={empty}
             />
-            <Copyright />
-        </>
-    );
 };
 
 export default withRouter(LoginCon);

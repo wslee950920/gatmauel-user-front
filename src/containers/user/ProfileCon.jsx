@@ -3,8 +3,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import Profile from "../../components/profile";
-import Header from "../../components/header";
-import Copyright from "../../components/footer/Copyright";
 
 import { logout, getInfo } from "../../modules/user";
 import { checkNick } from '../../modules/auth';
@@ -60,10 +58,7 @@ const ProfileCon=({history})=>{
         }
     }, [nickError, nick])
 
-    return(
-        <>
-            <Header main user={user}/>
-            <Profile 
+    return  <Profile 
                 onLogout={onLogout} 
                 info={info} 
                 nickname={nickname} 
@@ -71,9 +66,6 @@ const ProfileCon=({history})=>{
                 onChange={onChange}
                 onSubmit={onSubmit}
             />                
-            <Copyright/>
-        </>
-    )
 };
 
 export default withRouter(ProfileCon);

@@ -3,8 +3,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import Account from "../../components/account";
-import Header from "../../components/header";
-import Copyright from "../../components/footer/Copyright";
 
 import { getInfo } from "../../modules/user";
 
@@ -26,13 +24,7 @@ const AccountCon=({history})=>{
         }
     }, [user, history, dispatch, info])
 
-    return(
-        <>
-            <Header main user={user}/>
-            <Account info={info}/>
-            <Copyright/>
-        </> 
-    )
+    return <Account info={info}/>
 };
 
 export default withRouter(AccountCon);

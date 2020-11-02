@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import Register from '../../components/register';
-import Header from "../../components/header";
-import Copyright from "../../components/footer/Copyright";
 
 import { register, checkNick, init } from '../../modules/auth';
 
@@ -118,10 +116,7 @@ const RegisterCon = ({ history }) => {
         }
     }, [nickError, nick])
 
-    return (
-        <>
-            <Header main user={user}/>
-            <Register
+    return <Register
                 nickname={nickname}
                 email={email}
                 password={password}
@@ -130,9 +125,6 @@ const RegisterCon = ({ history }) => {
                 onChange={onChange}
                 error={error}
             />
-            <Copyright />
-        </>
-    )
 }
 
 export default withRouter(RegisterCon);
