@@ -17,8 +17,7 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import rootReducer, { rootSaga } from "./modules";
 import PreloadContext from "./lib/PreloadContext";
-import createSagaMiddleware from "redux-saga";
-import { END } from "redux-saga";
+import createSagaMiddleware, { END } from "redux-saga";
 
 const statsFile = path.resolve("./build/loadable-stats.json");
 

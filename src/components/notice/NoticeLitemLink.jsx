@@ -8,6 +8,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
+import kTime from '../../lib/kTime';
+
 const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
@@ -24,9 +26,9 @@ const NoticeLitemLink = ({ data, style, index, length }) => {
   const renderLink = useMemo(
     () =>
       React.forwardRef((itemProps, ref) => (
-        <RouterLink to={data.to} ref={ref} {...itemProps} />
+        <RouterLink to={`/notice/${index}`} ref={ref} {...itemProps} />
       )),
-    [data.to]
+    [index]
   );
   const divider = useMemo(() => {
     if (index !== length - 1) return true;
@@ -39,7 +41,7 @@ const NoticeLitemLink = ({ data, style, index, length }) => {
       <Container maxWidth="sm">
         <ListItem divider={divider} button component={renderLink}>
           <ListItemText
-            primary="공지사항 제목"
+            primary={data.title}
             secondary={
               <>
                 <Typography
@@ -48,10 +50,10 @@ const NoticeLitemLink = ({ data, style, index, length }) => {
                   className={classes.inline}
                   color="textPrimary"
                 >
-                  20/09/27
+                  {kTime(data.createdAt)}
                 </Typography>
                 <br />
-                {data.text}
+                {data.content}
               </>
             }
             secondaryTypographyProps={{

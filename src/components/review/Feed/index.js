@@ -15,6 +15,8 @@ import MobileStepper from "@material-ui/core/MobileStepper";
 import FeedMenu from "./FeedMenu";
 import CarouselImg from "./CarouselImg";
 
+import kTime from "../../../lib/kTime";
+
 const useStyles = makeStyles((theme) => ({
   media: {
     height: 0,
@@ -77,8 +79,8 @@ const Feed = ({ data, index }) => {
               <MoreVertIcon />
             </IconButton>
           }
-          title="맨유경비원"
-          subheader="20/09/29"
+          title={data.nick}
+          subheader={kTime(data.createdAt)}
           subheaderTypographyProps={{
             variant: "caption",
             className: classes.subHeader,
@@ -100,7 +102,7 @@ const Feed = ({ data, index }) => {
             className={classes.stepper}
           />
           <Typography variant="body1" className={classes.ns}>
-            {data.text}
+            {data.content}
           </Typography>
         </CardContent>
       </Card>

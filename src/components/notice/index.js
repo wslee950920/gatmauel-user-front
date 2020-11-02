@@ -1,15 +1,13 @@
-import React, { useRef, useCallback } from "react";
+import React, { useCallback } from "react";
 import { FixedSizeList as List } from "react-window";
 import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
+import usePlatform from "../../lib/usePlatform";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import NoticeLitemLink from "./NoticeLitemLink";
-import Footer from "../footer";
-
-import usePlatform from "../../lib/usePlatform";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,18 +17,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Notice = () => {
+const Notice = ({ notices }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const { height, width } = useWindowDimensions();
-  const datas = useRef(
-    new Array(20).fill({
-      text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
-      to: "/notice/1",
-    })
-  );
   const platform = usePlatform();
+
   const Row = useCallback(({ index, style, data: datas }) => {
     const data = datas[index];
 
@@ -45,7 +38,7 @@ const Notice = () => {
   }, []);
 
   return (
-    <>
+    notices && (
       <List
         className={classes.root}
         height={
@@ -56,16 +49,15 @@ const Notice = () => {
           8 -
           clsx(platform ? 0 : 57.43)
         }
-        itemCount={datas.current.length}
+        itemCount={notices.length}
         itemSize={100}
         width={width}
-        itemData={datas.current}
+        itemData={notices}
       >
         {Row}
       </List>
-      {platform ? null : <Footer />}
-    </>
+    )
   );
 };
 
-export default Notice;
+export default React.memo(Notice);

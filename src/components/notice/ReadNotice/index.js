@@ -1,19 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 
 import RWView from "../../common/RWView";
-import Footer from "../../../components/footer";
 
-const ReadNotice = () => {
-  const data = useRef(
-    `Wish I could come, but I'm out of town this…주방 공사합니다.`
-  );
-
-  return (
-    <>
-      <RWView view rOnly data={data.current} />
-      <Footer />
-    </>
-  );
+const ReadNotice = ({ notice }) => {
+  return <RWView view rOnly data={notice} />;
 };
 
-export default ReadNotice;
+export default React.memo(ReadNotice);

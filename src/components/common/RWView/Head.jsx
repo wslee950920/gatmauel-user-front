@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 
+import kTime from '../../../lib/kTime'
+
 const useStyles = makeStyles((theme) => ({
     inline: {
       display: "inline",
@@ -16,13 +18,13 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const Head=()=>{
+const Head=({title, time})=>{
     const classes = useStyles();
 
     return(
         <Container maxWidth="sm">
           <ListItemText
-            primary="공지사항 제목"
+            primary={title}
             secondary={
               <Typography
                 component="span"
@@ -30,7 +32,7 @@ const Head=()=>{
                 className={classes.inline}
                 color="textPrimary"
               >
-                20/10/18
+                {kTime(time)}
               </Typography>
             }
             classes={{ multiline: classes.multiline }}
@@ -40,4 +42,4 @@ const Head=()=>{
       )
 }
 
-export default Head;
+export default React.memo(Head);

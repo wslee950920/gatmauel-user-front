@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     fontFamily: "Roboto",
     transition: theme.transitions.create("width"),
+    '&::placeholder':{
+      textDecoration:'line-through'
+    },
 
     [theme.breakpoints.up("sm")]: {
       width: "0ch",
@@ -59,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchBar = ({ handleSearch, matches }) => {
+const SearchBar = ({ handleSearch, matches, notice }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -68,10 +71,10 @@ const SearchBar = ({ handleSearch, matches }) => {
       <Toolbar className={classes.root} disableGutters>
         <div className={classes.search}>
           <div className={classes.searchIcon}>
-            <SearchIcon fontSize={"default"} />
+            <SearchIcon fontSize={"default"} color='disabled'/>
           </div>
           <InputBase
-            placeholder="Search…"
+            placeholder={notice?"Search...":"HashTags..."}
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput,
@@ -81,6 +84,7 @@ const SearchBar = ({ handleSearch, matches }) => {
               setTimeout(handleSearch, theme.transitions.duration.shortest)
             }
             autoFocus={matches}
+            disabled
           />
         </div>
       </Toolbar>

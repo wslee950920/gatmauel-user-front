@@ -43,7 +43,7 @@ const Footer = () => {
         <div>
           <ScheduleIcon fontSize="small" />
           <Typography variant="caption" className={classes.info}>
-            11:00~22:00/매월 셋째주 수요일 휴무
+            11:00~22:00/매월 셋째주 월요일 휴무
           </Typography>
         </div>
         {matches && (

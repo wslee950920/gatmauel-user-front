@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Review = () => {
+const Review = ({ reviews }) => {
   const classes = useStyles();
   const theme = useTheme();
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
@@ -38,11 +38,6 @@ const Review = () => {
   const [open, setOpen] = useState(false);
   const paper = useRef(null);
   const [pWidth, setpWidth] = useState(width);
-  const datas = useRef(
-    new Array(10).fill({
-      text: `Wish I could come, but I'm out of town this…주방 공사합니다.`,
-    })
-  );
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -56,11 +51,11 @@ const Review = () => {
 
   const rowRenderer = useCallback(
     ({ index, key, style }) => {
-      const data = datas.current[index];
+      const data = reviews[index];
 
       return <ReviewItem data={data} style={style} key={key} index={index} />;
     },
-    [datas]
+    [reviews]
   );
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -71,8 +66,7 @@ const Review = () => {
 
   useEffect(() => {
     setpWidth(paper.current.getBoundingClientRect().width);
-  }, [pWidth]);
-
+  }, []);
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -88,7 +82,7 @@ const Review = () => {
   }, [theme, rowHeight]);
 
   return (
-    <StepProvider datas={datas.current}>
+    <StepProvider datas={reviews}>
       <WindowScroller>
         {({ height, isScrolling, registerChild, scrollTop }) => (
           <div className={classes.paper} ref={paper}>
@@ -97,7 +91,7 @@ const Review = () => {
               <List
                 autoHeight
                 height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
-                rowCount={datas.current.length}
+                rowCount={reviews.length}
                 rowHeight={rowHeight}
                 width={parseFloat(pWidth)}
                 rowRenderer={rowRenderer}
@@ -114,4 +108,4 @@ const Review = () => {
   );
 };
 
-export default Review;
+export default React.memo(Review);

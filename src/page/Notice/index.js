@@ -5,22 +5,29 @@ import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import Header from "../../components/header";
-import Notice from "../../components/notice";
+import NoticeCon from "../../containers/notice/NoticeCon";
 import SearchBar from "../../components/common/SearchBar";
-import ReadNotice from "../../components/notice/ReadNotice";
+import ReadNoticeCon from "../../containers/notice/ReadNoticeCon";
+import Footer from "../../components/footer";
+
+import usePlatform from "../../lib/usePlatform";
 
 const NoticePage = ({ match }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const platform = usePlatform();
 
   return (
     <>
       <Header />
-      {!matches && <Route exact path={match.url} component={SearchBar} />}
-      <Route exact path={match.url} component={Notice} />
-      <Route path={`${match.url}/:id`} component={ReadNotice} />
+      {!matches && (
+        <Route exact path={match.url} component={() => <SearchBar notice />} />
+      )}
+      <Route exact path={match.url} component={NoticeCon} />
+      <Route path={`${match.url}/:id`} component={ReadNoticeCon} />
+      {platform ? null : <Footer />}
     </>
   );
 };
 
-export default React.memo(NoticePage);
+export default NoticePage;

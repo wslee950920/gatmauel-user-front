@@ -3,18 +3,19 @@ import React from "react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 
-import Header from "../../components/header";
-import Review from "../../components/review";
+import HeaderCon from "../../containers/HeaderCon";
+import ReviewCon from "../../containers/ReviewCon";
 import SearchBar from "../../components/common/SearchBar";
 
 const ReviewPage = () => {
   const theme = useTheme();
   const small = useMediaQuery(theme.breakpoints.up("sm"));
+
   return (
     <>
-      <Header />
+      <HeaderCon />
       {!small && <SearchBar />}
-      <Review />
+      <ReviewCon />
     </>
   );
 };

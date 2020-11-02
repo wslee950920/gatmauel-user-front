@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import useWindowDimensions from "../../../lib/windowDimensions";
+import { Link } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -30,6 +31,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "white",
     padding: theme.spacing(2),
   },
+  back: {
+    marginTop: theme.spacing(1),
+    display: "flex",
+    justifyContent: "flex-end",
+  },
 }));
 
 const RWView = ({ handleClickOpen, rOnly, data }) => {
@@ -53,7 +59,7 @@ const RWView = ({ handleClickOpen, rOnly, data }) => {
           : {})}
       >
         <div className={classes.background}>
-          {data && <Head />}
+          {data && <Head title={data.title} time={data.createdAt} />}
           <TextareaAutosize
             aria-label="read-write-data"
             rowsMin={clsx(data ? 16 : 4)}
@@ -61,7 +67,7 @@ const RWView = ({ handleClickOpen, rOnly, data }) => {
             className={classes.textArea}
             onClick={handleClickOpen}
             readOnly={rOnly}
-            defaultValue={data}
+            value={data && data.content}
             {...(data
               ? {
                   style: {
@@ -73,6 +79,19 @@ const RWView = ({ handleClickOpen, rOnly, data }) => {
           />
           {!data && <Tools />}
         </div>
+        {rOnly && data && (
+          <div className={classes.back}>
+            <Link
+              to="/notice"
+              style={{
+                fontFamily: "Roboto",
+                color: theme.palette.text.secondary,
+              }}
+            >
+              돌아가기
+            </Link>
+          </div>
+        )}
       </Container>
     </div>
   );
