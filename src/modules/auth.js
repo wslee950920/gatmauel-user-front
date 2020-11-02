@@ -16,6 +16,7 @@ const [
   CHECK_NICK_SUCCESS,
   CHECK_NICK_FAILURE,
 ] = createRequestActionTypes("auth/CHECK_NICK");
+const INIT = "auth/INIT";
 
 export const register = createAction(REGISTER, ({ nick, email, password }) => ({
   nick,
@@ -29,6 +30,7 @@ export const login = createAction(LOGIN, ({ email, password }) => ({
 export const checkNick = createAction(CHECK_NICK, ({ nick }) => ({
   nick,
 }));
+export const init = createAction(INIT);
 
 const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
@@ -74,6 +76,11 @@ const auth = handleActions(
     [CHECK_NICK_FAILURE]: (state, { payload: error }) => ({
       ...state,
       nickError: error,
+    }),
+    [INIT]: (state) => ({
+      ...state,
+      auth: null,
+      authError: null,
     }),
   },
   initialState

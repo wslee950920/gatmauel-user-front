@@ -34,6 +34,9 @@ const ProfileCon=({history})=>{
         if (value !== ''&&value!==user.nick)
             dispatch(checkNick({ nick: value }));
     }, [dispatch, user]);
+    const onSubmit = useCallback((e) => {
+        e.preventDefault();
+      }, []);
 
     useEffect(()=>{
         if(!user){
@@ -66,6 +69,7 @@ const ProfileCon=({history})=>{
                 nickname={nickname} 
                 error={error} 
                 onChange={onChange}
+                onSubmit={onSubmit}
             />                
             <Copyright/>
         </>

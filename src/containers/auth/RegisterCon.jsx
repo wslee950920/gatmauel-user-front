@@ -6,7 +6,7 @@ import Register from '../../components/register';
 import Header from "../../components/header";
 import Copyright from "../../components/footer/Copyright";
 
-import { register, checkNick } from '../../modules/auth';
+import { register, checkNick, init } from '../../modules/auth';
 
 const RegisterCon = ({ history }) => {
     const [email, setEmail] = useState('');
@@ -57,7 +57,7 @@ const RegisterCon = ({ history }) => {
             if(email===''||!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))){
                 setError(prev=>({...prev, email:true}));
 
-                if(nickname===''){
+                if(nickname===''||nickError){
                     setError(prev=>({...prev, nick:true}));
                     return;
                 }
@@ -68,25 +68,36 @@ const RegisterCon = ({ history }) => {
         if(email===''||!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))){
             setError(prev=>({...prev, email:true}));
 
-            if(nickname===''){
+            if(nickname===''||nickError){
                 setError(prev=>({...prev, nick:true}));
                 return;
             }
             return;
         } else setError(prev=>({...prev, email:false}));
-        if(nickname===''){
+        if(nickname===''||nickError){
             setError(prev=>({...prev, nick:true}));
             return;
         } 
 
         setError(prev => ({ ...prev, email: false, same: false }))
         dispatch(register({ nick: nickname, email, password }));
-    }, [nickname, email, password, confirm, dispatch]);
+    }, [nickname, email, password, confirm, dispatch, nickError]);
 
+    useEffect(() => {
+        if (authError) {
+            setError(prev => ({ ...prev, email: true }));
+
+            return;
+        }
+        if (auth) {
+            history.push('/login');
+            alert('로그인 해주세요.');
+            dispatch(init());
+        }
+    }, [auth, authError, history, dispatch]);
     useEffect(() => {
         if(user){
             history.push('/');
-            alert('로그인한 상태 입니다.');
 
             return;
         }
@@ -95,21 +106,7 @@ const RegisterCon = ({ history }) => {
         setEmail('');
         setPassword('');
         setConfirm('');
-    }, [user, history]);
-    useEffect(() => {
-        if (authError) {
-            if (authError.response.status === 999)
-                setError(prev => ({ ...prev, email: true }));
-            else if (authError.response.status === 888)
-                setError(prev => ({ ...prev, email: false}));
-
-            return;
-        }
-        if (auth) {
-            history.push('/login');
-            alert('로그인을 해주세요.')
-        }
-    }, [auth, authError, history]);
+    }, [user, auth, history]);
     useEffect(() => {
         if (nickError) {
             setError(prev => ({ ...prev, nick: true }));

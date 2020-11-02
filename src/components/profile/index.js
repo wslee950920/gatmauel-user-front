@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -57,12 +57,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Profile = ({ onLogout, info, nickname, error, onChange }) => {
+const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
   const classes = useStyles();
-
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
-  }, []);
 
   return (
     info && (
