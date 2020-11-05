@@ -65,14 +65,13 @@ const CarouselMenu = ({ handleOpen }) => {
         <GridList
           className={classes.gridList}
           cols={parseFloat(clsx(medium ? ratio : small ? 2.25 : 1.25))}
+          cellHeight="auto"
+          spacing={8}
         >
           {tileData.map((tile) => (
             <GridListTile
               key={tile.name}
-              style={{
-                height: "auto",
-                margin: theme.spacing(1, 0),
-              }}
+              style={{ margin: theme.spacing(1, 0) }}
             >
               <MDBView hover zoom>
                 <img

@@ -26,7 +26,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FullScreenDialog = ({ open, handleClose }) => {
+const FullScreenDialog = ({
+  open,
+  handleClose,
+  imgs,
+  handleFileOnChange,
+  handleFileRemove,
+  onChange,
+  content,
+  onSubmit,
+}) => {
   const classes = useStyles();
 
   return (
@@ -48,7 +57,14 @@ const FullScreenDialog = ({ open, handleClose }) => {
           <Divider />
         </Container>
       </div>
-      <RWView />
+      <RWView
+        imgs={imgs}
+        handleFileOnChange={handleFileOnChange}
+        handleFileRemove={handleFileRemove}
+        content={content}
+        onChange={onChange}
+        onSubmit={onSubmit}
+      />
     </Dialog>
   );
 };

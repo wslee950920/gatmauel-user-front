@@ -60,10 +60,6 @@ const LoginCon=({history})=>{
     }, [email, password, dispatch]);
 
     useEffect(()=>{
-        setEmail('');
-        setPassword('');
-    }, []);
-    useEffect(()=>{
         if(authError){
             return;
         }

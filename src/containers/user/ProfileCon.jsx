@@ -4,8 +4,8 @@ import { withRouter } from 'react-router-dom';
 
 import Profile from "../../components/profile";
 
-import { logout, getInfo } from "../../modules/user";
-import { checkNick } from '../../modules/auth';
+import { logout, getInfo, check } from "../../modules/user";
+import { checkNick, init } from '../../modules/auth';
 
 const ProfileCon=({history})=>{
     const {user, info, nick, nickError}=useSelector(
@@ -19,8 +19,8 @@ const ProfileCon=({history})=>{
     const dispatch=useDispatch();
     const [nickname, setNickname]=useState('');
     const [error, setError] = useState({
-        nick: false,
-    })
+        nick:false
+    });
 
     const onLogout = useCallback(() => {
         dispatch(logout());
@@ -29,8 +29,12 @@ const ProfileCon=({history})=>{
         const {value}=e.target;
         setNickname(value);
 
-        if (value !== ''&&value!==user.nick)
+        if (value === ''||value===user.nick){
+            setError(prev=>({...prev, nick:false}));            
+            return;
+        } else{
             dispatch(checkNick({ nick: value }));
+        }
     }, [dispatch, user]);
     const onSubmit = useCallback((e) => {
         e.preventDefault();
@@ -41,22 +45,27 @@ const ProfileCon=({history})=>{
             history.push('/login');
             alert('로그인 해주세요.');
         } else{
-            if(!info){
-                dispatch(getInfo());
-            }
-            setNickname(user.nick);
+            dispatch(check());
         }
-    }, [user, history, dispatch, info]);
+    }, [user, history, dispatch]);
+    useEffect(()=>{
+        if(!info){
+            dispatch(getInfo());
+        }
+    }, [info, dispatch]);
     useEffect(() => {
         if (nickError) {
-            setError(prev => ({ ...prev, nick: true }));
+            setError(prev=>({...prev, nick:true}));
 
             return;
         }
         if (nick) {
-            setError(prev => ({ ...prev, nick: false }));
+            setError(prev=>({...prev, nick:false}));
         }
-    }, [nickError, nick])
+    }, [nickError, nick]);
+    useEffect(()=>{
+        return ()=>dispatch(init());
+    }, [dispatch]);
 
     return  <Profile 
                 onLogout={onLogout} 

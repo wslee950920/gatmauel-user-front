@@ -28,16 +28,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Review = ({ reviews }) => {
+const Review = ({
+  reviews,
+  history,
+  user,
+  content,
+  imgs,
+  handleFileOnChange,
+  handleFileRemove,
+  onChange,
+  onSubmit,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
   const small = useMediaQuery(theme.breakpoints.up("sm"));
   const bSmall = useMediaQuery(theme.breakpoints.between(400, "sm"));
   const { width } = useWindowDimensions();
-  const [open, setOpen] = useState(false);
   const paper = useRef(null);
   const [pWidth, setpWidth] = useState(width);
+  const [open, setOpen] = useState(false);
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -60,9 +70,19 @@ const Review = ({ reviews }) => {
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
-  const handleClickOpen = useCallback(() => {
-    setOpen(true);
-  }, []);
+  const handleClickOpen = useCallback(
+    (e) => {
+      if (!user) {
+        e.preventDefault();
+
+        history.push("/login");
+        alert("로그인을 해주세요.");
+      }
+
+      setOpen(true);
+    },
+    [user, history]
+  );
 
   useEffect(() => {
     setpWidth(paper.current.getBoundingClientRect().width);
@@ -86,7 +106,15 @@ const Review = ({ reviews }) => {
       <WindowScroller>
         {({ height, isScrolling, registerChild, scrollTop }) => (
           <div className={classes.paper} ref={paper}>
-            <RWView handleClickOpen={handleClickOpen} rOnly />
+            <RWView
+              handleClickOpen={handleClickOpen}
+              rOnly
+              imgs={imgs}
+              handleFileOnChange={handleFileOnChange}
+              handleFileRemove={handleFileRemove}
+              content={content}
+              onSubmit={onSubmit}
+            />
             <div ref={registerChild}>
               <List
                 autoHeight
@@ -103,7 +131,16 @@ const Review = ({ reviews }) => {
           </div>
         )}
       </WindowScroller>
-      <FullScreenDialog open={open} handleClose={handleClose} />
+      <FullScreenDialog
+        open={open}
+        handleClose={handleClose}
+        imgs={imgs}
+        handleFileOnChange={handleFileOnChange}
+        handleFileRemove={handleFileRemove}
+        content={content}
+        onChange={onChange}
+        onSubmit={onSubmit}
+      />
     </StepProvider>
   );
 };

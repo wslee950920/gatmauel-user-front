@@ -15,7 +15,7 @@ const RegisterCon = ({ history }) => {
         nick: false,
         email: false,
         same: false
-    })
+    });
 
     const dispatch = useDispatch();
     const { auth, authError, nick, nickError, user } = useSelector(({ auth, user }) => ({
@@ -30,7 +30,6 @@ const RegisterCon = ({ history }) => {
         const { name, value } = e.target;
 
         if (name === 'email'){
-
             setEmail(value);
         }
         else if (name === 'password'){
@@ -42,8 +41,12 @@ const RegisterCon = ({ history }) => {
         else if (name === 'nickname') {
             setNickname(value);
 
-            if (value !== '')
-                dispatch(checkNick({ nick: value }));
+            if (value === ''){
+                setError(prev=>({...prev, nick:false}));
+                return;
+            }
+
+            dispatch(checkNick({ nick: value }));
         }
     }, [dispatch]);
     const onSubmit = useCallback((e) => {
@@ -100,11 +103,10 @@ const RegisterCon = ({ history }) => {
             return;
         }
 
-        setNickname('');
-        setEmail('');
-        setPassword('');
-        setConfirm('');
-    }, [user, auth, history]);
+        return ()=>{
+            dispatch(init());
+        }
+    }, [user, history, dispatch]);
     useEffect(() => {
         if (nickError) {
             setError(prev => ({ ...prev, nick: true }));

@@ -27,6 +27,7 @@ const checkSaga = createRequestSaga(CHECK, authAPI.check);
 function checkFailureSaga() {
   try {
     localStorage.removeItem("user");
+    put(init());
   } catch (e) {
     console.error("localStorage is not working");
   }

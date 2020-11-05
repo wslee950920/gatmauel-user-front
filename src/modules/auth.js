@@ -78,9 +78,7 @@ const auth = handleActions(
       nickError: error,
     }),
     [INIT]: (state) => ({
-      ...state,
-      auth: null,
-      authError: null,
+      ...initialState,
     }),
   },
   initialState

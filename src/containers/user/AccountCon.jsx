@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 import Account from "../../components/account";
 
-import { getInfo } from "../../modules/user";
+import { getInfo, check } from "../../modules/user";
 
 const AccountCon=({history})=>{
     const {user, info}=useSelector(({user})=>({
@@ -18,11 +18,14 @@ const AccountCon=({history})=>{
             history.push('/login');
             alert('로그인 해주세요.');
         } else{
-            if(!info){
-                dispatch(getInfo());
-            }  
+            dispatch(check());
         }
-    }, [user, history, dispatch, info])
+    }, [user, history, dispatch]);
+    useEffect(()=>{
+        if(!info){
+            dispatch(getInfo());
+        }
+    }, [info, dispatch]);
 
     return <Account info={info}/>
 };

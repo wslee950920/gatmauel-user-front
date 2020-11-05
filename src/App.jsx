@@ -16,7 +16,7 @@ const MapPage=loadable(()=>import('./page/Map'));
 const App = () => {
   return (
     <Switch>
-      <Route path={"/"} component={MainPage} exact={true} />
+      <Route path={"/"} component={MainPage} exact/>
       <Route path={"/login"} component={LoginPage} exact />
       <Route path={"/register"} component={RegisterPage} exact />
       <Route path={"/profile"} component={ProfilePage} exact />
