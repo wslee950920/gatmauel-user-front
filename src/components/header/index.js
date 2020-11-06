@@ -114,16 +114,17 @@ const Header = ({ main, user }) => {
                 </IconButton>
               )
             )}
-            {/*TODO:추후 알림이 있을 때만 검은색(classes.icon)으로 강조되게끔한다.*/}
-            <IconButton
-              aria-label="show new notifications"
-              className={classes.icon}
-              disabled
-            >
-              <Badge badgeContent={0} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            {user && (
+              <IconButton
+                aria-label="show new notifications"
+                className={classes.icon}
+                disabled
+              >
+                <Badge badgeContent={0} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            )}
             <IconButton
               edge="end"
               aria-label="account-menu"

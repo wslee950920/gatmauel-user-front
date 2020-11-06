@@ -14,7 +14,7 @@ const Circular = ({ height }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root} style={{ height: height }}>
+    <div className={classes.root} style={{ height }}>
       <CircularProgress size={30} />
     </div>
   );

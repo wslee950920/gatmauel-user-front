@@ -26,10 +26,8 @@ const ReviewCon = ({ history }) => {
     setOpen(false);
   }, []);
   const handleClickOpen = useCallback(
-    (e) => {
+    () => {
       if (!user) {
-        e.preventDefault();
-
         history.push("/login");
         alert("로그인을 해주세요.");
 
@@ -106,9 +104,10 @@ const ReviewCon = ({ history }) => {
       history.go(0);
     }
     if (reviewError) {
-      console.error(reviewError);
-      
-      history.go(0);
+      if(reviewError.response.status===403){
+        alert('로그인을 해주세요');
+        history.go(0);
+      }
     }
   }, [review, reviewError, dispatch, history]);
 

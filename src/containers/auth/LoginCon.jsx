@@ -69,7 +69,7 @@ const LoginCon=({history})=>{
     }, [auth, authError, dispatch]);
     useEffect(()=>{
         if(user){
-            history.push('/');
+            history.go(-1);
         }
 
         try{
