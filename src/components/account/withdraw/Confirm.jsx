@@ -26,7 +26,7 @@ const Confirm = ({ open, handleClose, email }) => {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            id="email"
             label="이메일"
             type="email"
             fullWidth

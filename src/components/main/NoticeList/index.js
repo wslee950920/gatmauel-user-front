@@ -74,16 +74,16 @@ const NoticeList = ({ notices }) => {
           <div>
             <List>
               {notices ? (
-                notices
-                  .slice(0, 2)
-                  .map((notice, index) => (
+                <div style={{ height: 144 }}>
+                  {notices.slice(0, 2).map((notice, index) => (
                     <ListItemLink
                       key={notice.id}
                       primary={notice.title}
                       to={`/notice/${index}`}
                       secondary={kTime(notice.createdAt)}
                     />
-                  ))
+                  ))}
+                </div>
               ) : (
                 <Circular height={144} />
               )}

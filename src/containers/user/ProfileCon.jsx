@@ -41,11 +41,14 @@ const ProfileCon=({history})=>{
       }, []);
 
     useEffect(()=>{
+        dispatch(check());
+        
+        return ()=>dispatch(init());
+    }, [dispatch]);  
+    useEffect(()=>{
         if(!user){
             history.push('/login');
             alert('로그인 해주세요.');
-        } else{
-            dispatch(check());
         }
     }, [user, history, dispatch]);
     useEffect(()=>{
@@ -63,9 +66,6 @@ const ProfileCon=({history})=>{
             setError(prev=>({...prev, nick:false}));
         }
     }, [nickError, nick]);
-    useEffect(()=>{
-        return ()=>dispatch(init());
-    }, [dispatch]);
 
     return  <Profile 
                 onLogout={onLogout} 

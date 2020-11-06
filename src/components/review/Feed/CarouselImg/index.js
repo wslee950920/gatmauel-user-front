@@ -2,19 +2,22 @@ import React from "react";
 
 import Carousel from "react-bootstrap/Carousel";
 
-import carouselItem from "./CarouselItem";
-
-const CarouselImg = ({ activeIndex, handleSelect }) => {
+const CarouselImg = ({ activeIndex, handleSelect, imgs }) => {
   return (
     <Carousel
       indicators={false}
       interval={20000}
       activeIndex={activeIndex}
       onSelect={handleSelect}
+      controls={imgs.split("||").length > 1}
     >
-      {carouselItem.map((item) => (
-        <Carousel.Item key={item.id}>
-          <img className="d-block w-100" src={item.src} alt={item.alt} />
+      {imgs.split("||").map((src, index) => (
+        <Carousel.Item key={index}>
+          <img
+            className="d-block w-100"
+            src={process.env.REACT_APP_CF_DOMAIN_NAME + src}
+            alt="피드 이미지"
+          />
         </Carousel.Item>
       ))}
     </Carousel>

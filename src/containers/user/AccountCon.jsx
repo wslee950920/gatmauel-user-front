@@ -14,11 +14,12 @@ const AccountCon=({history})=>{
     const dispatch=useDispatch();
 
     useEffect(()=>{
+        dispatch(check());
+    }, [dispatch]);
+    useEffect(()=>{
         if(!user){
             history.push('/login');
             alert('로그인 해주세요.');
-        } else{
-            dispatch(check());
         }
     }, [user, history, dispatch]);
     useEffect(()=>{

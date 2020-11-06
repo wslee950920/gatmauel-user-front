@@ -30,14 +30,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Review = ({
   reviews,
-  history,
-  user,
   content,
   imgs,
   handleFileOnChange,
   handleFileRemove,
   onChange,
   onSubmit,
+  open,
+  handleClose,
+  handleClickOpen,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -47,7 +48,6 @@ const Review = ({
   const { width } = useWindowDimensions();
   const paper = useRef(null);
   const [pWidth, setpWidth] = useState(width);
-  const [open, setOpen] = useState(false);
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -66,22 +66,6 @@ const Review = ({
       return <ReviewItem data={data} style={style} key={key} index={index} />;
     },
     [reviews]
-  );
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  }, []);
-  const handleClickOpen = useCallback(
-    (e) => {
-      if (!user) {
-        e.preventDefault();
-
-        history.push("/login");
-        alert("로그인을 해주세요.");
-      }
-
-      setOpen(true);
-    },
-    [user, history]
   );
 
   useEffect(() => {

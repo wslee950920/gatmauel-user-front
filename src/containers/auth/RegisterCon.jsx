@@ -84,6 +84,11 @@ const RegisterCon = ({ history }) => {
         dispatch(register({ nick: nickname, email, password }));
     }, [nickname, email, password, confirm, dispatch, nickError]);
 
+    useEffect(()=>{
+        return ()=>{
+            dispatch(init());
+        }
+    }, [dispatch]);
     useEffect(() => {
         if (authError) {
             setError(prev => ({ ...prev, email: true }));
@@ -102,11 +107,7 @@ const RegisterCon = ({ history }) => {
 
             return;
         }
-
-        return ()=>{
-            dispatch(init());
-        }
-    }, [user, history, dispatch]);
+    }, [user, history]);
     useEffect(() => {
         if (nickError) {
             setError(prev => ({ ...prev, nick: true }));
@@ -116,7 +117,7 @@ const RegisterCon = ({ history }) => {
         if (nick) {
             setError(prev => ({ ...prev, nick: false }));
         }
-    }, [nickError, nick])
+    }, [nickError, nick]);
 
     return <Register
                 nickname={nickname}

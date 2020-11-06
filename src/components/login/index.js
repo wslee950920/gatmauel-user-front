@@ -91,7 +91,7 @@ const LogIn = ({
               InputProps={{ className: classes.fontRobo }}
               onChange={onChange}
               value={email}
-              error={!!error || !!empty.email}
+              error={!!error || empty.email}
             />
             <TextField
               variant="outlined"
@@ -106,7 +106,7 @@ const LogIn = ({
               size="small"
               onChange={onChange}
               value={password}
-              error={!!error || !!empty.password}
+              error={!!error || empty.password}
             />
             <FormControlLabel
               control={

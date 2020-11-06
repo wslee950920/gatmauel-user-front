@@ -68,16 +68,16 @@ const ReviewList = ({ reviews }) => {
           <div>
             <List>
               {reviews ? (
-                reviews
-                  .slice(0, 4)
-                  .map((review, index) => (
+                <div style={{ height: 192 }}>
+                  {reviews.slice(0, 4).map((review, index) => (
                     <ListItemLink
                       key={review.id}
                       primary={review.content}
                       to={`/review?index=${index}`}
                       review
                     />
-                  ))
+                  ))}
+                </div>
               ) : (
                 <Circular height={192} />
               )}

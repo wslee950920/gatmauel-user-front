@@ -92,15 +92,20 @@ const Feed = ({ data, index }) => {
           component={CarouselImg}
           activeIndex={activeStep}
           handleSelect={handleSelect}
+          imgs={data.imgs}
         />
         <CardContent classes={{ root: classes.content }}>
-          <MobileStepper
-            variant="dots"
-            steps={3}
-            position="static"
-            activeStep={activeStep}
-            className={classes.stepper}
-          />
+          {data.imgs.split("||").length > 1 ? (
+            <MobileStepper
+              variant="dots"
+              steps={data.imgs.split("||").length}
+              position="static"
+              activeStep={activeStep}
+              className={classes.stepper}
+            />
+          ) : (
+            <br />
+          )}
           <Typography variant="body1" className={classes.ns}>
             {data.content}
           </Typography>

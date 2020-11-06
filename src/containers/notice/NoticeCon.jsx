@@ -14,10 +14,8 @@ const NoticeCon=()=>{
     ));
 
     useEffect(()=>{
-        if(notices) return;
-
         dispatch(getNotices());
-    }, [dispatch, notices]);
+    }, [dispatch]);
 
     return <Notice notices={notices}/>
 }
