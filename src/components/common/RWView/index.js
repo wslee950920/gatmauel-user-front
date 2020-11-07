@@ -90,7 +90,9 @@ const RWView = ({
   content,
   onChange,
   onSubmit,
+  onCamera,
 }) => {
+  console.log(content);
   const classes = useStyles();
   const { height } = useWindowDimensions();
   const theme = useTheme();
@@ -177,6 +179,7 @@ const RWView = ({
               handleClickOpen={handleClickOpen}
               handleFileOnChange={handleFileOnChange}
               onSubmit={onSubmit}
+              onCamera={onCamera}
             />
           )}
         </div>

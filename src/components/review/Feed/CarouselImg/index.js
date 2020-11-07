@@ -1,17 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 
 import Carousel from "react-bootstrap/Carousel";
 
 const CarouselImg = ({ activeIndex, handleSelect, imgs }) => {
   const onError = useCallback((e, src) => {
-    setError(true);
-
     const target = e.target;
     target.src = "images/icons/loading.gif";
 
     setTimeout(() => {
       target.src = process.env.REACT_APP_CF_DOMAIN_NAME + src;
-      setError(false);
     }, 1500);
   }, []);
 

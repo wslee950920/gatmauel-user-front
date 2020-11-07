@@ -9,7 +9,6 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import ShareBtn from "./ShareBtn";
-import Footer from "../../components/footer";
 
 import usePlatform from "../../lib/usePlatform";
 
@@ -53,7 +52,6 @@ const Map = () => {
         </NaverMap>
         <ShareBtn platform={platform} />
       </Container>
-      <Footer />
     </>
   );
 };

@@ -18,28 +18,28 @@ export function* writeSaga() {
   yield takeLatest(WRITE_REVIEW, writeReviewSaga);
 }
 
-const initialState={
-    review:null,
-    reviewError:null
+const initialState = {
+  review: null,
+  reviewError: null,
 };
 
-const write=handleActions(
-    {
-        [WRITE_REVIEW]:state=>({
-            ...state,
-            review:null,
-            reviewError:null
-        }),
-        [WRITE_REVIEW_SUCCESS]:(state, {payload:review})=>({
-            ...state,
-            review,
-        }),
-        [WRITE_REVIEW_FAILURE]:(state, {payload:reviewError})=>({
-            ...state,
-            reviewError,
-        }),
-    },
-    initialState,
+const write = handleActions(
+  {
+    [WRITE_REVIEW]: (state) => ({
+      ...state,
+      review: null,
+      reviewError: null,
+    }),
+    [WRITE_REVIEW_SUCCESS]: (state, { payload: review }) => ({
+      ...state,
+      review,
+    }),
+    [WRITE_REVIEW_FAILURE]: (state, { payload: reviewError }) => ({
+      ...state,
+      reviewError,
+    }),
+  },
+  initialState
 );
 
 export default write;

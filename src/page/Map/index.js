@@ -4,6 +4,7 @@ import { RenderAfterNavermapsLoaded } from "react-naver-maps";
 import Map from "../../components/map";
 import Circular from "../../components/common/Cirular";
 import Header from "../../components/header";
+import Footer from "../../components/footer";
 
 const MapPage = () => {
   useEffect(() => {
@@ -27,6 +28,7 @@ const MapPage = () => {
       >
         <Map />
       </RenderAfterNavermapsLoaded>
+      <Footer />
     </>
   );
 };

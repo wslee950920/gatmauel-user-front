@@ -1,26 +1,12 @@
 import React from "react";
+import { Route } from "react-router-dom";
+import loadable from "@loadable/component";
 
-import { makeStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
-import Divider from "@material-ui/core/Divider";
 import Slide from "@material-ui/core/Slide";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
-import Button from "@material-ui/core/Button";
 
-import RWView from "../../common/RWView";
-
-const useStyles = makeStyles((theme) => ({
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: theme.spacing(0.5),
-  },
-  root: {
-    marginBottom: theme.spacing(1),
-  },
-}));
+const Write = loadable(() => import("./Write"));
+const Camera = loadable(() => import("./Camera"));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -35,9 +21,8 @@ const FullScreenDialog = ({
   onChange,
   content,
   onSubmit,
+  onCamera,
 }) => {
-  const classes = useStyles();
-
   return (
     <Dialog
       fullScreen
@@ -45,25 +30,26 @@ const FullScreenDialog = ({
       onClose={handleClose}
       TransitionComponent={Transition}
     >
-      <div className={classes.root}>
-        <CssBaseline />
-        <Container maxWidth="sm">
-          <div className={classes.header}>
-            <Button onClick={handleClose} color="secondary">
-              취소
-            </Button>
-            <div />
-          </div>
-          <Divider />
-        </Container>
-      </div>
-      <RWView
-        imgs={imgs}
-        handleFileOnChange={handleFileOnChange}
-        handleFileRemove={handleFileRemove}
-        content={content}
-        onChange={onChange}
-        onSubmit={onSubmit}
+      <Route
+        path={"/review/write"}
+        component={() => (
+          <Write
+            imgs={imgs}
+            handleFileOnChange={handleFileOnChange}
+            handleFileRemove={handleFileRemove}
+            onChange={onChange}
+            content={content}
+            onSubmit={onSubmit}
+            onCamera={onCamera}
+            handleClose={handleClose}
+          />
+        )}
+        exact
+      />
+      <Route
+        path={"/review/camera"}
+        component={() => <Camera handleClose={handleClose} />}
+        exact
       />
     </Dialog>
   );

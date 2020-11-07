@@ -1,11 +1,11 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { getReviews } from '../modules/reviews';
+import { getReviews } from '../../modules/reviews';
 import { useSelector, useDispatch } from 'react-redux';
-import { writeReview } from '../modules/write';
+import { writeReview } from '../../modules/write';
 
-import Review from '../components/review';
+import Review from '../../components/review';
 
 const ReviewCon = ({ history }) => {
   const dispatch = useDispatch();
@@ -23,8 +23,9 @@ const ReviewCon = ({ history }) => {
   let formData = new FormData();
 
   const handleClose = useCallback(() => {
+    history.push('/review');
     setOpen(false);
-  }, []);
+  }, [history]);
   const handleClickOpen = useCallback(
     () => {
       if (!user) {
@@ -34,6 +35,7 @@ const ReviewCon = ({ history }) => {
         return;
       }
 
+      history.push('/review/write');
       setOpen(true);
     },
     [user, history]
@@ -95,6 +97,15 @@ const ReviewCon = ({ history }) => {
     },
     [content, formData, imgs, dispatch]
   );
+  const onCamera=useCallback(()=>{
+    if(!user){
+      history.push('/login');
+      alert('로그인을 해주세요.');
+    } else{
+      history.push('/review/camera');
+      setOpen(true);
+    }
+  }, [history, user]);
 
   useEffect(() => {
     dispatch(getReviews());
@@ -123,6 +134,7 @@ const ReviewCon = ({ history }) => {
       open={open}
       handleClose={handleClose}
       handleClickOpen={handleClickOpen}
+      onCamera={onCamera}
     />)
 }
 

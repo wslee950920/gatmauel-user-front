@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const Tools=({handleClickOpen, handleFileOnChange, onSubmit})=>{
+const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera})=>{
     const classes=useStyles();
 
     return(
@@ -34,7 +34,7 @@ const Tools=({handleClickOpen, handleFileOnChange, onSubmit})=>{
           <Divider variant="middle" />
           <div className={classes.box}>
             <div className={classes.leftIcons}>    
-              <IconButton size="small">
+              <IconButton size="small" onClick={onCamera}>
                 <CameraAltIcon color="action" />
               </IconButton>
               <input 

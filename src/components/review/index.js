@@ -17,8 +17,8 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import ReviewItem from "./ReviewItem";
-import FullScreenDialog from "./FullScreenDialog";
 import RWView from "../common/RWView";
+import FullScreenDialog from "./FullScreenDialog";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,6 +39,7 @@ const Review = ({
   open,
   handleClose,
   handleClickOpen,
+  onCamera,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -98,6 +99,7 @@ const Review = ({
               handleFileRemove={handleFileRemove}
               content={content}
               onSubmit={onSubmit}
+              onCamera={onCamera}
             />
             <div ref={registerChild}>
               <List
@@ -124,6 +126,7 @@ const Review = ({
         content={content}
         onChange={onChange}
         onSubmit={onSubmit}
+        onCamera={onCamera}
       />
     </StepProvider>
   );

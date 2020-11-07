@@ -4,7 +4,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 
 import HeaderCon from "../../containers/HeaderCon";
-import ReviewCon from "../../containers/ReviewCon";
+import ReviewCon from "../../containers/review/ReviewCon";
 import SearchBar from "../../components/common/SearchBar";
 
 const ReviewPage = () => {
