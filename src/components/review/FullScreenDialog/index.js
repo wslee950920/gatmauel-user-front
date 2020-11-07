@@ -5,24 +5,16 @@ import loadable from "@loadable/component";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 
-const Write = loadable(() => import("./Write"));
-const Camera = loadable(() => import("./Camera"));
+const WriteCon = loadable(() => import("../../../containers/review/WriteCon"));
+const CameraCon = loadable(() =>
+  import("../../../containers/review/CameraCon")
+);
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FullScreenDialog = ({
-  open,
-  handleClose,
-  imgs,
-  handleFileOnChange,
-  handleFileRemove,
-  onChange,
-  content,
-  onSubmit,
-  onCamera,
-}) => {
+const FullScreenDialog = ({ open, handleClose }) => {
   return (
     <Dialog
       fullScreen
@@ -30,27 +22,8 @@ const FullScreenDialog = ({
       onClose={handleClose}
       TransitionComponent={Transition}
     >
-      <Route
-        path={"/review/write"}
-        component={() => (
-          <Write
-            imgs={imgs}
-            handleFileOnChange={handleFileOnChange}
-            handleFileRemove={handleFileRemove}
-            onChange={onChange}
-            content={content}
-            onSubmit={onSubmit}
-            onCamera={onCamera}
-            handleClose={handleClose}
-          />
-        )}
-        exact
-      />
-      <Route
-        path={"/review/camera"}
-        component={() => <Camera handleClose={handleClose} />}
-        exact
-      />
+      <Route path={"/review/write"} component={WriteCon} exact />
+      <Route path={"/review/camera"} component={CameraCon} exact />
     </Dialog>
   );
 };

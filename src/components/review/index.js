@@ -34,7 +34,6 @@ const Review = ({
   imgs,
   handleFileOnChange,
   handleFileRemove,
-  onChange,
   onSubmit,
   open,
   handleClose,
@@ -49,6 +48,7 @@ const Review = ({
   const { width } = useWindowDimensions();
   const paper = useRef(null);
   const [pWidth, setpWidth] = useState(width);
+  const inputId = useRef("review-file-input");
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -100,6 +100,7 @@ const Review = ({
               content={content}
               onSubmit={onSubmit}
               onCamera={onCamera}
+              inputId={inputId.current}
             />
             <div ref={registerChild}>
               <List
@@ -117,17 +118,7 @@ const Review = ({
           </div>
         )}
       </WindowScroller>
-      <FullScreenDialog
-        open={open}
-        handleClose={handleClose}
-        imgs={imgs}
-        handleFileOnChange={handleFileOnChange}
-        handleFileRemove={handleFileRemove}
-        content={content}
-        onChange={onChange}
-        onSubmit={onSubmit}
-        onCamera={onCamera}
-      />
+      <FullScreenDialog open={open} handleClose={handleClose} />
     </StepProvider>
   );
 };

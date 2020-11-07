@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import clsx from "clsx";
 import useWindowDimensions from "../../../lib/windowDimensions";
 import { Link } from "react-router-dom";
@@ -91,13 +91,12 @@ const RWView = ({
   onChange,
   onSubmit,
   onCamera,
+  inputId,
 }) => {
-  console.log(content);
   const classes = useStyles();
   const { height } = useWindowDimensions();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
-  const back = useRef(null);
 
   return (
     <div className={classes.root}>
@@ -110,7 +109,7 @@ const RWView = ({
           },
         })}
       >
-        <div className={classes.background} ref={back}>
+        <div className={classes.background}>
           {data && <Head title={data.title} time={data.createdAt} />}
           <TextareaAutosize
             aria-label="read-write-data"
@@ -126,7 +125,10 @@ const RWView = ({
                     fontFamily: "Roboto",
                   },
                 }
-              : { onChange })}
+              : {
+                  onChange,
+                  name: "content",
+                })}
             autoFocus={!data && !rOnly}
           />
           {!data && imgs.length > 0 && (
@@ -165,8 +167,12 @@ const RWView = ({
                   </GridListTile>
                 ))}
                 {imgs.length < 10 && (
-                  <label htmlFor="icon-button-file" className={classes.add}>
-                    <IconButton aria-label={"add-image"} component="span">
+                  <label htmlFor={inputId} className={classes.add}>
+                    <IconButton
+                      aria-label={"add-image"}
+                      component="span"
+                      onClick={handleClickOpen}
+                    >
                       <AddCircleIcon fontSize="large" />
                     </IconButton>
                   </label>
@@ -180,6 +186,7 @@ const RWView = ({
               handleFileOnChange={handleFileOnChange}
               onSubmit={onSubmit}
               onCamera={onCamera}
+              inputId={inputId}
             />
           )}
         </div>

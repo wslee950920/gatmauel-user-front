@@ -1,31 +1,45 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { getReviews } from '../../modules/reviews';
 import { useSelector, useDispatch } from 'react-redux';
-import { writeReview } from '../../modules/write';
+import { 
+  writeReview, 
+  openDialog, 
+  closeDialog, 
+  addImage, 
+  removeImage } from '../../modules/write';
+import {check} from '../../modules/user';
 
 import Review from '../../components/review';
 
 const ReviewCon = ({ history }) => {
   const dispatch = useDispatch();
-  const { reviews, user, review, reviewError } = useSelector(state => (
+  const { 
+    reviews, 
+    user, 
+    review, 
+    reviewError, 
+    content, 
+    open,
+    imgs,
+  } = useSelector(state => (
     {
       reviews: state.reviews.reviews,
       user: state.user.user,
       review: state.write.review,
-      reviewError: state.write.reviewError
+      reviewError: state.write.reviewError,
+      content:state.write.content,
+      open:state.write.open,
+      imgs:state.write.imgs,
     }
   ));
-  const [imgs, setImgs] = useState([]);
-  const [content, setContent] = useState("");
-  const [open, setOpen] = useState(false);
-  let formData = new FormData();
+  let formData=new FormData();
 
   const handleClose = useCallback(() => {
     history.push('/review');
-    setOpen(false);
-  }, [history]);
+    dispatch(closeDialog());
+  }, [history, dispatch]);
   const handleClickOpen = useCallback(
     () => {
       if (!user) {
@@ -36,9 +50,9 @@ const ReviewCon = ({ history }) => {
       }
 
       history.push('/review/write');
-      setOpen(true);
+      dispatch(openDialog());
     },
-    [user, history]
+    [user, history, dispatch]
   );
   const handleFileOnChange = useCallback(
     (e) => {
@@ -50,20 +64,10 @@ const ReviewCon = ({ history }) => {
           for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
             reader.onload = () => {
-              setImgs((prev) => {
-                if (prev.length < 10) {
-                  return [
-                    ...prev,
-                    {
-                      file: files[i],
-                      previewURL: reader.result,
-                    },
-                  ];
-                } else {
-                  alert("이미지는 10개까지만 추가할 수 있습니다.");
-                  return prev;
-                }
-              });
+              dispatch(addImage({
+                file: files[i],
+                previewURL: reader.result,
+              }))        
             };
             reader.readAsDataURL(files[i]);
           }
@@ -75,17 +79,20 @@ const ReviewCon = ({ history }) => {
         return;
       }
     },
-    [imgs]
+    [imgs, dispatch]
   );
   const handleFileRemove = useCallback((index) => {
-    setImgs(prev => prev.filter((v, i) => index !== i));
-  }, []);
-  const onChange = useCallback((e) => {
-    const { value } = e.target;
-    setContent(value);
-  }, []);
+    dispatch(removeImage(index));
+  }, [dispatch]);
   const onSubmit = useCallback(
     async (e) => {
+      if(!user){
+        history.push('/login');
+        alert('로그인을 해주세요');
+
+        return;
+      }
+      
       e.preventDefault();
       if (content === '' && imgs.length === 0) return;
 
@@ -95,7 +102,7 @@ const ReviewCon = ({ history }) => {
       });
       await dispatch(writeReview(formData));
     },
-    [content, formData, imgs, dispatch]
+    [content, formData, imgs, dispatch, history, user]
   );
   const onCamera=useCallback(()=>{
     if(!user){
@@ -103,9 +110,9 @@ const ReviewCon = ({ history }) => {
       alert('로그인을 해주세요.');
     } else{
       history.push('/review/camera');
-      setOpen(true);
+      dispatch(openDialog());
     }
-  }, [history, user]);
+  }, [history, user, dispatch]);
 
   useEffect(() => {
     dispatch(getReviews());
@@ -116,9 +123,13 @@ const ReviewCon = ({ history }) => {
     }
     if (reviewError) {
       if(reviewError.response.status===403){
-        alert('로그인을 해주세요');
-        history.go(0);
+        dispatch(check());
+        alert('로그인을 해주세요.');
+      } else if(reviewError.response.status===400){
+        alert('내용을 입력해주세요.');
       }
+
+      history.go(0);
     }
   }, [review, reviewError, dispatch, history]);
 
@@ -129,7 +140,6 @@ const ReviewCon = ({ history }) => {
       imgs={imgs}
       handleFileOnChange={handleFileOnChange}
       handleFileRemove={handleFileRemove}
-      onChange={onChange}
       onSubmit={onSubmit}
       open={open}
       handleClose={handleClose}

@@ -21,7 +21,7 @@ const AccountCon=({history})=>{
             history.push('/login');
             alert('로그인 해주세요.');
         }
-    }, [user, history, dispatch]);
+    }, [user, history]);
     useEffect(()=>{
         if(!info){
             dispatch(getInfo());

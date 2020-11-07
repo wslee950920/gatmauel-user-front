@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera})=>{
+const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId})=>{
     const classes=useStyles();
 
     return(
@@ -40,12 +40,12 @@ const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera})=>{
               <input 
                 accept="image/*" 
                 className={classes.input} 
-                id="icon-button-file" 
+                id={inputId} 
                 type="file" 
                 multiple
                 onChange={handleFileOnChange}
               />
-              <label htmlFor="icon-button-file" className={classes.label}>                 
+              <label htmlFor={inputId} className={classes.label}>                 
                 <IconButton 
                   size="small" 
                   aria-label="upload picture" 

@@ -49,8 +49,10 @@ const ProfileCon=({history})=>{
         if(!user){
             history.push('/login');
             alert('로그인 해주세요.');
+        } else{
+            setNickname(user.nick);
         }
-    }, [user, history, dispatch]);
+    }, [user, history]);
     useEffect(()=>{
         if(!info){
             dispatch(getInfo());

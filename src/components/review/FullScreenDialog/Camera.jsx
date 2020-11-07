@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import {Link as RouterLink} from 'react-router-dom';
 
 import CameraIcon from "@material-ui/icons/Camera";
@@ -8,6 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Link from '@material-ui/core/Link';
+import IconButton from '@material-ui/core/IconButton';
 
 import Circular from '../../common/Cirular';
 
@@ -46,47 +47,12 @@ const useStyles = makeStyles((theme) => ({
   },
   link:{
     fontFamily:'Roboto',
-    margin:theme.spacing(0, 2)
+    margin:theme.spacing(0, 2, 5, 0)
   }
 }));
 
-const Camera = ({handleClose}) => {
+const Camera = ({handleClose, loading, video, getCapture }) => {
   const classes = useStyles();
-  const video = useRef(null);
-  const vStream = useRef(null);
-  const [loading, setLoading]=useState(true);
-
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({
-        video: {
-          facingMode: { exact: "environment" },
-          width: { min: 640 },
-          height: { min: 640 },
-          aspectRatio: 1,
-        },
-        audio: false,
-      })
-      .then((pStream) => {
-        vStream.current = pStream;
-
-        video.current.srcObject = pStream;
-        video.current.play();
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-    return () => {
-      try{
-        const oTrack = vStream.current.getTracks();
-        oTrack.map((pTrack) => pTrack.stop());
-      } catch(e){
-        console.error(e);
-      }
-    };
-  }, []);
 
   return (
     <>
@@ -111,8 +77,11 @@ const Camera = ({handleClose}) => {
         </div>
         <div className={classes.btn}>
           {loading?
-            <Circular/>:
-            <CameraIcon color="action" fontSize="large" />
+            <Circular/>:(
+              <IconButton onClick={getCapture}>
+                <CameraIcon color="action" fontSize="large" />
+              </IconButton>
+            )
           }
         </div>
         <div className={classes.back}>
