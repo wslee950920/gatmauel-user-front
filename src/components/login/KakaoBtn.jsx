@@ -14,7 +14,7 @@ const KakaoBtn = () => {
 
   return (
     <Button fullWidth href="#" classes={{ text: classes.kakaoBtn }}>
-      <img src="images/icons/kakao_login.png" alt="카카오로그인" style={{ width: "100%" }} />
+      <img src="/images/icons/kakao_login.png" alt="카카오로그인" style={{ width: "100%" }} />
     </Button>
   );
 };

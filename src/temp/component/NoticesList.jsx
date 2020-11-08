@@ -77,26 +77,26 @@ const NoticeList = ({notices}) => {
             </Link>
           </div>
           <div>
-            {
-              notices ? (
-                <List>
-                  {notices.slice(0, 2).map((notice, index)=>(
+            <List>
+              {
+                notices ? (
+                  notices.slice(0, 2).map((notice, index)=>(
                     <ListItemLink
                       key={notice.id}
                       primary={notice.title}
                       to={`/notice/${index}`}
                       secondary={kTime(notice.createdAt)}
                     />
-                  ))}
-                </List>
-              ) : generate(
-                <ListItemLink
-                  primary="공지사항 제목"
-                  to="#"
-                  secondary="00/00/00"
-                />
-              )
-            }
+                  ))
+                ) : generate(
+                  <ListItemLink
+                    primary="공지사항 제목"
+                    to="#"
+                    secondary="00/00/00"
+                  />
+                )
+              }
+            </List>
           </div>
         </Container>
       </div>

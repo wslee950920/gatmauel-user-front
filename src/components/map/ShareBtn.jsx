@@ -113,7 +113,7 @@ const KakaoBtn=({platform})=>{
           }
         >
             <img 
-              src="images/icons/naver_map.png" 
+              src="/images/icons/naver_map.png" 
               alt="naver-navi-icon" 
             />
         </Button>
@@ -134,7 +134,7 @@ const KakaoBtn=({platform})=>{
           }
         >
             <img 
-              src="images/icons/kakao_map.png" 
+              src="/images/icons/kakao_map.png" 
               alt="kakao-navi-icon" 
             />
         </Button>
@@ -145,7 +145,7 @@ const KakaoBtn=({platform})=>{
           size='small'
         >
             <img 
-              src="images/icons/kakaolink_btn_small.png" 
+              src="/images/icons/kakaolink_btn_small.png" 
               alt="kakao-share-icon" 
             />
         </Button>  

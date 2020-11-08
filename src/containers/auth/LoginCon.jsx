@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 
 import LogIn from '../../components/login';
 
-import {login} from '../../modules/auth';
+import {login, init} from '../../modules/auth';
 import {check} from '../../modules/user';
 
 const LoginCon=({history})=>{
@@ -60,6 +60,11 @@ const LoginCon=({history})=>{
     }, [email, password, dispatch]);
 
     useEffect(()=>{
+        return()=>{
+            dispatch(init());
+        }
+    }, [dispatch]);
+    useEffect(()=>{
         if(authError){
             return;
         }
@@ -69,7 +74,7 @@ const LoginCon=({history})=>{
     }, [auth, authError, dispatch]);
     useEffect(()=>{
         if(user){
-            history.go(-1);
+            history.push('/');
         }
 
         try{

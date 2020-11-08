@@ -5,7 +5,7 @@ import Carousel from "react-bootstrap/Carousel";
 const CarouselImg = ({ activeIndex, handleSelect, imgs }) => {
   const onError = useCallback((e, src) => {
     const target = e.target;
-    target.src = "images/icons/loading.gif";
+    target.src = "/images/icons/loading.gif";
 
     setTimeout(() => {
       target.src = process.env.REACT_APP_CF_DOMAIN_NAME + src;
