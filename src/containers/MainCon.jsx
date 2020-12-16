@@ -13,12 +13,11 @@ const MainContainer=()=>{
         }
     ));
     const dispatch=useDispatch();
+    
     useEffect(()=>{
         //이렇게 해도 const getReviews = () => async (dispatch) => {}의 두번째
         //인자로 dispatch가 전달 되는 듯
         dispatch(getReviews());
-    }, [dispatch]);
-    useEffect(()=>{
         dispatch(getNotices());
     }, [dispatch]);
 

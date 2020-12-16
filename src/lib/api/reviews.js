@@ -1,3 +1,3 @@
-import client from "./client";
+import { user } from "./client";
 
-export const reviews = () => client.get("/api/review/list");
+export const reviews = () => user.get("/api/review/list");

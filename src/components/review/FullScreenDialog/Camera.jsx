@@ -14,7 +14,7 @@ import Circular from '../../common/Cirular';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    margin: theme.spacing(12, 0),
+    margin: theme.spacing(8, 0),
     position: "relative",
     paddingBottom: "100%",
     height: 0,
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
   btn: {
-    margin: theme.spacing(12, 0, 8, 0),
+    margin: theme.spacing(8, 0),
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link:{
     fontFamily:'Roboto',
-    margin:theme.spacing(0, 2, 5, 0)
+    margin:theme.spacing(0, 2, 4, 0)
   }
 }));
 

@@ -1,4 +1,3 @@
-import client from "./client";
+import { user } from "./client";
 
-export const getInfo = () =>
-  client.get("/api/user/info", { withCredentials: true });
+export const getInfo = () => user.get("/api/user/info");

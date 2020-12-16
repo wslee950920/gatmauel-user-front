@@ -8,7 +8,8 @@ import {
   openDialog, 
   closeDialog, 
   addImage, 
-  removeImage } from '../../modules/write';
+  removeImage,
+  initialize } from '../../modules/write';
 import {check} from '../../modules/user';
 
 import Review from '../../components/review';
@@ -86,6 +87,8 @@ const ReviewCon = ({ history }) => {
   }, [dispatch]);
   const onSubmit = useCallback(
     async (e) => {
+      e.preventDefault();
+
       if(!user){
         history.push('/login');
         alert('로그인을 해주세요');
@@ -93,7 +96,6 @@ const ReviewCon = ({ history }) => {
         return;
       }
       
-      e.preventDefault();
       if (content === '' && imgs.length === 0) return;
 
       await formData.append("content", content);
@@ -116,22 +118,29 @@ const ReviewCon = ({ history }) => {
 
   useEffect(() => {
     dispatch(getReviews());
+    dispatch(check());
+
+    return ()=>{
+      dispatch(initialize());
+    }
   }, [dispatch]);
   useEffect(() => {
     if (review) {
-      history.go(0);
+      dispatch(getReviews());
+      dispatch(closeDialog());
+      dispatch(initialize());
     }
     if (reviewError) {
       if(reviewError.response.status===403){
         dispatch(check());
         alert('로그인을 해주세요.');
+        dispatch(closeDialog());
+        dispatch(initialize());
       } else if(reviewError.response.status===400){
         alert('내용을 입력해주세요.');
       }
-
-      history.go(0);
     }
-  }, [review, reviewError, dispatch, history]);
+  }, [review, reviewError, dispatch]);
 
   return (reviews &&
     <Review

@@ -1,3 +1,3 @@
-import client from "./client";
+import { admin } from "./client";
 
-export const notices = () => client.get("/api/notice/list");
+export const notices = () => admin.get("/api/notice/list");

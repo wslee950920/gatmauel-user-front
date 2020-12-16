@@ -14,11 +14,10 @@ import {
 import Write from '../../components/review/FullScreenDialog/Write'
 
 const WriteCon=({history})=>{
-    const { content, imgs, user } = useSelector(state => (
+    const { content, imgs } = useSelector(state => (
         {
           content:state.write.content,
           imgs:state.write.imgs,
-          user:state.user.user
         }
     ));
     const dispatch=useDispatch();
@@ -72,14 +71,8 @@ const WriteCon=({history})=>{
     );
     const onSubmit = useCallback(
         async (e) => {
-          if(!user){
-            history.push('/login');
-            alert('로그인을 해주세요');
-
-            return;
-          }
-
           e.preventDefault();
+
           if (content === '' && imgs.length === 0) return;
     
           await formData.append("content", content);
@@ -88,7 +81,7 @@ const WriteCon=({history})=>{
           });
           await dispatch(writeReview(formData));
         },
-        [content, formData, imgs, dispatch, history, user]
+        [content, formData, imgs, dispatch]
       );
 
     return (

@@ -1,19 +1,13 @@
-import client from "./client";
+import { user } from "./client";
 
 export const login = ({ email, password }) =>
-  client.post(
-    "/api/auth/login",
-    { email, password },
-    { withCredentials: true }
-  );
+  user.post("/api/auth/login", { email, password });
 
 export const register = ({ nick, email, password }) =>
-  client.post("/api/auth/register", { nick, email, password });
+  user.post("/api/auth/register", { nick, email, password });
 export const checkNick = ({ nick }) =>
-  client.post("/api/auth/check/nick", { nick });
+  user.post("/api/auth/check/nick", { nick });
 
-export const check = () =>
-  client.get("/api/auth/check", { withCredentials: true });
+export const check = () => user.get("/api/auth/check");
 
-export const logout = () =>
-  client.get("/api/auth/logout", { withCredentials: true });
+export const logout = () => user.get("/api/auth/logout");
