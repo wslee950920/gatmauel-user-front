@@ -1,12 +1,12 @@
 import React from "react";
 
-import Header from "../../components/header";
+import HeaderCon from "../../containers/HeaderCon";
 import Menu from "../../components/menu";
 
 const MenuPage = () => {
   return (
     <>
-      <Header main />
+      <HeaderCon main />
       <Menu />
     </>
   );

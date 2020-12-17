@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import Header from "../../components/header";
+import HeaderCon from "../../containers/HeaderCon";
 import NoticeCon from "../../containers/notice/NoticeCon";
 import SearchBar from "../../components/common/SearchBar";
 import ReadNoticeCon from "../../containers/notice/ReadNoticeCon";
@@ -19,7 +19,7 @@ const NoticePage = ({ match }) => {
 
   return (
     <>
-      <Header />
+      <HeaderCon />
       {!matches && (
         <Route exact path={match.url} component={() => <SearchBar notice />} />
       )}

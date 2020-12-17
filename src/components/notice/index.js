@@ -38,25 +38,23 @@ const Notice = ({ notices }) => {
   }, []);
 
   return (
-    notices && (
-      <List
-        className={classes.root}
-        height={
-          height -
-          56 -
-          8 -
-          clsx(matches ? 0 : 37.09) -
-          8 -
-          clsx(platform ? 0 : 57.43)
-        }
-        itemCount={notices.length}
-        itemSize={100}
-        width={width}
-        itemData={notices}
-      >
-        {Row}
-      </List>
-    )
+    <List
+      className={classes.root}
+      height={
+        height -
+        56 -
+        8 -
+        clsx(matches ? 0 : 37.09) -
+        8 -
+        clsx(platform ? 0 : 57.43)
+      }
+      itemCount={notices ? notices.length : 0}
+      itemSize={100}
+      width={width}
+      itemData={notices}
+    >
+      {Row}
+    </List>
   );
 };
 

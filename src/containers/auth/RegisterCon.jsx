@@ -91,7 +91,8 @@ const RegisterCon = ({ history }) => {
     }, [dispatch]);
     useEffect(() => {
         if (authError) {
-            setError(prev => ({ ...prev, email: true }));
+            if (authError.response.status===409)
+                setError(prev => ({ ...prev, email: true }));
 
             return;
         }

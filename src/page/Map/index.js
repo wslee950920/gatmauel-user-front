@@ -3,7 +3,7 @@ import { RenderAfterNavermapsLoaded } from "react-naver-maps";
 
 import Map from "../../components/map";
 import Circular from "../../components/common/Cirular";
-import Header from "../../components/header";
+import HeaderCon from "../../containers/HeaderCon";
 import Footer from "../../components/footer";
 
 const MapPage = () => {
@@ -20,7 +20,7 @@ const MapPage = () => {
 
   return (
     <>
-      <Header main />
+      <HeaderCon main />
       <RenderAfterNavermapsLoaded
         ncpClientId={process.env.REACT_APP_NAVER_MAP_CLIENT}
         error={<p>Maps Load Error</p>}
