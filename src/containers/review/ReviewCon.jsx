@@ -9,7 +9,9 @@ import {
   closeDialog, 
   addImage, 
   removeImage,
-  initialize } from '../../modules/write';
+  initialize,
+  changeField
+} from '../../modules/review';
 import {check} from '../../modules/user';
 
 import Review from '../../components/review';
@@ -28,11 +30,11 @@ const ReviewCon = ({ history }) => {
     {
       reviews: state.reviews.reviews,
       user: state.user.user,
-      review: state.write.review,
-      reviewError: state.write.reviewError,
-      content:state.write.content,
-      open:state.write.open,
-      imgs:state.write.imgs,
+      review: state.review.review,
+      reviewError: state.review.reviewError,
+      content:state.review.content,
+      open:state.review.open,
+      imgs:state.review.imgs,
     }
   ));
   let formData=new FormData();
@@ -115,6 +117,14 @@ const ReviewCon = ({ history }) => {
       dispatch(openDialog());
     }
   }, [history, user, dispatch]);
+  const feedUpdate=useCallback((index)=>{
+    dispatch(changeField({
+      key:'content',
+      value:reviews[index].content
+    }));
+    history.push(`/review/update/${index}`);
+    dispatch(openDialog());
+  }, [history, dispatch, reviews]);
 
   useEffect(() => {
     dispatch(getReviews());
@@ -129,15 +139,15 @@ const ReviewCon = ({ history }) => {
       dispatch(getReviews());
       dispatch(closeDialog());
       dispatch(initialize());
-    }
-    if (reviewError) {
+    } 
+    else if(reviewError) {
       if(reviewError.response.status===403){
         dispatch(check());
         alert('로그인을 해주세요.');
         dispatch(closeDialog());
         dispatch(initialize());
       } else if(reviewError.response.status===400){
-        alert('내용을 입력해주세요.');
+          alert('내용을 입력해주세요.');
       }
     }
   }, [review, reviewError, dispatch]);
@@ -154,6 +164,8 @@ const ReviewCon = ({ history }) => {
       handleClose={handleClose}
       handleClickOpen={handleClickOpen}
       onCamera={onCamera}
+      user={user}
+      feedUpdate={feedUpdate}
     />)
 }
 

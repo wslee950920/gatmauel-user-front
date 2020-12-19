@@ -9,6 +9,9 @@ const WriteCon = loadable(() => import("../../../containers/review/WriteCon"));
 const CameraCon = loadable(() =>
   import("../../../containers/review/CameraCon")
 );
+const UpdateCon = loadable(() =>
+  import("../../../containers/review/UpdateCon")
+);
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,6 +27,7 @@ const FullScreenDialog = ({ open, handleClose }) => {
     >
       <Route path={"/review/write"} component={WriteCon} exact />
       <Route path={"/review/camera"} component={CameraCon} exact />
+      <Route path={"/review/update/:index"} component={UpdateCon} exact />
     </Dialog>
   );
 };

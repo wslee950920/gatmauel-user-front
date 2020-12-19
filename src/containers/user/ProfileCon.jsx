@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Profile from "../../components/profile";
 
 import { logout, getInfo, check } from "../../modules/user";
-import { checkNick, init } from '../../modules/auth';
+import { checkNick, initAuth } from '../../modules/auth';
 
 const ProfileCon=({history})=>{
     const {user, info, nick, nickError}=useSelector(
@@ -43,7 +43,7 @@ const ProfileCon=({history})=>{
     useEffect(()=>{
         dispatch(check());
         
-        return ()=>dispatch(init());
+        return ()=>dispatch(initAuth());
     }, [dispatch]);  
     useEffect(()=>{
         if(!user){

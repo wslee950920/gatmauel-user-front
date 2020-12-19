@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 
 import LogIn from '../../components/login';
 
-import {login, init} from '../../modules/auth';
+import {login, initAuth} from '../../modules/auth';
 import {check} from '../../modules/user';
 
 const LoginCon=({history})=>{
@@ -61,7 +61,7 @@ const LoginCon=({history})=>{
 
     useEffect(()=>{
         return()=>{
-            dispatch(init());
+            dispatch(initAuth());
         }
     }, [dispatch]);
     useEffect(()=>{

@@ -92,6 +92,7 @@ const RWView = ({
   onSubmit,
   onCamera,
   inputId,
+  review,
 }) => {
   const classes = useStyles();
   const { height } = useWindowDimensions();
@@ -130,8 +131,12 @@ const RWView = ({
                   name: "content",
                 })}
             autoFocus={!data && !rOnly}
+            onFocus={(event) => {
+              event.target.selectionStart = content.length;
+              event.target.selectionEnd = content.length;
+            }}
           />
-          {!data && imgs.length > 0 && (
+          {!data && (review || imgs.length > 0) && (
             <>
               <div className={classes.end}>
                 <Typography variant="caption" className={classes.fontRobo}>
@@ -139,34 +144,40 @@ const RWView = ({
                 </Typography>
               </div>
               <List className={classes.gList}>
-                {imgs.map((img, index) => (
+                {(review ? review.imgs.split("||") : imgs).map((img, index) => (
                   <GridListTile key={index} className={classes.tile}>
                     <img
-                      src={img.previewURL}
+                      src={
+                        review
+                          ? process.env.REACT_APP_CF_DOMAIN_NAME + img
+                          : img.previewURL
+                      }
                       alt="리뷰 이미지"
                       className={classes.img}
                     />
-                    <GridListTileBar
-                      classes={{
-                        root: classes.titleBar,
-                      }}
-                      actionIcon={
-                        <IconButton
-                          aria-label={`close-${index}`}
-                          onClick={() => handleFileRemove(index)}
-                          size="small"
-                        >
-                          <CloseIcon
-                            className={classes.title}
-                            fontSize="small"
-                          />
-                        </IconButton>
-                      }
-                      titlePosition="top"
-                    />
+                    {!review && (
+                      <GridListTileBar
+                        classes={{
+                          root: classes.titleBar,
+                        }}
+                        actionIcon={
+                          <IconButton
+                            aria-label={`close-${index}`}
+                            onClick={() => handleFileRemove(index)}
+                            size="small"
+                          >
+                            <CloseIcon
+                              className={classes.title}
+                              fontSize="small"
+                            />
+                          </IconButton>
+                        }
+                        titlePosition="top"
+                      />
+                    )}
                   </GridListTile>
                 ))}
-                {imgs.length < 10 && (
+                {!review && imgs.length < 10 && (
                   <label htmlFor={inputId} className={classes.add}>
                     <IconButton
                       aria-label={"add-image"}
@@ -187,6 +198,7 @@ const RWView = ({
               onSubmit={onSubmit}
               onCamera={onCamera}
               inputId={inputId}
+              review={review}
             />
           )}
         </div>

@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 import Register from '../../components/register';
 
-import { register, checkNick, init } from '../../modules/auth';
+import { register, checkNick, initAuth } from '../../modules/auth';
 
 const RegisterCon = ({ history }) => {
     const [email, setEmail] = useState('');
@@ -86,7 +86,7 @@ const RegisterCon = ({ history }) => {
 
     useEffect(()=>{
         return ()=>{
-            dispatch(init());
+            dispatch(initAuth());
         }
     }, [dispatch]);
     useEffect(() => {
@@ -99,7 +99,7 @@ const RegisterCon = ({ history }) => {
         if (auth) {
             history.push('/login');
             alert('로그인 해주세요.');
-            dispatch(init());
+            dispatch(initAuth());
         }
     }, [auth, authError, history, dispatch]);
     useEffect(() => {

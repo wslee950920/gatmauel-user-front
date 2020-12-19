@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = ({ data, index }) => {
+const Feed = ({ data, index, user, feedUpdate }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const { state, action } = useContext(StepContext);
@@ -71,13 +71,16 @@ const Feed = ({ data, index }) => {
         <CardHeader
           avatar={<Avatar aria-label="avatar" />}
           action={
-            <IconButton
-              aria-label="more"
-              aria-haspopup="true"
-              onClick={handleClick}
-            >
-              <MoreVertIcon />
-            </IconButton>
+            user &&
+            data.userId === user.id && (
+              <IconButton
+                aria-label="more"
+                aria-haspopup="true"
+                onClick={handleClick}
+              >
+                <MoreVertIcon />
+              </IconButton>
+            )
           }
           title={data.nick}
           subheader={kTime(data.createdAt)}
@@ -111,7 +114,12 @@ const Feed = ({ data, index }) => {
           </Typography>
         </CardContent>
       </Card>
-      <FeedMenu handleClose={handleClose} anchorEl={anchorEl} />
+      <FeedMenu
+        handleClose={handleClose}
+        anchorEl={anchorEl}
+        feedUpdate={feedUpdate}
+        index={index}
+      />
     </>
   );
 };

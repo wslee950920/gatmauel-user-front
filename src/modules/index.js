@@ -6,10 +6,10 @@ import notices, { noticesSaga } from "./notices";
 import loading from "./loading";
 import auth, { authSaga } from "./auth";
 import user, { userSaga } from "./user";
-import write, { writeSaga } from "./write";
+import review, { reviewSaga } from "./review";
 
 export function* rootSaga() {
-  yield all([noticesSaga(), authSaga(), userSaga(), writeSaga()]);
+  yield all([noticesSaga(), authSaga(), userSaga(), reviewSaga()]);
 }
 
 const rootReducer = combineReducers({
@@ -18,6 +18,6 @@ const rootReducer = combineReducers({
   loading,
   auth,
   user,
-  write,
+  review,
 });
 export default rootReducer;

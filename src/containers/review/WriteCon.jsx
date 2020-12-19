@@ -9,15 +9,15 @@ import {
     openDialog, 
     addImage,
     writeReview 
-    } from '../../modules/write'
+    } from '../../modules/review'
 
 import Write from '../../components/review/FullScreenDialog/Write'
 
 const WriteCon=({history})=>{
     const { content, imgs } = useSelector(state => (
         {
-          content:state.write.content,
-          imgs:state.write.imgs,
+          content:state.review.content,
+          imgs:state.review.imgs,
         }
     ));
     const dispatch=useDispatch();

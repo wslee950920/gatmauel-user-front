@@ -1,12 +1,5 @@
-import React, {
-  useRef,
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
-} from "react";
+import React, { useRef, useCallback, useMemo, useEffect } from "react";
 import { List, WindowScroller } from "react-virtualized";
-import useWindowDimensions from "../../lib/windowDimensions";
 import clsx from "clsx";
 import "react-virtualized/styles.css"; // only needs to be imported once
 import { StepProvider } from "./context/step";
@@ -39,15 +32,14 @@ const Review = ({
   handleClose,
   handleClickOpen,
   onCamera,
+  user,
+  feedUpdate,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
   const small = useMediaQuery(theme.breakpoints.up("sm"));
   const bSmall = useMediaQuery(theme.breakpoints.between(400, "sm"));
-  const { width } = useWindowDimensions();
-  const paper = useRef(null);
-  const [pWidth, setpWidth] = useState(width);
   const inputId = useRef("review-file-input");
 
   const rowHeight = useMemo(() => {
@@ -64,14 +56,20 @@ const Review = ({
     ({ index, key, style }) => {
       const data = reviews[index];
 
-      return <ReviewItem data={data} style={style} key={key} index={index} />;
+      return (
+        <ReviewItem
+          data={data}
+          style={style}
+          key={key}
+          index={index}
+          user={user}
+          feedUpdate={feedUpdate}
+        />
+      );
     },
-    [reviews]
+    [reviews, user, feedUpdate]
   );
 
-  useEffect(() => {
-    setpWidth(paper.current.getBoundingClientRect().width);
-  }, []);
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -90,7 +88,7 @@ const Review = ({
     <StepProvider datas={reviews}>
       <WindowScroller>
         {({ height, isScrolling, registerChild, scrollTop }) => (
-          <div className={classes.paper} ref={paper}>
+          <div className={classes.paper}>
             <RWView
               handleClickOpen={handleClickOpen}
               rOnly
@@ -108,7 +106,12 @@ const Review = ({
                 height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
                 rowCount={reviews.length}
                 rowHeight={rowHeight}
-                width={parseFloat(pWidth)}
+                width={1}
+                containerStyle={{
+                  width: "100%",
+                  maxWidth: "100%",
+                }}
+                style={{ width: "100%" }}
                 rowRenderer={rowRenderer}
                 scrollTop={scrollTop}
                 isScrolling={isScrolling}

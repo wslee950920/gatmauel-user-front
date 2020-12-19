@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId})=>{
+const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId, review})=>{
     const classes=useStyles();
 
     return(
@@ -34,7 +34,11 @@ const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId})
           <Divider variant="middle" />
           <div className={classes.box}>
             <div className={classes.leftIcons}>    
-              <IconButton size="small" onClick={onCamera}>
+              <IconButton 
+                size="small" 
+                onClick={onCamera} 
+                disabled={!!review}
+              >
                 <CameraAltIcon color="action" />
               </IconButton>
               <input 
@@ -44,6 +48,7 @@ const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId})
                 type="file" 
                 multiple
                 onChange={handleFileOnChange}
+                disabled={!!review}
               />
               <label htmlFor={inputId} className={classes.label}>                 
                 <IconButton 
@@ -51,6 +56,7 @@ const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId})
                   aria-label="upload picture" 
                   component="span"
                   onClick={handleClickOpen}
+                  disabled={!!review}
                 >
                   <PhotoAlbumIcon color="action" />
                 </IconButton>

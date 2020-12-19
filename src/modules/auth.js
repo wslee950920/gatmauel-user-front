@@ -30,7 +30,7 @@ export const login = createAction(LOGIN, ({ email, password }) => ({
 export const checkNick = createAction(CHECK_NICK, ({ nick }) => ({
   nick,
 }));
-export const init = createAction(INIT);
+export const initAuth = createAction(INIT);
 
 const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
