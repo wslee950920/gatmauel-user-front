@@ -15,6 +15,11 @@ const [
   UPDATE_REVIEW_SUCCESS,
   UPDATE_REVIEW_FAILURE,
 ] = createRequestActionTypes("update/UPDATE_REVIEW");
+const [
+  REMOVE_REVIEW,
+  REMOVE_REVIEW_SUCCESS,
+  REMOVE_REVIEW_FAILURE,
+] = createRequestActionTypes("remove/REMOVE_REVIEW");
 
 const INITIALIZE = "write/INITIALIZE";
 const CHANGE_FIELD = "write/CHANGE_FIELD";
@@ -34,6 +39,7 @@ export const updateReview = createAction(UPDATE_REVIEW, ({ id, content }) => ({
   id,
   content,
 }));
+export const removeReview = createAction(REMOVE_REVIEW, (id) => id);
 
 export const openDialog = createAction(OPEN_DIALOG);
 export const closeDialog = createAction(CLOSE_DIALOG);
@@ -46,10 +52,12 @@ export const removeImage = createAction(REMOVE_IMAGE, (index) => index);
 
 const writeReviewSaga = createRequestSaga(WRITE_REVIEW, reviewAPI.write);
 const updateReviewSaga = createRequestSaga(UPDATE_REVIEW, reviewAPI.update);
+const removeReviewSaga = createRequestSaga(REMOVE_REVIEW, reviewAPI.remove);
 
 export function* reviewSaga() {
   yield takeLatest(WRITE_REVIEW, writeReviewSaga);
   yield takeLatest(UPDATE_REVIEW, updateReviewSaga);
+  yield takeLatest(REMOVE_REVIEW, removeReviewSaga);
 }
 
 const initialState = {
@@ -90,6 +98,19 @@ const review = handleActions(
       review,
     }),
     [UPDATE_REVIEW_FAILURE]: (state, { payload: reviewError }) => ({
+      ...state,
+      reviewError,
+    }),
+    [REMOVE_REVIEW]: (state) => ({
+      ...state,
+      review: null,
+      reviewError: null,
+    }),
+    [REMOVE_REVIEW_SUCCESS]: (state, { payload: review }) => ({
+      ...state,
+      review,
+    }),
+    [REMOVE_REVIEW_FAILURE]: (state, { payload: reviewError }) => ({
       ...state,
       reviewError,
     }),

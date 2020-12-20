@@ -60,7 +60,7 @@ export default handleActions(
   {
     [GET_INFO_SUCCESS]: (state, { payload: info }) => ({
       ...state,
-      info,
+      info: info.data,
     }),
     [GET_INFO_FAILURE]: (state, { payload: error }) => ({
       ...state,
@@ -68,11 +68,11 @@ export default handleActions(
     }),
     [TEMP_SET_USER]: (state, { payload: user }) => ({
       ...state,
-      user,
+      user: user.data,
     }),
     [CHECK_SUCCESS]: (state, { payload: user }) => ({
       ...state,
-      user,
+      user: user.data,
       error: null,
     }),
     [CHECK_FAILURE]: (state, { payload: error }) => ({

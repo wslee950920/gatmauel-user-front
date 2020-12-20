@@ -34,6 +34,7 @@ const Review = ({
   onCamera,
   user,
   feedUpdate,
+  feedRemove,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -64,10 +65,11 @@ const Review = ({
           index={index}
           user={user}
           feedUpdate={feedUpdate}
+          feedRemove={feedRemove}
         />
       );
     },
-    [reviews, user, feedUpdate]
+    [reviews, user, feedUpdate, feedRemove]
   );
 
   useEffect(() => {

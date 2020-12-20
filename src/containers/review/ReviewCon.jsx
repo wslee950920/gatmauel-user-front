@@ -10,7 +10,8 @@ import {
   addImage, 
   removeImage,
   initialize,
-  changeField
+  changeField,
+  removeReview
 } from '../../modules/review';
 import {check} from '../../modules/user';
 
@@ -125,6 +126,9 @@ const ReviewCon = ({ history }) => {
     history.push(`/review/update/${index}`);
     dispatch(openDialog());
   }, [history, dispatch, reviews]);
+  const feedRemove=useCallback((id)=>{
+    dispatch(removeReview(id));
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getReviews());
@@ -137,8 +141,11 @@ const ReviewCon = ({ history }) => {
   useEffect(() => {
     if (review) {
       dispatch(getReviews());
-      dispatch(closeDialog());
-      dispatch(initialize());
+
+      if(review.status!==205){
+        dispatch(closeDialog());
+        dispatch(initialize());
+      }
     } 
     else if(reviewError) {
       if(reviewError.response.status===403){
@@ -166,6 +173,7 @@ const ReviewCon = ({ history }) => {
       onCamera={onCamera}
       user={user}
       feedUpdate={feedUpdate}
+      feedRemove={feedRemove}
     />)
 }
 
