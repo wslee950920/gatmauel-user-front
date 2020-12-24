@@ -12,10 +12,11 @@ import {
 import Write from '../../components/review/FullScreenDialog/Write'
 
 const UpdateCon=({history, match})=>{
-    const { content, reviews } = useSelector(state => (
+    const { content, reviews, loading } = useSelector(state => (
         {
           content:state.review.content,
-          reviews:state.reviews.reviews
+          reviews:state.reviews.reviews,
+          loading:state.loading['update/UPDATE_REVIEW']
         }
     ));
     const dispatch=useDispatch();
@@ -50,6 +51,7 @@ const UpdateCon=({history, match})=>{
             onChange={onChange}
             onSubmit={onSubmit}
             review={reviews[match.params.index]}
+            loading={loading}
         />
     );
 };

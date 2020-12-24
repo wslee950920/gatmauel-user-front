@@ -6,6 +6,7 @@ import PhotoAlbumIcon from "@material-ui/icons/PhotoAlbum";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
     box: {
@@ -26,7 +27,16 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId, review})=>{
+const Tools=({
+    handleClickOpen, 
+    handleFileOnChange, 
+    onSubmit, 
+    onCamera, 
+    inputId, 
+    review,
+    loading,
+    progress
+  })=>{
     const classes=useStyles();
 
     return(
@@ -37,7 +47,7 @@ const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId, 
               <IconButton 
                 size="small" 
                 onClick={onCamera} 
-                disabled={!!review}
+                disabled={!!review||loading}
               >
                 <CameraAltIcon color="action" />
               </IconButton>
@@ -48,7 +58,7 @@ const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId, 
                 type="file" 
                 multiple
                 onChange={handleFileOnChange}
-                disabled={!!review}
+                disabled={!!review||loading}
               />
               <label htmlFor={inputId} className={classes.label}>                 
                 <IconButton 
@@ -64,7 +74,16 @@ const Tools=({handleClickOpen, handleFileOnChange, onSubmit, onCamera, inputId, 
             </div>
             <div>
               <IconButton size="small" onClick={onSubmit}>
-                <CreateIcon color="action" />
+                {
+                  loading?
+                  <CircularProgress 
+                    color='primary' 
+                    size='1.5rem' 
+                    variant="determinate" 
+                    value={progress}
+                  />:
+                  <CreateIcon color="action" />
+                }
               </IconButton>        
             </div>
           </div>

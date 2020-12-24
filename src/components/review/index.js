@@ -12,6 +12,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ReviewItem from "./ReviewItem";
 import RWView from "../common/RWView";
 import FullScreenDialog from "./FullScreenDialog";
+import DeleteDialog from "./Delete";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,6 +36,9 @@ const Review = ({
   user,
   feedUpdate,
   feedRemove,
+  rOpen,
+  openRemove,
+  closeRemove,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -65,11 +69,11 @@ const Review = ({
           index={index}
           user={user}
           feedUpdate={feedUpdate}
-          feedRemove={feedRemove}
+          openRemove={openRemove}
         />
       );
     },
-    [reviews, user, feedUpdate, feedRemove]
+    [reviews, user, feedUpdate, openRemove]
   );
 
   useEffect(() => {
@@ -124,6 +128,11 @@ const Review = ({
         )}
       </WindowScroller>
       <FullScreenDialog open={open} handleClose={handleClose} />
+      <DeleteDialog
+        rOpen={rOpen}
+        closeRemove={closeRemove}
+        feedRemove={feedRemove}
+      />
     </StepProvider>
   );
 };

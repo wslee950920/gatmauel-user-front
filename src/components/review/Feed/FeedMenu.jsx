@@ -3,7 +3,14 @@ import React from "react";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const FeedMenu=({handleClose, anchorEl, feedUpdate, index, feedRemove, reviewId})=>{
+const FeedMenu=({
+  handleClose, 
+  anchorEl, 
+  feedUpdate, 
+  index, 
+  openRemove, 
+  reviewId
+})=>{
     return (
       <Menu
         id="feed-menu"
@@ -21,8 +28,9 @@ const FeedMenu=({handleClose, anchorEl, feedUpdate, index, feedRemove, reviewId}
         </MenuItem>
         <MenuItem 
           onClick={()=>{
-            feedRemove(reviewId)
-            handleClose()}} 
+            openRemove(reviewId);
+            handleClose();
+          }} 
           style={{color:'#C70039'}}
         >
           삭제

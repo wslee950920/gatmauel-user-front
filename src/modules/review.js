@@ -34,7 +34,13 @@ export const changeField = createAction(CHANGE_FIELD, ({ key, value }) => ({
   value,
 }));
 
-export const writeReview = createAction(WRITE_REVIEW, (formData) => formData);
+export const writeReview = createAction(
+  WRITE_REVIEW,
+  ({ formData, setProgress }) => ({
+    formData,
+    setProgress,
+  })
+);
 export const updateReview = createAction(UPDATE_REVIEW, ({ id, content }) => ({
   id,
   content,
@@ -123,7 +129,7 @@ const review = handleActions(
       open: false,
     }),
     [ADD_IMAGE]: (state, { payload: { file, previewURL } }) =>
-      state.imgs.length < 10
+      state.imgs.length < 5
         ? {
             ...state,
             imgs: [

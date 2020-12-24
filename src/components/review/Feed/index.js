@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = ({ data, index, user, feedUpdate, feedRemove }) => {
+const Feed = ({ data, index, user, feedUpdate, openRemove }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const { state, action } = useContext(StepContext);
@@ -119,7 +119,7 @@ const Feed = ({ data, index, user, feedUpdate, feedRemove }) => {
         anchorEl={anchorEl}
         feedUpdate={feedUpdate}
         index={index}
-        feedRemove={feedRemove}
+        openRemove={openRemove}
         reviewId={data.id}
       />
     </>

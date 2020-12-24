@@ -9,7 +9,6 @@ import Container from "@material-ui/core/Container";
 
 import Tab from "@material-ui/core/Tab";
 
-import Copyright from "../footer/Copyright";
 import FullWidthTabs from "../common/Tabs";
 import FindID from "./findID";
 import TabPanel from "../common/Tabs/TabPanel";
@@ -64,7 +63,6 @@ const FindInfo = () => {
             <FindPW />
           </TabPanel>
         </div>
-        <Copyright />
       </Container>
     </>
   );

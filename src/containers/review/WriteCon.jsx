@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
@@ -14,14 +14,16 @@ import {
 import Write from '../../components/review/FullScreenDialog/Write'
 
 const WriteCon=({history})=>{
-    const { content, imgs } = useSelector(state => (
+    const { content, imgs, loading } = useSelector(state => (
         {
           content:state.review.content,
           imgs:state.review.imgs,
+          loading:state.loading['write/WRITE_REVIEW'],
         }
     ));
     const dispatch=useDispatch();
     let formData=new FormData();
+    const [progress, setProgress]=useState(0);
 
     const handleClose = useCallback(() => {
         history.push('/review');
@@ -46,7 +48,7 @@ const WriteCon=({history})=>{
         (e) => {
           e.preventDefault();
     
-          if (imgs.length < 10) {
+          if (imgs.length < 5) {
             const files = e.target.files;
             try {
               for (let i = 0; i < files.length; i++) {
@@ -63,7 +65,7 @@ const WriteCon=({history})=>{
               console.error(e);
             }
           } else {
-            alert("이미지는 10개까지만 추가할 수 있습니다.");
+            alert("이미지는 5개까지만 추가할 수 있습니다.");
             return;
           }
         },
@@ -79,7 +81,7 @@ const WriteCon=({history})=>{
           await imgs.forEach((img) => {
             formData.append("imgs", img.file);
           });
-          await dispatch(writeReview(formData));
+          await dispatch(writeReview({formData, setProgress}));
         },
         [content, formData, imgs, dispatch]
       );
@@ -94,6 +96,8 @@ const WriteCon=({history})=>{
             onCamera={onCamera}
             handleFileOnChange={handleFileOnChange}
             onSubmit={onSubmit}
+            loading={loading}
+            progress={progress}
         />
     );
 };

@@ -20,7 +20,8 @@ const LoginCon=({history})=>{
         auth:auth.auth,
         authError:auth.authError,
         user:user.user,
-    }))
+    }));
+    const [error, setError]=useState(false);
 
     const onChange=useCallback((e)=>{
         const {name, value}=e.target;
@@ -65,11 +66,22 @@ const LoginCon=({history})=>{
         }
     }, [dispatch]);
     useEffect(()=>{
-        if(authError){
-            return;
-        }
-        if(auth){
-            dispatch(check());
+        try{
+            if(authError){
+                if(authError.response&&authError.response.status===401){
+                    setError(true);
+                    dispatch(initAuth());
+
+                    return;
+                }
+
+                throw authError;
+            }
+            if(auth){
+                dispatch(check());
+            }
+        } catch(e){
+            console.error(e)
         }
     }, [auth, authError, dispatch]);
     useEffect(()=>{
@@ -91,7 +103,7 @@ const LoginCon=({history})=>{
                 email={email} 
                 password={password} 
                 checked={checked}
-                error={authError}
+                error={error}
                 empty={empty}
             />
 };

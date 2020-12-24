@@ -59,13 +59,23 @@ const ProfileCon=({history})=>{
         }
     }, [info, dispatch]);
     useEffect(() => {
-        if (nickError) {
-            setError(prev=>({...prev, nick:true}));
+        try{
+            if (nickError) {
+                if(nickError.response&&
+                    (nickError.response.status===400||
+                        nickError.response.sattus===409)){
+                    setError(prev=>({...prev, nick:true}));
+    
+                    return;
+                }
 
-            return;
-        }
-        if (nick) {
-            setError(prev=>({...prev, nick:false}));
+                throw nickError;
+            }
+            if (nick) {
+                setError(prev=>({...prev, nick:false}));
+            }
+        } catch(e){
+            console.error(e);
         }
     }, [nickError, nick]);
 

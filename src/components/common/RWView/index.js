@@ -93,6 +93,8 @@ const RWView = ({
   onCamera,
   inputId,
   review,
+  loading,
+  progress,
 }) => {
   const classes = useStyles();
   const { height } = useWindowDimensions();
@@ -177,12 +179,13 @@ const RWView = ({
                     )}
                   </GridListTile>
                 ))}
-                {!review && imgs.length < 10 && (
+                {!review && imgs.length < 5 && (
                   <label htmlFor={inputId} className={classes.add}>
                     <IconButton
                       aria-label={"add-image"}
                       component="span"
                       onClick={handleClickOpen}
+                      disabled={loading}
                     >
                       <AddCircleIcon fontSize="large" />
                     </IconButton>
@@ -199,6 +202,8 @@ const RWView = ({
               onCamera={onCamera}
               inputId={inputId}
               review={review}
+              loading={loading}
+              progress={progress}
             />
           )}
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { getReviews } from '../../modules/reviews';
@@ -39,6 +39,8 @@ const ReviewCon = ({ history }) => {
     }
   ));
   let formData=new FormData();
+  const [rOpen, setRopen]=useState(false);
+  const [reviewId, setReviewId]=useState(null);
 
   const handleClose = useCallback(() => {
     history.push('/review');
@@ -126,9 +128,17 @@ const ReviewCon = ({ history }) => {
     history.push(`/review/update/${index}`);
     dispatch(openDialog());
   }, [history, dispatch, reviews]);
-  const feedRemove=useCallback((id)=>{
-    dispatch(removeReview(id));
-  }, [dispatch]);
+  const feedRemove=useCallback(()=>{
+    dispatch(removeReview(reviewId));
+    setRopen(false);
+  }, [dispatch, reviewId]);
+  const openRemove=useCallback((id)=>{
+    setRopen(true);
+    setReviewId(id);
+  }, []);
+  const closeRemove=useCallback(()=>{
+    setRopen(false);
+  }, []);
 
   useEffect(() => {
     dispatch(getReviews());
@@ -139,23 +149,34 @@ const ReviewCon = ({ history }) => {
     }
   }, [dispatch]);
   useEffect(() => {
-    if (review) {
-      dispatch(getReviews());
+    try{
+      if(reviewError) {
+        if(reviewError.response&&reviewError.response.status===403){
+          dispatch(check());
+          alert('로그인을 해주세요.');
+          dispatch(closeDialog());
+          dispatch(initialize());
 
-      if(review.status!==205){
-        dispatch(closeDialog());
-        dispatch(initialize());
+          return;
+        } else if(reviewError.response&&reviewError.response.status===400){
+            alert('내용을 입력해주세요.');
+
+            return;
+        }
+
+        throw reviewError;
       }
-    } 
-    else if(reviewError) {
-      if(reviewError.response.status===403){
-        dispatch(check());
-        alert('로그인을 해주세요.');
-        dispatch(closeDialog());
-        dispatch(initialize());
-      } else if(reviewError.response.status===400){
-          alert('내용을 입력해주세요.');
-      }
+
+      if (review) {
+        dispatch(getReviews());
+  
+        if(review.status&&review.status!==205){
+          dispatch(closeDialog());
+          dispatch(initialize());
+        }
+      } 
+    } catch(e){
+      console.error(e);
     }
   }, [review, reviewError, dispatch]);
 
@@ -174,6 +195,9 @@ const ReviewCon = ({ history }) => {
       user={user}
       feedUpdate={feedUpdate}
       feedRemove={feedRemove}
+      rOpen={rOpen}
+      openRemove={openRemove}
+      closeRemove={closeRemove}
     />)
 }
 

@@ -29,7 +29,9 @@ const Write=({
     onCamera,
     handleFileOnChange,
     onSubmit,
-    review
+    review,
+    loading,
+    progress
 })=>{
     const classes = useStyles();
     const inputId=useRef('write-input-id');
@@ -57,6 +59,8 @@ const Write=({
                 handleFileOnChange={handleFileOnChange}
                 onSubmit={onSubmit}
                 review={review}
+                loading={loading}
+                progress={progress}
             />
         </>
     );

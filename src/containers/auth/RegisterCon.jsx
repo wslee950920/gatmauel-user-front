@@ -90,16 +90,24 @@ const RegisterCon = ({ history }) => {
         }
     }, [dispatch]);
     useEffect(() => {
-        if (authError) {
-            if (authError.response.status===409)
-                setError(prev => ({ ...prev, email: true }));
+        try{
+            if (authError) {
+                if (authError.response&&authError.response.status===409){
+                    setError(prev => ({ ...prev, email: true }));
+                    dispatch(initAuth());
 
-            return;
-        }
-        if (auth) {
-            history.push('/login');
-            alert('로그인 해주세요.');
-            dispatch(initAuth());
+                    return;
+                }
+    
+                throw authError;
+            }
+            if (auth) {
+                history.push('/login');
+                alert('로그인 해주세요.');
+                dispatch(initAuth());
+            }
+        } catch(e){
+            console.error(e)
         }
     }, [auth, authError, history, dispatch]);
     useEffect(() => {
@@ -110,13 +118,17 @@ const RegisterCon = ({ history }) => {
         }
     }, [user, history]);
     useEffect(() => {
-        if (nickError) {
-            setError(prev => ({ ...prev, nick: true }));
-
-            return;
-        }
-        if (nick) {
-            setError(prev => ({ ...prev, nick: false }));
+        try{
+            if (nickError) {
+                setError(prev => ({ ...prev, nick: true }));
+    
+                return;
+            }
+            if (nick) {
+                setError(prev => ({ ...prev, nick: false }));
+            }
+        } catch(e){
+            console.error(e);
         }
     }, [nickError, nick]);
 
