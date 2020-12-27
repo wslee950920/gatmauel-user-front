@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useMemo, useEffect } from "react";
-import { List, WindowScroller } from "react-virtualized";
+import { List, WindowScroller, InfiniteLoader } from "react-virtualized";
 import clsx from "clsx";
 import "react-virtualized/styles.css"; // only needs to be imported once
 import { StepProvider } from "./context/step";
@@ -39,6 +39,9 @@ const Review = ({
   rOpen,
   openRemove,
   closeRemove,
+  loadNextPage,
+  loading,
+  hasNextPage,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -75,6 +78,21 @@ const Review = ({
     },
     [reviews, user, feedUpdate, openRemove]
   );
+  const isRowLoaded = useCallback(
+    ({ index }) => {
+      console.log(index, hasNextPage);
+      return !hasNextPage || index + 1 < reviews.length;
+    },
+    [hasNextPage, reviews]
+  );
+
+  const loadMoreRows = useMemo(() => {
+    return loading
+      ? () => {
+          console.log("loadMoreRows", loading);
+        }
+      : loadNextPage;
+  }, [loading, loadNextPage]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -92,41 +110,50 @@ const Review = ({
 
   return (
     <StepProvider datas={reviews}>
-      <WindowScroller>
-        {({ height, isScrolling, registerChild, scrollTop }) => (
-          <div className={classes.paper}>
-            <RWView
-              handleClickOpen={handleClickOpen}
-              rOnly
-              imgs={imgs}
-              handleFileOnChange={handleFileOnChange}
-              handleFileRemove={handleFileRemove}
-              content={content}
-              onSubmit={onSubmit}
-              onCamera={onCamera}
-              inputId={inputId.current}
-            />
-            <div ref={registerChild}>
-              <List
-                autoHeight
-                height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
-                rowCount={reviews.length}
-                rowHeight={rowHeight}
-                width={1}
-                containerStyle={{
-                  width: "100%",
-                  maxWidth: "100%",
-                }}
-                style={{ width: "100%" }}
-                rowRenderer={rowRenderer}
-                scrollTop={scrollTop}
-                isScrolling={isScrolling}
-                overscanRowCount={4}
-              />
-            </div>
-          </div>
-        )}
-      </WindowScroller>
+      <div className={classes.paper}>
+        <RWView
+          handleClickOpen={handleClickOpen}
+          rOnly
+          imgs={imgs}
+          handleFileOnChange={handleFileOnChange}
+          handleFileRemove={handleFileRemove}
+          content={content}
+          onSubmit={onSubmit}
+          onCamera={onCamera}
+          inputId={inputId.current}
+        />
+        <InfiniteLoader
+          isRowLoaded={isRowLoaded}
+          loadMoreRows={loadMoreRows}
+          rowCount={reviews.length}
+          threshold={2}
+        >
+          {({ onRowsRendered, registerChild }) => (
+            <WindowScroller>
+              {({ height, isScrolling, scrollTop }) => (
+                <List
+                  autoHeight
+                  height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
+                  rowCount={reviews.length}
+                  rowHeight={rowHeight}
+                  width={1}
+                  containerStyle={{
+                    width: "100%",
+                    maxWidth: "100%",
+                  }}
+                  style={{ width: "100%" }}
+                  rowRenderer={rowRenderer}
+                  scrollTop={scrollTop}
+                  isScrolling={isScrolling}
+                  overscanRowCount={4}
+                  onRowsRendered={onRowsRendered}
+                  ref={registerChild}
+                />
+              )}
+            </WindowScroller>
+          )}
+        </InfiniteLoader>
+      </div>
       <FullScreenDialog open={open} handleClose={handleClose} />
       <DeleteDialog
         rOpen={rOpen}

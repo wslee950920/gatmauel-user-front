@@ -1,3 +1,5 @@
 import { user } from "./client";
 
-export const reviews = () => user.get("/api/review/list");
+export const reviews = (page) => {
+  return user.get(`/api/review/list?page=${page || 1}`);
+};

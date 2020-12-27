@@ -65,6 +65,7 @@ const ProfileCon=({history})=>{
                     (nickError.response.status===400||
                         nickError.response.sattus===409)){
                     setError(prev=>({...prev, nick:true}));
+                    dispatch(initAuth());
     
                     return;
                 }
@@ -73,11 +74,12 @@ const ProfileCon=({history})=>{
             }
             if (nick) {
                 setError(prev=>({...prev, nick:false}));
+                dispatch(initAuth());
             }
         } catch(e){
             console.error(e);
         }
-    }, [nickError, nick]);
+    }, [nickError, nick, dispatch]);
 
     return  <Profile 
                 onLogout={onLogout} 

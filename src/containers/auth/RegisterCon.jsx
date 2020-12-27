@@ -121,16 +121,18 @@ const RegisterCon = ({ history }) => {
         try{
             if (nickError) {
                 setError(prev => ({ ...prev, nick: true }));
+                dispatch(initAuth());
     
                 return;
             }
             if (nick) {
                 setError(prev => ({ ...prev, nick: false }));
+                dispatch(initAuth());
             }
         } catch(e){
             console.error(e);
         }
-    }, [nickError, nick]);
+    }, [nickError, nick, dispatch]);
 
     return <Register
                 nickname={nickname}

@@ -6,4 +6,6 @@ export const user = axios.create({
   withCredentials: true,
 });
 
-export const admin = axios.create({ baseURL: "http://localhost:9091" });
+export const admin = axios.create({
+  baseURL: "http://localhost:9091",
+});

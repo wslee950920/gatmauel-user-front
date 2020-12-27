@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { getReviews } from '../../modules/reviews';
+import { getReviews, modReview, subReview } from '../../modules/reviews';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
   writeReview, 
@@ -27,6 +27,8 @@ const ReviewCon = ({ history }) => {
     content, 
     open,
     imgs,
+    lastPage,
+    loading
   } = useSelector(state => (
     {
       reviews: state.reviews.reviews,
@@ -36,11 +38,14 @@ const ReviewCon = ({ history }) => {
       content:state.review.content,
       open:state.review.open,
       imgs:state.review.imgs,
+      lastPage:state.reviews.lastPage,
+      loading:state.loading['reviews/GET']
     }
   ));
   let formData=new FormData();
   const [rOpen, setRopen]=useState(false);
   const [reviewId, setReviewId]=useState(null);
+  const [hasNextPage, setHasNextPage]=useState(true);
 
   const handleClose = useCallback(() => {
     history.push('/review');
@@ -121,12 +126,12 @@ const ReviewCon = ({ history }) => {
     }
   }, [history, user, dispatch]);
   const feedUpdate=useCallback((index)=>{
+    history.push(`/review/update/${index}`);
+    dispatch(openDialog());
     dispatch(changeField({
       key:'content',
       value:reviews[index].content
     }));
-    history.push(`/review/update/${index}`);
-    dispatch(openDialog());
   }, [history, dispatch, reviews]);
   const feedRemove=useCallback(()=>{
     dispatch(removeReview(reviewId));
@@ -139,10 +144,23 @@ const ReviewCon = ({ history }) => {
   const closeRemove=useCallback(()=>{
     setRopen(false);
   }, []);
+  const loadNextPage = useCallback(
+    ({ startIndex }) => {
+      const nextPage = Math.ceil((startIndex+1)/10)+1;
+      console.log('loadNextPage', startIndex, nextPage);
+
+      if (nextPage<=lastPage){
+        dispatch(getReviews(nextPage));
+      } else{
+        setHasNextPage(false);
+      }
+    },
+    [dispatch, lastPage]
+  );
 
   useEffect(() => {
-    dispatch(getReviews());
     dispatch(check());
+    dispatch(getReviews());
 
     return ()=>{
       dispatch(initialize());
@@ -168,19 +186,24 @@ const ReviewCon = ({ history }) => {
       }
 
       if (review) {
-        dispatch(getReviews());
-  
-        if(review.status&&review.status!==205){
-          dispatch(closeDialog());
-          dispatch(initialize());
+        if(review.hasOwnProperty('updated')){
+          dispatch(modReview(review));
         }
+
+        if(review.hasOwnProperty('deleted')){
+          dispatch(subReview(review));
+        } else{
+          dispatch(initialize());
+          dispatch(closeDialog());
+        }
+        dispatch(getReviews());
       } 
     } catch(e){
       console.error(e);
     }
   }, [review, reviewError, dispatch]);
 
-  return (reviews &&
+  return (
     <Review
       reviews={reviews}
       content={content}
@@ -198,7 +221,11 @@ const ReviewCon = ({ history }) => {
       rOpen={rOpen}
       openRemove={openRemove}
       closeRemove={closeRemove}
-    />)
+      loading={loading}
+      loadNextPage={loadNextPage}
+      hasNextPage={hasNextPage}
+    />
+  )
 }
 
 export default withRouter(ReviewCon);

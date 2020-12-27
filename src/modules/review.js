@@ -88,7 +88,7 @@ const review = handleActions(
     }),
     [WRITE_REVIEW_SUCCESS]: (state, { payload: review }) => ({
       ...state,
-      review,
+      review: review.data,
     }),
     [WRITE_REVIEW_FAILURE]: (state, { payload: reviewError }) => ({
       ...state,
@@ -101,7 +101,7 @@ const review = handleActions(
     }),
     [UPDATE_REVIEW_SUCCESS]: (state, { payload: review }) => ({
       ...state,
-      review,
+      review: review.data,
     }),
     [UPDATE_REVIEW_FAILURE]: (state, { payload: reviewError }) => ({
       ...state,
@@ -114,7 +114,7 @@ const review = handleActions(
     }),
     [REMOVE_REVIEW_SUCCESS]: (state, { payload: review }) => ({
       ...state,
-      review,
+      review: review.data,
     }),
     [REMOVE_REVIEW_FAILURE]: (state, { payload: reviewError }) => ({
       ...state,
