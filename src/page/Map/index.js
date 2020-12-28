@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { RenderAfterNavermapsLoaded } from "react-naver-maps";
 
 import Map from "../../components/map";
-import Circular from "../../components/common/Cirular";
+import Circular from "../../components/common/Circular";
 import HeaderCon from "../../containers/HeaderCon";
 import Footer from "../../components/footer";
 

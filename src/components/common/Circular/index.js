@@ -10,12 +10,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Circular = ({ height }) => {
+const Circular = ({ height, style }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root} style={{ height }}>
-      <CircularProgress size={30} />
+    <div style={style}>
+      <div className={classes.root} style={{ height }}>
+        <CircularProgress size={30} />
+      </div>
     </div>
   );
 };

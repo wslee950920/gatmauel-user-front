@@ -1,5 +1,17 @@
-import React, { useRef, useCallback, useMemo, useEffect } from "react";
-import { List, WindowScroller, InfiniteLoader } from "react-virtualized";
+import React, {
+  useRef,
+  useCallback,
+  useMemo,
+  useEffect,
+  forwardRef,
+} from "react";
+import {
+  List,
+  WindowScroller,
+  InfiniteLoader,
+  CellMeasurer,
+  CellMeasurerCache,
+} from "react-virtualized";
 import clsx from "clsx";
 import "react-virtualized/styles.css"; // only needs to be imported once
 import { StepProvider } from "./context/step";
@@ -13,6 +25,7 @@ import ReviewItem from "./ReviewItem";
 import RWView from "../common/RWView";
 import FullScreenDialog from "./FullScreenDialog";
 import DeleteDialog from "./Delete";
+import Circular from "../common/Circular";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -21,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const WrappedItem = forwardRef((props, ref) => {
+  return <ReviewItem {...props} forwardedRef={ref} />;
+});
 
 const Review = ({
   reviews,
@@ -52,40 +69,17 @@ const Review = ({
 
   const rowHeight = useMemo(() => {
     if (small) {
-      return 800;
+      return 816;
     } else if (bSmall) {
-      return 650;
+      return 609;
     } else if (xSmall) {
-      return 600;
-    } else return 550;
+      return 559;
+    } else return 504;
   }, [small, bSmall, xSmall]);
-
-  const rowRenderer = useCallback(
-    ({ index, key, style }) => {
-      const data = reviews[index];
-
-      return (
-        <ReviewItem
-          data={data}
-          style={style}
-          key={key}
-          index={index}
-          user={user}
-          feedUpdate={feedUpdate}
-          openRemove={openRemove}
-        />
-      );
-    },
-    [reviews, user, feedUpdate, openRemove]
-  );
-  const isRowLoaded = useCallback(
-    ({ index }) => {
-      console.log(index, hasNextPage);
-      return !hasNextPage || index + 1 < reviews.length;
-    },
-    [hasNextPage, reviews]
-  );
-
+  const cache = new CellMeasurerCache({
+    defaultHeight: rowHeight,
+    fixedWidth: true,
+  });
   const loadMoreRows = useMemo(() => {
     return loading
       ? () => {
@@ -93,6 +87,45 @@ const Review = ({
         }
       : loadNextPage;
   }, [loading, loadNextPage]);
+
+  const isRowLoaded = useCallback(
+    ({ index }) => {
+      //console.log("isRowLoaded", index, hasNextPage, reviews.length);
+      return !hasNextPage || index + 1 < reviews.length;
+    },
+    [hasNextPage, reviews]
+  );
+  const rowRenderer = useCallback(
+    ({ index, key, style, parent }) => {
+      //console.log("rowRenderer", !isRowLoaded({ index }));
+      const data = reviews[index];
+
+      return !isRowLoaded({ index }) ? (
+        <Circular style={style} key={key} height={40} />
+      ) : (
+        <CellMeasurer
+          cache={cache}
+          columnIndex={0}
+          key={key}
+          parent={parent}
+          rowIndex={index}
+        >
+          {({ measure, registerChild }) => (
+            <WrappedItem
+              ref={registerChild}
+              data={data}
+              style={style}
+              user={user}
+              feedUpdate={feedUpdate}
+              openRemove={openRemove}
+              measure={measure}
+            />
+          )}
+        </CellMeasurer>
+      );
+    },
+    [reviews, user, feedUpdate, openRemove, cache, isRowLoaded]
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -126,7 +159,7 @@ const Review = ({
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           rowCount={reviews.length}
-          threshold={2}
+          threshold={6}
         >
           {({ onRowsRendered, registerChild }) => (
             <WindowScroller>
@@ -135,7 +168,7 @@ const Review = ({
                   autoHeight
                   height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
                   rowCount={reviews.length}
-                  rowHeight={rowHeight}
+                  rowHeight={cache.rowHeight}
                   width={1}
                   containerStyle={{
                     width: "100%",
@@ -148,6 +181,7 @@ const Review = ({
                   overscanRowCount={4}
                   onRowsRendered={onRowsRendered}
                   ref={registerChild}
+                  deferredMeasurementCache={cache}
                 />
               )}
             </WindowScroller>

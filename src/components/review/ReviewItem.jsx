@@ -8,25 +8,33 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import Feed from "./Feed";
 
-const ReviewItem = ({ data, style, index, user, feedUpdate, openRemove}) => {
+const ReviewItem = ({ 
+  data, 
+  style, 
+  index, 
+  user, 
+  feedUpdate, 
+  openRemove, 
+  measure, 
+  forwardedRef
+}) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
-    <>
-      <ListItem style={style}>
-        <CssBaseline />
-        <Container maxWidth="sm" disableGutters={!matches}>
-          <Feed 
-            data={data} 
-            index={index} 
-            user={user} 
-            feedUpdate={feedUpdate} 
-            openRemove={openRemove}
-          />
-        </Container>
-      </ListItem>
-    </>
+    <ListItem style={style} ref={forwardedRef}>
+      <CssBaseline />
+      <Container maxWidth="sm" disableGutters={!matches}>
+        <Feed 
+          data={data} 
+          index={index} 
+          user={user} 
+          feedUpdate={feedUpdate} 
+          openRemove={openRemove}
+          measure={measure}
+        />
+      </Container>
+    </ListItem>
   );
 };
 

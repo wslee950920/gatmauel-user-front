@@ -36,14 +36,15 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     padding: theme.spacing(0.5, 1),
-    height: "10rem",
+    minHeight: "8rem",
   },
-  ns: {
+  pTag: {
     fontFamily: "NanumSquare",
+    whiteSpace: "pre-wrap",
   },
 }));
 
-const Feed = ({ data, index, user, feedUpdate, openRemove }) => {
+const Feed = ({ data, index, user, feedUpdate, openRemove, measure }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const { state, action } = useContext(StepContext);
@@ -90,13 +91,16 @@ const Feed = ({ data, index, user, feedUpdate, openRemove }) => {
           }}
         />
         {/**CardMedia에 props를 줬더니 CarouselImg컴포넌트가 받더라... */}
-        <CardMedia
-          className={classes.media}
-          component={CarouselImg}
-          activeIndex={activeStep}
-          handleSelect={handleSelect}
-          imgs={data.imgs}
-        />
+        {data.imgs && (
+          <CardMedia
+            className={classes.media}
+            component={CarouselImg}
+            activeIndex={activeStep}
+            handleSelect={handleSelect}
+            imgs={data.imgs}
+            measure={measure}
+          />
+        )}
         <CardContent classes={{ root: classes.content }}>
           {data.imgs.split("||").length > 1 ? (
             <MobileStepper
@@ -107,9 +111,9 @@ const Feed = ({ data, index, user, feedUpdate, openRemove }) => {
               className={classes.stepper}
             />
           ) : (
-            <br />
+            data.imgs && <br />
           )}
-          <Typography variant="body1" className={classes.ns}>
+          <Typography variant="body1" className={classes.pTag}>
             {data.content}
           </Typography>
         </CardContent>

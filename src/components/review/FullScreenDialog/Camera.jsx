@@ -10,7 +10,7 @@ import Divider from "@material-ui/core/Divider";
 import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 
-import Circular from '../../common/Cirular';
+import Circular from '../../common/Circular';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {

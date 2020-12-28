@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import Carousel from "react-bootstrap/Carousel";
 
-const CarouselImg = ({ activeIndex, handleSelect, imgs }) => {
+const CarouselImg = ({ activeIndex, handleSelect, imgs, measure }) => {
   const onError = useCallback((e, src) => {
     const target = e.target;
     target.src = "/images/icons/loading.gif";
@@ -31,6 +31,7 @@ const CarouselImg = ({ activeIndex, handleSelect, imgs }) => {
               width: "100%",
               height: "auto",
             }}
+            onLoad={measure}
           />
         </Carousel.Item>
       ))}

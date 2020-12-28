@@ -9,7 +9,7 @@ import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 
 import ListItemLink from "../../common/MainLists/ListItemLink";
-import Circular from "../../common/Cirular";
+import Circular from "../../common/Circular";
 
 const useStyles = makeStyles((theme) => ({
   root: {

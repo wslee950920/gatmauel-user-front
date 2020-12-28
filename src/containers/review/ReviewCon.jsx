@@ -147,7 +147,7 @@ const ReviewCon = ({ history }) => {
   const loadNextPage = useCallback(
     ({ startIndex }) => {
       const nextPage = Math.ceil((startIndex+1)/10)+1;
-      console.log('loadNextPage', startIndex, nextPage);
+      //console.log('loadNextPage', startIndex, nextPage);
 
       if (nextPage<=lastPage){
         dispatch(getReviews(nextPage));
