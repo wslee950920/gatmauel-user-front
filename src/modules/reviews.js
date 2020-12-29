@@ -36,7 +36,7 @@ export const modReview = createAction(
 );
 
 const initialState = {
-  reviews: [],
+  reviews: null,
   error: null,
   lastPage: null,
 };
@@ -47,7 +47,7 @@ const reviews = (state = initialState, action) => {
       return {
         ...state,
         reviews: [
-          ...state.reviews.filter((item) => {
+          ...(state.reviews ? state.reviews : []).filter((item) => {
             return (
               action.payload.data.findIndex(({ id }) => item.id === id) === -1
             );

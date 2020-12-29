@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
-import Templete from "./temp";
+import App from "./App";
 
 import express from "express";
 import path from "path";
@@ -43,7 +43,7 @@ const serverRender = async (req, res, next) => {
           <StaticRouter location={req.url} context={context}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <Templete />
+              <App />
             </ThemeProvider>
           </StaticRouter>
         </Provider>
@@ -75,11 +75,6 @@ const serverRender = async (req, res, next) => {
 
 const serve = express.static(path.resolve("./build"), { index: false });
 app.use(serve);
-//app.use(serverRender);는 요청 url이 어떻든 요청이 오기만 하면 실행 된다.
-//baseURL을 전역 설정하지 않았을 때 클라는 자신을 보내준 곳(localhost:5000)으로
-//요청을 보낸다. 게다가 localhost:5000/api/review/list로 요청을 보냈음에도
-//불구하고 app.use(serverRender)는 좋다고 serverRender를 실행해서 html템플릿을
-//응답으로 보내준다. 그래서 reviews가 html템플릿이 되었던 것.
 app.use(serverRender);
 
 app.listen(5000, () => {

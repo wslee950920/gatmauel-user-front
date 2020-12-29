@@ -8,7 +8,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 
-import ListItemLink from "../../components/common/MainLists/ListItemLink";
+import Circular from '../../components/common/Circular'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,29 +25,16 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 1, 0),
     flex: 1,
   },
-  content: {
-    fontSize: "0.7rem",
-    color: "#808080",
-  },
   box: {
     display: "flex",
     alignItems: "baseline",
-  },
-  primary: {
-    fontFamily: "MaplestoryOTFBold",
   },
   more: {
     marginRight: theme.spacing(1),
   },
 }));
 
-function generate(element) {
-  return [0, 1, 2, 3].map((value) =>
-    React.cloneElement(element, { key: value })
-  );
-}
-
-const ReviewList = ({ reviews }) => {
+const ReviewList = () => {
   const classes = useStyles();
   const theme = useTheme();
   
@@ -72,11 +59,14 @@ const ReviewList = ({ reviews }) => {
           </div>
           <div>
             <List>
-              {
-                generate(
-                  <ListItemLink primary="리뷰 내용" to="#" review />
-                )
-              }
+              <Circular
+                container={{
+                  height: 144,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              />
             </List>
           </div>
         </Container>
@@ -85,4 +75,4 @@ const ReviewList = ({ reviews }) => {
   );
 };
 
-export default React.memo(ReviewList);
+export default ReviewList;

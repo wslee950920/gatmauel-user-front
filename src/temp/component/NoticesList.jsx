@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -8,7 +8,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 
-import ListItemLink from "../../components/common/MainLists/ListItemLink";
+import Circular from '../../components/common/Circular'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,32 +30,14 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "baseline",
   },
-  fontRobo: {
-    fontFamily: "Roboto",
-  },
   more: {
     marginRight: theme.spacing(1),
   },
 }));
 
-function generate(element) {
-  return [0, 1].map((value) =>
-    React.cloneElement(element, { key: value })
-  );
-}
-
-const NoticeList = ({notices}) => {
+const NoticeList = () => {
   const classes = useStyles();
   const theme = useTheme();
-
-  const kTime = useCallback((time) => {
-    const temp=new Date(time);
-    const year=temp.getFullYear().toString().substr(2, 2);
-    const month=temp.getMonth()+1;
-    const date=temp.getDate();
-    
-    return `${year}/${month}/${date}`;
-  }, []);
 
   return (
     <div className={classes.root}>
@@ -78,15 +60,14 @@ const NoticeList = ({notices}) => {
           </div>
           <div>
             <List>
-              {
-                generate(
-                  <ListItemLink
-                    primary="공지사항 제목"
-                    to="#"
-                    secondary="00/00/00"
-                  />
-                )
-              }
+              <Circular
+                container={{
+                  height: 144,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              />
             </List>
           </div>
         </Container>
@@ -95,4 +76,4 @@ const NoticeList = ({notices}) => {
   );
 };
 
-export default React.memo(NoticeList);
+export default NoticeList;

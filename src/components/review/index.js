@@ -87,18 +87,22 @@ const Review = ({
       : loadNextPage;
   }, [loading, loadNextPage]);
   const rowCount = useMemo(() => {
-    return hasNextPage ? reviews.length + 1 : reviews.length;
+    return hasNextPage
+      ? (reviews ? reviews.length : 0) + 1
+      : reviews
+      ? reviews.length
+      : 0;
   }, [hasNextPage, reviews]);
 
   const isRowLoaded = useCallback(
     ({ index }) => {
-      return !hasNextPage || index < reviews.length;
+      return !hasNextPage || index < (reviews ? reviews.length : 0);
     },
     [hasNextPage, reviews]
   );
   const rowRenderer = useCallback(
     ({ index, key, style, parent }) => {
-      const data = reviews[index];
+      const data = reviews ? reviews[index] : null;
 
       return (
         <CellMeasurer
@@ -142,7 +146,7 @@ const Review = ({
   }, [theme, rowHeight]);
 
   return (
-    <StepProvider datas={reviews}>
+    <StepProvider datas={reviews ? reviews : []}>
       <div className={classes.paper}>
         <RWView
           handleClickOpen={handleClickOpen}

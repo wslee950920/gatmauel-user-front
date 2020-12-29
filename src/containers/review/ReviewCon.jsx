@@ -158,6 +158,11 @@ const ReviewCon = ({ history }) => {
     [dispatch, lastPage]
   );
 
+  useEffect(()=>{
+    if(lastPage<=1){
+      setHasNextPage(false);
+    }
+  }, [lastPage]);
   useEffect(() => {
     dispatch(check());
     dispatch(getReviews());

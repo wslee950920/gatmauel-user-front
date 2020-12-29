@@ -31,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "baseline",
   },
-  fontRobo: {
-    fontFamily: "Roboto",
-  },
   more: {
     marginRight: theme.spacing(1),
   },

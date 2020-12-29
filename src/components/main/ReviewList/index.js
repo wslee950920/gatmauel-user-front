@@ -26,16 +26,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 1, 0),
     flex: 1,
   },
-  content: {
-    fontSize: "0.7rem",
-    color: "#808080",
-  },
   box: {
     display: "flex",
     alignItems: "baseline",
-  },
-  primary: {
-    fontFamily: "MaplestoryOTFBold",
   },
   more: {
     marginRight: theme.spacing(1),
@@ -67,7 +60,7 @@ const ReviewList = ({ reviews }) => {
           </div>
           <div>
             <List>
-              {reviews.length > 0 ? (
+              {reviews ? (
                 <div style={{ height: 192 }}>
                   {reviews.slice(0, 4).map((review, index) => (
                     <ListItemLink
