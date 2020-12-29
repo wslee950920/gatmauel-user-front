@@ -1,16 +1,17 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
+import clsx from "clsx";
 
 import Carousel from "react-bootstrap/Carousel";
 
-const CarouselImg = ({ activeIndex, handleSelect, imgs, measure }) => {
-  const onError = useCallback((e, src) => {
-    const target = e.target;
-    target.src = "/images/icons/loading.gif";
+import Circular from "../../../common/Circular";
 
-    setTimeout(() => {
-      target.src = process.env.REACT_APP_CF_DOMAIN_NAME + src;
-    }, 1500);
-  }, []);
+const CarouselImg = ({ activeIndex, handleSelect, imgs, measure }) => {
+  const [loading, setLoading] = useState(true);
+
+  const onLoad = useCallback(() => {
+    setLoading(false);
+    measure();
+  }, [measure]);
 
   return (
     <Carousel
@@ -23,16 +24,30 @@ const CarouselImg = ({ activeIndex, handleSelect, imgs, measure }) => {
       {imgs.split("||").map((src, index) => (
         <Carousel.Item key={index}>
           <img
-            className="d-block w-100"
+            className={clsx(
+              loading ? "d-none w-100 h-auto" : "d-block w-100 h-auto"
+            )}
             src={process.env.REACT_APP_CF_DOMAIN_NAME + src}
             alt="피드 이미지"
-            onError={(e) => onError(e, src)}
-            style={{
-              width: "100%",
-              height: "auto",
-            }}
-            onLoad={measure}
+            onLoad={onLoad}
           />
+          {loading && (
+            <Circular
+              container={{
+                width: "100%",
+                paddingTop: "100%",
+                position: "relative",
+              }}
+              inside={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                margin: "auto",
+              }}
+            />
+          )}
         </Carousel.Item>
       ))}
     </Carousel>

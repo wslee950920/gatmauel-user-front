@@ -73,16 +73,7 @@ const ReviewList = ({ reviews }) => {
           <div>
             <List>
               {
-                reviews ? (
-                  reviews.slice(0, 4).map((review, index) => (
-                    <ListItemLink
-                      key={review.id}
-                      primary={review.content}
-                      to={`/review?index=${index}`}
-                      review
-                    />
-                  ))
-                ) : generate(
+                generate(
                   <ListItemLink primary="리뷰 내용" to="#" review />
                 )
               }

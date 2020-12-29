@@ -42,7 +42,11 @@ const Write=({
                 <CssBaseline />
                 <Container maxWidth="sm">
                     <div className={classes.header}>
-                        <Button onClick={handleClose} color="secondary">
+                        <Button 
+                            onClick={handleClose} 
+                            color="secondary" 
+                            disabled={loading}
+                        >
                             취소
                         </Button>
                     </div>

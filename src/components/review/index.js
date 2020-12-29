@@ -25,7 +25,6 @@ import ReviewItem from "./ReviewItem";
 import RWView from "../common/RWView";
 import FullScreenDialog from "./FullScreenDialog";
 import DeleteDialog from "./Delete";
-import Circular from "../common/Circular";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -83,26 +82,25 @@ const Review = ({
   const loadMoreRows = useMemo(() => {
     return loading
       ? () => {
-          console.log("loadMoreRows", loading);
+          console.log("already loading...");
         }
       : loadNextPage;
   }, [loading, loadNextPage]);
+  const rowCount = useMemo(() => {
+    return hasNextPage ? reviews.length + 1 : reviews.length;
+  }, [hasNextPage, reviews]);
 
   const isRowLoaded = useCallback(
     ({ index }) => {
-      //console.log("isRowLoaded", index, hasNextPage, reviews.length);
-      return !hasNextPage || index + 1 < reviews.length;
+      return !hasNextPage || index < reviews.length;
     },
     [hasNextPage, reviews]
   );
   const rowRenderer = useCallback(
     ({ index, key, style, parent }) => {
-      //console.log("rowRenderer", !isRowLoaded({ index }));
       const data = reviews[index];
 
-      return !isRowLoaded({ index }) ? (
-        <Circular style={style} key={key} height={40} />
-      ) : (
+      return (
         <CellMeasurer
           cache={cache}
           columnIndex={0}
@@ -119,6 +117,8 @@ const Review = ({
               feedUpdate={feedUpdate}
               openRemove={openRemove}
               measure={measure}
+              index={index}
+              isRowLoaded={isRowLoaded}
             />
           )}
         </CellMeasurer>
@@ -155,11 +155,12 @@ const Review = ({
           onCamera={onCamera}
           inputId={inputId.current}
         />
+        {/*threshold는 스크롤이 어느정도까지 왔을 때 데이터를 불러올지 설정한다. */}
         <InfiniteLoader
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
-          rowCount={reviews.length}
-          threshold={6}
+          rowCount={rowCount}
+          threshold={8}
         >
           {({ onRowsRendered, registerChild }) => (
             <WindowScroller>
@@ -167,7 +168,7 @@ const Review = ({
                 <List
                   autoHeight
                   height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
-                  rowCount={reviews.length}
+                  rowCount={rowCount}
                   rowHeight={cache.rowHeight}
                   width={1}
                   containerStyle={{

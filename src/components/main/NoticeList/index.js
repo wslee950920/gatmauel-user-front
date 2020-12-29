@@ -85,7 +85,14 @@ const NoticeList = ({ notices }) => {
                   ))}
                 </div>
               ) : (
-                <Circular height={144} />
+                <Circular
+                  container={{
+                    height: 144,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                />
               )}
             </List>
           </div>

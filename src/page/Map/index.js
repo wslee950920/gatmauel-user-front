@@ -24,7 +24,16 @@ const MapPage = () => {
       <RenderAfterNavermapsLoaded
         ncpClientId={process.env.REACT_APP_NAVER_MAP_CLIENT}
         error={<p>Maps Load Error</p>}
-        loading={<Circular height="60vh" />}
+        loading={
+          <Circular
+            container={{
+              height: "60vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          />
+        }
       >
         <Map />
       </RenderAfterNavermapsLoaded>

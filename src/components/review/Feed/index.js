@@ -32,10 +32,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: "#fff",
     justifyContent: "center",
-    marginBottom: theme.spacing(1),
   },
   content: {
-    padding: theme.spacing(0.5, 1),
+    padding: theme.spacing(0, 2),
     minHeight: "8rem",
   },
   pTag: {

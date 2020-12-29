@@ -7,6 +7,7 @@ import Container from "@material-ui/core/Container";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import Feed from "./Feed";
+import LoadingItem from './LoadingItem';
 
 const ReviewItem = ({ 
   data, 
@@ -16,7 +17,8 @@ const ReviewItem = ({
   feedUpdate, 
   openRemove, 
   measure, 
-  forwardedRef
+  forwardedRef,
+  isRowLoaded
 }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
@@ -25,14 +27,20 @@ const ReviewItem = ({
     <ListItem style={style} ref={forwardedRef}>
       <CssBaseline />
       <Container maxWidth="sm" disableGutters={!matches}>
-        <Feed 
-          data={data} 
-          index={index} 
-          user={user} 
-          feedUpdate={feedUpdate} 
-          openRemove={openRemove}
-          measure={measure}
-        />
+        {
+          !isRowLoaded({index})?(
+            <LoadingItem/>
+          ):(
+            <Feed 
+              data={data} 
+              index={index} 
+              user={user} 
+              feedUpdate={feedUpdate} 
+              openRemove={openRemove}
+              measure={measure}
+            />
+          )
+        }
       </Container>
     </ListItem>
   );

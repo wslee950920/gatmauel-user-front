@@ -79,7 +79,14 @@ const ReviewList = ({ reviews }) => {
                   ))}
                 </div>
               ) : (
-                <Circular height={192} />
+                <Circular
+                  container={{
+                    height: 192,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                />
               )}
             </List>
           </div>

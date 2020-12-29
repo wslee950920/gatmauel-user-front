@@ -1,25 +1,19 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
+
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-}));
-
-const Circular = ({ height, style }) => {
-  const classes = useStyles();
-
+const Circular = ({ container, inside }) => {
   return (
-    <div style={style}>
-      <div className={classes.root} style={{ height }}>
-        <CircularProgress size={30} />
-      </div>
+    <div style={container}>
+      <CircularProgress size={30} style={inside} />
     </div>
   );
+};
+
+Circular.propTypes = {
+  style: PropTypes.object,
+  height: PropTypes.object,
 };
 
 export default React.memo(Circular);
