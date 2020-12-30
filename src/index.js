@@ -10,9 +10,6 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 
-//react-bootstrap
-import "bootstrap/dist/css/bootstrap.min.css";
-
 //material ui
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -33,11 +30,9 @@ import { tempSetUser, check } from "./modules/user";
 
 const sagaMiddleware = createSagaMiddleware();
 
-const preloadedState = window.__PRELOADED_STATE__;
-delete window.__PRELOADED_STATE__;
 const store = createStore(
   rootReducer,
-  preloadedState,
+  window.__PRELOADED_STATE__,
   composeWithDevTools(applyMiddleware(thunk, sagaMiddleware))
 );
 
@@ -57,6 +52,13 @@ sagaMiddleware.run(rootSaga);
 loadUser();
 
 const Root = () => {
+  React.useEffect(() => {
+    const jssStyles = document.querySelector("#jss-server-side");
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
+
   return (
     <Provider store={store}>
       <BrowserRouter>
@@ -72,10 +74,14 @@ const Root = () => {
 const root = document.getElementById("root");
 
 if (process.env.NODE_ENV === "production") {
+  console.log("production");
+
   loadableReady(() => {
     ReactDOM.hydrate(<Root />, root);
   });
 } else {
+  console.log("else");
+
   ReactDOM.render(<Root />, root);
 }
 

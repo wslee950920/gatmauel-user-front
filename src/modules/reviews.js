@@ -23,8 +23,9 @@ export const getReviews = (page) => async (dispatch) => {
   } catch (e) {
     await dispatch(getReviewsFailure(e));
   }
-
   await dispatch(finishLoading("reviews/GET"));
+
+  return { type: "reviews/GET", page };
 };
 export const subReview = createAction(SUB_REVIEW, ({ deleted: id }) => id);
 export const modReview = createAction(

@@ -5,12 +5,12 @@ import App from "./App";
 
 import express from "express";
 import path from "path";
-import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
+import { ChunkExtractor } from "@loadable/server";
 import createPage from "./createPage";
 
-import { ThemeProvider } from "@material-ui/core/styles";
-import theme from "./theme";
+import { ThemeProvider, ServerStyleSheets } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import theme from "./theme";
 
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
@@ -24,6 +24,7 @@ const statsFile = path.resolve("./build/loadable-stats.json");
 const app = express();
 
 const serverRender = async (req, res, next) => {
+  const sheets = new ServerStyleSheets();
   const context = {};
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
@@ -36,21 +37,19 @@ const serverRender = async (req, res, next) => {
     promises: [],
   };
   const extractor = new ChunkExtractor({ statsFile });
-  const jsx = (
-    <ChunkExtractorManager extractor={extractor}>
-      <PreloadContext.Provider value={preloadContext}>
-        <Provider store={store}>
-          <StaticRouter location={req.url} context={context}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <App />
-            </ThemeProvider>
-          </StaticRouter>
-        </Provider>
-      </PreloadContext.Provider>
-    </ChunkExtractorManager>
+  const temp = (
+    <PreloadContext.Provider value={preloadContext}>
+      <Provider store={store}>
+        <StaticRouter location={req.url} context={context}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </StaticRouter>
+      </Provider>
+    </PreloadContext.Provider>
   );
-  ReactDOMServer.renderToStaticMarkup(jsx);
+  ReactDOMServer.renderToStaticMarkup(temp);
   store.dispatch(END);
 
   try {
@@ -61,13 +60,16 @@ const serverRender = async (req, res, next) => {
   }
   preloadContext.done = true;
 
-  const root = ReactDOMServer.renderToString(jsx);
+  const jsx = extractor.collectChunks(temp);
+  const root = ReactDOMServer.renderToString(sheets.collect(jsx));
+  const css = sheets.toString();
   const stateString = JSON.stringify(store.getState()).replace(/</g, "\\u003c");
   const stateScript = `<script>__PRELOADED_STATE__=${stateString}</script>`;
   const tags = {
     scripts: stateScript + extractor.getScriptTags(),
     links: extractor.getLinkTags(),
     styles: extractor.getStyleTags(),
+    css,
   };
 
   res.send(createPage(root, tags));

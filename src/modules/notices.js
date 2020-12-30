@@ -25,7 +25,6 @@ function* getNoticesSaga(action) {
   } catch (e) {
     yield put(getNoticesFailure(e));
   }
-
   yield put(finishLoading("notices/GET"));
 }
 

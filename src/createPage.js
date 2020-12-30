@@ -29,7 +29,6 @@ const createPage = (root, tags) => {
             <meta name="msapplication-TileColor" content="#ffffff">
             <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png">
             <link rel="manifest" href="/manifest.json" />
-            <!-- Google Fonts -->
             <link
               rel="stylesheet"
               href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
@@ -38,20 +37,12 @@ const createPage = (root, tags) => {
               rel="stylesheet"
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
-            <!-- Font Awesome -->
-            <link 
-              rel="stylesheet" 
-              href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-            />
-            <!-- Bootstrap core CSS -->
-            <link 
-              href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" 
+            <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css">
+            <link
               rel="stylesheet"
-            />
-            <!-- Material Design Bootstrap -->
-            <link 
-              href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" 
-              rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+              integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+              crossorigin="anonymous"
             />
             <style>
               .ssr-loading {
@@ -80,6 +71,7 @@ const createPage = (root, tags) => {
               }
             </style>
             <title>갯마을</title>
+            <style id="jss-server-side">${tags.css}</style>
             ${tags.styles}
             ${tags.links}
           </head>
