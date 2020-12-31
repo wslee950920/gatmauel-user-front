@@ -1,8 +1,7 @@
 import React, { useCallback } from "react";
 import { FixedSizeList as List } from "react-window";
-import useWindowDimensions from "../../lib/windowDimensions";
+import AutoSizer from "react-virtualized/dist/commonjs/AutoSizer";
 import clsx from "clsx";
-import usePlatform from "../../lib/usePlatform";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -21,8 +20,6 @@ const Notice = ({ notices }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
-  const { height, width } = useWindowDimensions();
-  const platform = usePlatform();
 
   const Row = useCallback(({ index, style, data: datas }) => {
     const data = datas[index];
@@ -38,23 +35,20 @@ const Notice = ({ notices }) => {
   }, []);
 
   return (
-    <List
-      className={classes.root}
-      height={
-        height -
-        56 -
-        8 -
-        clsx(matches ? 0 : 37.09) -
-        8 -
-        clsx(platform ? 0 : 57.43)
-      }
-      itemCount={notices ? notices.length : 0}
-      itemSize={100}
-      width={width}
-      itemData={notices}
-    >
-      {Row}
-    </List>
+    <AutoSizer>
+      {({ height, width }) => (
+        <List
+          className={classes.root}
+          height={height - 56 - 8 - clsx(matches ? 0 : 37.09) - 8 - 57.43}
+          itemCount={notices ? notices.length : 0}
+          itemSize={100}
+          width={width}
+          itemData={notices}
+        >
+          {Row}
+        </List>
+      )}
+    </AutoSizer>
   );
 };
 

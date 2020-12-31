@@ -45,7 +45,7 @@ const MenuList =({handleOpen, categories, listRefs})=> {
           key={category} 
           ref={listRefs.current[index]}
         >
-          <GridList cellHeight={window.innerWidth/3} cols={3}>
+          <GridList cellHeight={'100vw'/3} cols={3}>
             <GridListTile key="Subheader" cols={3} style={{ height: 'auto' }}>
               <ListSubheader component="div">
                 {category}
