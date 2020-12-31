@@ -1,8 +1,11 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import FormData from 'form-data';
+
+import {usePreloader} from '../../lib/PreloadContext';
 
 import { getReviews, modReview, subReview } from '../../modules/reviews';
-import { useSelector, useDispatch } from 'react-redux';
 import { 
   writeReview, 
   openDialog, 
@@ -49,6 +52,7 @@ const ReviewCon = ({ history }) => {
   const [reviewId, setReviewId]=useState(null);
   const [hasNextPage, setHasNextPage]=useState(true);
   const [progress, setProgress]=useState(0);
+  const nextPage=useRef(0);
 
   const handleClose = useCallback(() => {
     history.push('/review');
@@ -149,26 +153,36 @@ const ReviewCon = ({ history }) => {
   }, []);
   const loadNextPage = useCallback(
     ({ startIndex }) => {
-      const nextPage = (startIndex/10)+1;
-      if (lastPage&&nextPage<=lastPage){
-        dispatch(getReviews(nextPage));
-
-        if(nextPage===lastPage){
-          setHasNextPage(false);
+      nextPage.current = (startIndex/10)+1;
+      
+      if(lastPage){
+        if (nextPage.current<=lastPage){
+          dispatch(getReviews(nextPage.current));
         }
       }
     },
     [dispatch, lastPage]
   );
 
+  usePreloader(()=>dispatch(getReviews()));
+
   useEffect(()=>{
-    if(lastPage<=1){
+    if(reviews||gloading) return;
+
+      dispatch(getReviews());
+  }, [dispatch, reviews, gloading]);
+  useEffect(()=>{
+    if(!gloading&&lastPage&&nextPage.current===lastPage){
+      setHasNextPage(false);
+    }
+  }, [gloading, lastPage]);
+  useEffect(()=>{
+    if(lastPage&&lastPage<=1){
       setHasNextPage(false);
     }
   }, [lastPage]);
   useEffect(() => {
     dispatch(check());
-    dispatch(getReviews());
 
     return ()=>{
       dispatch(initialize());
