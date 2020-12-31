@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useContext } from "react";
 import StepContext from "../context/step";
+import loadable from "@loadable/component";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -12,10 +13,10 @@ import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MobileStepper from "@material-ui/core/MobileStepper";
 
-import FeedMenu from "./FeedMenu";
 import CarouselImg from "./CarouselImg";
-
 import kTime from "../../../lib/kTime";
+
+const FeedMenu = loadable(() => import("./FeedMenu"));
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -117,14 +118,16 @@ const Feed = ({ data, index, user, feedUpdate, openRemove, measure }) => {
           </Typography>
         </CardContent>
       </Card>
-      <FeedMenu
-        handleClose={handleClose}
-        anchorEl={anchorEl}
-        feedUpdate={feedUpdate}
-        index={index}
-        openRemove={openRemove}
-        reviewId={data.id}
-      />
+      {user && (
+        <FeedMenu
+          handleClose={handleClose}
+          anchorEl={anchorEl}
+          feedUpdate={feedUpdate}
+          index={index}
+          openRemove={openRemove}
+          reviewId={data.id}
+        />
+      )}
     </>
   );
 };

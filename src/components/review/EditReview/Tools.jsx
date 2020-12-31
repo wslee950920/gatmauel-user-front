@@ -33,9 +33,9 @@ const Tools=({
     onSubmit, 
     onCamera, 
     inputId, 
-    review,
     loading,
-    progress
+    progress,
+    review
   })=>{
     const classes=useStyles();
 
@@ -66,7 +66,7 @@ const Tools=({
                   aria-label="upload picture" 
                   component="span"
                   onClick={handleClickOpen}
-                  disabled={!!review}
+                  disabled={!!review||loading}
                 >
                   <PhotoAlbumIcon color="action" />
                 </IconButton>

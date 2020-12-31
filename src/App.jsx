@@ -9,7 +9,7 @@ const ProfilePage = loadable(() => import("./page/Profile"));
 const AccountPage = loadable(() => import("./page/Account"));
 const FindPage = loadable(() => import("./page/Find"));
 const NoticePage = loadable(() => import("./page/Notice"));
-const ReviewPage = loadable(() => import("./page/Review"));
+const ReviewPage = loadable(() => import("./page/Review"), {ssr:false});
 const MenuPage = loadable(()=>import('./page/Menu'));
 const MapPage=loadable(()=>import('./page/Map'));
 

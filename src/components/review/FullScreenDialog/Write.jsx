@@ -6,7 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 
-import RWView from "../../common/RWView";
+import EditReview from '../EditReview';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -29,9 +29,9 @@ const Write=({
     onCamera,
     handleFileOnChange,
     onSubmit,
-    review,
     loading,
-    progress
+    progress,
+    review
 })=>{
     const classes = useStyles();
     const inputId=useRef('write-input-id');
@@ -53,7 +53,7 @@ const Write=({
                     <Divider />
                 </Container>
             </div>
-            <RWView 
+            <EditReview 
                 content={content} 
                 imgs={imgs} 
                 onChange={onChange} 
@@ -62,9 +62,9 @@ const Write=({
                 inputId={inputId.current}
                 handleFileOnChange={handleFileOnChange}
                 onSubmit={onSubmit}
-                review={review}
                 loading={loading}
                 progress={progress}
+                review={review}
             />
         </>
     );

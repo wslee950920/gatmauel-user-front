@@ -1,13 +1,9 @@
 import React from "react";
-import clsx from "clsx";
-import useWindowDimensions from "../../../lib/windowDimensions";
-import { Link } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import CloseIcon from "@material-ui/icons/Close";
@@ -16,7 +12,6 @@ import List from "@material-ui/core/List";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Typography from "@material-ui/core/Typography";
 
-import Head from "./Head";
 import Tools from "./Tools";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,11 +32,6 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "NanumSquare",
     backgroundColor: "white",
     padding: theme.spacing(2),
-  },
-  back: {
-    marginTop: theme.spacing(1),
-    display: "flex",
-    justifyContent: "flex-end",
   },
   gList: {
     display: "flex",
@@ -80,65 +70,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RWView = ({
+const EditReview = ({
   handleClickOpen,
   rOnly,
-  data,
   imgs,
   handleFileOnChange,
   handleFileRemove,
   content,
-  onChange,
   onSubmit,
   onCamera,
   inputId,
-  review,
   loading,
   progress,
+  onChange,
+  review,
 }) => {
   const classes = useStyles();
-  const { height } = useWindowDimensions();
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Container
-        maxWidth="sm"
-        {...(data && {
-          style: {
-            height: height - 56 - 8 - 57.43 - parseInt(clsx(matches ? 8 : "0")),
-          },
-        })}
-      >
+      <Container maxWidth="sm">
         <div className={classes.background}>
-          {data && <Head title={data.title} time={data.createdAt} />}
           <TextareaAutosize
             aria-label="read-write-data"
-            rowsMin={clsx(data ? 16 : 2)}
-            rowsMax={clsx(data ? 16 : rOnly ? 2 : 10)}
+            rowsMin={2}
+            rowsMax={rOnly ? 2 : 10}
             className={classes.textArea}
             onClick={handleClickOpen}
             readOnly={rOnly}
-            value={data ? data.content : content}
-            {...(data
-              ? {
-                  style: {
-                    fontFamily: "Roboto",
-                  },
-                }
-              : {
-                  onChange,
-                  name: "content",
-                })}
-            autoFocus={!data && !rOnly}
+            value={content}
+            {...(!rOnly && {
+              onChange,
+              name: "content",
+            })}
+            autoFocus={!rOnly}
             onFocus={(event) => {
               event.target.selectionStart = content.length;
               event.target.selectionEnd = content.length;
             }}
+            disabled={loading}
           />
-          {!data && (review || imgs.length > 0) && (
+          {(review || imgs.length > 0) && (
             <>
               <div className={classes.end}>
                 <Typography variant="caption" className={classes.fontRobo}>
@@ -167,6 +140,7 @@ const RWView = ({
                             aria-label={`close-${index}`}
                             onClick={() => handleFileRemove(index)}
                             size="small"
+                            disabled={loading}
                           >
                             <CloseIcon
                               className={classes.title}
@@ -194,35 +168,20 @@ const RWView = ({
               </List>
             </>
           )}
-          {!data && (
-            <Tools
-              handleClickOpen={handleClickOpen}
-              handleFileOnChange={handleFileOnChange}
-              onSubmit={onSubmit}
-              onCamera={onCamera}
-              inputId={inputId}
-              review={review}
-              loading={loading}
-              progress={progress}
-            />
-          )}
+          <Tools
+            handleClickOpen={handleClickOpen}
+            handleFileOnChange={handleFileOnChange}
+            onSubmit={onSubmit}
+            onCamera={onCamera}
+            inputId={inputId}
+            loading={loading}
+            progress={progress}
+            review={review}
+          />
         </div>
-        {rOnly && data && (
-          <div className={classes.back}>
-            <Link
-              to="/notice"
-              style={{
-                fontFamily: "Roboto",
-                color: theme.palette.text.secondary,
-              }}
-            >
-              돌아가기
-            </Link>
-          </div>
-        )}
       </Container>
     </div>
   );
 };
 
-export default React.memo(RWView);
+export default React.memo(EditReview);

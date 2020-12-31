@@ -24,12 +24,10 @@ const MainContainer=()=>{
 
     useEffect(()=>{
         if(!reviews&&!rloading){
-            console.log('reviews dispatch');
             dispatch(getReviews());
         }
         
         if(!notices&&!nloading){
-            console.log('notices dispatch');
             dispatch(getNotices());
         }
     }, [dispatch, reviews, notices, rloading, nloading]);

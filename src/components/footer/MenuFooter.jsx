@@ -17,11 +17,11 @@ const useStyles=makeStyles((theme)=>({
     }
 }))
 
-const MenuFooter=({height})=>{
+const MenuFooter=()=>{
     const classes=useStyles();
 
     return(
-        <Box style={{height}} py={2} px={1}>
+        <Box py={2} px={1} pb={20}>
             <Typography variant="subtitle2" className={classes.title} >
                 원산지 표기
             </Typography>
@@ -44,4 +44,4 @@ const MenuFooter=({height})=>{
     )
 };
 
-export default React.memo(MenuFooter);
+export default MenuFooter;

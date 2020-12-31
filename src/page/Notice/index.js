@@ -10,23 +10,20 @@ import SearchBar from "../../components/common/SearchBar";
 import ReadNoticeCon from "../../containers/notice/ReadNoticeCon";
 import Footer from "../../components/footer";
 
-import usePlatform from "../../lib/usePlatform";
-
 const NoticePage = ({ match }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
-  const platform = usePlatform();
 
   return (
-    <>
+    <div style={{ position: "relative", height: "100vh" }}>
       <HeaderCon />
       {!matches && (
         <Route exact path={match.url} component={() => <SearchBar notice />} />
       )}
       <Route exact path={match.url} component={NoticeCon} />
       <Route path={`${match.url}/:id`} component={ReadNoticeCon} />
-      {platform ? null : <Footer />}
-    </>
+      <Footer />
+    </div>
   );
 };
 

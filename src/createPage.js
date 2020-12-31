@@ -47,7 +47,7 @@ const createPage = (root, tags) => {
             <style>
               .ssr-loading {
                 position: fixed;
-                z-index: 99;
+                z-index: 1500;
                 top: 0;
                 left: 0;
                 width: 100%;

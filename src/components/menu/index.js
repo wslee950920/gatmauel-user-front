@@ -3,7 +3,6 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import MenuBar from "./MenuBar";
 import MenuList from "./MenuList";
 import CardDialog from "../common/CardDialog";
-import MenuFooter from "../footer/MenuFooter";
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
@@ -73,16 +72,6 @@ const Menu = () => {
         value={value}
         listRefs={listRefs}
       />
-      {listRefs.current[5].current && (
-        <MenuFooter
-          height={
-            window.innerHeight -
-            listRefs.current[5].current.getBoundingClientRect().height -
-            yOffset +
-            (window.innerWidth - document.documentElement.clientWidth)
-          }
-        />
-      )}
       <CardDialog open={open} handleClose={handleClose} />
     </>
   );

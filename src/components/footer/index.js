@@ -9,12 +9,19 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 
 const useStyles = makeStyles((theme) => ({
-  background: {
+  main: {
     backgroundColor: "#dcdcdc",
     padding: theme.spacing(1),
     width: "100%",
     position: "absolute",
     bottom: -57.43,
+  },
+  background: {
+    backgroundColor: "#dcdcdc",
+    padding: theme.spacing(1),
+    width: "100%",
+    position: "absolute",
+    bottom: 0,
   },
   footer: {
     display: "flex",
@@ -32,13 +39,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Footer = () => {
+const Footer = ({ main }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("xs"));
 
   return (
-    <footer className={classes.background}>
+    <footer className={main ? classes.main : classes.background}>
       <div className={classes.footer}>
         <div>
           <ScheduleIcon fontSize="small" />

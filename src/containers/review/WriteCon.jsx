@@ -22,7 +22,7 @@ const WriteCon=({history})=>{
         }
     ));
     const dispatch=useDispatch();
-    let formData=new FormData();
+    const formData=new FormData();
     const [progress, setProgress]=useState(0);
 
     const handleClose = useCallback(() => {

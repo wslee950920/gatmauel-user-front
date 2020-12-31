@@ -11,7 +11,10 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "MaplestoryOTFBold",
     '&:active,&:hover':{
       color:theme.palette.primary.dark
-    }
+    },
+    whiteSpace:'nowrap',
+    overflow:'hidden',
+    textOverflow:'ellipsis'
   },
   fontRobo: {
     fontFamily: "Roboto",

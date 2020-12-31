@@ -84,16 +84,18 @@ const Camera = ({handleClose, loading, video, getCapture }) => {
             )
           }
         </div>
-        <div className={classes.back}>
-          <Link 
-            component={RouterLink} 
-            to='/review/write' 
-            color='textSecondary' 
-            className={classes.link}
-          >
-            돌아가기
-          </Link>
-        </div>
+        {!loading&&
+          <div className={classes.back}>
+            <Link 
+              component={RouterLink} 
+              to='/review/write' 
+              color='textSecondary' 
+              className={classes.link}
+            >
+              돌아가기
+            </Link>
+          </div>
+        }
       </Container>
     </>
   );

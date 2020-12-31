@@ -6,11 +6,11 @@ import Footer from "../../components/footer";
 
 const MainPage = () => {
   return (
-    <>
+    <div style={{ position: "relative" }}>
       <HeaderCon main />
       <MainCon />
-      <Footer />
-    </>
+      <Footer main />
+    </div>
   );
 };
 

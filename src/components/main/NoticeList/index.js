@@ -8,7 +8,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 
-import ListItemLink from "../../common/MainLists/ListItemLink";
+import ListItemLink from "../ListItemLink";
 import Circular from "../../common/Circular";
 
 const useStyles = makeStyles((theme) => ({

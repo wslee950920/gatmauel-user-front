@@ -28,7 +28,8 @@ const ReviewCon = ({ history }) => {
     open,
     imgs,
     lastPage,
-    loading
+    gloading,
+    wloading
   } = useSelector(state => (
     {
       reviews: state.reviews.reviews,
@@ -39,13 +40,15 @@ const ReviewCon = ({ history }) => {
       open:state.review.open,
       imgs:state.review.imgs,
       lastPage:state.reviews.lastPage,
-      loading:state.loading['reviews/GET']
+      gloading:state.loading['reviews/GET'],
+      wloading:state.loading['write/WRITE_REVIEW']
     }
   ));
-  let formData=new FormData();
+  const formData=new FormData();
   const [rOpen, setRopen]=useState(false);
   const [reviewId, setReviewId]=useState(null);
   const [hasNextPage, setHasNextPage]=useState(true);
+  const [progress, setProgress]=useState(0);
 
   const handleClose = useCallback(() => {
     history.push('/review');
@@ -112,7 +115,7 @@ const ReviewCon = ({ history }) => {
       await imgs.forEach((img) => {
         formData.append("imgs", img.file);
       });
-      await dispatch(writeReview(formData));
+      await dispatch(writeReview({formData, setProgress}));
     },
     [content, formData, imgs, dispatch, history, user]
   );
@@ -226,9 +229,11 @@ const ReviewCon = ({ history }) => {
       rOpen={rOpen}
       openRemove={openRemove}
       closeRemove={closeRemove}
-      loading={loading}
+      gloading={gloading}
       loadNextPage={loadNextPage}
       hasNextPage={hasNextPage}
+      progress={progress}
+      wloading={wloading}
     />
   )
 }

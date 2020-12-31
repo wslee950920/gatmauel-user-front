@@ -1,12 +1,9 @@
 import React from "react";
 import { NaverMap, Marker } from "react-naver-maps";
-import useWindowDimensions from "../../lib/windowDimensions";
-import clsx from "clsx";
 
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { makeStyles } from "@material-ui/core/styles";
 
 import ShareBtn from "./ShareBtn";
 
@@ -22,21 +19,12 @@ const useStyles = makeStyles((theme) => ({
 const Map = () => {
   const navermaps = window.naver.maps;
   const classes = useStyles();
-  const { height } = useWindowDimensions();
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const platform = usePlatform();
 
   return (
     <>
       <CssBaseline />
-      <Container
-        maxWidth="md"
-        disableGutters
-        style={{
-          height: height - 56 - 57.43 - parseInt(clsx(matches ? 8 : "0")),
-        }}
-      >
+      <Container maxWidth="md" disableGutters>
         <NaverMap
           mapDivId={"gatmauel-map"}
           className={classes.map}

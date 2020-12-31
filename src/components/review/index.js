@@ -5,15 +5,16 @@ import React, {
   useEffect,
   forwardRef,
 } from "react";
-import {
-  List,
-  WindowScroller,
-  InfiniteLoader,
-  CellMeasurer,
+import loadable from "@loadable/component";
+
+import List from "react-virtualized/dist/commonjs/List";
+import WindowScroller from "react-virtualized/dist/commonjs/WindowScroller";
+import InfiniteLoader from "react-virtualized/dist/commonjs/InfiniteLoader";
+import CellMeasurer, {
   CellMeasurerCache,
-} from "react-virtualized";
+} from "react-virtualized/dist/commonjs/CellMeasurer";
+
 import clsx from "clsx";
-import "react-virtualized/styles.css"; // only needs to be imported once
 import { StepProvider } from "./context/step";
 import querystring from "querystring";
 import url from "url";
@@ -22,9 +23,9 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import ReviewItem from "./ReviewItem";
-import RWView from "../common/RWView";
 import FullScreenDialog from "./FullScreenDialog";
-import DeleteDialog from "./Delete";
+import EditReview from "./EditReview";
+const DeleteDialog = loadable(() => import("./Delete"));
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,8 +57,10 @@ const Review = ({
   openRemove,
   closeRemove,
   loadNextPage,
-  loading,
+  gloading,
   hasNextPage,
+  progress,
+  wloading,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -80,12 +83,12 @@ const Review = ({
     fixedWidth: true,
   });
   const loadMoreRows = useMemo(() => {
-    return loading
+    return gloading
       ? () => {
           console.log("already loading...");
         }
       : loadNextPage;
-  }, [loading, loadNextPage]);
+  }, [gloading, loadNextPage]);
   const rowCount = useMemo(() => {
     return hasNextPage
       ? (reviews ? reviews.length : 0) + 1
@@ -148,7 +151,7 @@ const Review = ({
   return (
     <StepProvider datas={reviews ? reviews : []}>
       <div className={classes.paper}>
-        <RWView
+        <EditReview
           handleClickOpen={handleClickOpen}
           rOnly
           imgs={imgs}
@@ -158,6 +161,8 @@ const Review = ({
           onSubmit={onSubmit}
           onCamera={onCamera}
           inputId={inputId.current}
+          loading={wloading}
+          progress={progress}
         />
         {/*threshold는 스크롤이 어느정도까지 왔을 때 데이터를 불러올지 설정한다. */}
         <InfiniteLoader
@@ -194,11 +199,13 @@ const Review = ({
         </InfiniteLoader>
       </div>
       <FullScreenDialog open={open} handleClose={handleClose} />
-      <DeleteDialog
-        rOpen={rOpen}
-        closeRemove={closeRemove}
-        feedRemove={feedRemove}
-      />
+      {user && (
+        <DeleteDialog
+          rOpen={rOpen}
+          closeRemove={closeRemove}
+          feedRemove={feedRemove}
+        />
+      )}
     </StepProvider>
   );
 };

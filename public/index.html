@@ -42,10 +42,50 @@
       integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
       crossorigin="anonymous"
     />
+    <style>
+      .ssr-loading {
+        position: fixed;
+        z-index: 1500;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      .ssr-loading.hidden {
+        animation: fadeOut 1s;
+        animation-fill-mode: forwards;
+      }
+  
+      @keyframes fadeOut {
+        100% {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+    </style>
     <title>갯마을</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <div class="ssr-loading" id="ssr-loading">
+      <img src="/favicons/favicon-96x96.png" alt="Loading..." />
+    </div>
+    <script>
+      window.addEventListener("load", function () {
+        const loading = document.getElementById("ssr-loading");
+
+        loading.className += " hidden"; // class "loader hidden"
+        setTimeout(()=>{
+          const body=document.body;
+          body.removeChild(loading);
+        }, 1100)  
+      });
+    </script>
   </body>
 </html>

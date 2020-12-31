@@ -7,11 +7,21 @@ import Circular from "../../../common/Circular";
 
 const CarouselImg = ({ activeIndex, handleSelect, imgs, measure }) => {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const onLoad = useCallback(() => {
     setLoading(false);
     measure();
   }, [measure]);
+  const onError = useCallback((e, src) => {
+    setError(true);
+
+    const target = e.target;
+    setTimeout(() => {
+      target.src = process.env.REACT_APP_CF_DOMAIN_NAME + src;
+      setError(false);
+    }, 4000);
+  }, []);
 
   return (
     <Carousel
@@ -23,15 +33,18 @@ const CarouselImg = ({ activeIndex, handleSelect, imgs, measure }) => {
     >
       {imgs.split("||").map((src, index) => (
         <Carousel.Item key={index}>
-          <img
-            className={clsx(
-              loading ? "d-none w-100 h-auto" : "d-block w-100 h-auto"
-            )}
-            src={process.env.REACT_APP_CF_DOMAIN_NAME + src}
-            alt="피드 이미지"
-            onLoad={onLoad}
-          />
-          {loading && (
+          {!error && (
+            <img
+              className={clsx(
+                loading ? "d-none w-100 h-auto" : "d-block w-100 h-auto"
+              )}
+              src={process.env.REACT_APP_CF_DOMAIN_NAME + src}
+              alt="피드 이미지"
+              onLoad={onLoad}
+              onError={(e) => onError(e, src)}
+            />
+          )}
+          {(loading || error) && (
             <Circular
               container={{
                 width: "100%",
