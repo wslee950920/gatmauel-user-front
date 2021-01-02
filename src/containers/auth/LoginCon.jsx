@@ -56,9 +56,9 @@ const LoginCon=({history})=>{
             return;
         }
 
-        setEmpty({email:false, password:false})
-        dispatch(login({email, password}));
-    }, [email, password, dispatch]);
+        setEmpty({email:false, password:false});
+        dispatch(login({email, password, checked}));
+    }, [email, password, dispatch, checked]);
 
     useEffect(()=>{
         return()=>{

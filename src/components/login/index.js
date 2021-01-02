@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
   formCtrLabel: {
     fontSize: "0.8rem",
     color: "#707070",
-    textDecoration: "line-through",
   },
   fontRobo: {
     fontFamily: "Roboto",
@@ -114,7 +113,6 @@ const LogIn = ({
                   color="primary"
                   checked={checked}
                   onChange={onToggle}
-                  disabled
                 />
               }
               label="로그인 유지"
@@ -157,7 +155,7 @@ const LogIn = ({
           </form>
         </div>
         <Divider variant="middle" className={classes.divider} />
-        <KakaoBtn />
+        <KakaoBtn kakaoLogin={kakaoLogin} />
       </Container>
     </>
   );

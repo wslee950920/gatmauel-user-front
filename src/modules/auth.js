@@ -23,9 +23,10 @@ export const register = createAction(REGISTER, ({ nick, email, password }) => ({
   email,
   password,
 }));
-export const login = createAction(LOGIN, ({ email, password }) => ({
+export const login = createAction(LOGIN, ({ email, password, checked }) => ({
   email,
   password,
+  checked,
 }));
 export const checkNick = createAction(CHECK_NICK, ({ nick }) => ({
   nick,
