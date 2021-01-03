@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 import Profile from "../../components/profile";
 
-import { logout, getInfo, check } from "../../modules/user";
+import { logout, getInfo, check, userUpdate } from "../../modules/user";
 import { checkNick, initAuth } from '../../modules/auth';
 
 const ProfileCon=({history})=>{
@@ -25,7 +25,7 @@ const ProfileCon=({history})=>{
 
     const onLogout = useCallback(() => {
         dispatch(logout());
-      }, [dispatch]);
+    }, [dispatch]);
     const onChange=useCallback((e)=>{
         const {value}=e.target;
         setNickname(value);
@@ -39,7 +39,9 @@ const ProfileCon=({history})=>{
     }, [dispatch, user]);
     const onSubmit = useCallback((e) => {
         e.preventDefault();
-      }, []);
+
+        dispatch(userUpdate({nickname}));
+    }, [nickname, dispatch]);
 
     useEffect(()=>{
         dispatch(check());

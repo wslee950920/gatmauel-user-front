@@ -60,7 +60,7 @@ const LoginCon=({history})=>{
         dispatch(login({email, password, checked}));
     }, [email, password, dispatch, checked]);
 
-    useEffect(()=>{
+    useEffect(()=>{        
         return()=>{
             dispatch(initAuth());
         }
@@ -87,12 +87,12 @@ const LoginCon=({history})=>{
     useEffect(()=>{
         if(user){
             history.push('/');
-        }
 
-        try{
-            localStorage.setItem('user', JSON.stringify(user));
-        } catch(e){
-            console.error('localStorage is not working');
+            try{
+                localStorage.setItem('user', JSON.stringify(user));
+            } catch(e){
+                console.error('localStorage is not working');
+            }
         }
     }, [user, history]);
 

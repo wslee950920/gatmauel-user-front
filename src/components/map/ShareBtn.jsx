@@ -30,10 +30,10 @@ const KakaoBtn=({platform})=>{
 
       if(IorA.indexOf("android") !== -1){
         // android 일 때
-        window.location.href=`intent://search?query=${encodeURI('갯마을바지락칼국수보쌈')}&appname=https://wslee950920.github.io/gatmauel-user-front#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;end`
+        window.location.href=`intent://search?query=${encodeURI('갯마을바지락칼국수보쌈')}&appname=${process.env.REACT_APP_COMM_URL}#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;end`
       }else if(IorA.indexOf("iphone") !== -1){
         // iphone 일 때
-        window.location.href = `nmap://search?query=${encodeURI('갯마을바지락칼국수보쌈')}&appname=https://wslee950920.github.io/gatmauel-user-front`;
+        window.location.href = `nmap://search?query=${encodeURI('갯마을바지락칼국수보쌈')}&appname=${process.env.REACT_APP_COMM_URL}`;
       }
 
       setTimeout(function() {
