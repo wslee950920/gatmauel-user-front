@@ -8,12 +8,13 @@ import { logout, getInfo, check } from "../../modules/user";
 import { checkNick, initAuth } from '../../modules/auth';
 
 const ProfileCon=({history})=>{
-    const {user, info, nick, nickError}=useSelector(
+    const {user, info, nick, nickError, uError}=useSelector(
         ({user, auth})=>({
             user:user.user,
             info:user.info,
             nick: auth.nick,
             nickError: auth.nickError,
+            uError:user.error
         })
     );
     const dispatch=useDispatch();
@@ -54,10 +55,11 @@ const ProfileCon=({history})=>{
         }
     }, [user, history]);
     useEffect(()=>{
-        if(!info){
-            dispatch(getInfo());
-        }
-    }, [info, dispatch]);
+        if(info) return;
+        if(uError) return;
+
+        dispatch(getInfo());
+    }, [info, dispatch, uError]);
     useEffect(() => {
         try{
             if (nickError) {

@@ -7,9 +7,10 @@ import Account from "../../components/account";
 import { getInfo, check } from "../../modules/user";
 
 const AccountCon=({history})=>{
-    const {user, info}=useSelector(({user})=>({
+    const {user, info, error}=useSelector(({user})=>({
         user:user.user,
         info:user.info,
+        error:user.error
     }));
     const dispatch=useDispatch();
 
@@ -23,10 +24,11 @@ const AccountCon=({history})=>{
         }
     }, [user, history]);
     useEffect(()=>{
-        if(!info){
-            dispatch(getInfo());
-        }
-    }, [info, dispatch]);
+        if(info) return;
+        if(error) return;
+            
+        dispatch(getInfo());
+    }, [info, dispatch, error]);
 
     return <Account info={info}/>
 };

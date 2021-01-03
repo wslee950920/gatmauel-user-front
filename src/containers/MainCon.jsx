@@ -9,12 +9,14 @@ import {getNotices} from '../modules/notices';
 import Main from '../components/main';
 
 const MainContainer=()=>{
-    const {reviews, notices, rloading, nloading}=useSelector(state=>(
+    const {reviews, notices, rloading, nloading, rError, nError}=useSelector(state=>(
         {
             reviews:state.reviews.reviews, 
             notices:state.notices.notices,
             rloading:state.loading['reviews/GET'],
-            nloading:state.loading['notices/GET']
+            nloading:state.loading['notices/GET'],
+            rError:state.reviews.error,
+            nError:state.notices.error
         }
     ));
     const dispatch=useDispatch();
@@ -23,14 +25,17 @@ const MainContainer=()=>{
     usePreloader(()=>dispatch(getNotices()));
 
     useEffect(()=>{
-        if(!reviews&&!rloading){
-            dispatch(getReviews());
-        }
-        
-        if(!notices&&!nloading){
-            dispatch(getNotices());
-        }
-    }, [dispatch, reviews, notices, rloading, nloading]);
+        if(reviews||rloading) return;
+        if(rError) return;
+
+        dispatch(getReviews());
+    }, [dispatch, reviews, rloading, rError]);
+    useEffect(()=>{
+        if(notices||nloading) return;
+        if(nError) return;
+
+        dispatch(getNotices());
+    }, [dispatch, notices, nloading, nError]);
 
     return <Main reviews={reviews} notices={notices} />
 };

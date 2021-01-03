@@ -155,7 +155,7 @@ const LogIn = ({
           </form>
         </div>
         <Divider variant="middle" className={classes.divider} />
-        <KakaoBtn kakaoLogin={kakaoLogin} />
+        <KakaoBtn />
       </Container>
     </>
   );

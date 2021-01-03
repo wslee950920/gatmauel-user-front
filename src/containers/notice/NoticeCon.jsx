@@ -9,10 +9,11 @@ import Notice from '../../components/notice';
 
 const NoticeCon=()=>{
     const dispatch=useDispatch();
-    const {notices, loading}=useSelector(state=>(
+    const {notices, loading, error}=useSelector(state=>(
         {
             notices:state.notices.notices, 
-            loading:state.loading['notices/GET']
+            loading:state.loading['notices/GET'],
+            error:state.notices.error
         }
     ));
 
@@ -20,9 +21,10 @@ const NoticeCon=()=>{
 
     useEffect(()=>{
         if(notices||loading) return;
+        if(error) return;
 
         dispatch(getNotices());
-    }, [dispatch, notices, loading]);
+    }, [dispatch, notices, loading, error]);
 
     return <Notice notices={notices}/>
 }

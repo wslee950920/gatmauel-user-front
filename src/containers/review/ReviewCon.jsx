@@ -32,7 +32,8 @@ const ReviewCon = ({ history }) => {
     imgs,
     lastPage,
     gloading,
-    wloading
+    wloading,
+    error
   } = useSelector(state => (
     {
       reviews: state.reviews.reviews,
@@ -44,7 +45,8 @@ const ReviewCon = ({ history }) => {
       imgs:state.review.imgs,
       lastPage:state.reviews.lastPage,
       gloading:state.loading['reviews/GET'],
-      wloading:state.loading['write/WRITE_REVIEW']
+      wloading:state.loading['write/WRITE_REVIEW'],
+      error:state.reviews.error
     }
   ));
   const formData=new FormData();
@@ -168,16 +170,17 @@ const ReviewCon = ({ history }) => {
 
   useEffect(()=>{
     if(reviews||gloading) return;
+    if(error) return;
 
-      dispatch(getReviews());
-  }, [dispatch, reviews, gloading]);
+    dispatch(getReviews());
+  }, [dispatch, reviews, gloading, error]);
   useEffect(()=>{
     if(!gloading&&lastPage&&nextPage.current===lastPage){
       setHasNextPage(false);
     }
   }, [gloading, lastPage]);
   useEffect(()=>{
-    if(lastPage&&lastPage<=1){
+    if(lastPage!==null&&lastPage<=1){
       setHasNextPage(false);
     }
   }, [lastPage]);
