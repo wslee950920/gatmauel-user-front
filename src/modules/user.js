@@ -6,7 +6,6 @@ import createRequestSaga, {
 } from "../lib/createRequestSaga";
 import * as userAPI from "../lib/api/user";
 import { initAuth } from "../modules/auth";
-import { startLoading, finishLoading } from "../modules/loading";
 
 const TEMP_SET_USER = "user/TEMP_SET_USER";
 const [CHECK, CHECK_SUCCESS, CHECK_FAILURE] = createRequestActionTypes(
@@ -30,26 +29,8 @@ export const userUpdate = createAction(UPDATE_USER, (content) => content);
 
 const getInfoSaga = createRequestSaga(GET_INFO, userAPI.getInfo);
 const checkSaga = createRequestSaga(CHECK, authAPI.check);
+const userUpdateSaga = createRequestSaga(UPDATE_USER, userAPI.userUpdate);
 
-function* userUpdateSaga(action) {
-  yield put(startLoading(UPDATE_USER));
-
-  try {
-    const response = yield call(userAPI.userUpdate, action.payload);
-    yield put({
-      type: UPDATE_USER_SUCCESS,
-      payload: response,
-    });
-    yield put(getInfo());
-  } catch (e) {
-    yield put({
-      type: UPDATE_USER_FAILURE,
-      payload: e,
-      error: true,
-    });
-  }
-  yield put(finishLoading(UPDATE_USER));
-}
 function checkFailureSaga() {
   try {
     localStorage.removeItem("user");
@@ -109,10 +90,12 @@ export default handleActions(
     [LOGOUT]: (state) => ({
       ...state,
       user: null,
+      info: null,
     }),
-    [UPDATE_USER_SUCCESS]: (state, { payload: user }) => ({
+    [UPDATE_USER_SUCCESS]: (state, { payload: result }) => ({
       ...state,
-      user: user.data,
+      user: result.data.user,
+      info: result.data.info,
     }),
     [UPDATE_USER_FAILURE]: (state, { payload: error }) => ({
       ...state,

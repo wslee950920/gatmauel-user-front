@@ -60,7 +60,9 @@ const LoginCon=({history})=>{
         dispatch(login({email, password, checked}));
     }, [email, password, dispatch, checked]);
 
-    useEffect(()=>{        
+    useEffect(()=>{     
+        dispatch(check());
+           
         return()=>{
             dispatch(initAuth());
         }

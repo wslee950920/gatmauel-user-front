@@ -40,8 +40,10 @@ const ProfileCon=({history})=>{
     const onSubmit = useCallback((e) => {
         e.preventDefault();
 
+        if(error.nick||nickname===user.nick) return;
+
         dispatch(userUpdate({nickname}));
-    }, [nickname, dispatch]);
+    }, [nickname, dispatch, error, user]);
 
     useEffect(()=>{
         dispatch(check());
@@ -67,7 +69,7 @@ const ProfileCon=({history})=>{
             if (nickError) {
                 if(nickError.response&&
                     (nickError.response.status===400||
-                        nickError.response.sattus===409)){
+                        nickError.response.status===409)){
                     setError(prev=>({...prev, nick:true}));
                     dispatch(initAuth());
     
