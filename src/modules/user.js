@@ -68,7 +68,7 @@ export default handleActions(
     }),
     [TEMP_SET_USER]: (state, { payload: user }) => ({
       ...state,
-      user: user.data,
+      user,
     }),
     [CHECK_SUCCESS]: (state, { payload: user }) => ({
       ...state,

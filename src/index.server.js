@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
+import cookieParser from "cookie-parser";
+import jwt from "jsonwebtoken";
 import App from "./App";
 
 import express from "express";
@@ -16,14 +18,20 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import rootReducer, { rootSaga } from "./modules";
-import PreloadContext from "./lib/PreloadContext";
+import PreloadContext, { Preloader } from "./lib/PreloadContext";
 import createSagaMiddleware, { END } from "redux-saga";
+import { tempSetUser } from "./modules/user";
 
 const statsFile = path.resolve("./build/loadable-stats.json");
 
 const app = express();
+app.use(cookieParser(process.env.REACT_APP_COOKIE_SECRET));
 
 const serverRender = async (req, res, next) => {
+  const token = req.signedCookies.access_token;
+  const decoded = token
+    ? jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
+    : { id: 0, nick: "temp" };
   const sheets = new ServerStyleSheets();
   const context = {};
   const sagaMiddleware = createSagaMiddleware();
@@ -43,6 +51,7 @@ const serverRender = async (req, res, next) => {
         <StaticRouter location={req.url} context={context}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
+            <Preloader resolve={tempSetUser} decoded={decoded} />
             <App />
           </ThemeProvider>
         </StaticRouter>
