@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -17,12 +17,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Password = () => {
+const Password = ({ error, onChange, onSubmit }) => {
   const classes = useStyles();
-
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
-  }, []);
 
   return (
     <form className={classes.form} noValidate onSubmit={onSubmit}>
@@ -33,10 +29,12 @@ const Password = () => {
         fullWidth
         id="old"
         label="현재 PW"
-        name="old"
+        name="oldPass"
         size="small"
         InputProps={{ className: classes.fontMaple }}
         type="password"
+        onChange={onChange}
+        error={error.res}
       />
       <TextField
         variant="outlined"
@@ -45,10 +43,12 @@ const Password = () => {
         fullWidth
         id="new"
         label="새 PW"
-        name="new"
+        name="newPass"
         size="small"
         InputProps={{ className: classes.fontMaple }}
         type="password"
+        error={error.comp}
+        onChange={onChange}
       />
       <TextField
         variant="outlined"
@@ -61,6 +61,8 @@ const Password = () => {
         size="small"
         InputProps={{ className: classes.fontMaple }}
         type="password"
+        error={error.comp}
+        onChange={onChange}
       />
       <Button
         type="submit"
@@ -75,4 +77,4 @@ const Password = () => {
   );
 };
 
-export default Password;
+export default React.memo(Password);

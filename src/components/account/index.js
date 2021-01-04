@@ -33,7 +33,7 @@ const a11yProps = (index) => {
   };
 };
 
-const Account = ({ info }) => {
+const Account = ({ info, error, onChange, onSubmit }) => {
   const classes = useStyles();
   const [value, setValue] = useState(0);
 
@@ -59,7 +59,7 @@ const Account = ({ info }) => {
             <Tab label="탈퇴" {...a11yProps(1)} />
           </FullWidthTabs>
           <TabPanel value={value} index={0}>
-            <Password />
+            <Password error={error} onChange={onChange} onSubmit={onSubmit} />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Withdraw email={info && info.email} />
