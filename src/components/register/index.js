@@ -59,7 +59,7 @@ const Register = ({
               갯마을
             </Link>
           </Typography>
-          <form className={classes.form} noValidate onSubmit={onSubmit}>
+          <form className={classes.form} onSubmit={onSubmit}>
             <TextField
               variant="outlined"
               margin="normal"

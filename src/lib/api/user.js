@@ -6,3 +6,5 @@ export const userUpdate = ({ nickname: nick }) =>
   user.patch("/api/user/update", { nick });
 
 export const pwUpdate = (content) => user.patch("/api/user/password", content);
+
+export const userWithdraw = (content) => user.put("/api/user/remove", content);

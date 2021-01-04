@@ -25,6 +25,11 @@ const [
   UPDATE_PW_SUCCESS,
   UPDATE_PW_FAILURE,
 ] = createRequestActionTypes("pw/UPDATE");
+const [
+  WITHDRAW_USER,
+  WITHDRAW_USER_SUCCESS,
+  WITHDRAW_USER_FAILURE,
+] = createRequestActionTypes("user/WITHDRAW");
 
 export const tempSetUser = createAction(TEMP_SET_USER, (user) => user);
 export const check = createAction(CHECK);
@@ -32,11 +37,13 @@ export const logout = createAction(LOGOUT);
 export const getInfo = createAction(GET_INFO);
 export const userUpdate = createAction(UPDATE_USER, (content) => content);
 export const pwUpdate = createAction(UPDATE_PW, (content) => content);
+export const userWithdraw = createAction(WITHDRAW_USER, (content) => content);
 
 const getInfoSaga = createRequestSaga(GET_INFO, userAPI.getInfo);
 const checkSaga = createRequestSaga(CHECK, authAPI.check);
 const userUpdateSaga = createRequestSaga(UPDATE_USER, userAPI.userUpdate);
 const pwUpdateSaga = createRequestSaga(UPDATE_PW, userAPI.pwUpdate);
+const userWithdrawSaga = createRequestSaga(WITHDRAW_USER, userAPI.userWithdraw);
 
 function checkFailureSaga() {
   try {
@@ -63,6 +70,7 @@ export function* userSaga() {
   yield takeLatest(GET_INFO, getInfoSaga);
   yield takeLatest(UPDATE_USER, userUpdateSaga);
   yield takeLatest(UPDATE_PW, pwUpdateSaga);
+  yield takeLatest(WITHDRAW_USER, userWithdrawSaga);
 }
 
 const initialState = {
@@ -109,12 +117,21 @@ export default handleActions(
       ...state,
       error,
     }),
-    [UPDATE_PW_SUCCESS]: (state, { payload: result }) => ({
+    [UPDATE_PW_SUCCESS]: (state, { payload }) => ({
       ...state,
       user: null,
       info: null,
     }),
     [UPDATE_PW_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      error,
+    }),
+    [WITHDRAW_USER_SUCCESS]: (state, { payload }) => ({
+      ...state,
+      user: null,
+      info: null,
+    }),
+    [WITHDRAW_USER_FAILURE]: (state, { payload: error }) => ({
       ...state,
       error,
     }),

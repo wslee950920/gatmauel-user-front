@@ -4,18 +4,19 @@ import { withRouter } from 'react-router-dom';
 
 import Account from "../../components/account";
 
-import { getInfo, check, pwUpdate } from "../../modules/user";
+import { check, pwUpdate, userWithdraw } from "../../modules/user";
 
 const AccountCon=({history})=>{
-    const {user, info, error}=useSelector(({user})=>({
+    const {user, error}=useSelector(({user})=>({
         user:user.user,
-        info:user.info,
         error:user.error
     }));
     const [oldPassword, setOldPass]=useState('');
     const [newPassword, setNewPass]=useState('');
     const [confirm, setConfirm]=useState('');
+    const [email, setEmail]=useState('');
     const [pError, setPError]=useState({res:false, comp:false});
+    const [wError, setWError]=useState(false);
     const dispatch=useDispatch();
 
     const onChange=useCallback((e)=>{
@@ -27,8 +28,21 @@ const AccountCon=({history})=>{
             setNewPass(value);
         else if(name==='confirm')
             setConfirm(value);
+        else if(name==='email')
+            setEmail(value);
     }, []);
-    const onSubmit=useCallback((e)=>{
+    const wdSubmit=useCallback((e)=>{
+        e.preventDefault();
+
+        if(email===''){
+            setWError(true);
+
+            return;
+        } 
+
+        dispatch(userWithdraw({email}));
+    }, [email, dispatch]);
+    const pwSubmit=useCallback((e)=>{
         e.preventDefault();
 
         if((newPassword!==confirm)){
@@ -86,6 +100,9 @@ const AccountCon=({history})=>{
         else if(error&&error.response.status===409){
             alert('SNS 로그인은 비밀번호 변경을 할 수 없습니다.')
         }
+        else if(error&&error.response.status===403){
+            setWError(true);
+        }
     }, [error]);
     useEffect(()=>{
         dispatch(check());
@@ -96,14 +113,16 @@ const AccountCon=({history})=>{
             alert('로그인 해주세요.');
         }
     }, [user, history]);
-    useEffect(()=>{
-        if(info) return;
-        if(error) return;
-            
-        dispatch(getInfo());
-    }, [info, dispatch, error]);
 
-    return <Account info={info} error={pError} onChange={onChange} onSubmit={onSubmit}/>
+    return (
+        <Account     
+            pError={pError} 
+            onChange={onChange} 
+            pwSubmit={pwSubmit}
+            wdSubmit={wdSubmit}
+            wError={wError}
+        />
+    );
 };
 
 export default withRouter(AccountCon);

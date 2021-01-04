@@ -33,7 +33,7 @@ const a11yProps = (index) => {
   };
 };
 
-const Account = ({ info, error, onChange, onSubmit }) => {
+const Account = ({ pError, onChange, pwSubmit, wdSubmit, wError }) => {
   const classes = useStyles();
   const [value, setValue] = useState(0);
 
@@ -59,10 +59,10 @@ const Account = ({ info, error, onChange, onSubmit }) => {
             <Tab label="탈퇴" {...a11yProps(1)} />
           </FullWidthTabs>
           <TabPanel value={value} index={0}>
-            <Password error={error} onChange={onChange} onSubmit={onSubmit} />
+            <Password error={pError} onChange={onChange} onSubmit={pwSubmit} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Withdraw email={info && info.email} />
+            <Withdraw onChange={onChange} onSubmit={wdSubmit} error={wError} />
           </TabPanel>
         </div>
       </Container>

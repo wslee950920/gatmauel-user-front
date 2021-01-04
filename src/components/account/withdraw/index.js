@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Withdraw = ({ email }) => {
+const Withdraw = ({ onChange, onSubmit, error }) => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
@@ -34,7 +34,13 @@ const Withdraw = ({ email }) => {
       >
         회원 탈퇴
       </Button>
-      <Confirm open={open} handleClose={handleClose} email={email} />
+      <Confirm
+        open={open}
+        handleClose={handleClose}
+        onChange={onChange}
+        onSubmit={onSubmit}
+        error={error}
+      />
     </>
   );
 };

@@ -21,13 +21,12 @@ const Password = ({ error, onChange, onSubmit }) => {
   const classes = useStyles();
 
   return (
-    <form className={classes.form} noValidate onSubmit={onSubmit}>
+    <form className={classes.form} onSubmit={onSubmit}>
       <TextField
         variant="outlined"
         margin="normal"
         required
         fullWidth
-        id="old"
         label="현재 PW"
         name="oldPass"
         size="small"
@@ -41,7 +40,6 @@ const Password = ({ error, onChange, onSubmit }) => {
         margin="normal"
         required
         fullWidth
-        id="new"
         label="새 PW"
         name="newPass"
         size="small"
@@ -57,7 +55,6 @@ const Password = ({ error, onChange, onSubmit }) => {
         fullWidth
         name="confirm"
         label="PW 확인"
-        id="confirm"
         size="small"
         InputProps={{ className: classes.fontMaple }}
         type="password"

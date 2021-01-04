@@ -8,40 +8,41 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-const Confirm = ({ open, handleClose, email }) => {
+const Confirm = ({ open, handleClose, onChange, onSubmit, error }) => {
   return (
-    <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">알림!</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="form-dialog-title"
+    >
+      <DialogTitle id="form-dialog-title">알림!</DialogTitle>
         <DialogContent>
           <DialogContentText>
             같은 이메일, 별명으로 30일 동안 재가입이 불가합니다.
             <br />
             이메일을 입력해주세요.
           </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="email"
-            label="이메일"
-            type="email"
-            fullWidth
-          />
+          <form id='user-withdraw' onSubmit={onSubmit}>
+            <TextField
+              margin="dense"
+              label="이메일"
+              type="email"
+              fullWidth
+              name='email'
+              onChange={onChange}
+              error={error}
+            />
+          </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="inherit">
             취소
           </Button>
-          <Button onClick={handleClose} color="secondary">
+          <Button color="secondary" type="submit" form='user-withdraw'>
             확인
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
   );
 };
 

@@ -76,7 +76,7 @@ const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
           <div style={{ width: "100%" }} className={classes.divider}>
             <Divider variant="fullWidth" />
           </div>
-          <form className={classes.form} noValidate onSubmit={onSubmit}>
+          <form className={classes.form} onSubmit={onSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
