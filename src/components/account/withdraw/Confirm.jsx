@@ -7,8 +7,17 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  fontRobo:{
+    fontFamily:'Roboto'
+  }
+}));
 
 const Confirm = ({ open, handleClose, onChange, onSubmit, error }) => {
+  const classes = useStyles();
+
   return (
     <Dialog
       open={open}
@@ -31,6 +40,7 @@ const Confirm = ({ open, handleClose, onChange, onSubmit, error }) => {
               name='email'
               onChange={onChange}
               error={error}
+              inputProps={{className:classes.fontRobo}}
             />
           </form>
         </DialogContent>

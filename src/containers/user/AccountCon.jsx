@@ -17,8 +17,16 @@ const AccountCon=({history})=>{
     const [email, setEmail]=useState('');
     const [pError, setPError]=useState({res:false, comp:false});
     const [wError, setWError]=useState(false);
+    const [open, setOpen] = useState(false);
     const dispatch=useDispatch();
 
+    const handleClickOpen = useCallback(() => {
+        setOpen(true);
+      }, []);
+      const handleClose = useCallback(() => {
+        setOpen(false);
+        setWError(false);
+      }, []);
     const onChange=useCallback((e)=>{
         const {name, value}=e.target;
 
@@ -121,6 +129,9 @@ const AccountCon=({history})=>{
             pwSubmit={pwSubmit}
             wdSubmit={wdSubmit}
             wError={wError}
+            open={open}
+            handleClickOpen={handleClickOpen}
+            handleClose={handleClose}
         />
     );
 };

@@ -33,7 +33,16 @@ const a11yProps = (index) => {
   };
 };
 
-const Account = ({ pError, onChange, pwSubmit, wdSubmit, wError }) => {
+const Account = ({
+  pError,
+  onChange,
+  pwSubmit,
+  wdSubmit,
+  wError,
+  open,
+  handleClickOpen,
+  handleClose,
+}) => {
   const classes = useStyles();
   const [value, setValue] = useState(0);
 
@@ -62,7 +71,14 @@ const Account = ({ pError, onChange, pwSubmit, wdSubmit, wError }) => {
             <Password error={pError} onChange={onChange} onSubmit={pwSubmit} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Withdraw onChange={onChange} onSubmit={wdSubmit} error={wError} />
+            <Withdraw
+              onChange={onChange}
+              onSubmit={wdSubmit}
+              error={wError}
+              open={open}
+              handleClickOpen={handleClickOpen}
+              handleClose={handleClose}
+            />
           </TabPanel>
         </div>
       </Container>

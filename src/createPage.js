@@ -95,6 +95,11 @@ const createPage = (root, tags) => {
                 }, 1100)  
               });
             </script>
+            <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+            <script>
+              // SDK를 초기화 합니다. 사용할 앱의 JavaScript 키를 설정해 주세요.
+              Kakao.init('d2ce2c2db72e12590a8fb847d6407940');
+            </script>
           </body>
       </html>
       `;

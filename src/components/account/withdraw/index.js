@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,16 +12,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Withdraw = ({ onChange, onSubmit, error }) => {
-  const [open, setOpen] = useState(false);
+const Withdraw = ({
+  onChange,
+  onSubmit,
+  error,
+  open,
+  handleClickOpen,
+  handleClose,
+}) => {
   const classes = useStyles();
-
-  const handleClickOpen = useCallback(() => {
-    setOpen(true);
-  }, []);
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  }, []);
 
   return (
     <>
