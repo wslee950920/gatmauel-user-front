@@ -9,14 +9,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const KakaoBtn = () => {
+const KakaoBtn = ({onClick}) => {
   const classes = useStyles();
 
   return (
-    <Button fullWidth href='http://localhost:9090/api/auth/kakao' target="_blank" classes={{ text: classes.kakaoBtn }}>
+    <Button fullWidth classes={{ text: classes.kakaoBtn }} onClick={onClick}>
       <img src="/images/icons/kakao_login.png" alt="카카오로그인" style={{ width: "100%" }} />
     </Button>
   );
 };
 
-export default KakaoBtn;
+export default React.memo(KakaoBtn);

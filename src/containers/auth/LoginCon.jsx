@@ -7,6 +7,8 @@ import LogIn from '../../components/login';
 import {login, initAuth} from '../../modules/auth';
 import {check} from '../../modules/user';
 
+import {user as userAPI} from '../../lib/api/client';
+
 const LoginCon=({history})=>{
     const [email, setEmail]=useState('');
     const [password, setPassword]=useState('');
@@ -23,6 +25,37 @@ const LoginCon=({history})=>{
     }));
     const [error, setError]=useState(false);
 
+    const onClick=useCallback(()=>{
+        window.Kakao.Auth.login({
+            success:(res)=>{
+                window.Kakao.Auth.setAccessToken(res.access_token);
+                window.Kakao.API.request({
+                    url: '/v2/user/me',
+                    success:(info)=>{
+                        userAPI.post('/api/auth/kakao/v2', {
+                          id:info.id,
+                          email:info.kakao_account.email,
+                          nick:info.kakao_account.profile.nickname
+                        })
+                        .then(()=>{
+                          dispatch(check());
+                        })
+                        .catch((err)=>{
+                          if(err.response.status===409){
+                              alert('이미 가입된 이메일입니다.');
+                          }
+                        })
+                    },
+                    fail:()=>{
+                        alert('카카오 로그인에 오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                    }
+                });
+            },
+            fail:()=>{
+                alert('카카오 로그인에 오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+            }
+        });
+    }, [dispatch]);
     const onChange=useCallback((e)=>{
         const {name, value}=e.target;
 
@@ -60,9 +93,7 @@ const LoginCon=({history})=>{
         dispatch(login({email, password, checked}));
     }, [email, password, dispatch, checked]);
 
-    useEffect(()=>{     
-        dispatch(check());
-           
+    useEffect(()=>{          
         return()=>{
             dispatch(initAuth());
         }
@@ -107,6 +138,7 @@ const LoginCon=({history})=>{
                 checked={checked}
                 error={error}
                 empty={empty}
+                onClick={onClick}
             />
 };
 
