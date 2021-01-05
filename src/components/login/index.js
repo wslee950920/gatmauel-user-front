@@ -13,7 +13,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
-import NoSsr from "@material-ui/core/NoSsr";
 
 import KakaoBtn from "./KakaoBtn";
 
@@ -157,9 +156,7 @@ const LogIn = ({
           </form>
         </div>
         <Divider variant="middle" className={classes.divider} />
-        <NoSsr>
-          <KakaoBtn onClick={onClick} />
-        </NoSsr>
+        <KakaoBtn onClick={onClick} />
       </Container>
     </>
   );

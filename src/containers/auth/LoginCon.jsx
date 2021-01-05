@@ -107,6 +107,12 @@ const LoginCon=({history})=>{
 
                     return;
                 }
+                else if(authError.response&&authError.response.status===403){
+                    alert('SNS 로그인을 진행해주세요.');
+                    dispatch(initAuth());
+                    
+                    return;
+                }
 
                 throw authError;
             }
