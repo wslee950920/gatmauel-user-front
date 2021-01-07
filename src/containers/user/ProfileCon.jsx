@@ -56,6 +56,12 @@ const ProfileCon=({history})=>{
             alert('로그인 해주세요.');
         } else{
             setNickname(user.nick);
+
+            try{
+                localStorage.setItem('user', JSON.stringify(user));
+            } catch(e){
+                console.error('localStorage is not working');
+            }
         }
     }, [user, history]);
     useEffect(()=>{
