@@ -33,16 +33,20 @@ const LoginCon=({history})=>{
                     url: '/v2/user/me',
                     success:(info)=>{
                         userAPI.post('/api/auth/kakao/v2', {
-                          id:info.id,
+                          snsId:info.id,
                           email:info.kakao_account.email,
+                          eVerified:info.kakao_account.is_email_verified,
                           nick:info.kakao_account.profile.nickname
                         })
                         .then(()=>{
                           dispatch(check());
                         })
                         .catch((err)=>{
-                          if(err.response.status===409){
+                          if(err.response&&err.response.status===409){
                               alert('이미 가입된 이메일입니다.');
+                          }
+                          else if(err.response&&err.response.status===403){
+                              alert('이메일 인증을 해주세요.');
                           }
                         })
                     },
@@ -108,9 +112,15 @@ const LoginCon=({history})=>{
                     return;
                 }
                 else if(authError.response&&authError.response.status===403){
-                    alert('SNS 로그인을 진행해주세요.');
+                    alert('이메일 인증을 해주세요.');
                     dispatch(initAuth());
                     
+                    return;
+                }
+                else if(authError.response&&authError.response.status===406){
+                    alert('SNS 로그인을 해주세요.');
+                    dispatch(initAuth());
+
                     return;
                 }
 

@@ -103,7 +103,7 @@ const RegisterCon = ({ history }) => {
             }
             if (auth) {
                 history.push('/login');
-                alert('로그인 해주세요.');
+                alert('이메일 인증을 해주세요.');
                 dispatch(initAuth());
             }
         } catch(e){
