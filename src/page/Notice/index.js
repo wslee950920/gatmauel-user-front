@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import HeaderCon from "../../containers/HeaderCon";
+import HeaderCon from "../../containers/main/HeaderCon";
 import NoticeCon from "../../containers/notice/NoticeCon";
 import SearchBar from "../../components/common/SearchBar";
 import ReadNoticeCon from "../../containers/notice/ReadNoticeCon";

@@ -48,6 +48,9 @@ const LoginCon=({history})=>{
                           else if(err.response&&err.response.status===403){
                               alert('이메일 인증을 해주세요.');
                           }
+                          else if(err.response&&err.response.status===406){
+                              dispatch(check());
+                          }
                         })
                     },
                     fail:()=>{
@@ -118,6 +121,11 @@ const LoginCon=({history})=>{
                     return;
                 }
                 else if(authError.response&&authError.response.status===406){
+                    dispatch(check());
+
+                    return;
+                }
+                else if(authError.response&&authError.response.status===409){
                     alert('SNS 로그인을 해주세요.');
                     dispatch(initAuth());
 

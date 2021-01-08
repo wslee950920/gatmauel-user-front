@@ -3,7 +3,7 @@ import React from "react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 
-import HeaderCon from "../../containers/HeaderCon";
+import HeaderCon from "../../containers/main/HeaderCon";
 import ReviewCon from "../../containers/review/ReviewCon";
 import SearchBar from "../../components/common/SearchBar";
 

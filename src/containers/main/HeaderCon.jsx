@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
-import Header from "../components/header";
+import Header from "../../components/header";
 
 const HeaderCon=({main})=>{
     const {user}=useSelector(state=>(

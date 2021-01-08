@@ -1,7 +1,7 @@
 import React from "react";
 
 import LoginCon from "../../containers/auth/LoginCon";
-import HeaderCon from "../../containers/HeaderCon";
+import HeaderCon from "../../containers/main/HeaderCon";
 import Copyright from "../../components/footer/Copyright";
 
 const LoginPage = () => {

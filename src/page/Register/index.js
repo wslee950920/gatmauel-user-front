@@ -1,6 +1,6 @@
 import React from "react";
 
-import HeaderCon from "../../containers/HeaderCon";
+import HeaderCon from "../../containers/main/HeaderCon";
 import RegisterCon from "../../containers/auth/RegisterCon";
 import Copyright from "../../components/footer/Copyright";
 

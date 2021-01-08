@@ -1,7 +1,7 @@
 import React from "react";
 
-import HeaderCon from "../../containers/HeaderCon";
-import MainCon from "../../containers/MainCon";
+import HeaderCon from "../../containers/main/HeaderCon";
+import MainCon from "../../containers/main/MainCon";
 import Footer from "../../components/footer";
 
 const MainPage = () => {

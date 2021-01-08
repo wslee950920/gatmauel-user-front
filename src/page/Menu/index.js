@@ -1,14 +1,14 @@
 import React from "react";
 
-import HeaderCon from "../../containers/HeaderCon";
-import Menu from "../../components/menu";
+import HeaderCon from "../../containers/main/HeaderCon";
+import MenuCon from "../../containers/menu/MenuCon";
 import MenuFooter from "../../components/footer/MenuFooter";
 
 const MenuPage = () => {
   return (
     <>
       <HeaderCon main />
-      <Menu />
+      <MenuCon />
       <MenuFooter />
     </>
   );
