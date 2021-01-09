@@ -9,7 +9,7 @@ import GridListTileBar from "@material-ui/core/GridListTileBar";
 import Container from "@material-ui/core/Container";
 import { MDBView } from "mdbreact";
 
-import tileData from "./TileData";
+import Circular from "../../common/Circular";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
     background:
       "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
   },
-
   background: {
     backgroundColor: "white",
     border: "solid #dcdcdc",
@@ -44,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CarouselMenu = ({ handleOpen }) => {
+const CarouselMenu = ({ handleOpen, food }) => {
   const classes = useStyles();
   const theme = useTheme();
   const small = useMediaQuery(theme.breakpoints.up("sm"));
@@ -62,38 +61,58 @@ const CarouselMenu = ({ handleOpen }) => {
   return (
     <div className={classes.root}>
       <Container className={classes.background} ref={conRef}>
-        <GridList
-          className={classes.gridList}
-          cols={parseFloat(clsx(medium ? ratio : small ? 2.25 : 1.25))}
-          cellHeight="auto"
-          spacing={8}
-        >
-          {tileData.map((tile) => (
-            <GridListTile
-              key={tile.name}
-              style={{ margin: theme.spacing(1, 0) }}
-            >
-              <MDBView hover zoom>
-                <img
-                  src={tile.img}
-                  alt={tile.name}
-                  onClick={handleOpen}
-                  className="img-fluid"
-                  style={{
-                    cursor: "pointer",
-                  }}
-                />
-                <GridListTileBar
-                  title={tile.name}
-                  classes={{
-                    root: classes.titleBar,
-                    title: classes.title,
-                  }}
-                />
-              </MDBView>
-            </GridListTile>
-          ))}
-        </GridList>
+        {food ? (
+          <GridList
+            className={classes.gridList}
+            cols={parseFloat(clsx(medium ? ratio : small ? 2.25 : 1.25))}
+            cellHeight="auto"
+            spacing={8}
+          >
+            {food.map((data, index) => (
+              <GridListTile
+                key={data.name}
+                style={{ margin: theme.spacing(1, 0) }}
+              >
+                <MDBView hover zoom>
+                  <img
+                    src={process.env.REACT_APP_CF_DOMAIN_NAME + data.img}
+                    alt={data.name}
+                    onClick={() => handleOpen(index)}
+                    className="img-fluid"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  />
+                  <GridListTileBar
+                    title={data.name}
+                    classes={{
+                      root: classes.titleBar,
+                      title: classes.title,
+                    }}
+                  />
+                </MDBView>
+              </GridListTile>
+            ))}
+          </GridList>
+        ) : (
+          <Circular
+            container={{
+              width: "100%",
+              paddingTop: `${
+                100 / parseFloat(clsx(medium ? ratio : small ? 2.25 : 1.25))
+              }%`,
+              position: "relative",
+            }}
+            inside={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              margin: "auto",
+            }}
+          />
+        )}
       </Container>
     </div>
   );

@@ -8,11 +8,13 @@ import CarouselMenu from "./CarouselMenu";
 import CardDialog from "../common/CardDialog";
 import NoticeList from "./NoticeList";
 
-const Main = ({ reviews, notices }) => {
+const Main = ({ reviews, notices, food }) => {
   const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
 
-  const handleOpen = useCallback(() => {
+  const handleOpen = useCallback((i) => {
     setOpen(true);
+    setIndex(i);
   }, []);
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -31,10 +33,12 @@ const Main = ({ reviews, notices }) => {
           <ReviewList reviews={reviews} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <CarouselMenu handleOpen={handleOpen} />
+          <CarouselMenu handleOpen={handleOpen} food={food} />
         </Grid>
       </Grid>
-      <CardDialog open={open} handleClose={handleClose} />
+      {food && (
+        <CardDialog open={open} handleClose={handleClose} food={food[index]} />
+      )}
     </>
   );
 };

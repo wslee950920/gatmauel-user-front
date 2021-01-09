@@ -9,7 +9,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Grow ref={ref} {...props} />;
 });
 
-const CardDialog = ({ open, handleClose }) => {
+const CardDialog = ({ open, handleClose, food }) => {
   return (
     <div>
       <Dialog
@@ -24,7 +24,7 @@ const CardDialog = ({ open, handleClose }) => {
           style: { transformOrigin: "bottom right" },
         }}
       >
-        <MenuCard handleClose={handleClose} />
+        <MenuCard handleClose={handleClose} food={food} />
       </Dialog>
     </div>
   );

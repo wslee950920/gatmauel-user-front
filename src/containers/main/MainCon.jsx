@@ -58,7 +58,7 @@ const MainContainer=()=>{
         dispatch(getFood());
     }, [dispatch, food, floading, fError]);
 
-    return <Main reviews={reviews} notices={notices} />
+    return <Main reviews={reviews} notices={notices} food={food}/>
 };
 
 export default MainContainer;

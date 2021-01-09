@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -14,10 +14,20 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
 
+import Circular from "../Circular";
+
 const useStyles = makeStyles((theme) => ({
   media: {
-    height: 0,
-    paddingTop: "100%", // 1:1
+    width: "100%",
+    height: "auto",
+  },
+  cart: {
+    marginLeft: "auto",
+  },
+  textField: {
+    width: "1.5rem",
+  },
+  card: {
     width: 250,
 
     [theme.breakpoints.up("xs")]: {
@@ -27,18 +37,24 @@ const useStyles = makeStyles((theme) => ({
       width: 400,
     },
   },
-  cart: {
-    marginLeft: "auto",
+  header: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "1.2rem",
+    },
   },
-  textField: {
-    width: "1.5rem",
+  content: {
+    marginBottom: theme.spacing(8),
   },
 }));
 
-const MenuCard = ({ handleClose }) => {
+const MenuCard = ({ handleClose, food }) => {
   const classes = useStyles();
   const [num, setNum] = useState(1);
+  const [loading, setLoading] = useState(true);
 
+  const onLoad = useCallback(() => {
+    setLoading(false);
+  }, []);
   const addOnClick = useCallback(() => {
     setNum((prevNum) => {
       if (prevNum < 10 && prevNum >= 1) return prevNum + 1;
@@ -59,55 +75,98 @@ const MenuCard = ({ handleClose }) => {
 
     setNum(newValue);
   }, []);
-
   const checkRange = useCallback((n) => {
     if (n > 10 || n < 1) return true;
     else return false;
   }, []);
 
+  const insertComma = useMemo(() => {
+    const result = String(food.price).split("");
+    result.push("원");
+    result.splice(-4, 0, ",");
+
+    return result;
+  }, [food.price]);
+
   return (
-    <Card>
+    <Card className={classes.card}>
       <CardHeader
         action={
           <IconButton aria-label="close" onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         }
-        title="칼국수"
-        subheader="7000원"
+        title={food.name}
+        subheader={insertComma}
+        titleTypographyProps={{ className: classes.header }}
       />
-      <CardMedia className={classes.media} image="images/menu/1.jpg" />
-      <CardContent>
+      <CardMedia
+        component={() => {
+          return (
+            <>
+              <img
+                style={{
+                  ...(loading ? { display: "none" } : { display: "block" }),
+                }}
+                alt={food.name}
+                src={process.env.REACT_APP_CF_DOMAIN_NAME + food.img}
+                onLoad={onLoad}
+                className={classes.media}
+              />
+              {loading && (
+                <Circular
+                  container={{
+                    width: "100%",
+                    paddingTop: "100%",
+                    position: "relative",
+                  }}
+                  inside={{
+                    position: "absolute",
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    margin: "auto",
+                  }}
+                />
+              )}
+            </>
+          );
+        }}
+      />
+      <CardContent {...(!food.deli && { className: classes.content })}>
         <Typography variant="body2" color="textSecondary" component="p">
-          칼국수 + 겉절이 + 고추다데기
+          {food.compo}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="remove" onClick={removeOnClick}>
-          <RemoveIcon />
-        </IconButton>
-        <TextField
-          size="small"
-          className={classes.textField}
-          inputProps={{
-            maxLength: 2,
-            style: { textAlign: "center", fontFamily: "Roboto" },
-          }}
-          value={num}
-          onChange={onChange}
-          error={checkRange(num)}
-        />
-        <IconButton aria-label="add" onClick={addOnClick}>
-          <AddIcon />
-        </IconButton>
-        <IconButton
-          className={classes.cart}
-          aria-label="cart"
-          onClick={handleClose}
-        >
-          <AddShoppingCartIcon />
-        </IconButton>
-      </CardActions>
+      {food.deli && (
+        <CardActions disableSpacing>
+          <IconButton aria-label="remove" onClick={removeOnClick}>
+            <RemoveIcon />
+          </IconButton>
+          <TextField
+            size="small"
+            className={classes.textField}
+            inputProps={{
+              maxLength: 2,
+              style: { textAlign: "center", fontFamily: "Roboto" },
+            }}
+            value={num}
+            onChange={onChange}
+            error={checkRange(num)}
+          />
+          <IconButton aria-label="add" onClick={addOnClick}>
+            <AddIcon />
+          </IconButton>
+          <IconButton
+            className={classes.cart}
+            aria-label="cart"
+            onClick={handleClose}
+          >
+            <AddShoppingCartIcon />
+          </IconButton>
+        </CardActions>
+      )}
     </Card>
   );
 };
