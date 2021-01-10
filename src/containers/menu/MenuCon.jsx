@@ -6,6 +6,7 @@ import {usePreloader} from '../../lib/PreloadContext';
 import {getCategory} from '../../modules/food';
 
 import Menu from '../../components/menu';
+import Circular from '../../components/common/Circular';
 
 const MenuCon=()=>{
     const {category, loading, error}=useSelector(state=>({
@@ -25,7 +26,16 @@ const MenuCon=()=>{
     }, [dispatch, category, loading, error]);
 
     return(
-        <Menu category={category}/>
+        category?
+            <Menu categories={category}/>:
+            <Circular 
+                container={{
+                    height: '100vh',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+              }}
+            />
     );
 }
 

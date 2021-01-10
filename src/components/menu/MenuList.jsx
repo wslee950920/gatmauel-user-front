@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
@@ -8,8 +8,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import { MDBView } from "mdbreact";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
-
-import tileData from "./TileData";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,27 +29,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MenuList =({handleOpen, categories, listRefs})=> {
+const MenuList =({handleOpen, categories, listRefs, setValue, setLoading})=> {
   const classes = useStyles();
   const theme=useTheme();
+
+  const onLoad=useCallback(()=>{
+    setLoading(false);
+  }, [setLoading]);
 
   return (
     <div className={classes.background}>
       <CssBaseline />
       <Container maxWidth='lg' disableGutters >
-      {categories.map((category, index)=>(
+      {categories.map((category, cIndex)=>(
         <div 
           className={classes.root} 
-          key={category} 
-          ref={listRefs.current[index]}
+          key={category.category+'_list'} 
+          ref={listRefs.current[cIndex]}
         >
           <GridList cellHeight={'100vw'/3} cols={3}>
             <GridListTile key="Subheader" cols={3} style={{ height: 'auto' }}>
               <ListSubheader component="div">
-                {category}
+                {category.category}
               </ListSubheader>
             </GridListTile>
-            {tileData.map((tile) => (
+            {category.food.map((tile, fIndex) => (
               <GridListTile 
                 key={tile.name} 
                 style={{
@@ -61,13 +63,17 @@ const MenuList =({handleOpen, categories, listRefs})=> {
               >
                 <MDBView hover zoom>
                   <img 
-                    src={tile.img} 
+                    src={process.env.REACT_APP_CF_DOMAIN_NAME+tile.img} 
                     alt={tile.name} 
-                    onClick={handleOpen}
+                    onClick={()=>{
+                      handleOpen(fIndex);
+                      setValue(cIndex);
+                    }}
                     className="img-fluid"
                     style={{
                       cursor: "pointer",
                     }}
+                    onLoad={onLoad}
                   />
                 </MDBView>
                 <GridListTileBar

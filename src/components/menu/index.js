@@ -4,75 +4,149 @@ import MenuBar from "./MenuBar";
 import MenuList from "./MenuList";
 import CardDialog from "../common/CardDialog";
 
-const Menu = () => {
+const Menu = ({ categories }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0);
-  const categories = useRef([
-    "칼국수",
-    "보쌈",
-    "특별메뉴",
-    "만두",
-    "계절메뉴",
-    "추가메뉴",
-  ]);
-  const [yOffset, setYoffset] = useState(0);
-  const listRefs = useRef(categories.current.map(() => React.createRef()));
-  const cb = useRef(null);
+  const [yOffset, setYoffset] = useState(null);
+  const [index, setIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const handleOpen = useCallback(() => {
+  const listRefs = useRef(categories.map(() => React.createRef()));
+  const ticking = useRef(false);
+  const jump = useRef(false);
+
+  const handleOpen = useCallback((i) => {
     setOpen(true);
+    setIndex(i);
   }, []);
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
   const handleClick = useCallback(
-    (event, newValue) => {
+    (newValue) => {
+      jump.current = true;
       setValue(newValue);
-      const y =
-        listRefs.current[newValue].current.getBoundingClientRect().top +
-        window.pageYOffset -
-        yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
+
+      window.scrollTo({
+        top: yOffset[newValue].top - yOffset[0].top,
+        behavior: "smooth",
+      });
     },
     [yOffset]
   );
+  const scrollCallback = useCallback(() => {
+    if (!ticking.current) {
+      window.requestAnimationFrame(() => {
+        const y = window.scrollY + yOffset[0].top;
+        if (
+          y >= Math.round(yOffset[0].top) &&
+          y < Math.round(yOffset[0].bottom)
+        ) {
+          if (!jump.current) {
+            setValue(0);
+          }
+          if (y === Math.round(yOffset[0].top)) jump.current = false;
+        } else if (
+          y >= Math.round(yOffset[1].top) &&
+          y < Math.round(yOffset[1].bottom)
+        ) {
+          if (!jump.current) {
+            setValue(1);
+          }
+          if (y === Math.round(yOffset[1].top)) jump.current = false;
+        } else if (
+          y >= Math.round(yOffset[2].top) &&
+          y < Math.round(yOffset[2].bottom)
+        ) {
+          if (!jump.current) {
+            setValue(2);
+          }
+          if (y === Math.round(yOffset[2].top)) jump.current = false;
+        } else if (
+          y >= Math.round(yOffset[3].top) &&
+          y < Math.round(yOffset[3].bottom)
+        ) {
+          if (!jump.current) {
+            setValue(3);
+          }
+          if (y === Math.round(yOffset[3].top)) jump.current = false;
+        } else if (
+          y >= Math.round(yOffset[4].top) &&
+          y < Math.round(yOffset[4].bottom)
+        ) {
+          if (!jump.current) {
+            setValue(4);
+          }
+          if (y === Math.round(yOffset[4].top)) jump.current = false;
+        } else if (
+          y >= Math.round(yOffset[5].top) &&
+          y < Math.round(yOffset[5].bottom)
+        ) {
+          if (!jump.current) {
+            setValue(5);
+          }
+          if (y === Math.round(yOffset[5].top)) jump.current = false;
+        } else if (
+          y >= Math.round(yOffset[6].top) &&
+          y < Math.round(yOffset[6].bottom)
+        ) {
+          if (!jump.current) {
+            setValue(6);
+          }
+          if (y === Math.round(yOffset[6].top)) jump.current = false;
+        }
+
+        ticking.current = false;
+      });
+
+      ticking.current = true;
+    }
+  }, [yOffset]);
 
   useEffect(() => {
-    setYoffset(listRefs.current[0].current.getBoundingClientRect().top);
-  }, []);
+    if (!loading) {
+      window.scrollTo(0, 0);
+
+      setYoffset(
+        listRefs.current.map((compo) => ({
+          top: compo.current.getBoundingClientRect().top,
+          bottom: compo.current.getBoundingClientRect().bottom,
+        }))
+      );
+    }
+  }, [loading]);
   useEffect(() => {
-    window.addEventListener(
-      "scroll",
-      (cb.current = () => {
-        listRefs.current.forEach((item, index) => {
-          if (
-            item.current.getBoundingClientRect().top <= yOffset * 1.2 &&
-            item.current.getBoundingClientRect().top >= 0
-          )
-            setValue(index);
-        });
-      })
-    );
+    if (yOffset) {
+      window.addEventListener("scroll", scrollCallback);
+    }
 
     return () => {
-      window.removeEventListener("scroll", cb.current);
+      window.removeEventListener("scroll", scrollCallback);
     };
-  }, [yOffset]);
+  }, [yOffset, scrollCallback]);
 
   return (
     <>
       <MenuBar
-        categories={categories.current}
+        categories={categories}
         handleClick={handleClick}
         value={value}
       />
       <MenuList
         handleOpen={handleOpen}
-        categories={categories.current}
+        categories={categories}
         value={value}
         listRefs={listRefs}
+        setValue={setValue}
+        setLoading={setLoading}
       />
-      <CardDialog open={open} handleClose={handleClose} />
+      {categories[value].food[index] && (
+        <CardDialog
+          open={open}
+          handleClose={handleClose}
+          food={categories[value].food[index]}
+        />
+      )}
     </>
   );
 };

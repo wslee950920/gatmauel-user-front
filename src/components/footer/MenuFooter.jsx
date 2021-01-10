@@ -1,8 +1,10 @@
 import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
+
 import Box from '@material-ui/core/Box';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles=makeStyles((theme)=>({
     title:{
@@ -18,10 +20,14 @@ const useStyles=makeStyles((theme)=>({
 }))
 
 const MenuFooter=()=>{
+    const theme=useTheme();
+    const md=useMediaQuery(theme.breakpoints.up('md'));
+    const sm=useMediaQuery(theme.breakpoints.up('sm'));
+    const xs=useMediaQuery(theme.breakpoints.up('xs'));
     const classes=useStyles();
 
     return(
-        <Box py={2} px={1} pb={20}>
+        <Box py={2} px={1} pb={md?70:sm?88:xs?50:48}>
             <Typography variant="subtitle2" className={classes.title} >
                 원산지 표기
             </Typography>

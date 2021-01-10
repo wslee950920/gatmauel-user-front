@@ -52,10 +52,10 @@ const MenuBar=({categories, handleClick, value})=> {
               >
                 {categories.map((category, index)=>(
                   <Tab 
-                    label={category} 
+                    label={category.category} 
                     {...a11yProps(index)} 
-                    key={index} 
-                    onClick={(e)=>handleClick(e, index)}
+                    key={category.category+'_bar'} 
+                    onClick={()=>handleClick(index)}
                   />
                 ))}
               </Tabs>
