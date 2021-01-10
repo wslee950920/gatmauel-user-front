@@ -9,15 +9,25 @@ const Menu = ({ categories }) => {
   const [value, setValue] = useState(0);
   const [yOffset, setYoffset] = useState(null);
   const [index, setIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loadings, setLoadings] = useState(
+    categories.map((category) => category.food.map(() => true))
+  );
 
   const listRefs = useRef(categories.map(() => React.createRef()));
   const ticking = useRef(false);
   const jump = useRef(false);
 
+  const onLoad = useCallback((r, c) => {
+    setLoadings((prev) => {
+      let copy = [...prev.map((row) => [...row])];
+      copy[r][c] = false;
+
+      return copy;
+    });
+  }, []);
   const handleOpen = useCallback((i) => {
-    setOpen(true);
     setIndex(i);
+    setOpen(true);
   }, []);
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -39,61 +49,68 @@ const Menu = ({ categories }) => {
       window.requestAnimationFrame(() => {
         const y = window.scrollY + yOffset[0].top;
         if (
-          y >= Math.round(yOffset[0].top) &&
-          y < Math.round(yOffset[0].bottom)
+          Math.round(y) >= Math.round(yOffset[0].top) &&
+          Math.round(y) < Math.round(yOffset[0].bottom)
         ) {
           if (!jump.current) {
             setValue(0);
           }
-          if (y === Math.round(yOffset[0].top)) jump.current = false;
+          if (Math.round(y) === Math.round(yOffset[0].top))
+            jump.current = false;
         } else if (
-          y >= Math.round(yOffset[1].top) &&
-          y < Math.round(yOffset[1].bottom)
+          Math.round(y) >= Math.round(yOffset[1].top) &&
+          Math.round(y) < Math.round(yOffset[1].bottom)
         ) {
           if (!jump.current) {
             setValue(1);
           }
-          if (y === Math.round(yOffset[1].top)) jump.current = false;
+          if (Math.round(y) === Math.round(yOffset[1].top))
+            jump.current = false;
         } else if (
-          y >= Math.round(yOffset[2].top) &&
-          y < Math.round(yOffset[2].bottom)
+          Math.round(y) >= Math.round(yOffset[2].top) &&
+          Math.round(y) < Math.round(yOffset[2].bottom)
         ) {
           if (!jump.current) {
             setValue(2);
           }
-          if (y === Math.round(yOffset[2].top)) jump.current = false;
+          if (Math.round(Math.round(y)) === Math.round(yOffset[2].top))
+            jump.current = false;
         } else if (
-          y >= Math.round(yOffset[3].top) &&
-          y < Math.round(yOffset[3].bottom)
+          Math.round(y) >= Math.round(yOffset[3].top) &&
+          Math.round(y) < Math.round(yOffset[3].bottom)
         ) {
           if (!jump.current) {
             setValue(3);
           }
-          if (y === Math.round(yOffset[3].top)) jump.current = false;
+          if (Math.round(y) === Math.round(yOffset[3].top))
+            jump.current = false;
         } else if (
-          y >= Math.round(yOffset[4].top) &&
-          y < Math.round(yOffset[4].bottom)
+          Math.round(y) >= Math.round(yOffset[4].top) &&
+          Math.round(y) < Math.round(yOffset[4].bottom)
         ) {
           if (!jump.current) {
             setValue(4);
           }
-          if (y === Math.round(yOffset[4].top)) jump.current = false;
+          if (Math.round(y) === Math.round(yOffset[4].top))
+            jump.current = false;
         } else if (
-          y >= Math.round(yOffset[5].top) &&
-          y < Math.round(yOffset[5].bottom)
+          Math.round(y) >= Math.round(yOffset[5].top) &&
+          Math.round(y) < Math.round(yOffset[5].bottom)
         ) {
           if (!jump.current) {
             setValue(5);
           }
-          if (y === Math.round(yOffset[5].top)) jump.current = false;
+          if (Math.round(y) === Math.round(yOffset[5].top))
+            jump.current = false;
         } else if (
-          y >= Math.round(yOffset[6].top) &&
-          y < Math.round(yOffset[6].bottom)
+          Math.round(y) >= Math.round(yOffset[6].top) &&
+          Math.round(y) < Math.round(yOffset[6].bottom)
         ) {
           if (!jump.current) {
             setValue(6);
           }
-          if (y === Math.round(yOffset[6].top)) jump.current = false;
+          if (Math.round(y) === Math.round(yOffset[6].top))
+            jump.current = false;
         }
 
         ticking.current = false;
@@ -104,17 +121,15 @@ const Menu = ({ categories }) => {
   }, [yOffset]);
 
   useEffect(() => {
-    if (!loading) {
-      window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
 
-      setYoffset(
-        listRefs.current.map((compo) => ({
-          top: compo.current.getBoundingClientRect().top,
-          bottom: compo.current.getBoundingClientRect().bottom,
-        }))
-      );
-    }
-  }, [loading]);
+    setYoffset(
+      listRefs.current.map((compo) => ({
+        top: compo.current.getBoundingClientRect().top,
+        bottom: compo.current.getBoundingClientRect().bottom,
+      }))
+    );
+  }, []);
   useEffect(() => {
     if (yOffset) {
       window.addEventListener("scroll", scrollCallback);
@@ -137,8 +152,9 @@ const Menu = ({ categories }) => {
         categories={categories}
         value={value}
         listRefs={listRefs}
+        onLoad={onLoad}
+        loadings={loadings}
         setValue={setValue}
-        setLoading={setLoading}
       />
       {categories[value].food[index] && (
         <CardDialog

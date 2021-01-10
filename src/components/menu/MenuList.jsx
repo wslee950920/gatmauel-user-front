@@ -1,4 +1,5 @@
-import React, {useCallback} from 'react';
+import React from 'react';
+import clsx from 'clsx';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
@@ -8,6 +9,8 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import { MDBView } from "mdbreact";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
+
+import Circular from '../common/Circular';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,13 +32,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MenuList =({handleOpen, categories, listRefs, setValue, setLoading})=> {
+const MenuList =({handleOpen, categories, listRefs, setValue, loadings, onLoad})=> {
   const classes = useStyles();
   const theme=useTheme();
-
-  const onLoad=useCallback(()=>{
-    setLoading(false);
-  }, [setLoading]);
 
   return (
     <div className={classes.background}>
@@ -45,10 +44,14 @@ const MenuList =({handleOpen, categories, listRefs, setValue, setLoading})=> {
         <div 
           className={classes.root} 
           key={category.category+'_list'} 
-          ref={listRefs.current[cIndex]}
         >
-          <GridList cellHeight={'100vw'/3} cols={3}>
-            <GridListTile key="Subheader" cols={3} style={{ height: 'auto' }}>
+          <GridList cellHeight={'100%'/3} cols={3} style={{width:'100%'}}>
+            <GridListTile 
+              key="Subheader" 
+              cols={3} 
+              style={{ height: 'auto' }}
+              ref={listRefs.current[cIndex]}
+            >
               <ListSubheader component="div">
                 {category.category}
               </ListSubheader>
@@ -58,9 +61,26 @@ const MenuList =({handleOpen, categories, listRefs, setValue, setLoading})=> {
                 key={tile.name} 
                 style={{
                   padding:theme.spacing(0.1), 
-                  height:'auto'
+                  height:'auto',
                 }}
               >
+                {loadings[cIndex][fIndex]&&(
+                  <Circular
+                    container={{
+                      width: "100%",
+                      paddingTop: "100%",
+                      position: "relative",
+                    }}
+                    inside={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      margin: "auto",
+                    }}
+                  />
+                )}
                 <MDBView hover zoom>
                   <img 
                     src={process.env.REACT_APP_CF_DOMAIN_NAME+tile.img} 
@@ -69,13 +89,15 @@ const MenuList =({handleOpen, categories, listRefs, setValue, setLoading})=> {
                       handleOpen(fIndex);
                       setValue(cIndex);
                     }}
-                    className="img-fluid"
+                    className={clsx(loadings[cIndex][fIndex]?'d-none':"img-fluid")}
                     style={{
                       cursor: "pointer",
                     }}
-                    onLoad={onLoad}
+                    onLoad={()=>{
+                      onLoad(cIndex, fIndex);
+                    }}
                   />
-                </MDBView>
+                </MDBView>  
                 <GridListTileBar
                   title={tile.name}
                   classes={{title:classes.title, root:classes.titleBar}}
