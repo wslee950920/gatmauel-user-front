@@ -72,12 +72,12 @@ const CarouselMenu = ({ handleOpen, food }) => {
               <GridListTile
                 key={data.name}
                 style={{ margin: theme.spacing(1, 0) }}
+                onClick={() => handleOpen(index)}
               >
                 <MDBView hover zoom>
                   <img
                     src={process.env.REACT_APP_CF_DOMAIN_NAME + data.img}
                     alt={data.name}
-                    onClick={() => handleOpen(index)}
                     className="img-fluid"
                     style={{
                       cursor: "pointer",
