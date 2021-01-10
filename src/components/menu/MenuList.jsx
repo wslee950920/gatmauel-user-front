@@ -63,6 +63,10 @@ const MenuList =({handleOpen, categories, listRefs, setValue, loadings, onLoad})
                   padding:theme.spacing(0.1), 
                   height:'auto',
                 }}
+                onClick={()=>{
+                  handleOpen(fIndex);
+                  setValue(cIndex);
+                }}
               >
                 {loadings[cIndex][fIndex]&&(
                   <Circular
@@ -85,10 +89,6 @@ const MenuList =({handleOpen, categories, listRefs, setValue, loadings, onLoad})
                   <img 
                     src={process.env.REACT_APP_CF_DOMAIN_NAME+tile.img} 
                     alt={tile.name} 
-                    onClick={()=>{
-                      handleOpen(fIndex);
-                      setValue(cIndex);
-                    }}
                     className={clsx(loadings[cIndex][fIndex]?'d-none':"img-fluid")}
                     style={{
                       cursor: "pointer",
