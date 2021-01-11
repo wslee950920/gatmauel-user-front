@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
   titleBar: {
     background:
       "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-    cursor: "pointer",
   },
   background: {
     backgroundColor: "white",
@@ -42,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     display: "flex",
   },
+  tile: { margin: theme.spacing(1, 0), cursor: "pointer" },
 }));
 
 const CarouselMenu = ({ handleOpen, food }) => {
@@ -72,7 +72,7 @@ const CarouselMenu = ({ handleOpen, food }) => {
             {food.map((data, index) => (
               <GridListTile
                 key={data.name}
-                style={{ margin: theme.spacing(1, 0) }}
+                className={classes.tile}
                 onClick={() => handleOpen(index)}
               >
                 <MDBView hover zoom>

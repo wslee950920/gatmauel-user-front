@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -26,16 +26,19 @@ const useStyles = makeStyles((theme) => ({
   titleBar: {
     background:
       "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-    cursor:'pointer'
   },
   background:{
     backgroundColor:'white'
+  },
+  tile:{
+    padding:theme.spacing(0.1), 
+    height:'auto',
+    cursor:'pointer'
   }
 }));
 
 const MenuList =({handleOpen, categories, listRefs, setValue, loadings, onLoad})=> {
   const classes = useStyles();
-  const theme=useTheme();
 
   return (
     <div className={classes.background}>
@@ -60,10 +63,7 @@ const MenuList =({handleOpen, categories, listRefs, setValue, loadings, onLoad})
             {category.food.map((tile, fIndex) => (
               <GridListTile 
                 key={tile.name} 
-                style={{
-                  padding:theme.spacing(0.1), 
-                  height:'auto',
-                }}
+                className={classes.tile}
                 onClick={()=>{
                   handleOpen(fIndex);
                   setValue(cIndex);
