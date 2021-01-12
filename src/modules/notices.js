@@ -6,7 +6,7 @@ const GET_NOTICES = "notices/GET_NOTICES";
 const GET_NOTICES_SUCCESS = "notices/GET_NOTICES_SUCCESS";
 const GET_NOTICES_FAILURE = "notices/GET_NOTICES_FAILURE";
 
-export const getNotices = () => ({ type: GET_NOTICES });
+export const getNotices = (page) => ({ type: GET_NOTICES, payload: page });
 const getNoticesSuccess = (data) => ({
   type: GET_NOTICES_SUCCESS,
   payload: data,
@@ -20,8 +20,8 @@ function* getNoticesSaga(action) {
   yield put(startLoading("notices/GET"));
 
   try {
-    const response = yield call(noticesAPI.notices);
-    yield put(getNoticesSuccess(response.data));
+    const response = yield call(noticesAPI.notices, action.payload);
+    yield put(getNoticesSuccess(response));
   } catch (e) {
     yield put(getNoticesFailure(e));
   }
@@ -33,8 +33,9 @@ export function* noticesSaga() {
 }
 
 const initialState = {
-  notices: null,
+  notices: [],
   error: null,
+  lastPage: null,
 };
 
 const notices = (state = initialState, action) => {
@@ -42,12 +43,13 @@ const notices = (state = initialState, action) => {
     case GET_NOTICES_SUCCESS:
       return {
         ...state,
-        notices: action.payload,
+        notices: [...state.notices, ...action.payload.data],
+        lastPage: parseInt(action.payload.headers["last-page"]),
       };
     case GET_NOTICES_FAILURE:
       return {
         ...state,
-        error: action.payload,
+        error: action.payload.data,
       };
     default:
       return state;

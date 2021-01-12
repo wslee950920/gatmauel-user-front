@@ -99,6 +99,13 @@ const Review = ({
 
   const isRowLoaded = useCallback(
     ({ index }) => {
+      console.log(
+        "is row loaded",
+        index,
+        reviews ? reviews.length : 0,
+        hasNextPage,
+        !hasNextPage || index < (reviews ? reviews.length : 0)
+      );
       return !hasNextPage || index < (reviews ? reviews.length : 0);
     },
     [hasNextPage, reviews]
@@ -169,7 +176,7 @@ const Review = ({
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           rowCount={rowCount}
-          threshold={8}
+          threshold={rowCount}
         >
           {({ onRowsRendered, registerChild }) => (
             <WindowScroller>
