@@ -1,11 +1,9 @@
 import React, { useCallback, useMemo } from "react";
-import { FixedSizeList as List } from "react-window";
-import AutoSizer from "react-virtualized/dist/commonjs/AutoSizer";
-import clsx from "clsx";
-import InfiniteLoader from "react-window-infinite-loader";
+import List from "react-virtualized/dist/commonjs/List";
+import WindowScroller from "react-virtualized/dist/commonjs/WindowScroller";
+import InfiniteLoader from "react-virtualized/dist/commonjs/InfiniteLoader";
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import NoticeLitemLink from "./NoticeLitemLink";
@@ -21,14 +19,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
   const classes = useStyles();
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
-  const itemCount = useMemo(
+  const rowCount = useMemo(
     () => (hasNextPage ? notices.length + 1 : notices.length),
     [hasNextPage, notices]
   );
-  const loadMoreItems = useMemo(
+  const loadMoreRows = useMemo(
     () =>
       loading
         ? () => {
@@ -38,27 +34,26 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
     [loading, loadNextPage]
   );
 
-  const isItemLoaded = useCallback(
-    (index) => {
-      return !hasNextPage || index < notices.length;
-    },
-    [hasNextPage, notices, loading, loadNextPage]
+  const isRowLoaded = useCallback(
+    (index) => !hasNextPage || index < notices.length,
+    [hasNextPage, notices]
   );
-  const Row = useCallback(
-    ({ index, style }) => {
-      return isItemLoaded(index) ? (
+  const rowRenderer = useCallback(
+    ({ index, style, key }) => {
+      return isRowLoaded(index) ? (
         <NoticeLitemLink
           data={notices[index]}
           style={style}
           index={index}
           length={notices.length}
+          key={key}
         />
       ) : (
-        <div style={style}>
+        <div style={style} key={key}>
           <CssBaseline />
           <Circular
             container={{
-              height: 100,
+              height: 40,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -67,34 +62,41 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
         </div>
       );
     },
-    [notices, isItemLoaded]
+    [notices, isRowLoaded]
   );
 
   return (
-    <AutoSizer>
-      {({ height, width }) => (
-        <InfiniteLoader
-          itemCount={itemCount}
-          isItemLoaded={isItemLoaded}
-          loadMoreItems={loadMoreItems}
-          threshold={9}
-        >
-          {({ onItemsRendered, ref }) => (
+    <InfiniteLoader
+      rowCount={rowCount}
+      isRowLoaded={isRowLoaded}
+      loadMoreRows={loadMoreRows}
+      threshold={9}
+    >
+      {({ onRowsRendered, registerChild }) => (
+        <WindowScroller>
+          {({ height, isScrolling, scrollTop }) => (
             <List
+              autoHeight
               className={classes.root}
-              height={height - 56 - 8 - clsx(matches ? 0 : 37.09) - 8 - 57.43}
-              itemCount={itemCount}
-              itemSize={100}
-              width={width}
-              ref={ref}
-              onItemsRendered={onItemsRendered}
-            >
-              {Row}
-            </List>
+              height={height}
+              rowCount={rowCount}
+              rowHeight={100}
+              ref={registerChild}
+              onRowsRendered={onRowsRendered}
+              rowRenderer={rowRenderer}
+              isScrolling={isScrolling}
+              scrollTop={scrollTop}
+              width={1}
+              containerStyle={{
+                width: "100%",
+                maxWidth: "100%",
+              }}
+              style={{ width: "100%" }}
+            />
           )}
-        </InfiniteLoader>
+        </WindowScroller>
       )}
-    </AutoSizer>
+    </InfiniteLoader>
   );
 };
 

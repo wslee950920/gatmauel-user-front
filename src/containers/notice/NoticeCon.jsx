@@ -18,7 +18,7 @@ const NoticeCon=()=>{
     ));
     const [hasNextPage, setHasNextPage]=useState(true);
 
-    const loadNextPage=useCallback((startIndex)=>{
+    const loadNextPage=useCallback(({startIndex})=>{
         dispatch(getNotices(Math.ceil(startIndex/10)+1));
     }, [dispatch]);
 

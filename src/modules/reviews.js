@@ -37,7 +37,7 @@ export const modReview = createAction(
 );
 
 const initialState = {
-  reviews: null,
+  reviews: [],
   error: null,
   lastPage: null,
 };
@@ -48,7 +48,7 @@ const reviews = (state = initialState, action) => {
       return {
         ...state,
         reviews: [
-          ...(state.reviews ? state.reviews : []).filter((item) => {
+          ...state.reviews.filter((item) => {
             return (
               action.payload.data.findIndex(({ id }) => item.id === id) === -1
             );
@@ -56,6 +56,7 @@ const reviews = (state = initialState, action) => {
           ...action.payload.data,
         ].sort((l, r) => r.id - l.id),
         lastPage: parseInt(action.payload.headers["last-page"]),
+        error:null
       };
     case GET_REVIEWS_FAILURE:
       return {

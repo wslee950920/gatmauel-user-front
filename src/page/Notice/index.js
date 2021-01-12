@@ -15,7 +15,7 @@ const NoticePage = ({ match }) => {
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
-    <div style={{ position: "relative", height: "100vh" }}>
+    <div style={{ height: "100vh" }}>
       <HeaderCon />
       {!matches && (
         <Route exact path={match.url} component={() => <SearchBar notice />} />

@@ -14,7 +14,6 @@ import CellMeasurer, {
   CellMeasurerCache,
 } from "react-virtualized/dist/commonjs/CellMeasurer";
 
-import clsx from "clsx";
 import { StepProvider } from "./context/step";
 import querystring from "querystring";
 import url from "url";
@@ -78,10 +77,6 @@ const Review = ({
       return 559;
     } else return 504;
   }, [small, bSmall, xSmall]);
-  const cache = new CellMeasurerCache({
-    defaultHeight: rowHeight,
-    fixedWidth: true,
-  });
   const loadMoreRows = useMemo(() => {
     return gloading
       ? () => {
@@ -90,30 +85,22 @@ const Review = ({
       : loadNextPage;
   }, [gloading, loadNextPage]);
   const rowCount = useMemo(() => {
-    return hasNextPage
-      ? (reviews ? reviews.length : 0) + 1
-      : reviews
-      ? reviews.length
-      : 0;
+    return hasNextPage ? reviews.length + 1 : reviews.length;
   }, [hasNextPage, reviews]);
+
+  const cache = new CellMeasurerCache({
+    defaultHeight: rowHeight,
+    fixedWidth: true,
+  });
 
   const isRowLoaded = useCallback(
     ({ index }) => {
-      console.log(
-        "is row loaded",
-        index,
-        reviews ? reviews.length : 0,
-        hasNextPage,
-        !hasNextPage || index < (reviews ? reviews.length : 0)
-      );
-      return !hasNextPage || index < (reviews ? reviews.length : 0);
+      return !hasNextPage || index < reviews.length;
     },
     [hasNextPage, reviews]
   );
   const rowRenderer = useCallback(
     ({ index, key, style, parent }) => {
-      const data = reviews ? reviews[index] : null;
-
       return (
         <CellMeasurer
           cache={cache}
@@ -125,7 +112,7 @@ const Review = ({
           {({ measure, registerChild }) => (
             <WrappedItem
               ref={registerChild}
-              data={data}
+              data={reviews[index]}
               style={style}
               user={user}
               feedUpdate={feedUpdate}
@@ -156,7 +143,7 @@ const Review = ({
   }, [theme, rowHeight]);
 
   return (
-    <StepProvider datas={reviews ? reviews : []}>
+    <StepProvider datas={reviews}>
       <div className={classes.paper}>
         <EditReview
           handleClickOpen={handleClickOpen}
@@ -176,14 +163,14 @@ const Review = ({
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           rowCount={rowCount}
-          threshold={rowCount}
+          threshold={9}
         >
           {({ onRowsRendered, registerChild }) => (
             <WindowScroller>
               {({ height, isScrolling, scrollTop }) => (
                 <List
                   autoHeight
-                  height={height - 56 - 8 - clsx(small ? 0 : 37.09) - 8}
+                  height={height}
                   rowCount={rowCount}
                   rowHeight={cache.rowHeight}
                   width={1}

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {usePreloader} from '../../lib/PreloadContext';
@@ -19,7 +19,9 @@ const MainContainer=()=>{
         nError,
         food,
         floading,
-        fError
+        fError,
+        rlastPage,
+        nlastPage
     }=useSelector(state=>(
         {
             reviews:state.reviews.reviews, 
@@ -30,27 +32,46 @@ const MainContainer=()=>{
             nError:state.notices.error,
             food:state.food.food,
             floading:state.loading['get/Food'],
-            fError:state.food.error
+            fError:state.food.error,
+            rlastPage:state.reviews.lastPage,
+            nlastPage:state.notices.lastPage
         }
     ));
     const dispatch=useDispatch();
+    const [hasNextPage, setHasNextPage]=useState({reviews:true, notices:true});
     
     usePreloader(()=>dispatch(getReviews()));
     usePreloader(()=>dispatch(getNotices()));
     usePreloader(()=>dispatch(getFood()));
 
     useEffect(()=>{
-        if(reviews||rloading) return;
+        if(reviews.length>0) return;
         if(rError) return;
+        if(rloading) return;
 
-        dispatch(getReviews());
-    }, [dispatch, reviews, rloading, rError]);
+        if(hasNextPage.reviews){
+            dispatch(getReviews());
+        }
+    }, [dispatch, reviews, rloading, rError, hasNextPage]);
     useEffect(()=>{
-        if(notices||nloading) return;
+        if(Math.ceil(reviews.length/10)===rlastPage){
+          setHasNextPage(false);
+        } 
+      }, [reviews, rlastPage]);
+    useEffect(()=>{
+        if(notices.length>0) return;
+        if(nloading) return;
         if(nError) return;
 
-        dispatch(getNotices());
-    }, [dispatch, notices, nloading, nError]);
+        if(hasNextPage.notices){
+            dispatch(getNotices());
+        }
+    }, [dispatch, notices, nloading, nError, hasNextPage]);
+    useEffect(()=>{
+        if(Math.ceil(notices.length/10)===nlastPage){
+            setHasNextPage(prev=>({...prev, notices:false}));
+        }    
+    }, [notices, nlastPage]);
     useEffect(()=>{
         if(food||floading) return;
         if(fError) return;

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useRef } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
@@ -33,7 +33,6 @@ const ReviewCon = ({ history }) => {
     lastPage,
     gloading,
     wloading,
-    error
   } = useSelector(state => (
     {
       reviews: state.reviews.reviews,
@@ -46,7 +45,6 @@ const ReviewCon = ({ history }) => {
       lastPage:state.reviews.lastPage,
       gloading:state.loading['reviews/GET'],
       wloading:state.loading['write/WRITE_REVIEW'],
-      error:state.reviews.error
     }
   ));
   const formData=new FormData();
@@ -54,7 +52,6 @@ const ReviewCon = ({ history }) => {
   const [reviewId, setReviewId]=useState(null);
   const [hasNextPage, setHasNextPage]=useState(true);
   const [progress, setProgress]=useState(0);
-  const nextPage=useRef(0);
 
   const handleClose = useCallback(() => {
     history.push('/review');
@@ -153,37 +150,17 @@ const ReviewCon = ({ history }) => {
   const closeRemove=useCallback(()=>{
     setRopen(false);
   }, []);
-  const loadNextPage = useCallback(
-    ({ startIndex }) => {
-      nextPage.current = (startIndex/10)+1;
-      
-      if(lastPage){
-        if (nextPage.current<=lastPage){
-          dispatch(getReviews(nextPage.current));
-        }
-      }
-    },
-    [dispatch, lastPage]
-  );
+  const loadNextPage=useCallback(({startIndex})=>{
+    dispatch(getReviews(Math.ceil(startIndex/10)+1));
+  }, [dispatch]);
 
   usePreloader(()=>dispatch(getReviews()));
 
   useEffect(()=>{
-    if(reviews||gloading) return;
-    if(error) return;
-
-    dispatch(getReviews());
-  }, [dispatch, reviews, gloading, error]);
-  useEffect(()=>{
-    if(!gloading&&lastPage&&nextPage.current===lastPage){
+    if(Math.ceil(reviews.length/10)===lastPage){
       setHasNextPage(false);
-    }
-  }, [gloading, lastPage]);
-  useEffect(()=>{
-    if(lastPage!==null&&lastPage<=1){
-      setHasNextPage(false);
-    }
-  }, [lastPage]);
+    } 
+  }, [reviews, lastPage]);
   useEffect(() => {
     dispatch(check());
 
@@ -246,7 +223,7 @@ const ReviewCon = ({ history }) => {
       rOpen={rOpen}
       openRemove={openRemove}
       closeRemove={closeRemove}
-      gloading={gloading}
+      gloading={gloading||false}
       loadNextPage={loadNextPage}
       hasNextPage={hasNextPage}
       progress={progress}
