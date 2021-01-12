@@ -55,7 +55,7 @@ const MainContainer=()=>{
     }, [dispatch, reviews, rloading, rError, hasNextPage]);
     useEffect(()=>{
         if(Math.ceil(reviews.length/10)===rlastPage){
-          setHasNextPage(false);
+          setHasNextPage(prev=>({...prev, reviews:false}));
         } 
       }, [reviews, rlastPage]);
     useEffect(()=>{

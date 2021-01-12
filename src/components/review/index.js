@@ -167,18 +167,14 @@ const Review = ({
         >
           {({ onRowsRendered, registerChild }) => (
             <WindowScroller>
-              {({ height, isScrolling, scrollTop }) => (
+              {({ height, isScrolling, scrollTop, width }) => (
                 <List
                   autoHeight
+                  autoWidth
                   height={height}
                   rowCount={rowCount}
                   rowHeight={cache.rowHeight}
-                  width={1}
-                  containerStyle={{
-                    width: "100%",
-                    maxWidth: "100%",
-                  }}
-                  style={{ width: "100%" }}
+                  width={width}
                   rowRenderer={rowRenderer}
                   scrollTop={scrollTop}
                   isScrolling={isScrolling}

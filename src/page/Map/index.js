@@ -37,7 +37,7 @@ const MapPage = () => {
       >
         <Map />
       </RenderAfterNavermapsLoaded>
-      <Footer />
+      <Footer map/>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { Route } from "react-router-dom";
 
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import NoSsr from "@material-ui/core/NoSsr";
 
 import HeaderCon from "../../containers/main/HeaderCon";
 import NoticeCon from "../../containers/notice/NoticeCon";
@@ -22,7 +23,9 @@ const NoticePage = ({ match }) => {
       )}
       <Route exact path={match.url} component={NoticeCon} />
       <Route path={`${match.url}/:id`} component={ReadNoticeCon} />
-      <Footer />
+      <NoSsr>
+        <Footer />
+      </NoSsr>
     </div>
   );
 };

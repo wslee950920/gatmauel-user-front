@@ -20,7 +20,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#dcdcdc",
     padding: theme.spacing(1),
     width: "100%",
-    position: "fixed",
+    position: "sticky",
+    bottom: 0,
+  },
+  map: {
+    backgroundColor: "#dcdcdc",
+    padding: theme.spacing(1),
+    width: "100%",
+    position: "absolute",
     bottom: 0,
   },
   footer: {
@@ -39,13 +46,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Footer = ({ main }) => {
+const Footer = ({ main, map }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("xs"));
 
   return (
-    <footer className={main ? classes.main : classes.background}>
+    <footer
+      className={main ? classes.main : map ? classes.map : classes.background}
+    >
       <div className={classes.footer}>
         <div>
           <ScheduleIcon fontSize="small" />

@@ -35,12 +35,12 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
   );
 
   const isRowLoaded = useCallback(
-    (index) => !hasNextPage || index < notices.length,
+    ({ index }) => !hasNextPage || index < notices.length,
     [hasNextPage, notices]
   );
   const rowRenderer = useCallback(
     ({ index, style, key }) => {
-      return isRowLoaded(index) ? (
+      return isRowLoaded({ index }) ? (
         <NoticeLitemLink
           data={notices[index]}
           style={style}
@@ -53,7 +53,7 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
           <CssBaseline />
           <Circular
             container={{
-              height: 40,
+              height: 100,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -70,13 +70,15 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
       rowCount={rowCount}
       isRowLoaded={isRowLoaded}
       loadMoreRows={loadMoreRows}
-      threshold={9}
+      threshold={8}
     >
       {({ onRowsRendered, registerChild }) => (
         <WindowScroller>
-          {({ height, isScrolling, scrollTop }) => (
+          {({ height, isScrolling, scrollTop, width }) => (
             <List
               autoHeight
+              autoWidth
+              width={width}
               className={classes.root}
               height={height}
               rowCount={rowCount}
@@ -86,12 +88,7 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
               rowRenderer={rowRenderer}
               isScrolling={isScrolling}
               scrollTop={scrollTop}
-              width={1}
-              containerStyle={{
-                width: "100%",
-                maxWidth: "100%",
-              }}
-              style={{ width: "100%" }}
+              overscanRowCount={6}
             />
           )}
         </WindowScroller>
