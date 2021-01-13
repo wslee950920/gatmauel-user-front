@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useCallback,
-  useMemo,
-  useEffect,
-  forwardRef,
-} from "react";
+import React, { useRef, useCallback, useMemo, forwardRef } from "react";
 import loadable from "@loadable/component";
 
 import List from "react-virtualized/dist/commonjs/List";
@@ -15,8 +9,6 @@ import CellMeasurer, {
 } from "react-virtualized/dist/commonjs/CellMeasurer";
 
 import { StepProvider } from "./context/step";
-import querystring from "querystring";
-import url from "url";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -128,20 +120,6 @@ const Review = ({
     [reviews, user, feedUpdate, openRemove, cache, isRowLoaded]
   );
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    const parsedUrl = url.parse(window.location.href);
-    const query = querystring.parse(parsedUrl.query);
-    const empty =
-      Object.keys(query).length === 0 && query.constructor === Object;
-    if (!empty) {
-      window.scrollTo({
-        top: rowHeight * parseInt(query.index) + 181 + theme.spacing(4),
-      });
-    }
-  }, [theme, rowHeight]);
-
   return (
     <StepProvider datas={reviews}>
       <div className={classes.paper}>
@@ -166,15 +144,20 @@ const Review = ({
           threshold={9}
         >
           {({ onRowsRendered, registerChild }) => (
-            <WindowScroller>
-              {({ height, isScrolling, scrollTop, width }) => (
+            <WindowScroller serverWidth={600} serverHeight={2700}>
+              {({ height, isScrolling, scrollTop }) => (
                 <List
                   autoHeight
                   autoWidth
                   height={height}
                   rowCount={rowCount}
                   rowHeight={cache.rowHeight}
-                  width={width}
+                  width={1}
+                  containerStyle={{
+                    width: "100%",
+                    maxWidth: "100%",
+                  }}
+                  style={{ width: "100%" }}
                   rowRenderer={rowRenderer}
                   scrollTop={scrollTop}
                   isScrolling={isScrolling}

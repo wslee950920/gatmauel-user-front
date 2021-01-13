@@ -73,12 +73,17 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
       threshold={8}
     >
       {({ onRowsRendered, registerChild }) => (
-        <WindowScroller>
-          {({ height, isScrolling, scrollTop, width }) => (
+        <WindowScroller serverHeight={1100} serverWidth={600}>
+          {({ height, isScrolling, scrollTop }) => (
             <List
               autoHeight
               autoWidth
-              width={width}
+              width={1}
+              containerStyle={{
+                width: "100%",
+                maxWidth: "100%",
+              }}
+              style={{ width: "100%" }}
               className={classes.root}
               height={height}
               rowCount={rowCount}
