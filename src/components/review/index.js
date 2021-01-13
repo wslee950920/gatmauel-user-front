@@ -165,7 +165,7 @@ const Review = ({
                   onRowsRendered={onRowsRendered}
                   ref={registerChild}
                   deferredMeasurementCache={cache}
-                  scrollToAlignment="start"
+                  scrollToAlignment="auto"
                   onScroll={onChildScroll}
                 />
               )}

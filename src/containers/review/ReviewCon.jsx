@@ -21,7 +21,6 @@ import {check} from '../../modules/user';
 import Review from '../../components/review';
 
 const ReviewCon = ({ history, location }) => {
-  console.log(history, location);
   const dispatch = useDispatch();
   const { 
     reviews, 
