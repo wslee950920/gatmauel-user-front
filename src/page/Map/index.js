@@ -19,7 +19,7 @@ const MapPage = () => {
   }, []);
 
   return (
-    <div style={{ height: "100vh" }}>
+    <div style={{ position: "relative", height: "100vh" }}>
       <HeaderCon main />
       <RenderAfterNavermapsLoaded
         ncpClientId={process.env.REACT_APP_NAVER_MAP_CLIENT}
@@ -37,7 +37,7 @@ const MapPage = () => {
       >
         <Map />
       </RenderAfterNavermapsLoaded>
-      <Footer map/>
+      <Footer map />
     </div>
   );
 };

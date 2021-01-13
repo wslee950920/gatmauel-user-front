@@ -70,11 +70,11 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
       rowCount={rowCount}
       isRowLoaded={isRowLoaded}
       loadMoreRows={loadMoreRows}
-      threshold={8}
+      threshold={2}
     >
       {({ onRowsRendered, registerChild }) => (
         <WindowScroller serverHeight={1100} serverWidth={600}>
-          {({ height, isScrolling, scrollTop }) => (
+          {({ height, isScrolling, scrollTop, onChildScroll }) => (
             <List
               autoHeight
               autoWidth
@@ -94,6 +94,8 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
               isScrolling={isScrolling}
               scrollTop={scrollTop}
               overscanRowCount={6}
+              scrollToAlignment="start"
+              onScroll={onChildScroll}
             />
           )}
         </WindowScroller>

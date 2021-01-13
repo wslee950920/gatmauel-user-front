@@ -1,4 +1,9 @@
-import React, { useRef, useCallback, useMemo, forwardRef } from "react";
+import React, {
+  useRef,
+  useCallback,
+  useMemo,
+  forwardRef
+} from "react";
 import loadable from "@loadable/component";
 
 import List from "react-virtualized/dist/commonjs/List";
@@ -145,7 +150,7 @@ const Review = ({
         >
           {({ onRowsRendered, registerChild }) => (
             <WindowScroller serverWidth={600} serverHeight={2700}>
-              {({ height, isScrolling, scrollTop }) => (
+              {({ height, isScrolling, scrollTop, onChildScroll }) => (
                 <List
                   autoHeight
                   autoWidth
@@ -165,6 +170,8 @@ const Review = ({
                   onRowsRendered={onRowsRendered}
                   ref={registerChild}
                   deferredMeasurementCache={cache}
+                  scrollToAlignment="start"
+                  onScroll={onChildScroll}
                 />
               )}
             </WindowScroller>

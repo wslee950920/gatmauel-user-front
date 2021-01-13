@@ -28,7 +28,7 @@ const ReadNoticeCon=({match})=>{
     }, [dispatch, notices, loading, error]);
 
     const {id}=match.params;
-    if(!notices||!notices[id]) return null;
+    if(notices.length<1||!notices[id]) return null;
     return <ReadNotice notice={notices[id]}/>;
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
 
@@ -206,28 +206,35 @@ const ReviewCon = ({ history }) => {
   }, [review, reviewError, dispatch]);
 
   return (
-    <Review
-      reviews={reviews}
-      content={content}
-      imgs={imgs}
-      handleFileOnChange={handleFileOnChange}
-      handleFileRemove={handleFileRemove}
-      onSubmit={onSubmit}
-      open={open}
-      handleClose={handleClose}
-      handleClickOpen={handleClickOpen}
-      onCamera={onCamera}
-      user={user}
-      feedUpdate={feedUpdate}
-      feedRemove={feedRemove}
-      rOpen={rOpen}
-      openRemove={openRemove}
-      closeRemove={closeRemove}
-      gloading={gloading||false}
-      loadNextPage={loadNextPage}
-      hasNextPage={hasNextPage}
-      progress={progress}
-      wloading={wloading}
+    <Route 
+      path={'/review'} 
+      component={(location)=>(
+        <Review
+          reviews={reviews}
+          content={content}
+          imgs={imgs}
+          handleFileOnChange={handleFileOnChange}
+          handleFileRemove={handleFileRemove}
+          onSubmit={onSubmit}
+          open={open}
+          handleClose={handleClose}
+          handleClickOpen={handleClickOpen}
+          onCamera={onCamera}
+          user={user}
+          feedUpdate={feedUpdate}
+          feedRemove={feedRemove}
+          rOpen={rOpen}
+          openRemove={openRemove}
+          closeRemove={closeRemove}
+          gloading={gloading||false}
+          loadNextPage={loadNextPage}
+          hasNextPage={hasNextPage}
+          progress={progress}
+          wloading={wloading}
+          location={location.location}
+        />
+      )} 
+      exact
     />
   )
 }
