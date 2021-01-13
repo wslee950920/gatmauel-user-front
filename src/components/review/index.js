@@ -1,4 +1,11 @@
-import React, { useRef, useCallback, useMemo, forwardRef } from "react";
+import React, {
+  useRef,
+  useCallback,
+  useMemo,
+  forwardRef,
+  useState,
+  useEffect,
+} from "react";
 import loadable from "@loadable/component";
 
 import List from "react-virtualized/dist/commonjs/List";
@@ -52,6 +59,7 @@ const Review = ({
   hasNextPage,
   progress,
   wloading,
+  scrollToIndex,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -59,6 +67,7 @@ const Review = ({
   const small = useMediaQuery(theme.breakpoints.up("sm"));
   const bSmall = useMediaQuery(theme.breakpoints.between(400, "sm"));
   const inputId = useRef("review-file-input");
+  const [scrollIndex, setScrollIndex] = useState(-1);
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -85,6 +94,9 @@ const Review = ({
     fixedWidth: true,
   });
 
+  const clearScrollToIndex = useCallback(() => {
+    setScrollIndex(-1);
+  }, []);
   const isRowLoaded = useCallback(
     ({ index }) => {
       return !hasNextPage || index < reviews.length;
@@ -120,6 +132,13 @@ const Review = ({
     [reviews, user, feedUpdate, openRemove, cache, isRowLoaded]
   );
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  useEffect(() => {
+    setScrollIndex(scrollToIndex);
+  }, [scrollToIndex]);
+
   return (
     <StepProvider datas={reviews}>
       <div className={classes.paper}>
@@ -144,7 +163,11 @@ const Review = ({
           threshold={8}
         >
           {({ onRowsRendered, registerChild }) => (
-            <WindowScroller serverWidth={600} serverHeight={2700}>
+            <WindowScroller
+              serverWidth={600}
+              serverHeight={2700}
+              onScroll={clearScrollToIndex}
+            >
               {({ height, isScrolling, scrollTop, onChildScroll }) => (
                 <List
                   autoHeight
@@ -165,8 +188,9 @@ const Review = ({
                   onRowsRendered={onRowsRendered}
                   ref={registerChild}
                   deferredMeasurementCache={cache}
-                  scrollToAlignment="auto"
+                  scrollToAlignment="end"
                   onScroll={onChildScroll}
+                  scrollToIndex={scrollIndex}
                 />
               )}
             </WindowScroller>

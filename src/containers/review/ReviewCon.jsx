@@ -1,7 +1,8 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
+import querystring from 'querystring';
 
 import {usePreloader} from '../../lib/PreloadContext';
 
@@ -52,6 +53,13 @@ const ReviewCon = ({ history, location }) => {
   const [reviewId, setReviewId]=useState(null);
   const [hasNextPage, setHasNextPage]=useState(true);
   const [progress, setProgress]=useState(0);
+
+  const scrollToIndex=useMemo(()=>{
+    const url=location.search.split('?')[1];
+    const query=querystring.parse(url);
+
+    return parseInt(query.index||-1);
+  }, [location]);
 
   const handleClose = useCallback(() => {
     history.push('/review');
@@ -228,6 +236,7 @@ const ReviewCon = ({ history, location }) => {
       hasNextPage={hasNextPage}
       progress={progress}
       wloading={wloading}
+      scrollToIndex={scrollToIndex}
     />
   )
 }
