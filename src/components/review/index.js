@@ -1,9 +1,4 @@
-import React, {
-  useRef,
-  useCallback,
-  useMemo,
-  forwardRef
-} from "react";
+import React, { useRef, useCallback, useMemo, forwardRef } from "react";
 import loadable from "@loadable/component";
 
 import List from "react-virtualized/dist/commonjs/List";
@@ -146,7 +141,7 @@ const Review = ({
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           rowCount={rowCount}
-          threshold={9}
+          threshold={8}
         >
           {({ onRowsRendered, registerChild }) => (
             <WindowScroller serverWidth={600} serverHeight={2700}>
