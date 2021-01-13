@@ -20,7 +20,8 @@ const ReadNoticeCon=({match})=>{
     usePreloader(()=>dispatch(getNotices()));
 
     useEffect(()=>{
-        if(notices||loading) return;
+        if(notices.length>0) return;
+        if(loading) return;
         if(error) return;
 
         dispatch(getNotices());

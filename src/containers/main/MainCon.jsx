@@ -45,9 +45,9 @@ const MainContainer=()=>{
     usePreloader(()=>dispatch(getFood()));
 
     useEffect(()=>{
-        if(reviews.length>0) return;
         if(rError) return;
         if(rloading) return;
+        if(reviews.length>0) return;
 
         if(hasNextPage.reviews){
             dispatch(getReviews());
@@ -73,8 +73,9 @@ const MainContainer=()=>{
         }    
     }, [notices, nlastPage]);
     useEffect(()=>{
-        if(food||floading) return;
+        if(food) return;
         if(fError) return;
+        if(floading) return;
 
         dispatch(getFood());
     }, [dispatch, food, floading, fError]);

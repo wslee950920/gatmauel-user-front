@@ -83,7 +83,7 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
                 width: "100%",
                 maxWidth: "100%",
               }}
-              style={{ width: "100%" }}
+              style={{ width: "100%", minHeight: "calc(100vh - 129.57px)" }}
               className={classes.root}
               height={height}
               rowCount={rowCount}

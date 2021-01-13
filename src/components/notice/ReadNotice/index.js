@@ -12,6 +12,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(1, 0),
     width: "100%",
+    height: `calc(100vh - 129.57px)`,
+
+    [theme.breakpoints.up("sm")]: {
+      height: "calc(100vh - 138px)",
+    },
   },
   background: {
     backgroundColor: "white",
@@ -39,9 +44,6 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Roboto",
     color: theme.palette.text.secondary,
   },
-  conatiner: {
-    height: "100vh",
-  },
 }));
 
 const ReadNotice = ({ notice }) => {
@@ -50,7 +52,7 @@ const ReadNotice = ({ notice }) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Container maxWidth="sm" className={classes.container}>
+      <Container maxWidth="sm">
         <div className={classes.background}>
           <Head title={notice.title} time={notice.createdAt} />
           <TextareaAutosize
