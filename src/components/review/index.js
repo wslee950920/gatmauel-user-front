@@ -68,6 +68,7 @@ const Review = ({
   const bSmall = useMediaQuery(theme.breakpoints.between(400, "sm"));
   const inputId = useRef("review-file-input");
   const [scrollIndex, setScrollIndex] = useState(-1);
+  const listRef = useRef(null);
 
   const rowHeight = useMemo(() => {
     if (small) {
@@ -136,6 +137,18 @@ const Review = ({
     window.scrollTo(0, 0);
   }, []);
   useEffect(() => {
+    if (scrollToIndex >= 0) {
+      const offset = listRef.current.getOffsetForRow({
+        alignment: "center",
+        index: scrollToIndex,
+      });
+      if (offset > -1) {
+        window.scrollTo(0, offset + 56 + 56 + (offset && 135));
+
+        return;
+      }
+    }
+
     setScrollIndex(scrollToIndex);
   }, [scrollToIndex]);
 
@@ -167,6 +180,7 @@ const Review = ({
               serverWidth={600}
               serverHeight={2700}
               onScroll={clearScrollToIndex}
+              ref={registerChild}
             >
               {({ height, isScrolling, scrollTop, onChildScroll }) => (
                 <List
@@ -186,11 +200,11 @@ const Review = ({
                   isScrolling={isScrolling}
                   overscanRowCount={4}
                   onRowsRendered={onRowsRendered}
-                  ref={registerChild}
                   deferredMeasurementCache={cache}
-                  scrollToAlignment="end"
+                  scrollToAlignment="center"
                   onScroll={onChildScroll}
                   scrollToIndex={scrollIndex}
+                  ref={listRef}
                 />
               )}
             </WindowScroller>
