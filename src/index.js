@@ -27,6 +27,8 @@ import thunk from "redux-thunk";
 import rootReducer, { rootSaga } from "./modules";
 import { composeWithDevTools } from "redux-devtools-extension";
 import createSagaMiddleware from "redux-saga";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
 import { tempSetUser, check } from "./modules/user";
 
@@ -37,6 +39,7 @@ const store = createStore(
   window.__PRELOADED_STATE__,
   composeWithDevTools(applyMiddleware(thunk, sagaMiddleware))
 );
+const persistor = persistStore(store);
 
 function loadUser() {
   try {
@@ -63,12 +66,14 @@ const Root = () => {
 
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-      </BrowserRouter>
+      <PersistGate persistor={persistor}>
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   );
 };
