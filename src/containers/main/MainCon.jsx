@@ -21,7 +21,8 @@ const MainContainer=()=>{
         floading,
         fError,
         rlastPage,
-        nlastPage
+        nlastPage,
+        order
     }=useSelector(state=>(
         {
             reviews:state.reviews.reviews, 
@@ -34,7 +35,8 @@ const MainContainer=()=>{
             floading:state.loading['get/Food'],
             fError:state.food.error,
             rlastPage:state.reviews.lastPage,
-            nlastPage:state.notices.lastPage
+            nlastPage:state.notices.lastPage,
+            order:state.order.order
         }
     ));
     const dispatch=useDispatch();
@@ -80,7 +82,7 @@ const MainContainer=()=>{
         dispatch(getFood());
     }, [dispatch, food, floading, fError]);
 
-    return <Main reviews={reviews} notices={notices} food={food}/>
+    return <Main reviews={reviews} notices={notices} food={food} order={order}/>
 };
 
 export default MainContainer;

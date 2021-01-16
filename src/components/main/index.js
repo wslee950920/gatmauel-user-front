@@ -7,8 +7,9 @@ import ReviewList from "./ReviewList";
 import CarouselMenu from "./CarouselMenu";
 import CardDialog from "../common/CardDialog";
 import NoticeList from "./NoticeList";
+import Fab from "../common/Fab";
 
-const Main = ({ reviews, notices, food }) => {
+const Main = ({ reviews, notices, food, order }) => {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -39,6 +40,7 @@ const Main = ({ reviews, notices, food }) => {
       {food && (
         <CardDialog open={open} handleClose={handleClose} food={food[index]} />
       )}
+      {order && <Fab order={order} />}
     </>
   );
 };
