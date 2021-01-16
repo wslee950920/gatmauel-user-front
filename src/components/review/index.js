@@ -139,11 +139,11 @@ const Review = ({
   useEffect(() => {
     if (scrollToIndex >= 0) {
       const offset = listRef.current.getOffsetForRow({
-        alignment: "center",
+        alignment: "start",
         index: scrollToIndex,
       });
       if (offset > -1) {
-        window.scrollTo(0, offset + 56 + 56 + (offset && 135));
+        window.scrollTo(0, offset + 135);
 
         return;
       }

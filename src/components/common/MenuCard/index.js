@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
+import { useDispatch } from "react-redux";
 
+import { addOrder } from "../../../modules/order";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -51,6 +53,7 @@ const MenuCard = ({ handleClose, food }) => {
   const classes = useStyles();
   const [num, setNum] = useState(1);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   const onLoad = useCallback(() => {
     setLoading(false);
@@ -79,6 +82,12 @@ const MenuCard = ({ handleClose, food }) => {
     if (n > 10 || n < 1) return true;
     else return false;
   }, []);
+  const addToCart = useCallback(() => {
+    dispatch(addOrder({ id: food.id, name: food.name, num }));
+    setTimeout(() => {
+      setNum(1);
+    }, 500);
+  }, [dispatch, food, num]);
 
   const insertComma = useMemo(() => {
     const result = String(food.price).split("");
@@ -92,7 +101,15 @@ const MenuCard = ({ handleClose, food }) => {
     <Card className={classes.card}>
       <CardHeader
         action={
-          <IconButton aria-label="close" onClick={handleClose}>
+          <IconButton
+            aria-label="close"
+            onClick={() => {
+              handleClose();
+              setTimeout(() => {
+                setNum(1);
+              }, 500);
+            }}
+          >
             <CloseIcon />
           </IconButton>
         }
@@ -161,7 +178,10 @@ const MenuCard = ({ handleClose, food }) => {
           <IconButton
             className={classes.cart}
             aria-label="cart"
-            onClick={handleClose}
+            onClick={() => {
+              addToCart();
+              handleClose();
+            }}
           >
             <AddShoppingCartIcon />
           </IconButton>
