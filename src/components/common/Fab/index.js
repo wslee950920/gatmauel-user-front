@@ -15,6 +15,7 @@ import AddIcon from "@material-ui/icons/Add";
 import TextField from "@material-ui/core/TextField";
 import CloseIcon from "@material-ui/icons/Close";
 import Link from "@material-ui/core/Link";
+import Badge from "@material-ui/core/Badge";
 
 import {
   removeOrder,
@@ -159,7 +160,9 @@ const FabBtn = ({ order }) => {
           onClick={handleOpen}
           aria-describedby={id}
         >
-          <ShoppingCartIcon />
+          <Badge badgeContent={order.length}>
+            <ShoppingCartIcon />
+          </Badge>
         </Fab>
       </Zoom>
       <Popover

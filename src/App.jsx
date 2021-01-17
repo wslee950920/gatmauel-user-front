@@ -12,6 +12,7 @@ const NoticePage = loadable(() => import("./page/Notice"));
 const ReviewPage = loadable(() => import("./page/Review"));
 const MenuPage = loadable(()=>import('./page/Menu'));
 const MapPage=loadable(()=>import('./page/Map'), {ssr:false});
+const OrderPage=loadable(()=>import('./page/Order'));
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
       <Route path={"/review"} component={ReviewPage} />
       <Route path={'/menu'} component={MenuPage} exact/>
       <Route path={'/map'} component={MapPage} exact/>
+      <Route path={'/order'} component={OrderPage} exact/>
       <Route
         render={() => (
           <div>

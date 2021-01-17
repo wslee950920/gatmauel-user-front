@@ -17,7 +17,7 @@ export default [
   },
   {
     text: "주문하기",
-    to: "#",
+    to: "/order",
   },
   {
     text: "오시는길",

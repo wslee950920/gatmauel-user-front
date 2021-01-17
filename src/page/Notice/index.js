@@ -18,7 +18,7 @@ const NoticePage = ({ match }) => {
     <div style={{ height: "100vh" }}>
       <HeaderCon />
       {!matches && (
-        <Route exact path={match.url} component={() => <SearchBar notice />} />
+        <Route exact path={match.url} render={() => <SearchBar notice />} />
       )}
       <Route exact path={match.url} component={NoticeCon} />
       <Route path={`${match.url}/:id`} component={ReadNoticeCon} />
