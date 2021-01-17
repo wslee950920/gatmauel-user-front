@@ -40,7 +40,7 @@ const Main = ({ reviews, notices, food, order }) => {
       {food && (
         <CardDialog open={open} handleClose={handleClose} food={food[index]} />
       )}
-      {order && <Fab order={order} />}
+      <Fab order={order} />
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
-import { addOrder } from "../../../modules/order";
+import { insertToCart } from "../../../modules/order";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -83,7 +83,9 @@ const MenuCard = ({ handleClose, food }) => {
     else return false;
   }, []);
   const addToCart = useCallback(() => {
-    dispatch(addOrder({ id: food.id, name: food.name, num }));
+    dispatch(
+      insertToCart({ id: food.id, name: food.name, num, price: food.price })
+    );
     setTimeout(() => {
       setNum(1);
     }, 500);
@@ -94,7 +96,7 @@ const MenuCard = ({ handleClose, food }) => {
     result.push("원");
     result.splice(-4, 0, ",");
 
-    return result;
+    return result.join("");
   }, [food.price]);
 
   return (
@@ -179,8 +181,10 @@ const MenuCard = ({ handleClose, food }) => {
             className={classes.cart}
             aria-label="cart"
             onClick={() => {
-              addToCart();
-              handleClose();
+              if (!checkRange(num)) {
+                addToCart();
+                handleClose();
+              }
             }}
           >
             <AddShoppingCartIcon />
