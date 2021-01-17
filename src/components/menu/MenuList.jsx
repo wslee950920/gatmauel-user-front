@@ -49,7 +49,7 @@ const MenuList =({handleOpen, categories, listRefs, setValue, loadings, onLoad})
           className={classes.root} 
           key={category.category+'_list'} 
         >
-          <GridList cellHeight={'100%'/3} cols={3} style={{width:'100%'}}>
+          <GridList cellHeight='auto' cols={3} style={{width:'100%'}}>
             <GridListTile 
               key="Subheader" 
               cols={3} 

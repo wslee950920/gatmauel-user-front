@@ -9,10 +9,11 @@ import Menu from '../../components/menu';
 import Circular from '../../components/common/Circular';
 
 const MenuCon=()=>{
-    const {category, loading, error}=useSelector(state=>({
+    const {category, loading, error, order}=useSelector(state=>({
         category:state.food.category,
         error:state.food.error,
-        loading:state.loading['get/CATEGORY']
+        loading:state.loading['get/CATEGORY'],
+        order:state.order.order
     }));
     const dispatch=useDispatch();
 
@@ -27,7 +28,7 @@ const MenuCon=()=>{
 
     return(
         category?
-            <Menu categories={category}/>:
+            <Menu categories={category} order={order}/>:
             <Circular 
                 container={{
                     height: '100vh',

@@ -3,8 +3,9 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import MenuBar from "./MenuBar";
 import MenuList from "./MenuList";
 import CardDialog from "../common/CardDialog";
+import Fab from "../common/Fab";
 
-const Menu = ({ categories }) => {
+const Menu = ({ categories, order }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [yOffset, setYoffset] = useState(null);
@@ -163,6 +164,7 @@ const Menu = ({ categories }) => {
           food={categories[value].food[index]}
         />
       )}
+      <Fab order={order} />
     </>
   );
 };

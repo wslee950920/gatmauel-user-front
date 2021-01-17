@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { RenderAfterNavermapsLoaded } from "react-naver-maps";
 
-import Map from "../../components/map";
+import MapCon from "../../containers/map/MapCon";
 import Circular from "../../components/common/Circular";
 import HeaderCon from "../../containers/main/HeaderCon";
 import Footer from "../../components/footer";
@@ -35,7 +35,7 @@ const MapPage = () => {
           />
         }
       >
-        <Map />
+        <MapCon />
       </RenderAfterNavermapsLoaded>
       <Footer map />
     </div>

@@ -23,6 +23,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ReviewItem from "./ReviewItem";
 import FullScreenDialog from "./FullScreenDialog";
 import EditReview from "./EditReview";
+import Fab from "../common/Fab";
 const DeleteDialog = loadable(() => import("./Delete"));
 
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +61,7 @@ const Review = ({
   progress,
   wloading,
   scrollToIndex,
+  order,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -153,65 +155,66 @@ const Review = ({
   }, [scrollToIndex]);
 
   return (
-    <StepProvider datas={reviews}>
-      <div className={classes.paper}>
-        <EditReview
-          handleClickOpen={handleClickOpen}
-          rOnly
-          imgs={imgs}
-          handleFileOnChange={handleFileOnChange}
-          handleFileRemove={handleFileRemove}
-          content={content}
-          onSubmit={onSubmit}
-          onCamera={onCamera}
-          inputId={inputId.current}
-          loading={wloading}
-          progress={progress}
-        />
-        {/*threshold는 스크롤이 어느정도까지 왔을 때 데이터를 불러올지 설정한다. */}
-        <InfiniteLoader
-          isRowLoaded={isRowLoaded}
-          loadMoreRows={loadMoreRows}
-          rowCount={rowCount}
-          threshold={8}
-        >
-          {({ onRowsRendered, registerChild }) => (
-            <WindowScroller
-              serverWidth={600}
-              serverHeight={2700}
-              onScroll={clearScrollToIndex}
-              ref={registerChild}
-            >
-              {({ height, isScrolling, scrollTop, onChildScroll }) => (
-                <List
-                  autoHeight
-                  autoWidth
-                  height={height}
-                  rowCount={rowCount}
-                  rowHeight={cache.rowHeight}
-                  width={1}
-                  containerStyle={{
-                    width: "100%",
-                    maxWidth: "100%",
-                  }}
-                  style={{ width: "100%" }}
-                  rowRenderer={rowRenderer}
-                  scrollTop={scrollTop}
-                  isScrolling={isScrolling}
-                  overscanRowCount={4}
-                  onRowsRendered={onRowsRendered}
-                  deferredMeasurementCache={cache}
-                  scrollToAlignment="center"
-                  onScroll={onChildScroll}
-                  scrollToIndex={scrollIndex}
-                  ref={listRef}
-                />
-              )}
-            </WindowScroller>
-          )}
-        </InfiniteLoader>
-      </div>
-      <FullScreenDialog open={open} handleClose={handleClose} />
+    <>
+      <StepProvider datas={reviews}>
+        <div className={classes.paper}>
+          <EditReview
+            handleClickOpen={handleClickOpen}
+            rOnly
+            imgs={imgs}
+            handleFileOnChange={handleFileOnChange}
+            handleFileRemove={handleFileRemove}
+            content={content}
+            onSubmit={onSubmit}
+            onCamera={onCamera}
+            inputId={inputId.current}
+            loading={wloading}
+            progress={progress}
+          />
+          <InfiniteLoader
+            isRowLoaded={isRowLoaded}
+            loadMoreRows={loadMoreRows}
+            rowCount={rowCount}
+            threshold={8}
+          >
+            {({ onRowsRendered, registerChild }) => (
+              <WindowScroller
+                serverWidth={600}
+                serverHeight={2700}
+                onScroll={clearScrollToIndex}
+                ref={registerChild}
+              >
+                {({ height, isScrolling, scrollTop, onChildScroll }) => (
+                  <List
+                    autoHeight
+                    autoWidth
+                    height={height}
+                    rowCount={rowCount}
+                    rowHeight={cache.rowHeight}
+                    width={1}
+                    containerStyle={{
+                      width: "100%",
+                      maxWidth: "100%",
+                    }}
+                    style={{ width: "100%" }}
+                    rowRenderer={rowRenderer}
+                    scrollTop={scrollTop}
+                    isScrolling={isScrolling}
+                    overscanRowCount={4}
+                    onRowsRendered={onRowsRendered}
+                    deferredMeasurementCache={cache}
+                    scrollToAlignment="center"
+                    onScroll={onChildScroll}
+                    scrollToIndex={scrollIndex}
+                    ref={listRef}
+                  />
+                )}
+              </WindowScroller>
+            )}
+          </InfiniteLoader>
+        </div>
+        <FullScreenDialog open={open} handleClose={handleClose} />
+      </StepProvider>
       {user && (
         <DeleteDialog
           rOpen={rOpen}
@@ -219,7 +222,8 @@ const Review = ({
           feedRemove={feedRemove}
         />
       )}
-    </StepProvider>
+      <Fab order={order} />
+    </>
   );
 };
 

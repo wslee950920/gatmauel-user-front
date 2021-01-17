@@ -8,6 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 
 import NoticeLitemLink from "./NoticeLitemLink";
 import Circular from "../common/Circular";
+import Fab from "../common/Fab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
+const Notice = ({ notices, hasNextPage, loadNextPage, loading, order }) => {
   const classes = useStyles();
 
   const rowCount = useMemo(
@@ -66,40 +67,43 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading }) => {
   );
 
   return (
-    <InfiniteLoader
-      rowCount={rowCount}
-      isRowLoaded={isRowLoaded}
-      loadMoreRows={loadMoreRows}
-      threshold={1}
-    >
-      {({ onRowsRendered, registerChild }) => (
-        <WindowScroller serverHeight={1100} serverWidth={600}>
-          {({ height, isScrolling, scrollTop, onChildScroll }) => (
-            <List
-              autoHeight
-              autoWidth
-              width={1}
-              containerStyle={{
-                width: "100%",
-                maxWidth: "100%",
-              }}
-              style={{ width: "100%", minHeight: "calc(100vh - 129.57px)" }}
-              className={classes.root}
-              height={height}
-              rowCount={rowCount}
-              rowHeight={100}
-              ref={registerChild}
-              onRowsRendered={onRowsRendered}
-              rowRenderer={rowRenderer}
-              isScrolling={isScrolling}
-              scrollTop={scrollTop}
-              overscanRowCount={6}
-              onScroll={onChildScroll}
-            />
-          )}
-        </WindowScroller>
-      )}
-    </InfiniteLoader>
+    <>
+      <InfiniteLoader
+        rowCount={rowCount}
+        isRowLoaded={isRowLoaded}
+        loadMoreRows={loadMoreRows}
+        threshold={1}
+      >
+        {({ onRowsRendered, registerChild }) => (
+          <WindowScroller serverHeight={1100} serverWidth={600}>
+            {({ height, isScrolling, scrollTop, onChildScroll }) => (
+              <List
+                autoHeight
+                autoWidth
+                width={1}
+                containerStyle={{
+                  width: "100%",
+                  maxWidth: "100%",
+                }}
+                style={{ width: "100%", minHeight: "calc(100vh - 129.57px)" }}
+                className={classes.root}
+                height={height}
+                rowCount={rowCount}
+                rowHeight={100}
+                ref={registerChild}
+                onRowsRendered={onRowsRendered}
+                rowRenderer={rowRenderer}
+                isScrolling={isScrolling}
+                scrollTop={scrollTop}
+                overscanRowCount={6}
+                onScroll={onChildScroll}
+              />
+            )}
+          </WindowScroller>
+        )}
+      </InfiniteLoader>
+      <Fab order={order} />
+    </>
   );
 };
 

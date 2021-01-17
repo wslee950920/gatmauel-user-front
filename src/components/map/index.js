@@ -6,6 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ShareBtn from "./ShareBtn";
+import Fab from "../common/Fab";
 
 import usePlatform from "../../lib/usePlatform";
 
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Map = () => {
+const Map = ({ order }) => {
   const navermaps = window.naver.maps;
   const classes = useStyles();
   const platform = usePlatform();
@@ -40,8 +41,9 @@ const Map = () => {
         </NaverMap>
         <ShareBtn platform={platform} />
       </Container>
+      <Fab order={order} />
     </>
   );
 };
 
-export default Map;
+export default React.memo(Map);

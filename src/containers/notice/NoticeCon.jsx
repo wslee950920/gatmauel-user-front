@@ -9,11 +9,12 @@ import Notice from '../../components/notice';
 
 const NoticeCon=()=>{
     const dispatch=useDispatch();
-    const {notices, loading, lastPage}=useSelector(state=>(
+    const {notices, loading, lastPage, order}=useSelector(state=>(
         {
             notices:state.notices.notices, 
             loading:state.loading['notices/GET'],
             lastPage:state.notices.lastPage,
+            order:state.order.order
         }
     ));
     const [hasNextPage, setHasNextPage]=useState(true);
@@ -36,6 +37,7 @@ const NoticeCon=()=>{
             hasNextPage={hasNextPage} 
             loadNextPage={loadNextPage}
             loading={loading||false}
+            order={order}
         />
     );
 }

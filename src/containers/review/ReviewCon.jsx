@@ -34,6 +34,7 @@ const ReviewCon = ({ history, location }) => {
     lastPage,
     gloading,
     wloading,
+    order
   } = useSelector(state => (
     {
       reviews: state.reviews.reviews,
@@ -46,6 +47,7 @@ const ReviewCon = ({ history, location }) => {
       lastPage:state.reviews.lastPage,
       gloading:state.loading['reviews/GET'],
       wloading:state.loading['write/WRITE_REVIEW'],
+      order:state.order.order
     }
   ));
   const formData=new FormData();
@@ -237,6 +239,7 @@ const ReviewCon = ({ history, location }) => {
       progress={progress}
       wloading={wloading}
       scrollToIndex={scrollToIndex}
+      order={order}
     />
   )
 }

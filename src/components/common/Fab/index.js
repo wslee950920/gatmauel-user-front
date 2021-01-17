@@ -103,15 +103,21 @@ const FabBtn = ({ order }) => {
   );
   const addOnClick = useCallback(
     (index) => {
-      if (order[index].num === "" || order[index].num < 10)
+      if (order[index].num === "") {
         dispatch(addOrder(index));
+      } else if (order[index].num < 10) {
+        dispatch(addOrder(index));
+      }
     },
     [dispatch, order]
   );
   const subOnClick = useCallback(
     (index) => {
-      if (order[index].num === "" || order[index].num > 1)
+      if (order[index].num === "") {
         dispatch(subOrder(index));
+      } else if (order[index].num > 1) {
+        dispatch(subOrder(index));
+      }
     },
     [dispatch, order]
   );
