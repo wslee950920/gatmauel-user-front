@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -11,6 +11,8 @@ import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
+
+import AddrDialog from "./AddrDialog";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -59,6 +61,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
 
   return (
     <>
@@ -115,8 +126,7 @@ const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
               id="address"
               size="small"
               InputProps={{ className: classes.fontMaple }}
-              InputLabelProps={{ classes: { root: classes.disabled } }}
-              disabled
+              onClick={handleClickOpen}
             />
             <TextField
               variant="outlined"
@@ -127,8 +137,6 @@ const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
               id="detail"
               size="small"
               InputProps={{ className: classes.fontMaple }}
-              InputLabelProps={{ classes: { root: classes.disabled } }}
-              disabled
             />
             <div className={classes.field}>
               <TextField
@@ -174,6 +182,7 @@ const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
           </form>
         </div>
       </Container>
+      <AddrDialog open={open} handleClose={handleClose} />
     </>
   );
 };

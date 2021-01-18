@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
@@ -50,9 +50,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     fontFamily: "Roboto",
     transition: theme.transitions.create("width"),
-    '&::placeholder':{
-      textDecoration:'line-through'
-    },
 
     [theme.breakpoints.up("sm")]: {
       width: "0ch",
@@ -64,13 +61,18 @@ const useStyles = makeStyles((theme) => ({
 const SearchBar = ({ handleSearch, matches, notice }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const timer=useRef(null);
+
+  useEffect(()=>{
+    return clearTimeout(timer.current);
+  }, []);
 
   return (
     <>
       <Toolbar className={classes.root} disableGutters>
         <div className={classes.search}>
           <div className={classes.searchIcon}>
-            <SearchIcon fontSize={"default"} color='disabled'/>
+            <SearchIcon fontSize="default" />
           </div>
           <InputBase
             placeholder={notice?"Search...":"HashTags..."}
@@ -80,10 +82,9 @@ const SearchBar = ({ handleSearch, matches, notice }) => {
             }}
             inputProps={{ "aria-label": "search" }}
             onBlur={() =>
-              setTimeout(handleSearch, theme.transitions.duration.shortest)
+              timer.current=setTimeout(handleSearch, theme.transitions.duration.shortest)
             }
             autoFocus={matches}
-            disabled
           />
         </div>
       </Toolbar>

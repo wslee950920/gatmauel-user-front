@@ -1,11 +1,15 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 import {getNotices} from '../../modules/notices';
 
 import {usePreloader} from '../../lib/PreloadContext';
 
 import Notice from '../../components/notice';
+import SearchBar from "../../components/common/SearchBar";
 
 const NoticeCon=()=>{
     const dispatch=useDispatch();
@@ -18,6 +22,8 @@ const NoticeCon=()=>{
         }
     ));
     const [hasNextPage, setHasNextPage]=useState(true);
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
     const loadNextPage=useCallback(({startIndex})=>{
         dispatch(getNotices(Math.ceil(startIndex/10)+1));
@@ -32,13 +38,16 @@ const NoticeCon=()=>{
     }, [notices, lastPage]);
 
     return (
-        <Notice 
-            notices={notices} 
-            hasNextPage={hasNextPage} 
-            loadNextPage={loadNextPage}
-            loading={loading||false}
-            order={order}
-        />
+        <>
+            {!matches&&<SearchBar notice/>}
+            <Notice 
+                notices={notices} 
+                hasNextPage={hasNextPage} 
+                loadNextPage={loadNextPage}
+                loading={loading||false}
+                order={order}
+            />
+        </>
     );
 }
 

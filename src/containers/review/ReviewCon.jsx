@@ -4,6 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
 import querystring from 'querystring';
 
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+
 import {usePreloader} from '../../lib/PreloadContext';
 
 import { getReviews, modReview, subReview } from '../../modules/reviews';
@@ -20,6 +23,7 @@ import {
 import {check} from '../../modules/user';
 
 import Review from '../../components/review';
+import SearchBar from "../../components/common/SearchBar";
 
 const ReviewCon = ({ history, location }) => {
   const dispatch = useDispatch();
@@ -55,6 +59,8 @@ const ReviewCon = ({ history, location }) => {
   const [reviewId, setReviewId]=useState(null);
   const [hasNextPage, setHasNextPage]=useState(true);
   const [progress, setProgress]=useState(0);
+  const theme = useTheme();
+  const small = useMediaQuery(theme.breakpoints.up("sm"));
 
   const scrollToIndex=useMemo(()=>{
     const url=location.search.split('?')[1];
@@ -216,6 +222,8 @@ const ReviewCon = ({ history, location }) => {
   }, [review, reviewError, dispatch]);
 
   return (
+    <>
+    {!small && <SearchBar />}
     <Review
       reviews={reviews}
       content={content}
@@ -241,6 +249,7 @@ const ReviewCon = ({ history, location }) => {
       scrollToIndex={scrollToIndex}
       order={order}
     />
+    </>
   )
 }
 
