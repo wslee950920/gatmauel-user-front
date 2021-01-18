@@ -214,7 +214,7 @@ const FabBtn = ({ order }) => {
         <SnackbarContent
           message={`총액 : ${insertComma(getTotal)}`}
           action={
-            <Link component={RouterLink} to="#">
+            <Link component={RouterLink} to="/order">
               주문하기
             </Link>
           }

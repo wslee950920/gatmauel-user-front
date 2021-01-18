@@ -4,13 +4,14 @@ import {useSelector} from 'react-redux';
 import Order from '../../components/order';
 
 const OrderCon=()=>{
-    const { order}=useSelector(state=>(
+    const { order, info }=useSelector(state=>(
         {
-            order:state.order.order
+            order:state.order.order,
+            info:state.user.info
         }
     ));
 
-    return <Order order={order}/>;
+    return <Order order={order} info={info}/>;
 }
 
 export default OrderCon;

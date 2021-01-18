@@ -9,7 +9,7 @@ const OrderPage = () => {
     <div style={{ position: "relative", height: "100vh" }}>
       <HeaderCon main />
       <OrderCon />
-      <Footer />
+      <Footer map />
     </div>
   );
 };

@@ -84,7 +84,13 @@ const MenuCard = ({ handleClose, food }) => {
   }, []);
   const addToCart = useCallback(() => {
     dispatch(
-      insertToCart({ id: food.id, name: food.name, num, price: food.price })
+      insertToCart({
+        id: food.id,
+        name: food.name,
+        num,
+        price: food.price,
+        img: food.img,
+      })
     );
     setTimeout(() => {
       setNum(1);
