@@ -39,7 +39,7 @@ const NoticeCon=()=>{
 
     return (
         <>
-            {!matches&&<SearchBar notice/>}
+            {!matches&&<SearchBar/>}
             <Notice 
                 notices={notices} 
                 hasNextPage={hasNextPage} 

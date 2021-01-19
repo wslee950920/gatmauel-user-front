@@ -1,6 +1,7 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 import Profile from "../../components/profile";
 
@@ -20,9 +21,81 @@ const ProfileCon=({history})=>{
     const dispatch=useDispatch();
     const [nickname, setNickname]=useState('');
     const [error, setError] = useState({
-        nick:false
+        nick:false,
+        addr:false,
+        detail:false
     });
+    const [kakao, setKakao]=useState([]);
+    const [hasNextPage, setHasNextPage]=useState(true);
+    const [loading, setLoading]=useState(false);
+    const [query, setQuery]=useState('');
+    const [addr, setAddr]=useState('');
+    const [open, setOpen] = useState(false);
+    const [detail, setDetail]=useState('');
+    const inputRef = useRef(null);
 
+    const handleMouseDown = useCallback((event) => {
+        event.preventDefault();
+
+        inputRef.current.blur();
+    }, []);
+    const detailChange=useCallback((e)=>{
+        setError(prev=>({...prev, detail:false}));
+
+        const {value}=e.target;
+        setDetail(value);
+    }, []);
+    const clearAddress=useCallback(()=>{
+        setAddr('');
+    }, []);
+    const handleClickOpen = useCallback(() => {
+        setOpen(true);
+        setError(prev=>({...prev, addr:false}))
+    }, []);
+    const handleClose = useCallback(() => {
+        setOpen(false);
+    }, []);
+    const addrOnClick=useCallback((addr)=>{
+        setAddr(addr);
+        setOpen(false);
+    }, []);
+    const getAddress=useCallback((query, page)=>{
+        setLoading(true);
+
+        axios.get('https://dapi.kakao.com/v2/local/search/address.json', {
+            headers: {
+                'Authorization' : `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`
+            },
+            params:{
+                query,
+                page
+            }
+        })
+        .then((response)=>{
+            if(page===1){
+                setKakao(response.data.documents);
+            }
+            else{
+                setKakao(prev=>[...prev, ...response.data.documents]);
+            }
+            setHasNextPage(!response.data.meta.is_end);
+            setLoading(false);
+        })
+        .catch((error)=>{
+            if(error.response.status===400){
+                setHasNextPage(false);
+            }
+        })
+    }, [])
+    const queryOnChange=useCallback((e)=>{
+        const {value}=e.target;
+        setQuery(value);
+        getAddress(value, 1);
+    }, [getAddress])
+    const loadNextPage=useCallback(({startIndex})=>{
+        const page=Math.ceil(startIndex/10)+1;
+        getAddress(query, page);
+    }, [query, getAddress]);
     const onLogout = useCallback(() => {
         dispatch(logout());
     }, [dispatch]);
@@ -40,10 +113,26 @@ const ProfileCon=({history})=>{
     const onSubmit = useCallback((e) => {
         e.preventDefault();
 
-        if(error.nick||nickname===user.nick) return;
+        if(error.nick||error.addr||error.detail) return;
+        if(nickname===user.nick&&info.address===addr&&info.detail===detail) return;
+        if(addr!==''&&detail===''){
+            setError(prev=>({...prev, detail:true}));
 
-        dispatch(userUpdate({nickname}));
-    }, [nickname, dispatch, error, user]);
+            return;
+        } 
+        if(addr===''&&detail!==''){
+            setError(prev=>({...prev, addr:true}));
+
+            return;
+        }
+
+        setError(prev=>({
+            ...prev,
+            detail:false,
+            addr:false
+        }));
+        dispatch(userUpdate({nickname, address:addr, detail}));
+    }, [nickname, dispatch, error, user, addr, detail, info]);
 
     useEffect(()=>{
         dispatch(check());
@@ -70,6 +159,17 @@ const ProfileCon=({history})=>{
 
         dispatch(getInfo());
     }, [info, dispatch, uError]);
+    useEffect(()=>{
+        if(info){
+            setAddr(info.address?info.address:'');
+            setDetail(info.detail?info.detail:'');
+        }
+    }, [info]);
+    useEffect(()=>{
+        if(open===false){
+            inputRef.current.blur();
+        }
+    }, [open]);
     useEffect(() => {
         try{
             if (nickError) {
@@ -100,6 +200,22 @@ const ProfileCon=({history})=>{
                 error={error} 
                 onChange={onChange}
                 onSubmit={onSubmit}
+                kakao={kakao}
+                loadNextPage={loadNextPage}
+                loading={loading}
+                hasNextPage={hasNextPage}
+                queryOnChange={queryOnChange}
+                query={query}
+                addr={addr}
+                addrOnClick={addrOnClick}
+                open={open}
+                handleClickOpen={handleClickOpen}
+                handleClose={handleClose}
+                detail={detail}
+                detailChange={detailChange}
+                clearAddress={clearAddress}
+                inputRef={inputRef}
+                handleMouseDown={handleMouseDown}
             />                
 };
 

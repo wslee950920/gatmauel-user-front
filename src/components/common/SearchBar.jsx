@@ -1,22 +1,24 @@
-import React, {useEffect, useRef} from "react";
+import React from "react";
 
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  root:{
+    width:'100%',
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  toolbar: {
     width: "100%",
     padding: theme.spacing(0, 1),
     position: "fixed",
     zIndex: theme.zIndex.appBar,
     backgroundColor: "#fafafa",
-
-    [theme.breakpoints.up("sm")]: {
-      backgroundColor: "#fff",
-      position: "static",
-    },
+    maxWidth:theme.breakpoints.values.sm
   },
   search: {
     position: "relative",
@@ -24,12 +26,6 @@ const useStyles = makeStyles((theme) => ({
     border: "solid #dcdcdc",
     width: "100%",
     backgroundColor: "white",
-
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      marginTop: theme.spacing(0.5),
-      width: "auto",
-    },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -49,47 +45,39 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     width: "100%",
     fontFamily: "Roboto",
-    transition: theme.transitions.create("width"),
-
-    [theme.breakpoints.up("sm")]: {
-      width: "0ch",
-      "&:focus": { width: "20ch" },
-    },
   },
 }));
 
-const SearchBar = ({ handleSearch, matches, notice }) => {
+const SearchBar = ({ review, address, onChange, value }) => {
   const classes = useStyles();
-  const theme = useTheme();
-  const timer=useRef(null);
-
-  useEffect(()=>{
-    return clearTimeout(timer.current);
-  }, []);
 
   return (
-    <>
-      <Toolbar className={classes.root} disableGutters>
+    <div className={classes.root}>
+      <Toolbar className={classes.toolbar} disableGutters style={address&&{backgroundColor:'white'}}>
         <div className={classes.search}>
           <div className={classes.searchIcon}>
             <SearchIcon fontSize="default" />
           </div>
           <InputBase
-            placeholder={notice?"Search...":"HashTags..."}
+            placeholder={review?"HashTags...":address?"도로명주소(ex:일월로...)":"Search..."}
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput,
             }}
-            inputProps={{ "aria-label": "search" }}
-            onBlur={() =>
-              timer.current=setTimeout(handleSearch, theme.transitions.duration.shortest)
-            }
-            autoFocus={matches}
+            inputProps={{ 
+              "aria-label": "search", 
+              type:'search',
+            }}
+            {...(address&&{
+              onChange,
+              value,
+              autoFocus:true
+            })}
           />
         </div>
       </Toolbar>
-      {!matches && <Toolbar />}
-    </>
+      <Toolbar disableGutters/>
+    </div>
   );
 };
 

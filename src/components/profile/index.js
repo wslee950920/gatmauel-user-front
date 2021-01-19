@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -11,6 +11,12 @@ import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import ClearIcon from "@material-ui/icons/Clear";
+import IconButton from "@material-ui/core/IconButton";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
 
 import AddrDialog from "./AddrDialog";
 
@@ -59,17 +65,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
+const Profile = ({
+  onLogout,
+  info,
+  nickname,
+  error,
+  onChange,
+  onSubmit,
+  kakao,
+  loadNextPage,
+  loading,
+  hasNextPage,
+  queryOnChange,
+  query,
+  addr,
+  addrOnClick,
+  open,
+  handleClickOpen,
+  handleClose,
+  detail,
+  detailChange,
+  clearAddress,
+  inputRef,
+  handleMouseDown,
+}) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = useCallback(() => {
-    setOpen(true);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  }, []);
 
   return (
     <>
@@ -114,20 +134,44 @@ const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
               size="small"
               type="email"
               InputProps={{ className: classes.fontMaple }}
-              value={info ? info.email : ""}
+              value={info && info.email ? info.email : ""}
               disabled
             />
-            <TextField
+            <FormControl
               variant="outlined"
-              margin="normal"
-              fullWidth
-              name="address"
-              label="시/군/구"
-              id="address"
               size="small"
-              InputProps={{ className: classes.fontMaple }}
-              onClick={handleClickOpen}
-            />
+              fullWidth
+              margin="normal"
+            >
+              <InputLabel htmlFor="outlined-adornment-address">
+                시/군/구
+              </InputLabel>
+              <OutlinedInput
+                fullWidth
+                name="address"
+                id="outlined-adornment-address"
+                label="시/군/구"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="clear address"
+                      edge="end"
+                      onMouseDown={handleMouseDown}
+                      onClick={clearAddress}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                inputRef={inputRef}
+                inputProps={{
+                  className: classes.fontMaple,
+                  onClick: handleClickOpen,
+                }}
+                value={addr}
+                error={error.addr}
+              />
+            </FormControl>
             <TextField
               variant="outlined"
               margin="normal"
@@ -137,6 +181,9 @@ const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
               id="detail"
               size="small"
               InputProps={{ className: classes.fontMaple }}
+              value={detail}
+              onChange={detailChange}
+              error={error.detail}
             />
             <div className={classes.field}>
               <TextField
@@ -182,7 +229,17 @@ const Profile = ({ onLogout, info, nickname, error, onChange, onSubmit }) => {
           </form>
         </div>
       </Container>
-      <AddrDialog open={open} handleClose={handleClose} />
+      <AddrDialog
+        open={open}
+        handleClose={handleClose}
+        kakao={kakao}
+        loadNextPage={loadNextPage}
+        loading={loading}
+        hasNextPage={hasNextPage}
+        queryOnChange={queryOnChange}
+        query={query}
+        addrOnClick={addrOnClick}
+      />
     </>
   );
 };

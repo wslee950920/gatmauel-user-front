@@ -223,7 +223,7 @@ const ReviewCon = ({ history, location }) => {
 
   return (
     <>
-    {!small && <SearchBar />}
+    {!small && <SearchBar review/>}
     <Review
       reviews={reviews}
       content={content}
