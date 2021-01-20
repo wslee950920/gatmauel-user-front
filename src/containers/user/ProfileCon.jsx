@@ -49,8 +49,20 @@ const ProfileCon=({history})=>{
         setAddr('');
     }, []);
     const handleClickOpen = useCallback(() => {
-        setOpen(true);
-        setError(prev=>({...prev, addr:false}))
+        const filter="win16|win32|win64|macintel|mac";
+        if(navigator.platform &&filter.indexOf(navigator.platform.toLowerCase()) < 0){
+            //모바일
+            setOpen(true);
+            setError(prev=>({...prev, addr:false}));
+
+            return;
+        } else{ //PC
+            new window.daum.Postcode({
+                oncomplete:(data)=>{
+                    setAddr(data.address);
+                }
+            }).open();
+        }
     }, []);
     const handleClose = useCallback(() => {
         setOpen(false);
