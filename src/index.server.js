@@ -18,8 +18,6 @@ import thunk from "redux-thunk";
 import rootReducer, { rootSaga } from "./modules";
 import PreloadContext from "./lib/PreloadContext";
 import createSagaMiddleware, { END } from "redux-saga";
-import { persistStore } from "redux-persist";
-import { PersistGate } from "redux-persist/integration/react";
 
 const statsFile = path.resolve("./build/loadable-stats.json");
 
@@ -33,7 +31,6 @@ const serverRender = async (req, res, next) => {
     rootReducer,
     applyMiddleware(thunk, sagaMiddleware)
   );
-  const persistor = persistStore(store);
   const sagaPromise = sagaMiddleware.run(rootSaga).toPromise();
   const preloadContext = {
     done: false,
@@ -43,14 +40,12 @@ const serverRender = async (req, res, next) => {
   const temp = (
     <PreloadContext.Provider value={preloadContext}>
       <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <StaticRouter location={req.url} context={context}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <App />
-            </ThemeProvider>
-          </StaticRouter>
-        </PersistGate>
+        <StaticRouter location={req.url} context={context}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </StaticRouter>
       </Provider>
     </PreloadContext.Provider>
   );
