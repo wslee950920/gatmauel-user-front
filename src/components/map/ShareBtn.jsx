@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback}  from 'react';
+import React, {useCallback}  from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
@@ -65,16 +65,6 @@ const KakaoBtn=({platform})=>{
         templateId:45367,
         installTalk:true
       })
-    }, []);
-
-    useEffect(()=>{
-      if (window.Kakao) {
-        const kakao = window.Kakao
-        // 중복 initialization 방지
-        if (!kakao.isInitialized()) {
-          kakao.init(process.env.REACT_APP_KAKAO_JS_KEY)
-        }
-      }
     }, []);
 
     return(

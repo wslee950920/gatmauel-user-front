@@ -19,6 +19,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 
 import AddrDialog from "./AddrDialog";
+import Fab from "../common/Fab";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -88,6 +89,7 @@ const Profile = ({
   clearAddress,
   inputRef,
   handleMouseDown,
+  order,
 }) => {
   const classes = useStyles();
 
@@ -240,6 +242,7 @@ const Profile = ({
         query={query}
         addrOnClick={addrOnClick}
       />
+      <Fab order={order} />
     </>
   );
 };

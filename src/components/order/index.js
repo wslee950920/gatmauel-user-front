@@ -8,7 +8,8 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import OrderList from "./OrderList";
 import SelectTab from "./SelectTab";
-import InfoDialog from "./InfoDialog";
+import InfoDialog from "../common/InfoDialog";
+import Payment from "./Payment";
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -41,6 +42,7 @@ const Order = ({ order, info }) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const [iOpen, setIOpen] = useState(false);
+  const [pOpen, setPOpen] = useState(false);
 
   const getTotal = useMemo(() => {
     const temp = order.reduce(
@@ -80,6 +82,12 @@ const Order = ({ order, info }) => {
   const DialogClose = useCallback(() => {
     setIOpen(false);
   }, []);
+  const PaymentOpen = useCallback(() => {
+    setPOpen(true);
+  }, []);
+  const PaymentClose = useCallback(() => {
+    setPOpen(false);
+  }, []);
 
   return (
     <>
@@ -114,16 +122,16 @@ const Order = ({ order, info }) => {
             variant="contained"
             className={classes.btn}
             color="primary"
-            component={RouterLink}
-            to={value === 0 ? "/pickup" : "/deli"}
             style={{ marginTop: theme.spacing(1.5) }}
             classes={{ label: classes.label }}
+            onClick={PaymentOpen}
           >
             {value === 0 ? "포장 주문하기" : "배달 주문하기"}
           </Button>
-          <InfoDialog open={iOpen} handleClose={DialogClose} />
         </Container>
       </div>
+      <InfoDialog open={iOpen} handleClose={DialogClose} />
+      <Payment open={pOpen} handleClose={PaymentClose} deli={value} />
     </>
   );
 };

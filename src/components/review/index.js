@@ -21,10 +21,10 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import ReviewItem from "./ReviewItem";
-import FullScreenDialog from "./FullScreenDialog";
 import EditReview from "./EditReview";
 import Fab from "../common/Fab";
 const DeleteDialog = loadable(() => import("./Delete"));
+const FullScreenDialog = loadable(() => import("./FullScreenDialog"));
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -213,14 +213,16 @@ const Review = ({
             )}
           </InfiniteLoader>
         </div>
-        <FullScreenDialog open={open} handleClose={handleClose} />
       </StepProvider>
       {user && (
-        <DeleteDialog
-          rOpen={rOpen}
-          closeRemove={closeRemove}
-          feedRemove={feedRemove}
-        />
+        <>
+          <FullScreenDialog open={open} handleClose={handleClose} />
+          <DeleteDialog
+            rOpen={rOpen}
+            closeRemove={closeRemove}
+            feedRemove={feedRemove}
+          />
+        </>
       )}
       <Fab order={order} />
     </>

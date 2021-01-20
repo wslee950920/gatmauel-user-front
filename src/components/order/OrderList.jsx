@@ -1,6 +1,5 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import { useDispatch } from "react-redux";
-import { useHistory } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -24,7 +23,7 @@ import {
 const useStyles=makeStyles((theme)=>({
     root:{
         width:'100%',
-        maxHeight:'40vh',
+        maxHeight:'45vh',
         overflow: 'auto',
     },
     textField: {
@@ -47,7 +46,6 @@ const useStyles=makeStyles((theme)=>({
 const OrderList=({order})=>{
     const classes=useStyles();
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const insertComma = useCallback((num) => {
         const result = String(num).split("");
@@ -99,13 +97,6 @@ const OrderList=({order})=>{
         },
         [dispatch]
       );
-
-    useEffect(()=>{
-        if(order.length===0){
-            alert('메뉴를 추가해주세요.');
-            history.push('/menu');
-        }
-    }, [order, history]);
 
     return(
         <List className={classes.root}>

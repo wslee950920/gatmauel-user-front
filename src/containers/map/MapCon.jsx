@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import { RenderAfterNavermapsLoaded } from "react-naver-maps";
 
@@ -11,6 +11,16 @@ const MapCon=()=>{
             order:state.order.order
         }
     ));
+
+    useEffect(()=>{
+        if (window.Kakao) {
+          const kakao = window.Kakao
+          // 중복 initialization 방지
+          if (!kakao.isInitialized()) {
+            kakao.init(process.env.REACT_APP_KAKAO_JS_KEY)
+          }
+        }
+    }, []);
 
     return (
         <RenderAfterNavermapsLoaded

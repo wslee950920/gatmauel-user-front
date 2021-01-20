@@ -9,13 +9,14 @@ import { logout, getInfo, check, userUpdate } from "../../modules/user";
 import { checkNick, initAuth } from '../../modules/auth';
 
 const ProfileCon=({history})=>{
-    const {user, info, nick, nickError, uError}=useSelector(
-        ({user, auth})=>({
+    const {user, info, nick, nickError, uError, order}=useSelector(
+        ({user, auth, order})=>({
             user:user.user,
             info:user.info,
             nick: auth.nick,
             nickError: auth.nickError,
-            uError:user.error
+            uError:user.error,
+            order:order.order
         })
     );
     const dispatch=useDispatch();
@@ -60,8 +61,13 @@ const ProfileCon=({history})=>{
             new window.daum.Postcode({
                 oncomplete:(data)=>{
                     setAddr(data.address);
+                },
+                onclose:()=>{
+                    inputRef.current.blur();
                 }
-            }).open();
+            }).open({
+                popupName: 'postcodePopup'
+            });
         }
     }, []);
     const handleClose = useCallback(() => {
@@ -228,6 +234,7 @@ const ProfileCon=({history})=>{
                 clearAddress={clearAddress}
                 inputRef={inputRef}
                 handleMouseDown={handleMouseDown}
+                order={order}
             />                
 };
 
