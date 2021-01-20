@@ -59,7 +59,13 @@ const KakaoBtn=({platform})=>{
           }
         }
       }, 1500);
-    }, [])
+    }, []);
+    const kakaoShare=useCallback(()=>{
+      window.Kakao.Link.sendCustom({
+        templateId:45367,
+        installTalk:true
+      })
+    }, []);
 
     useEffect(()=>{
       if (window.Kakao) {
@@ -68,29 +74,6 @@ const KakaoBtn=({platform})=>{
         if (!kakao.isInitialized()) {
           kakao.init(process.env.REACT_APP_KAKAO_JS_KEY)
         }
-        kakao.Link.createDefaultButton({
-          // Render 부분 id=kakao-link-btn 을 찾아 그부분에 렌더링을 합니다
-          container: '#kakao-link-btn',
-          objectType: 'feed',
-          content: {
-            title: '갯마을바지락칼국수보쌈',
-            description: '#칼국수 #보쌈 #당수동 #맛집',
-            imageUrl: 'https://raw.githubusercontent.com/wslee950920/gatmauel-user-front/master/public/images/icons/logo192.png', //추후 s3에서 가져오자
-            link: {
-              mobileWebUrl: process.env.REACT_APP_COMM_URL,
-              webUrl: process.env.REACT_APP_COMM_URL,
-            },
-          },
-          buttons: [
-            {
-              title: '홈페이지 방문하기',
-              link: {
-                mobileWebUrl: process.env.REACT_APP_COMM_URL,
-                webUrl: process.env.REACT_APP_COMM_URL,
-              },
-            },
-          ],
-        })
       }
     }, []);
 
@@ -105,11 +88,11 @@ const KakaoBtn=({platform})=>{
               naverMap();
             }
           }}
-          {...(!platform?
+          {...(!platform&&
             {
               href:process.env.REACT_APP_NAVER_MAP_URL,
               target:'self'
-            }:{})
+            })
           }
         >
             <img 
@@ -126,11 +109,11 @@ const KakaoBtn=({platform})=>{
               kakaoMap();
             }
           }}
-          {...(!platform?
+          {...(!platform&&
             {
               href:process.env.REACT_APP_KAKAO_MAP_URL,
               target:'self'
-            }:{})
+            })
           }
         >
             <img 
@@ -139,10 +122,12 @@ const KakaoBtn=({platform})=>{
             />
         </Button>
         <Button 
-          id="kakao-link-btn" 
           className={classes.btn} 
           classes={{ root:classes.btnRoot, text: classes.kakaoBtn }} 
           size='small'
+          onClick={()=>{
+            kakaoShare();
+          }}
         >
             <img 
               src="/images/icons/kakaolink_btn_small.png" 
