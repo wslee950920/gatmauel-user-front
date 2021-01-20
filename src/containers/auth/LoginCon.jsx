@@ -100,7 +100,16 @@ const LoginCon=({history})=>{
         dispatch(login({email, password, checked}));
     }, [email, password, dispatch, checked]);
 
-    useEffect(()=>{          
+    useEffect(()=>{
+        if (window.Kakao) {
+            const kakao = window.Kakao
+            // 중복 initialization 방지
+            if (!kakao.isInitialized()) {
+              kakao.init(process.env.REACT_APP_KAKAO_JS_KEY)
+            }
+        }
+    }, []);
+    useEffect(()=>{            
         return()=>{
             dispatch(initAuth());
         }
