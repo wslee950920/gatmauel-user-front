@@ -147,7 +147,7 @@ const InfoDialog=({open, handleClose})=>{
                                 >
                                     {coll[1] ? <KeyboardArrowUpIcon />:<KeyboardArrowDownIcon />}
                                 </IconButton>
-                                    지역별 추가 배달료
+                                    거리별 추가 배달료
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -165,7 +165,7 @@ const InfoDialog=({open, handleClose})=>{
                                             clsx(classes.cell, classes.pRight)
                                         }
                                     >
-                                        입북동
+                                        2km이하
                                     </TableCell>
                                     <TableCell 
                                         align="right" 
@@ -182,7 +182,7 @@ const InfoDialog=({open, handleClose})=>{
                                             clsx(classes.cell, classes.pRight)
                                         }
                                     >
-                                        반월동
+                                        2km이상 4km미만
                                     </TableCell>
                                     <TableCell 
                                         align="right" 
@@ -199,7 +199,7 @@ const InfoDialog=({open, handleClose})=>{
                                             clsx(classes.cell, classes.pRight)
                                         }
                                     >
-                                        금곡동, 호매실동
+                                        4km이상
                                     </TableCell>
                                     <TableCell 
                                         align="right" 

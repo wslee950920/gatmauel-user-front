@@ -18,7 +18,7 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 
-import AddrDialog from "./AddrDialog";
+import AddrDialog from "../common/Address/AddrDialog";
 import Fab from "../common/Fab";
 
 const useStyles = makeStyles((theme) => ({
@@ -87,9 +87,11 @@ const Profile = ({
   detail,
   detailChange,
   clearAddress,
-  inputRef,
+  addrRef,
   handleMouseDown,
   order,
+  detailRef,
+  handleOnExit,
 }) => {
   const classes = useStyles();
 
@@ -165,7 +167,7 @@ const Profile = ({
                     </IconButton>
                   </InputAdornment>
                 }
-                inputRef={inputRef}
+                inputRef={addrRef}
                 inputProps={{
                   className: classes.fontMaple,
                   onClick: handleClickOpen,
@@ -180,12 +182,12 @@ const Profile = ({
               fullWidth
               name="detail"
               label="상세주소"
-              id="detail"
               size="small"
               InputProps={{ className: classes.fontMaple }}
               value={detail}
               onChange={detailChange}
               error={error.detail}
+              inputRef={detailRef}
             />
             <div className={classes.field}>
               <TextField
@@ -241,6 +243,7 @@ const Profile = ({
         queryOnChange={queryOnChange}
         query={query}
         addrOnClick={addrOnClick}
+        handleOnExit={handleOnExit}
       />
       <Fab order={order} />
     </>

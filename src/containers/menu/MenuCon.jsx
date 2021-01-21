@@ -20,7 +20,8 @@ const MenuCon=()=>{
     usePreloader(()=>dispatch(getCategory()));
 
     useEffect(()=>{
-        if(category||loading) return;
+        if(category) return;
+        if(loading) return;
         if(error) return;
 
         dispatch(getCategory());

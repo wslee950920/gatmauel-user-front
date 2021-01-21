@@ -62,7 +62,7 @@ const CarouselMenu = ({ handleOpen, food }) => {
   return (
     <div className={classes.root}>
       <Container className={classes.background} ref={conRef}>
-        {food ? (
+        {food && food.length > 0 ? (
           <GridList
             className={classes.gridList}
             cols={parseFloat(clsx(medium ? ratio : small ? 2.25 : 1.25))}

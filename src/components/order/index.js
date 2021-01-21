@@ -131,7 +131,12 @@ const Order = ({ order, info }) => {
         </Container>
       </div>
       <InfoDialog open={iOpen} handleClose={DialogClose} />
-      <Payment open={pOpen} handleClose={PaymentClose} deli={value} />
+      <Payment
+        open={pOpen}
+        handleClose={PaymentClose}
+        deli={value}
+        info={info}
+      />
     </>
   );
 };

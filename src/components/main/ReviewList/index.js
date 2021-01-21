@@ -4,7 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 
@@ -33,16 +33,18 @@ const useStyles = makeStyles((theme) => ({
   more: {
     marginRight: theme.spacing(1),
   },
+  padding: {
+    padding: theme.spacing(0.8),
+  },
 }));
 
 const ReviewList = ({ reviews }) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <div style={{ padding: theme.spacing(0.8) }}>
+      <div className={classes.padding}>
         <Container className={classes.background}>
           <div className={classes.box}>
             <Typography variant="subtitle1" className={classes.title} noWrap>

@@ -11,8 +11,8 @@ import Container from "@material-ui/core/Container";
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
-import SearchBar from '../common/SearchBar';
-import Circular from '../common/Circular';
+import SearchBar from '../SearchBar';
+import Circular from '../Circular';
 import AddrBtn from './AddrBtn';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +43,8 @@ const AddrDialog=({
     loadNextPage, 
     loading, 
     hasNextPage, 
-    queryOnChange
+    queryOnChange,
+    handleOnExit
 })=>{
     const classes=useStyles();
 
@@ -93,7 +94,13 @@ const AddrDialog=({
     );
 
     return(
-        <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+        <Dialog 
+            fullScreen 
+            open={open} 
+            onClose={handleClose} 
+            TransitionComponent={Transition} 
+            onExited={handleOnExit}
+        >
             <>
                 <CssBaseline />
                 <Container maxWidth="sm">

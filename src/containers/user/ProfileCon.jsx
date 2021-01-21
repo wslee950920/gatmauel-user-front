@@ -9,14 +9,15 @@ import { logout, getInfo, check, userUpdate } from "../../modules/user";
 import { checkNick, initAuth } from '../../modules/auth';
 
 const ProfileCon=({history})=>{
-    const {user, info, nick, nickError, uError, order}=useSelector(
-        ({user, auth, order})=>({
+    const {user, info, nick, nickError, uError, order, iloading}=useSelector(
+        ({user, auth, order, loading})=>({
             user:user.user,
             info:user.info,
             nick: auth.nick,
             nickError: auth.nickError,
             uError:user.error,
-            order:order.order
+            order:order.order,
+            iloading:loading['user/GET_INFO']
         })
     );
     const dispatch=useDispatch();
@@ -33,12 +34,11 @@ const ProfileCon=({history})=>{
     const [addr, setAddr]=useState('');
     const [open, setOpen] = useState(false);
     const [detail, setDetail]=useState('');
-    const inputRef = useRef(null);
+    const addrRef = useRef(null);
+    const detailRef=useRef(null);
 
     const handleMouseDown = useCallback((event) => {
         event.preventDefault();
-
-        inputRef.current.blur();
     }, []);
     const detailChange=useCallback((e)=>{
         setError(prev=>({...prev, detail:false}));
@@ -51,7 +51,7 @@ const ProfileCon=({history})=>{
     }, []);
     const handleClickOpen = useCallback(() => {
         const filter="win16|win32|win64|macintel|mac";
-        if(navigator.platform &&filter.indexOf(navigator.platform.toLowerCase()) < 0){
+        if(navigator.platform &&filter.indexOf(navigator.platform.toLowerCase()) > 0){
             //모바일
             setOpen(true);
             setError(prev=>({...prev, addr:false}));
@@ -61,19 +61,24 @@ const ProfileCon=({history})=>{
             new window.daum.Postcode({
                 oncomplete:(data)=>{
                     setAddr(data.address);
+                    detailRef.current.focus();
                 },
                 onclose:()=>{
-                    inputRef.current.blur();
+                    addrRef.current.blur();
                 }
             }).open({
                 popupName: 'postcodePopup'
             });
         }
     }, []);
+    const handleOnExit=useCallback(()=>{
+        addrRef.current.blur();
+    }, []);
     const handleClose = useCallback(() => {
         setOpen(false);
     }, []);
     const addrOnClick=useCallback((addr)=>{
+        setTimeout(()=>{detailRef.current.focus()}, 200);
         setAddr(addr);
         setOpen(false);
     }, []);
@@ -174,20 +179,16 @@ const ProfileCon=({history})=>{
     useEffect(()=>{
         if(info) return;
         if(uError) return;
+        if(iloading) return;
 
         dispatch(getInfo());
-    }, [info, dispatch, uError]);
+    }, [info, dispatch, uError, iloading]);
     useEffect(()=>{
         if(info){
             setAddr(info.address?info.address:'');
             setDetail(info.detail?info.detail:'');
         }
     }, [info]);
-    useEffect(()=>{
-        if(open===false){
-            inputRef.current.blur();
-        }
-    }, [open]);
     useEffect(() => {
         try{
             if (nickError) {
@@ -232,9 +233,11 @@ const ProfileCon=({history})=>{
                 detail={detail}
                 detailChange={detailChange}
                 clearAddress={clearAddress}
-                inputRef={inputRef}
+                addrRef={addrRef}
                 handleMouseDown={handleMouseDown}
                 order={order}
+                detailRef={detailRef}
+                handleOnExit={handleOnExit}
             />                
 };
 
