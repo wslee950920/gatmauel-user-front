@@ -9,14 +9,13 @@ import { logout, getInfo, check, userUpdate } from "../../modules/user";
 import { checkNick, initAuth } from '../../modules/auth';
 
 const ProfileCon=({history})=>{
-    const {user, info, nick, nickError, uError, order, iloading}=useSelector(
-        ({user, auth, order, loading})=>({
+    const {user, info, nick, nickError, uError, iloading}=useSelector(
+        ({user, auth, loading})=>({
             user:user.user,
             info:user.info,
             nick: auth.nick,
             nickError: auth.nickError,
             uError:user.error,
-            order:order.order,
             iloading:loading['user/GET_INFO']
         })
     );
@@ -235,7 +234,6 @@ const ProfileCon=({history})=>{
                 clearAddress={clearAddress}
                 addrRef={addrRef}
                 handleMouseDown={handleMouseDown}
-                order={order}
                 detailRef={detailRef}
                 handleOnExit={handleOnExit}
             />                

@@ -19,7 +19,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 
 import AddrDialog from "../common/Address/AddrDialog";
-import Fab from "../common/Fab";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -59,10 +58,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 1, 1),
     color: "white",
     fontFamily: "Roboto",
-    textDecoration: "line-through",
-  },
-  disabled: {
-    textDecoration: "line-through",
+    backgroundColor: theme.palette.primary.light,
   },
 }));
 
@@ -89,7 +85,6 @@ const Profile = ({
   clearAddress,
   addrRef,
   handleMouseDown,
-  order,
   detailRef,
   handleOnExit,
 }) => {
@@ -196,14 +191,15 @@ const Profile = ({
                 fullWidth
                 name="phone"
                 label="전화번호"
-                id="phone"
                 size="small"
                 InputProps={{ className: classes.fontMaple }}
-                InputLabelProps={{ classes: { root: classes.disabled } }}
                 type="tel"
-                disabled
               />
-              <Button variant="contained" className={classes.button} disabled>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
                 인증
               </Button>
             </div>
@@ -245,7 +241,6 @@ const Profile = ({
         addrOnClick={addrOnClick}
         handleOnExit={handleOnExit}
       />
-      <Fab order={order} />
     </>
   );
 };

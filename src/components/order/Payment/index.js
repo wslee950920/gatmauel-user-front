@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import axios from "axios";
+import loadable from "@loadable/component";
 
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
@@ -17,7 +18,7 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 
-import AddrDialog from "../../common/Address/AddrDialog";
+const AddrDialog = loadable(() => import("../../common/Address/AddrDialog"));
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -279,18 +280,20 @@ const Payment = ({ open, handleClose, deli, info }) => {
           </Container>
         </div>
       </Dialog>
-      <AddrDialog
-        open={aOpen}
-        handleClose={addressClose}
-        kakao={kakao}
-        loadNextPage={loadNextPage}
-        loading={loading}
-        hasNextPage={hasNextPage}
-        queryOnChange={queryOnChange}
-        query={query}
-        addrOnClick={addrOnClick}
-        handleOnExit={addressExit}
-      />
+      {!!deli && (
+        <AddrDialog
+          open={aOpen}
+          handleClose={addressClose}
+          kakao={kakao}
+          loadNextPage={loadNextPage}
+          loading={loading}
+          hasNextPage={hasNextPage}
+          queryOnChange={queryOnChange}
+          query={query}
+          addrOnClick={addrOnClick}
+          handleOnExit={addressExit}
+        />
+      )}
     </>
   );
 };
