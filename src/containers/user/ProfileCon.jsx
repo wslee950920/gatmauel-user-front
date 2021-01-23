@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState, useRef} from 'react';
+import React, {useEffect, useCallback, useState, useRef, useMemo} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -7,6 +7,8 @@ import Profile from "../../components/profile";
 
 import { logout, getInfo, check, userUpdate } from "../../modules/user";
 import { checkNick, initAuth } from '../../modules/auth';
+
+import {user as userAPI} from '../../lib/api/client';
 
 const ProfileCon=({history})=>{
     const {user, info, nick, nickError, uError, iloading}=useSelector(
@@ -24,7 +26,8 @@ const ProfileCon=({history})=>{
     const [error, setError] = useState({
         nick:false,
         addr:false,
-        detail:false
+        detail:false,
+        code:false
     });
     const [kakao, setKakao]=useState([]);
     const [hasNextPage, setHasNextPage]=useState(true);
@@ -35,6 +38,30 @@ const ProfileCon=({history})=>{
     const [detail, setDetail]=useState('');
     const addrRef = useRef(null);
     const detailRef=useRef(null);
+    const [phone, setPhone]=useState('');
+    const [verify, setVerify]=useState(false);
+    const es=useRef(null);
+    const [end, setEnd]=useState(null);
+    const [sse, setSse]=useState(null);
+    const [code, setCode]=useState('');
+    const [confirm, setConfirm]=useState(true);
+    const [helper, setHelper]=useState('');
+
+    const timer = useMemo(() => {
+        if(sse&&end){
+            if (sse >= end) {    
+              return "00:00";
+            } else {
+              const temp = end - sse;
+              const seconds = ("0" + Math.floor((temp / 1000) % 60)).slice(-2);
+              const minutes = ("0" + Math.floor((temp / 1000 / 60) % 60)).slice(-2);
+        
+              return minutes + ":" + seconds;
+            }
+        } else{
+            return '';
+        }
+      }, [sse, end]);
 
     const handleMouseDown = useCallback((event) => {
         event.preventDefault();
@@ -45,6 +72,12 @@ const ProfileCon=({history})=>{
         const {value}=e.target;
         setDetail(value);
     }, []);
+    const phoneChange=useCallback((e)=>{
+        setConfirm(false);
+        
+        const {value}=e.target;
+        setPhone(value);
+    }, [])
     const clearAddress=useCallback(()=>{
         setAddr('');
     }, []);
@@ -113,7 +146,7 @@ const ProfileCon=({history})=>{
         const {value}=e.target;
         setQuery(value);
         getAddress(value, 1);
-    }, [getAddress])
+    }, [getAddress]);
     const loadNextPage=useCallback(({startIndex})=>{
         const page=Math.ceil(startIndex/10)+1;
         getAddress(query, page);
@@ -136,7 +169,7 @@ const ProfileCon=({history})=>{
         e.preventDefault();
 
         if(error.nick||error.addr||error.detail) return;
-        if(nickname===user.nick&&info.address===addr&&info.detail===detail) return;
+        if(nickname===user.nick&&info.address===addr&&info.detail===detail&&phone===info.phone) return;
         if(addr!==''&&detail===''){
             setError(prev=>({...prev, detail:true}));
 
@@ -148,14 +181,104 @@ const ProfileCon=({history})=>{
             return;
         }
 
+        setVerify(false);
+        setSse(null);
+        setEnd(null);
+        if(es&&es.current){
+            es.current.close();
+        }
         setError(prev=>({
             ...prev,
             detail:false,
-            addr:false
+            addr:false,
         }));
-        dispatch(userUpdate({nickname, address:addr, detail}));
-    }, [nickname, dispatch, error, user, addr, detail, info]);
+        dispatch(userUpdate({
+            nickname, 
+            address:addr, 
+            detail, 
+            phone:(confirm||phone===info.phone?phone:'')
+        }));
+    }, [nickname, dispatch, error, user, addr, detail, info, phone, confirm]);
+    const checkPhone=useCallback(()=>{
+        setError(prev=>({...prev, code:false}));
+        setCode('');
 
+        if(phone===info.phone&&confirm){
+            setConfirm(true);
+
+            return;
+        }
+
+        userAPI.post('/api/user/phone', {phone})
+            .then((res)=>{
+                setVerify(true);
+
+                const temp=new Date(res.data.updatedAt);
+                temp.setMinutes(temp.getMinutes()+3);
+                setEnd(temp);
+            })
+            .catch((e)=>{
+                if(e){
+                    alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                }
+            })
+    }, [phone, info, confirm]);
+    const codeOnChange=useCallback((e)=>{
+        setError(prev=>({...prev, code:false}));
+
+        const curValue = e.target.value;
+        const newValue = curValue.replace(/[^0-9]/g, "");
+        setCode(newValue);
+    }, [])
+    const confirmPhone=useCallback(()=>{
+        if(code===''){
+            return;
+        }
+
+        userAPI.post('/api/user/callback', {code, phone})
+            .then(()=>{
+                setError(prev=>({...prev, code:false}));
+                setConfirm(true);
+                setVerify(false);
+                setSse(null);
+                setEnd(null);
+
+                es.current.close();
+            })
+            .catch((error)=>{
+                setError(prev=>({...prev, code:true}));
+                setConfirm(false);
+
+                if(error){
+                    if(error.response.status===419){
+                        setHelper('인증번호가 만료되었습니다.');
+                    } else if(error.response.status===404){
+                        setHelper('인증번호가 틀렸습니다.')
+                    } else{
+                        alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                    }
+                }
+            });
+    }, [code, phone]);
+
+    useEffect(()=>{
+        return ()=>{
+            if(es&&es.current){
+                es.current.close();
+            }
+        }    
+    }, [])
+    useEffect(()=>{
+        if(verify){
+            es.current=new EventSource('http://localhost:9090/api/user/timer',{
+                withCredentials: true
+            });
+
+            es.current.onmessage=(e)=>{
+                setSse(new Date(parseInt(e.data, 10)));
+            }    
+        }
+    }, [verify]);
     useEffect(()=>{
         dispatch(check());
         
@@ -164,7 +287,6 @@ const ProfileCon=({history})=>{
     useEffect(()=>{
         if(!user){
             history.push('/login');
-            alert('로그인 해주세요.');
         } else{
             setNickname(user.nick);
 
@@ -176,16 +298,26 @@ const ProfileCon=({history})=>{
         }
     }, [user, history]);
     useEffect(()=>{
+        if(uError){
+            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+
+            return;
+        }
+    }, [uError]);
+    useEffect(()=>{
         if(info) return;
         if(uError) return;
         if(iloading) return;
 
-        dispatch(getInfo());
-    }, [info, dispatch, uError, iloading]);
+        if(user){
+            dispatch(getInfo());
+        }
+    }, [dispatch, uError, iloading, info, user]);
     useEffect(()=>{
         if(info){
             setAddr(info.address?info.address:'');
             setDetail(info.detail?info.detail:'');
+            setPhone(info.phone?info.phone:'');
         }
     }, [info]);
     useEffect(() => {
@@ -236,6 +368,15 @@ const ProfileCon=({history})=>{
                 handleMouseDown={handleMouseDown}
                 detailRef={detailRef}
                 handleOnExit={handleOnExit}
+                phone={phone}
+                phoneChange={phoneChange}
+                checkPhone={checkPhone}
+                timer={timer}
+                verify={verify}
+                confirmPhone={confirmPhone}
+                codeOnChange={codeOnChange}
+                code={code}
+                helper={helper}
             />                
 };
 

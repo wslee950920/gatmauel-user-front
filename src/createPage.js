@@ -97,6 +97,7 @@ const createPage = (root, tags) => {
             </script>
             <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
             <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/eventsource-polyfill/0.9.6/eventsource.min.js" integrity="sha512-2yFxlFMuyG+/BzPxBPJIqVDQtYXs/Vf/Y9TU37Cu3W8nMgXf+isJZM0OgWUS/wv9BypnST+Z3g36yLmnrSMoQQ==" crossorigin="anonymous"></script>
           </body>
       </html>
       `;

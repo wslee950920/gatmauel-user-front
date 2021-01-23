@@ -1,5 +1,4 @@
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -17,6 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 import AddrDialog from "../common/Address/AddrDialog";
 
@@ -54,8 +54,15 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   button: {
-    height: "auto",
+    height: "2.5rem",
     margin: theme.spacing(2, 1, 1),
+    color: "white",
+    fontFamily: "Roboto",
+    backgroundColor: theme.palette.primary.light,
+  },
+  verify: {
+    height: "2.5rem",
+    margin: theme.spacing(1, 1, 0.5),
     color: "white",
     fontFamily: "Roboto",
     backgroundColor: theme.palette.primary.light,
@@ -87,6 +94,15 @@ const Profile = ({
   handleMouseDown,
   detailRef,
   handleOnExit,
+  phone,
+  phoneChange,
+  checkPhone,
+  timer,
+  verify,
+  confirmPhone,
+  codeOnChange,
+  code,
+  helper,
 }) => {
   const classes = useStyles();
 
@@ -194,15 +210,73 @@ const Profile = ({
                 size="small"
                 InputProps={{ className: classes.fontMaple }}
                 type="tel"
+                value={phone}
+                onChange={phoneChange}
               />
               <Button
                 variant="contained"
                 color="primary"
                 className={classes.button}
+                {...(!!phone && {
+                  onClick: checkPhone,
+                })}
+                {...(verify && {
+                  style: { fontSize: "0.65rem" },
+                })}
               >
-                인증
+                {!verify ? "인증" : "재전송"}
               </Button>
             </div>
+            {verify && (
+              <div className={classes.field}>
+                <FormControl
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  margin="dense"
+                  error={error.code}
+                >
+                  <InputLabel htmlFor="outlined-adornment-verification">
+                    인증번호
+                  </InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    name="verification"
+                    id="outlined-adornment-verification"
+                    label="인증번호"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <Typography
+                          variant="body2"
+                          className={classes.fontRobo}
+                          color="error"
+                        >
+                          {timer}
+                        </Typography>
+                      </InputAdornment>
+                    }
+                    inputProps={{
+                      className: classes.fontMaple,
+                    }}
+                    onChange={codeOnChange}
+                    value={code}
+                  />
+                  {error.code && (
+                    <FormHelperText id="outlined-adornment-verification-error">
+                      {helper}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.verify}
+                  onClick={confirmPhone}
+                >
+                  확인
+                </Button>
+              </div>
+            )}
             <Button
               type="submit"
               fullWidth
@@ -215,8 +289,6 @@ const Profile = ({
             <Grid container justify="flex-end">
               <Grid item>
                 <Link
-                  component={RouterLink}
-                  to="/"
                   variant="caption"
                   color="textSecondary"
                   TypographyClasses={{ caption: classes.fontRobo }}

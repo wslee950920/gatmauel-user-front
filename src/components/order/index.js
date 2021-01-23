@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from "react";
+import loadable from "@loadable/component";
 import { Link as RouterLink } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -8,8 +9,9 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import OrderList from "./OrderList";
 import SelectTab from "./SelectTab";
-import InfoDialog from "../common/InfoDialog";
 import Payment from "./Payment";
+
+const InfoDialog = loadable(() => import("../common/InfoDialog"));
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -130,7 +132,7 @@ const Order = ({ order, info }) => {
           </Button>
         </Container>
       </div>
-      <InfoDialog open={iOpen} handleClose={DialogClose} />
+      {value === 1 && <InfoDialog open={iOpen} handleClose={DialogClose} />}
       <Payment
         open={pOpen}
         handleClose={PaymentClose}

@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   fontMaple: {
     fontFamily: "MaplestoryOTFBold",
+    color: "black",
   },
 }));
 
@@ -182,8 +183,8 @@ const Payment = ({ open, handleClose, deli, info }) => {
         setDetail(info.detail ? info.detail : "");
       }
     } else if (value === 1) {
-      setAddr("");
-      setDetail("");
+      setAddr("경기도 수원시 팔달구 일월로18번길 4-26");
+      setDetail("172동 1901호");
     }
   }, [info, value]);
 
@@ -238,18 +239,20 @@ const Payment = ({ open, handleClose, deli, info }) => {
                     name="address"
                     id={`outlined-adornment-delivery`}
                     label="시/군/구"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="clear address"
-                          edge="end"
-                          onMouseDown={handleMouseDown}
-                          onClick={clearAddress}
-                        >
-                          <ClearIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    }
+                    {...(value === 0 && {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="clear address"
+                            edge="end"
+                            onMouseDown={handleMouseDown}
+                            onClick={clearAddress}
+                          >
+                            <ClearIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    })}
                     inputProps={{
                       className: classes.fontMaple,
                       onClick: handleClickOpen,
@@ -257,6 +260,7 @@ const Payment = ({ open, handleClose, deli, info }) => {
                     value={addr}
                     error={error.addr}
                     inputRef={addrRef}
+                    disabled={value === 1}
                   />
                 </FormControl>
                 <TextField
@@ -266,11 +270,16 @@ const Payment = ({ open, handleClose, deli, info }) => {
                   name="detail"
                   label="상세주소"
                   size="small"
-                  InputProps={{ className: classes.fontMaple }}
+                  InputProps={{
+                    className: classes.fontMaple,
+                    style: { color: "black" },
+                  }}
                   value={detail}
                   onChange={detailChange}
                   error={error.detail}
                   inputRef={detailRef}
+                  disabled={value === 1}
+                  InputLabelProps={{ style: { color: "rgba(0, 0, 0, 0.54)" } }}
                 />
               </div>
             </Container>
