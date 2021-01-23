@@ -169,7 +169,7 @@ const ProfileCon=({history})=>{
         e.preventDefault();
 
         if(error.nick||error.addr||error.detail) return;
-        if(nickname===user.nick&&info.address===addr&&info.detail===detail&&phone===info.phone) return;
+        if(nickname===user.nick&&info.address===addr&&info.detail===detail&&(phone===info.phone&&confirm)) return;
         if(addr!==''&&detail===''){
             setError(prev=>({...prev, detail:true}));
 
