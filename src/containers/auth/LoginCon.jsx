@@ -38,8 +38,8 @@ const LoginCon=({history})=>{
                           eVerified:info.kakao_account.is_email_verified,
                           nick:info.kakao_account.profile.nickname
                         })
-                        .then(()=>{
-                            dispatch(tempSetUser(true));
+                        .then((res)=>{
+                            dispatch(tempSetUser(res.data));
                         })
                         .catch((err)=>{
                           if(err.response&&err.response.status===409){
@@ -143,7 +143,7 @@ const LoginCon=({history})=>{
                 throw loginError;
             }
             if(login){
-                dispatch(tempSetUser(true));
+                dispatch(tempSetUser(login.data));
             }
         } catch(e){
             console.error(e)
