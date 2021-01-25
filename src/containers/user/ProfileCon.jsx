@@ -67,7 +67,11 @@ const ProfileCon=({history})=>{
         event.preventDefault();
     }, []);
     const detailChange=useCallback((e)=>{
-        setError(prev=>({...prev, detail:false}));
+        setError(prev=>({
+            ...prev,
+            addr:false,
+            detail:false
+        }))
 
         const {value}=e.target;
         setDetail(value);
@@ -82,6 +86,11 @@ const ProfileCon=({history})=>{
         setPhone(value);
     }, [info])
     const clearAddress=useCallback(()=>{
+        setError(prev=>({
+            ...prev,
+            addr:false,
+            detail:false
+        }))
         setAddr('');
     }, []);
     const handleClickOpen = useCallback(() => {

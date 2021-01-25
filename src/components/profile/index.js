@@ -10,14 +10,15 @@ import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import ClearIcon from "@material-ui/icons/Clear";
-import IconButton from "@material-ui/core/IconButton";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import Link from "@material-ui/core/Link";
 
 import AddrDialog from "../common/Address/AddrDialog";
+import NumberFormatter from "../common/PhoneFormatter";
+import AddrInput from "../common/Address/AddrInput";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
   },
   fontRobo: {
     fontFamily: "Roboto",
-    textDecoration:'underline'
   },
   divider: {
     margin: theme.spacing(2),
@@ -152,53 +152,20 @@ const Profile = ({
               value={info && info.email ? info.email : ""}
               disabled
             />
-            <FormControl
-              variant="outlined"
-              size="small"
-              fullWidth
-              margin="normal"
-            >
-              <InputLabel htmlFor="outlined-adornment-address">
-                시/군/구
-              </InputLabel>
-              <OutlinedInput
-                fullWidth
-                name="address"
-                id="outlined-adornment-address"
-                label="시/군/구"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="clear address"
-                      edge="end"
-                      onMouseDown={handleMouseDown}
-                      onClick={clearAddress}
-                    >
-                      <ClearIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
-                inputRef={addrRef}
-                inputProps={{
-                  className: classes.fontMaple,
-                  onClick: handleClickOpen,
-                }}
-                value={addr}
-                error={error.addr}
-              />
-            </FormControl>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              name="detail"
-              label="상세주소"
-              size="small"
-              InputProps={{ className: classes.fontMaple }}
-              value={detail}
-              onChange={detailChange}
-              error={error.detail}
-              inputRef={detailRef}
+            <AddrInput
+              handleMouseDown={handleMouseDown}
+              clearAddress={clearAddress}
+              addrRef={addrRef}
+              addr={addr}
+              error={{
+                addr: error.addr,
+                detail: error.detail,
+              }}
+              handleClickOpen={handleClickOpen}
+              detail={detail}
+              detailChange={detailChange}
+              detailRef={detailRef}
+              value={0}
             />
             <div className={classes.field}>
               <TextField
@@ -208,7 +175,10 @@ const Profile = ({
                 name="phone"
                 label="전화번호"
                 size="small"
-                InputProps={{ className: classes.fontMaple }}
+                InputProps={{
+                  className: classes.fontMaple,
+                  inputComponent: NumberFormatter,
+                }}
                 type="tel"
                 value={phone}
                 onChange={phoneChange}
@@ -288,13 +258,15 @@ const Profile = ({
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <Button
-                  size="small"
-                  className={classes.fontRobo}
+                <Link
+                  variant="caption"
+                  color="textSecondary"
+                  TypographyClasses={{ caption: classes.fontRobo }}
                   onClick={onLogout}
+                  component="button"
                 >
                   로그아웃
-                </Button>
+                </Link>
               </Grid>
             </Grid>
           </form>

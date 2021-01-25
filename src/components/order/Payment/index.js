@@ -12,12 +12,10 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import ClearIcon from "@material-ui/icons/Clear";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
+import Button from "@material-ui/core/Button";
 
+import NumberFormatter from "../../common/PhoneFormatter";
+import AddrInput from "../../common/Address/AddrInput";
 const AddrDialog = loadable(() => import("../../common/Address/AddrDialog"));
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +47,17 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "MaplestoryOTFBold",
     color: "black",
   },
+  field: {
+    width: "100%",
+    display: "flex",
+  },
+  button: {
+    height: "2.5rem",
+    margin: theme.spacing(1, 1, 1),
+    color: "white",
+    fontFamily: "Roboto",
+    backgroundColor: theme.palette.primary.light,
+  },
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -71,7 +80,22 @@ const Payment = ({ open, handleClose, deli, info }) => {
   const [hasNextPage, setHasNextPage] = useState(true);
   const [query, setQuery] = useState("");
   const detailRef = useRef(null);
+  const [phone, setPhone] = useState("");
+  const [verify, setVerify] = useState(false);
+  const [confirm, setConfirm] = useState(true);
 
+  const phoneChange = useCallback(
+    (e) => {
+      const { value } = e.target;
+      if (value === info.phone) {
+        setConfirm(true);
+      } else {
+        setConfirm(false);
+      }
+      setPhone(value);
+    },
+    [info]
+  );
   const addrOnClick = useCallback((addr) => {
     setTimeout(() => {
       detailRef.current.focus();
@@ -112,8 +136,8 @@ const Payment = ({ open, handleClose, deli, info }) => {
   }, []);
   const a11yProps = useCallback((index) => {
     return {
-      id: `simple-tab-${index}`,
-      "aria-controls": `simple-tabpanel-${index}`,
+      id: `tab-${index}`,
+      "aria-controls": `tabpanel-${index}`,
     };
   }, []);
   const handleMouseDown = useCallback((event) => {
@@ -225,67 +249,59 @@ const Payment = ({ open, handleClose, deli, info }) => {
                 id={`address-tabpanel`}
                 aria-labelledby={`address-tab`}
               >
-                <FormControl
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  margin="dense"
-                >
-                  <InputLabel htmlFor={`outlined-adornment-delivery`}>
-                    시/군/구
-                  </InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    name="address"
-                    id={`outlined-adornment-delivery`}
-                    label="시/군/구"
-                    {...(value === 0 && {
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="clear address"
-                            edge="end"
-                            onMouseDown={handleMouseDown}
-                            onClick={clearAddress}
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    })}
-                    inputProps={{
-                      className: classes.fontMaple,
-                      onClick: handleClickOpen,
-                    }}
-                    value={addr}
-                    error={error.addr}
-                    inputRef={addrRef}
-                    disabled={value === 1}
-                  />
-                </FormControl>
-                <TextField
-                  variant="outlined"
-                  margin="dense"
-                  fullWidth
-                  name="detail"
-                  label="상세주소"
-                  size="small"
-                  InputProps={{
-                    className: classes.fontMaple,
-                    style: { color: "black" },
+                <AddrInput
+                  handleMouseDown={handleMouseDown}
+                  clearAddress={clearAddress}
+                  addrRef={addrRef}
+                  addr={addr}
+                  error={{
+                    addr: error.addr,
+                    detail: error.detail,
                   }}
-                  value={detail}
-                  onChange={detailChange}
-                  error={error.detail}
-                  inputRef={detailRef}
-                  disabled={value === 1}
-                  InputLabelProps={{ style: { color: "rgba(0, 0, 0, 0.54)" } }}
+                  handleClickOpen={handleClickOpen}
+                  detail={detail}
+                  detailChange={detailChange}
+                  detailRef={detailRef}
+                  value={value}
                 />
               </div>
             </Container>
           )}
-          <Container maxWidth="sm">
-            <div>포장</div>
+          <Container maxWidth="sm" className={classes.background}>
+            <Tabs
+              aria-label="phone tabs"
+              indicatorColor="primary"
+              className={classes.tabs}
+              value={0}
+            >
+              <Tab label="전화번호" {...a11yProps(3)} />
+            </Tabs>
+            <div className={classes.field}>
+              <TextField
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                name="phone"
+                size="small"
+                InputProps={{
+                  className: classes.fontMaple,
+                  inputComponent: NumberFormatter,
+                }}
+                type="tel"
+                value={phone}
+                onChange={phoneChange}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                {...(verify && {
+                  style: { fontSize: "0.65rem" },
+                })}
+              >
+                {!verify ? "인증" : "재전송"}
+              </Button>
+            </div>
           </Container>
         </div>
       </Dialog>
