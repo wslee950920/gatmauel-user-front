@@ -72,7 +72,7 @@ const NoticeList = ({ notices }) => {
           </div>
           <div>
             <List>
-              {notices.length > 0 ? (
+              {notices.length >= 0 ? (
                 <div style={{ height: 144 }}>
                   {notices.slice(0, 2).map((notice, index) => (
                     <ListItemLink

@@ -87,7 +87,7 @@ const RegisterCon = ({ history }) => {
 
     useEffect(()=>{
         dispatch(check());
-        
+
         return ()=>{
             dispatch(initAuth());
         }
@@ -97,7 +97,6 @@ const RegisterCon = ({ history }) => {
             if (authError) {
                 if (authError.response&&authError.response.status===409){
                     setError(prev => ({ ...prev, email: true }));
-                    dispatch(initAuth());
 
                     return;
                 }
@@ -105,8 +104,9 @@ const RegisterCon = ({ history }) => {
                 throw authError;
             }
             if (auth) {
-                alert('이메일 인증을 해주세요.');
+                dispatch(initAuth());
                 history.push('/login');
+                alert('이메일 인증을 해주세요.');
             }
         } catch(e){
             console.error(e)
@@ -123,13 +123,11 @@ const RegisterCon = ({ history }) => {
         try{
             if (nickError) {
                 setError(prev => ({ ...prev, nick: true }));
-                dispatch(initAuth());
     
                 return;
             }
             if (nick) {
                 setError(prev => ({ ...prev, nick: false }));
-                dispatch(initAuth());
             }
         } catch(e){
             console.error(e);

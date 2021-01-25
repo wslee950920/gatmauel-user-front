@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import Profile from "../../components/profile";
 
-import { logout, getInfo, check, userUpdate } from "../../modules/user";
+import { logout, getInfo, check, userUpdate, setInfoPhone } from "../../modules/user";
 import { checkNick, initAuth } from '../../modules/auth';
 
 import {user as userAPI} from '../../lib/api/client';
@@ -73,11 +73,14 @@ const ProfileCon=({history})=>{
         setDetail(value);
     }, []);
     const phoneChange=useCallback((e)=>{
-        setConfirm(false);
-        
         const {value}=e.target;
+        if(value===info.phone){
+            setConfirm(true)
+        } else{
+            setConfirm(false);
+        }
         setPhone(value);
-    }, [])
+    }, [info])
     const clearAddress=useCallback(()=>{
         setAddr('');
     }, []);
@@ -169,7 +172,11 @@ const ProfileCon=({history})=>{
         e.preventDefault();
 
         if(error.nick||error.addr||error.detail) return;
-        if(nickname===user.nick&&info.address===addr&&info.detail===detail&&(phone===info.phone&&confirm)) return;
+
+        if(nickname===user.nick&&addr===info.address&&detail===info.detail&&confirm){
+            return;
+        }
+
         if(addr!==''&&detail===''){
             setError(prev=>({...prev, detail:true}));
 
@@ -180,6 +187,13 @@ const ProfileCon=({history})=>{
 
             return;
         }
+
+        dispatch(userUpdate({
+            nickname, 
+            address:addr, 
+            detail, 
+            phone:confirm?info.phone:null
+        }));
 
         setVerify(false);
         setSse(null);
@@ -192,20 +206,13 @@ const ProfileCon=({history})=>{
             detail:false,
             addr:false,
         }));
-        dispatch(userUpdate({
-            nickname, 
-            address:addr, 
-            detail, 
-            phone:(confirm||phone===info.phone?phone:'')
-        }));
-    }, [nickname, dispatch, error, user, addr, detail, info, phone, confirm]);
+        setConfirm(true);
+    }, [nickname, dispatch, error, user, addr, detail, info, confirm]);
     const checkPhone=useCallback(()=>{
         setError(prev=>({...prev, code:false}));
         setCode('');
 
-        if(phone===info.phone&&confirm){
-            setConfirm(true);
-
+        if(confirm){
             return;
         }
 
@@ -219,10 +226,20 @@ const ProfileCon=({history})=>{
             })
             .catch((e)=>{
                 if(e){
+                    if(e.response){
+                        if(e.response.status===409){
+                            alert('이미 사용 중인 전화번호입니다.');
+                        } else{
+                            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                        }
+
+                        return;
+                    }
+
                     alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
                 }
             })
-    }, [phone, info, confirm]);
+    }, [phone, confirm]);
     const codeOnChange=useCallback((e)=>{
         setError(prev=>({...prev, code:false}));
 
@@ -237,6 +254,8 @@ const ProfileCon=({history})=>{
 
         userAPI.post('/api/user/callback', {code, phone})
             .then(()=>{
+                dispatch(setInfoPhone(phone));
+
                 setError(prev=>({...prev, code:false}));
                 setConfirm(true);
                 setVerify(false);
@@ -250,16 +269,24 @@ const ProfileCon=({history})=>{
                 setConfirm(false);
 
                 if(error){
-                    if(error.response.status===419){
-                        setHelper('인증번호가 만료되었습니다.');
-                    } else if(error.response.status===404){
-                        setHelper('인증번호가 틀렸습니다.')
-                    } else{
-                        alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                    if(error.response){
+                        if(error.response.status===419){
+                            setHelper('인증번호가 만료되었습니다.');
+                        } else if(error.response.status===404){
+                            setHelper('인증번호가 틀렸습니다.')
+                        } else if(error.response.status===403){
+                            setHelper('전화번호가 다릅니다.')
+                        } else{
+                            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                        }
+
+                        return;
                     }
+                    
+                    alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
                 }
             });
-    }, [code, phone]);
+    }, [code, phone, dispatch]);
 
     useEffect(()=>{
         return ()=>{
@@ -286,7 +313,6 @@ const ProfileCon=({history})=>{
     }, [dispatch]);  
     useEffect(()=>{
         if(!user){
-            alert('로그인을 해주세요.');
             history.push('/login');
         } else{
             setNickname(user.nick);
@@ -321,7 +347,6 @@ const ProfileCon=({history})=>{
                     (nickError.response.status===400||
                         nickError.response.status===409)){
                     setError(prev=>({...prev, nick:true}));
-                    dispatch(initAuth());
     
                     return;
                 }
@@ -330,7 +355,6 @@ const ProfileCon=({history})=>{
             }
             if (nick) {
                 setError(prev=>({...prev, nick:false}));
-                dispatch(initAuth());
             }
         } catch(e){
             console.error(e);

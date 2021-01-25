@@ -111,8 +111,8 @@ const LoginCon=({history})=>{
     }, []);
     useEffect(()=>{       
         dispatch(check());
-             
-        return()=>{
+
+        return ()=>{
             dispatch(initAuth());
         }
     }, [dispatch]);
@@ -121,13 +121,11 @@ const LoginCon=({history})=>{
             if(authError){
                 if(authError.response&&authError.response.status===401){
                     setError(true);
-                    dispatch(initAuth());
 
                     return;
                 }
                 else if(authError.response&&authError.response.status===403){
                     alert('이메일 인증을 해주세요.');
-                    dispatch(initAuth());
                     
                     return;
                 }
@@ -138,7 +136,6 @@ const LoginCon=({history})=>{
                 }
                 else if(authError.response&&authError.response.status===409){
                     alert('SNS 로그인을 해주세요.');
-                    dispatch(initAuth());
 
                     return;
                 }

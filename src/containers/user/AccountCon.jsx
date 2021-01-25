@@ -123,7 +123,6 @@ const AccountCon=({history})=>{
     }, [dispatch]);
     useEffect(()=>{
         if(!user){
-            alert('로그인 해주세요.');
             history.push('/login');
         }
     }, [user, history]);

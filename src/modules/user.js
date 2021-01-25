@@ -7,6 +7,8 @@ import createRequestSaga, {
 import * as userAPI from "../lib/api/user";
 
 const TEMP_SET_USER = "user/TEMP_SET_USER";
+const SET_PHONE = "user/SET_PHONE";
+
 const [CHECK, CHECK_SUCCESS, CHECK_FAILURE] = createRequestActionTypes(
   "user/CHECK"
 );
@@ -38,6 +40,7 @@ export const getInfo = createAction(GET_INFO);
 export const userUpdate = createAction(UPDATE_USER, (content) => content);
 export const pwUpdate = createAction(UPDATE_PW, (content) => content);
 export const userWithdraw = createAction(WITHDRAW_USER, (content) => content);
+export const setInfoPhone = createAction(SET_PHONE, (phone) => phone);
 
 const getInfoSaga = createRequestSaga(GET_INFO, userAPI.getInfo);
 const checkSaga = createRequestSaga(CHECK, authAPI.check);
@@ -93,6 +96,13 @@ export default handleActions(
     [TEMP_SET_USER]: (state, { payload: user }) => ({
       ...state,
       user,
+    }),
+    [SET_PHONE]: (state, { payload: phone }) => ({
+      ...state,
+      info: {
+        ...state.info,
+        phone,
+      },
     }),
     [CHECK_SUCCESS]: (state, { payload: user }) => ({
       ...state,
