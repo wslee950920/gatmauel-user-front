@@ -8,7 +8,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -45,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   fontRobo: {
     fontFamily: "Roboto",
+    textDecoration:'underline'
   },
   divider: {
     margin: theme.spacing(2),
@@ -288,14 +288,13 @@ const Profile = ({
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <Link
-                  variant="caption"
-                  color="textSecondary"
-                  TypographyClasses={{ caption: classes.fontRobo }}
+                <Button
+                  size="small"
+                  className={classes.fontRobo}
                   onClick={onLogout}
                 >
                   로그아웃
-                </Link>
+                </Button>
               </Grid>
             </Grid>
           </form>

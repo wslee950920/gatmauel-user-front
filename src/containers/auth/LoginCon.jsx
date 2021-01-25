@@ -5,7 +5,7 @@ import {withRouter} from 'react-router-dom';
 import LogIn from '../../components/login';
 
 import {login, initAuth} from '../../modules/auth';
-import {check} from '../../modules/user';
+import {check, tempSetUser} from '../../modules/user';
 
 import {user as userAPI} from '../../lib/api/client';
 
@@ -39,7 +39,7 @@ const LoginCon=({history})=>{
                           nick:info.kakao_account.profile.nickname
                         })
                         .then(()=>{
-                          dispatch(check());
+                            dispatch(tempSetUser(true));
                         })
                         .catch((err)=>{
                           if(err.response&&err.response.status===409){
@@ -109,7 +109,9 @@ const LoginCon=({history})=>{
             }
         }
     }, []);
-    useEffect(()=>{            
+    useEffect(()=>{       
+        dispatch(check());
+             
         return()=>{
             dispatch(initAuth());
         }
@@ -144,7 +146,7 @@ const LoginCon=({history})=>{
                 throw authError;
             }
             if(auth){
-                dispatch(check());
+                dispatch(tempSetUser(true));
             }
         } catch(e){
             console.error(e)

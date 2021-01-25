@@ -5,13 +5,13 @@ import createRequestSaga, {
   createRequestActionTypes,
 } from "../lib/createRequestSaga";
 import * as userAPI from "../lib/api/user";
-import { initAuth } from "../modules/auth";
 
 const TEMP_SET_USER = "user/TEMP_SET_USER";
 const [CHECK, CHECK_SUCCESS, CHECK_FAILURE] = createRequestActionTypes(
   "user/CHECK"
 );
 const LOGOUT = "user/LOGOUT";
+const LOGOUT_SUCCESS = "user/LOGOUT_SUCCESS";
 const [GET_INFO, GET_INFO_SUCCESS, GET_INFO_FAILURE] = createRequestActionTypes(
   "user/GET_INFO"
 );
@@ -48,7 +48,6 @@ const userWithdrawSaga = createRequestSaga(WITHDRAW_USER, userAPI.userWithdraw);
 function checkFailureSaga() {
   try {
     localStorage.removeItem("user");
-    put(initAuth());
   } catch (e) {
     console.error("localStorage is not working");
   }
@@ -56,8 +55,10 @@ function checkFailureSaga() {
 function* logoutSaga() {
   try {
     yield call(authAPI.logout);
+    yield put({
+      type: LOGOUT_SUCCESS,
+    });
     yield localStorage.removeItem("user");
-    yield put(initAuth());
   } catch (e) {
     console.error(e);
   }
@@ -101,9 +102,10 @@ export default handleActions(
     [CHECK_FAILURE]: (state, { payload: error }) => ({
       ...state,
       user: null,
+      info: null,
       error: error,
     }),
-    [LOGOUT]: (state) => ({
+    [LOGOUT_SUCCESS]: (state) => ({
       ...state,
       user: null,
       info: null,

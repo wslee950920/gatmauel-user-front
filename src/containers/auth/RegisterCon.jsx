@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Register from '../../components/register';
 
 import { register, checkNick, initAuth } from '../../modules/auth';
+import {check} from '../../modules/user';
 
 const RegisterCon = ({ history }) => {
     const [email, setEmail] = useState('');
@@ -85,6 +86,8 @@ const RegisterCon = ({ history }) => {
     }, [nickname, email, password, confirm, dispatch, nickError]);
 
     useEffect(()=>{
+        dispatch(check());
+        
         return ()=>{
             dispatch(initAuth());
         }
@@ -102,9 +105,8 @@ const RegisterCon = ({ history }) => {
                 throw authError;
             }
             if (auth) {
-                history.push('/login');
                 alert('이메일 인증을 해주세요.');
-                dispatch(initAuth());
+                history.push('/login');
             }
         } catch(e){
             console.error(e)

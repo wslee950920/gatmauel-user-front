@@ -153,7 +153,7 @@ const Payment = ({ open, handleClose, deli, info }) => {
     const filter = "win16|win32|win64|macintel|mac";
     if (
       navigator.platform &&
-      filter.indexOf(navigator.platform.toLowerCase()) > 0
+      filter.indexOf(navigator.platform.toLowerCase()) < 0
     ) {
       //모바일
       setAOpen(true);

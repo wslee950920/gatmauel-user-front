@@ -6,6 +6,7 @@ import {usePreloader} from '../../lib/PreloadContext';
 import {getReviews} from '../../modules/reviews';
 import {getNotices} from '../../modules/notices';
 import {getFood} from '../../modules/food';
+import {check} from '../../modules/user'
 
 import Main from '../../components/main';
 
@@ -46,6 +47,9 @@ const MainContainer=()=>{
     usePreloader(()=>dispatch(getNotices()));
     usePreloader(()=>dispatch(getFood()));
 
+    useEffect(()=>{
+        dispatch(check());
+    }, [dispatch]);
     useEffect(()=>{
         if(rError) return;
         if(rloading) return;

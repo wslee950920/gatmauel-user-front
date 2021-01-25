@@ -83,7 +83,7 @@ const ProfileCon=({history})=>{
     }, []);
     const handleClickOpen = useCallback(() => {
         const filter="win16|win32|win64|macintel|mac";
-        if(navigator.platform &&filter.indexOf(navigator.platform.toLowerCase()) > 0){
+        if(navigator.platform&&filter.indexOf(navigator.platform.toLowerCase()) < 0){
             //모바일
             setOpen(true);
             setError(prev=>({...prev, addr:false}));
@@ -286,6 +286,7 @@ const ProfileCon=({history})=>{
     }, [dispatch]);  
     useEffect(()=>{
         if(!user){
+            alert('로그인을 해주세요.');
             history.push('/login');
         } else{
             setNickname(user.nick);
@@ -297,13 +298,6 @@ const ProfileCon=({history})=>{
             }
         }
     }, [user, history]);
-    useEffect(()=>{
-        if(uError){
-            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-
-            return;
-        }
-    }, [uError]);
     useEffect(()=>{
         if(info) return;
         if(uError) return;
