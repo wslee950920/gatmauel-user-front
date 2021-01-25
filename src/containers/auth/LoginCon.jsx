@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 
 import LogIn from '../../components/login';
 
-import {login, initAuth} from '../../modules/auth';
+import {fetchLogin, initAuth} from '../../modules/auth';
 import {check, tempSetUser} from '../../modules/user';
 
 import {user as userAPI} from '../../lib/api/client';
@@ -18,9 +18,9 @@ const LoginCon=({history})=>{
         password:false
     });
     const dispatch=useDispatch();
-    const {auth, authError, user}=useSelector(({auth, user})=>({
-        auth:auth.auth,
-        authError:auth.authError,
+    const {login, loginError, user}=useSelector(({auth, user})=>({
+        login:auth.login,
+        loginError:auth.loginError,
         user:user.user,
     }));
     const [error, setError]=useState(false);
@@ -97,7 +97,7 @@ const LoginCon=({history})=>{
         }
 
         setEmpty({email:false, password:false});
-        dispatch(login({email, password, checked}));
+        dispatch(fetchLogin({email, password, checked}));
     }, [email, password, dispatch, checked]);
 
     useEffect(()=>{
@@ -118,37 +118,37 @@ const LoginCon=({history})=>{
     }, [dispatch]);
     useEffect(()=>{
         try{
-            if(authError){
-                if(authError.response&&authError.response.status===401){
+            if(loginError&&loginError.response){
+                if(loginError.response.status===401){
                     setError(true);
 
                     return;
                 }
-                else if(authError.response&&authError.response.status===403){
+                else if(loginError.response.status===403){
                     alert('이메일 인증을 해주세요.');
                     
                     return;
                 }
-                else if(authError.response&&authError.response.status===406){
+                else if(loginError.response.status===406){
                     dispatch(check());
 
                     return;
                 }
-                else if(authError.response&&authError.response.status===409){
+                else if(loginError.response.status===409){
                     alert('SNS 로그인을 해주세요.');
 
                     return;
                 }
 
-                throw authError;
+                throw loginError;
             }
-            if(auth){
+            if(login){
                 dispatch(tempSetUser(true));
             }
         } catch(e){
             console.error(e)
         }
-    }, [auth, authError, dispatch]);
+    }, [login, loginError, dispatch]);
     useEffect(()=>{
         if(user){
             history.push('/');

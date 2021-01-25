@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 import Register from '../../components/register';
 
-import { register, checkNick, initAuth } from '../../modules/auth';
+import { fetchRegister, checkNick, initAuth } from '../../modules/auth';
 import {check} from '../../modules/user';
 
 const RegisterCon = ({ history }) => {
@@ -19,9 +19,9 @@ const RegisterCon = ({ history }) => {
     });
 
     const dispatch = useDispatch();
-    const { auth, authError, nick, nickError, user } = useSelector(({ auth, user }) => ({
-        auth: auth.auth,
-        authError: auth.authError,
+    const { register, registerError, nick, nickError, user } = useSelector(({ auth, user }) => ({
+        register: auth.register,
+        registerError: auth.registerError,
         nick: auth.nick,
         nickError: auth.nickError,
         user:user.user
@@ -82,7 +82,7 @@ const RegisterCon = ({ history }) => {
         } 
 
         setError(prev => ({ ...prev, email: false, same: false }))
-        dispatch(register({ nick: nickname, email, password }));
+        dispatch(fetchRegister({ nick: nickname, email, password }));
     }, [nickname, email, password, confirm, dispatch, nickError]);
 
     useEffect(()=>{
@@ -94,24 +94,23 @@ const RegisterCon = ({ history }) => {
     }, [dispatch]);
     useEffect(() => {
         try{
-            if (authError) {
-                if (authError.response&&authError.response.status===409){
+            if (registerError) {
+                if (registerError.response&&registerError.response.status===409){
                     setError(prev => ({ ...prev, email: true }));
 
                     return;
                 }
     
-                throw authError;
+                throw registerError;
             }
-            if (auth) {
-                dispatch(initAuth());
+            if (register) {
                 history.push('/login');
                 alert('이메일 인증을 해주세요.');
             }
         } catch(e){
             console.error(e)
         }
-    }, [auth, authError, history, dispatch]);
+    }, [register, registerError, history, dispatch]);
     useEffect(() => {
         if(user){
             history.push('/');

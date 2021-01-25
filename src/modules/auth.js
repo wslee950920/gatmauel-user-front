@@ -18,16 +18,22 @@ const [
 ] = createRequestActionTypes("auth/CHECK_NICK");
 const INIT = "auth/INIT";
 
-export const register = createAction(REGISTER, ({ nick, email, password }) => ({
-  nick,
-  email,
-  password,
-}));
-export const login = createAction(LOGIN, ({ email, password, checked }) => ({
-  email,
-  password,
-  checked,
-}));
+export const fetchRegister = createAction(
+  REGISTER,
+  ({ nick, email, password }) => ({
+    nick,
+    email,
+    password,
+  })
+);
+export const fetchLogin = createAction(
+  LOGIN,
+  ({ email, password, checked }) => ({
+    email,
+    password,
+    checked,
+  })
+);
 export const checkNick = createAction(CHECK_NICK, ({ nick }) => ({
   nick,
 }));
@@ -43,31 +49,33 @@ export function* authSaga() {
 }
 
 const initialState = {
-  auth: null,
-  authError: null,
+  login: null,
+  loginError: null,
+  register: null,
+  registerError: null,
   nick: null,
   nickError: null,
 };
 
 const auth = handleActions(
   {
-    [LOGIN_SUCCESS]: (state, { payload: auth }) => ({
+    [LOGIN_SUCCESS]: (state, { payload: login }) => ({
       ...state,
-      auth,
-      authError: null,
+      login,
+      loginError: null,
     }),
     [LOGIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      authError: error,
+      loginError: error,
     }),
-    [REGISTER_SUCCESS]: (state, { payload: auth }) => ({
+    [REGISTER_SUCCESS]: (state, { payload: register }) => ({
       ...state,
-      authError: null,
-      auth,
+      registerError: null,
+      register,
     }),
     [REGISTER_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      authError: error,
+      registerError: error,
     }),
     [CHECK_NICK_SUCCESS]: (state, { payload: nick }) => ({
       ...state,
