@@ -78,9 +78,8 @@ const AddrInput=({
                 name="detail"
                 label="상세주소"
                 size="small"
-                InputProps={{ 
+                inputProps={{ 
                     className: classes.fontMaple,
-                    style:{color:'black'}
                 }}
                 value={detail}
                 onChange={detailChange}

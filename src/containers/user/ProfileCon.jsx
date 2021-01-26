@@ -46,6 +46,7 @@ const ProfileCon=({history})=>{
     const [code, setCode]=useState('');
     const [confirm, setConfirm]=useState(true);
     const [helper, setHelper]=useState('');
+    const [platform, setPlatform]=useState(null);
 
     const timer = useMemo(() => {
         if(sse&&end){
@@ -78,12 +79,13 @@ const ProfileCon=({history})=>{
     }, []);
     const phoneChange=useCallback((e)=>{
         const {value}=e.target;
-        if(value===info.phone){
+        setPhone(value);
+        
+        if(info && value === info.phone){
             setConfirm(true)
         } else{
             setConfirm(false);
         }
-        setPhone(value);
     }, [info])
     const clearAddress=useCallback(()=>{
         setError(prev=>({
@@ -94,8 +96,7 @@ const ProfileCon=({history})=>{
         setAddr('');
     }, []);
     const handleClickOpen = useCallback(() => {
-        const filter="win16|win32|win64|macintel|mac";
-        if(navigator.platform&&filter.indexOf(navigator.platform.toLowerCase()) < 0){
+        if(platform){
             //모바일
             setOpen(true);
             setError(prev=>({...prev, addr:false}));
@@ -114,7 +115,7 @@ const ProfileCon=({history})=>{
                 popupName: 'postcodePopup'
             });
         }
-    }, []);
+    }, [platform]);
     const handleOnExit=useCallback(()=>{
         addrRef.current.blur();
     }, []);
@@ -298,6 +299,10 @@ const ProfileCon=({history})=>{
     }, [code, phone, dispatch]);
 
     useEffect(()=>{
+        const filter = "win16|win32|win64|macintel|mac";
+        setPlatform(navigator.platform &&
+            filter.indexOf(navigator.platform.toLowerCase()) < 0);
+
         return ()=>{
             if(es&&es.current){
                 es.current.close();

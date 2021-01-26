@@ -9,16 +9,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Link from "@material-ui/core/Link";
 
 import AddrDialog from "../common/Address/AddrDialog";
-import NumberFormatter from "../common/PhoneFormatter";
 import AddrInput from "../common/Address/AddrInput";
+import PhoneVerify from "../common/Phone/PhoneVerify";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,24 +43,6 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     margin: theme.spacing(2),
-  },
-  field: {
-    width: "100%",
-    display: "flex",
-  },
-  button: {
-    height: "2.5rem",
-    margin: theme.spacing(2, 1, 1),
-    color: "white",
-    fontFamily: "Roboto",
-    backgroundColor: theme.palette.primary.light,
-  },
-  verify: {
-    height: "2.5rem",
-    margin: theme.spacing(1, 1, 0.5),
-    color: "white",
-    fontFamily: "Roboto",
-    backgroundColor: theme.palette.primary.light,
   },
 }));
 
@@ -167,86 +144,19 @@ const Profile = ({
               detailRef={detailRef}
               value={0}
             />
-            <div className={classes.field}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="phone"
-                label="전화번호"
-                size="small"
-                InputProps={{
-                  className: classes.fontMaple,
-                  inputComponent: NumberFormatter,
-                }}
-                type="tel"
-                value={phone}
-                onChange={phoneChange}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                {...(!!phone && {
-                  onClick: checkPhone,
-                })}
-                {...(verify && {
-                  style: { fontSize: "0.65rem" },
-                })}
-              >
-                {!verify ? "인증" : "재전송"}
-              </Button>
-            </div>
-            {verify && (
-              <div className={classes.field}>
-                <FormControl
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  margin="dense"
-                  error={error.code}
-                >
-                  <InputLabel htmlFor="outlined-adornment-verification">
-                    인증번호
-                  </InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    name="verification"
-                    id="outlined-adornment-verification"
-                    label="인증번호"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <Typography
-                          variant="body2"
-                          className={classes.fontRobo}
-                          color="error"
-                        >
-                          {timer}
-                        </Typography>
-                      </InputAdornment>
-                    }
-                    inputProps={{
-                      className: classes.fontMaple,
-                    }}
-                    onChange={codeOnChange}
-                    value={code}
-                  />
-                  {error.code && (
-                    <FormHelperText id="outlined-adornment-verification-error">
-                      {helper}
-                    </FormHelperText>
-                  )}
-                </FormControl>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.verify}
-                  onClick={confirmPhone}
-                >
-                  확인
-                </Button>
-              </div>
-            )}
+            <PhoneVerify
+              phone={phone}
+              phoneChange={phoneChange}
+              checkPhone={checkPhone}
+              verify={verify}
+              error={error.code}
+              timer={timer}
+              codeOnChange={codeOnChange}
+              code={code}
+              helper={helper}
+              confirmPhone={confirmPhone}
+              value={1}
+            />
             <Button
               type="submit"
               fullWidth

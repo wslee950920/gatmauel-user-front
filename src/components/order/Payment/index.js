@@ -1,6 +1,13 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
+} from "react";
 import axios from "axios";
 import loadable from "@loadable/component";
+import { useDispatch } from "react-redux";
 
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
@@ -11,10 +18,12 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 
-import NumberFormatter from "../../common/PhoneFormatter";
+import { user as userAPI } from "../../../lib/api/client";
+
+import { setInfoPhone } from "../../../modules/user";
+
+import PhoneVerify from "../../common/Phone/PhoneVerify";
 import AddrInput from "../../common/Address/AddrInput";
 const AddrDialog = loadable(() => import("../../common/Address/AddrDialog"));
 
@@ -33,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tabs: {
     marginBottom: theme.spacing(0.5),
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
   background: {
     padding: theme.spacing(0, 1, 0.8),
@@ -43,21 +53,6 @@ const useStyles = makeStyles((theme) => ({
   top: {
     marginBottom: theme.spacing(0.8),
   },
-  fontMaple: {
-    fontFamily: "MaplestoryOTFBold",
-    color: "black",
-  },
-  field: {
-    width: "100%",
-    display: "flex",
-  },
-  button: {
-    height: "2.5rem",
-    margin: theme.spacing(1, 1, 1),
-    color: "white",
-    fontFamily: "Roboto",
-    backgroundColor: theme.palette.primary.light,
-  },
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -66,12 +61,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Payment = ({ open, handleClose, deli, info }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [addr, setAddr] = useState("");
   const [detail, setDetail] = useState("");
   const [error, setError] = useState({
     addr: false,
     detail: false,
+    code: false,
   });
   const addrRef = useRef(null);
   const [aOpen, setAOpen] = useState(false);
@@ -83,16 +80,81 @@ const Payment = ({ open, handleClose, deli, info }) => {
   const [phone, setPhone] = useState("");
   const [verify, setVerify] = useState(false);
   const [confirm, setConfirm] = useState(true);
+  const [end, setEnd] = useState(null);
+  const [sse, setSse] = useState(null);
+  const [code, setCode] = useState("");
+  const [helper, setHelper] = useState("");
+  const es = useRef(null);
+  const [platform, setPlatform]=useState(null);
 
+  const timer = useMemo(() => {
+    if (sse && end) {
+      if (sse >= end) {
+        return "00:00";
+      } else {
+        const temp = end - sse;
+        const seconds = ("0" + Math.floor((temp / 1000) % 60)).slice(-2);
+        const minutes = ("0" + Math.floor((temp / 1000 / 60) % 60)).slice(-2);
+
+        return minutes + ":" + seconds;
+      }
+    } else {
+      return "";
+    }
+  }, [sse, end]);
+
+  const checkPhone = useCallback(() => {
+    setError((prev) => ({ ...prev, code: false }));
+    setCode("");
+
+    if (confirm) {
+      return;
+    }
+
+    userAPI
+      .post("/api/user/phone", { phone })
+      .then((res) => {
+        setVerify(true);
+
+        console.log(res.data);
+        const temp = new Date(res.data.updatedAt);
+        temp.setMinutes(temp.getMinutes() + 3);
+        console.log(temp);
+        setEnd(temp);
+      })
+      .catch((e) => {
+        if (e) {
+          if (e.response) {
+            if (e.response.status === 409) {
+              alert("이미 사용 중인 전화번호입니다.");
+            } else {
+              alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
+            }
+
+            return;
+          }
+
+          alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
+        }
+      });
+  }, [phone, confirm]);
+  const codeOnChange = useCallback((e) => {
+    setError((prev) => ({ ...prev, code: false }));
+
+    const curValue = e.target.value;
+    const newValue = curValue.replace(/[^0-9]/g, "");
+    setCode(newValue);
+  }, []);
   const phoneChange = useCallback(
     (e) => {
       const { value } = e.target;
-      if (value === info.phone) {
+      setPhone(value);
+
+      if (info && value === info.phone) {
         setConfirm(true);
       } else {
         setConfirm(false);
       }
-      setPhone(value);
     },
     [info]
   );
@@ -174,11 +236,7 @@ const Payment = ({ open, handleClose, deli, info }) => {
     [getAddress]
   );
   const handleClickOpen = useCallback(() => {
-    const filter = "win16|win32|win64|macintel|mac";
-    if (
-      navigator.platform &&
-      filter.indexOf(navigator.platform.toLowerCase()) < 0
-    ) {
+    if (platform) {
       //모바일
       setAOpen(true);
       setError((prev) => ({ ...prev, addr: false }));
@@ -198,19 +256,94 @@ const Payment = ({ open, handleClose, deli, info }) => {
         popupName: "postcodePopup",
       });
     }
-  }, []);
+  }, [platform]);
+  const confirmPhone = useCallback(() => {
+    if (code === "") {
+      return;
+    }
 
+    userAPI
+      .post("/api/user/temp", { code, phone })
+      .then(() => {
+        dispatch(setInfoPhone(phone));
+
+        setError((prev) => ({ ...prev, code: false }));
+        setConfirm(true);
+        setVerify(false);
+        setSse(null);
+        setEnd(null);
+
+        es.current.close();
+      })
+      .catch((error) => {
+        setError((prev) => ({ ...prev, code: true }));
+        setConfirm(false);
+
+        if (error) {
+          if (error.response) {
+            if (error.response.status === 419) {
+              setHelper("인증번호가 만료되었습니다.");
+            } else if (error.response.status === 404) {
+              setHelper("인증번호가 틀렸습니다.");
+            } else if (error.response.status === 403) {
+              setHelper("전화번호가 다릅니다.");
+            } else {
+              alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
+            }
+
+            return;
+          }
+
+          alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
+        }
+      });
+  }, [code, phone, dispatch]);
+
+  useEffect(() => {
+    const filter = "win16|win32|win64|macintel|mac";
+    setPlatform(navigator.platform &&
+      filter.indexOf(navigator.platform.toLowerCase()) < 0);
+
+    return () => {
+      if (es && es.current) {
+        es.current.close();
+      }
+
+      setAddr("");
+      setDetail("");
+      setPhone("");
+    };
+  }, []);
+  useEffect(() => {
+    if (verify) {
+      es.current = new EventSource("http://localhost:9090/api/user/timer", {
+        withCredentials: true,
+      });
+
+      es.current.onmessage = (e) => {
+        setSse(new Date(parseInt(e.data, 10)));
+      };
+    }
+  }, [verify]);
   useEffect(() => {
     if (value === 0) {
       if (info) {
         setAddr(info.address ? info.address : "");
         setDetail(info.detail ? info.detail : "");
+      } else {
+        setAddr("");
+        setDetail("");
       }
     } else if (value === 1) {
       setAddr("경기도 수원시 팔달구 일월로18번길 4-26");
       setDetail("172동 1901호");
     }
   }, [info, value]);
+  useEffect(() => {
+    if (info) {
+      setPhone(info.phone ? info.phone : "");
+    }
+  }, [info]);
 
   return (
     <>
@@ -276,36 +409,23 @@ const Payment = ({ open, handleClose, deli, info }) => {
             >
               <Tab label="전화번호" {...a11yProps(3)} />
             </Tabs>
-            <div className={classes.field}>
-              <TextField
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                name="phone"
-                size="small"
-                InputProps={{
-                  className: classes.fontMaple,
-                  inputComponent: NumberFormatter,
-                }}
-                type="tel"
-                value={phone}
-                onChange={phoneChange}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                {...(verify && {
-                  style: { fontSize: "0.65rem" },
-                })}
-              >
-                {!verify ? "인증" : "재전송"}
-              </Button>
-            </div>
+            <PhoneVerify
+              phone={phone}
+              phoneChange={phoneChange}
+              checkPhone={checkPhone}
+              verify={verify}
+              error={error.code}
+              timer={timer}
+              codeOnChange={codeOnChange}
+              code={code}
+              helper={helper}
+              confirmPhone={confirmPhone}
+              value={0}
+            />
           </Container>
         </div>
       </Dialog>
-      {!!deli && (
+      {!!deli&&platform && (
         <AddrDialog
           open={aOpen}
           handleClose={addressClose}
