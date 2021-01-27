@@ -29,13 +29,13 @@ const Map = ({ order }) => {
         <NaverMap
           mapDivId={"gatmauel-map"}
           className={classes.map}
-          defaultCenter={{ lat: 37.29274, lng: 126.941063 }} // 지도 초기 위치
+          defaultCenter={{ lat: 37.292731, lng: 126.941056 }} // 지도 초기 위치
           defaultZoom={16} // 지도 초기 확대 배율
           style={{ height: "60vh" }}
         >
           <Marker
             key={1}
-            position={new navermaps.LatLng(37.29274, 126.941063)}
+            position={new navermaps.LatLng(37.292731, 126.941056)}
             animation={2}
           />
         </NaverMap>

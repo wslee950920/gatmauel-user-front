@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
+import expireReducer from "redux-persist-expire";
 import storageSession from "redux-persist/lib/storage/session";
 import { all } from "redux-saga/effects";
 
@@ -31,5 +32,15 @@ const persistConfig = {
   key: "order",
   storage: storageSession,
   whitelist: ["order"],
+  transforms: [
+    expireReducer("order", {
+      expireSeconds: 1800,
+      expiredState: {
+        order: [],
+        temp: {},
+      },
+      autoExpire: true,
+    }),
+  ],
 };
 export default persistReducer(persistConfig, rootReducer);

@@ -1,13 +1,5 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  useMemo,
-} from "react";
-import axios from "axios";
+import React from "react";
 import loadable from "@loadable/component";
-import { useDispatch } from "react-redux";
 
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
@@ -18,10 +10,6 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
-import { user as userAPI } from "../../../lib/api/client";
-
-import { setInfoPhone } from "../../../modules/user";
 
 import PhoneVerify from "../../common/Phone/PhoneVerify";
 import AddrInput from "../../common/Address/AddrInput";
@@ -53,297 +41,65 @@ const useStyles = makeStyles((theme) => ({
   top: {
     marginBottom: theme.spacing(0.8),
   },
+  total: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: theme.spacing(2, 1.5, 0),
+  },
+  sizeOne: {
+    fontSize: "1rem",
+  },
+  small: {
+    fontSize: "0.7rem",
+  },
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Payment = ({ open, handleClose, deli, info }) => {
+const Payment = ({
+  open,
+  handleClose,
+  deli,
+  getTotal,
+  insertComma,
+  value,
+  handleChange,
+  a11yProps,
+  handleMouseDown,
+  clearAddress,
+  addrRef,
+  addr,
+  error,
+  handleClickOpen,
+  detail,
+  detailChange,
+  detailRef,
+  phone,
+  phoneChange,
+  checkPhone,
+  verify,
+  timer,
+  codeOnChange,
+  code,
+  helper,
+  confirmPhone,
+  platform,
+  aOpen,
+  addressClose,
+  kakao,
+  loadNextPage,
+  loading,
+  hasNextPage,
+  queryOnChange,
+  query,
+  addrOnClick,
+  addressExit,
+  charge,
+}) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const [value, setValue] = useState(0);
-  const [addr, setAddr] = useState("");
-  const [detail, setDetail] = useState("");
-  const [error, setError] = useState({
-    addr: false,
-    detail: false,
-    code: false,
-  });
-  const addrRef = useRef(null);
-  const [aOpen, setAOpen] = useState(false);
-  const [kakao, setKakao] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [hasNextPage, setHasNextPage] = useState(true);
-  const [query, setQuery] = useState("");
-  const detailRef = useRef(null);
-  const [phone, setPhone] = useState("");
-  const [verify, setVerify] = useState(false);
-  const [confirm, setConfirm] = useState(true);
-  const [end, setEnd] = useState(null);
-  const [sse, setSse] = useState(null);
-  const [code, setCode] = useState("");
-  const [helper, setHelper] = useState("");
-  const es = useRef(null);
-  const [platform, setPlatform]=useState(null);
-
-  const timer = useMemo(() => {
-    if (sse && end) {
-      if (sse >= end) {
-        return "00:00";
-      } else {
-        const temp = end - sse;
-        const seconds = ("0" + Math.floor((temp / 1000) % 60)).slice(-2);
-        const minutes = ("0" + Math.floor((temp / 1000 / 60) % 60)).slice(-2);
-
-        return minutes + ":" + seconds;
-      }
-    } else {
-      return "";
-    }
-  }, [sse, end]);
-
-  const checkPhone = useCallback(() => {
-    setError((prev) => ({ ...prev, code: false }));
-    setCode("");
-
-    if (confirm) {
-      return;
-    }
-
-    userAPI
-      .post("/api/user/phone", { phone })
-      .then((res) => {
-        setVerify(true);
-
-        console.log(res.data);
-        const temp = new Date(res.data.updatedAt);
-        temp.setMinutes(temp.getMinutes() + 3);
-        console.log(temp);
-        setEnd(temp);
-      })
-      .catch((e) => {
-        if (e) {
-          if (e.response) {
-            if (e.response.status === 409) {
-              alert("이미 사용 중인 전화번호입니다.");
-            } else {
-              alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
-            }
-
-            return;
-          }
-
-          alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
-        }
-      });
-  }, [phone, confirm]);
-  const codeOnChange = useCallback((e) => {
-    setError((prev) => ({ ...prev, code: false }));
-
-    const curValue = e.target.value;
-    const newValue = curValue.replace(/[^0-9]/g, "");
-    setCode(newValue);
-  }, []);
-  const phoneChange = useCallback(
-    (e) => {
-      const { value } = e.target;
-      setPhone(value);
-
-      if (info && value === info.phone) {
-        setConfirm(true);
-      } else {
-        setConfirm(false);
-      }
-    },
-    [info]
-  );
-  const addrOnClick = useCallback((addr) => {
-    setTimeout(() => {
-      detailRef.current.focus();
-    }, 200);
-    setAddr(addr);
-    setAOpen(false);
-  }, []);
-  const getAddress = useCallback((query, page) => {
-    setLoading(true);
-
-    axios
-      .get("https://dapi.kakao.com/v2/local/search/address.json", {
-        headers: {
-          Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
-        },
-        params: {
-          query,
-          page,
-        },
-      })
-      .then((response) => {
-        if (page === 1) {
-          setKakao(response.data.documents);
-        } else {
-          setKakao((prev) => [...prev, ...response.data.documents]);
-        }
-        setHasNextPage(!response.data.meta.is_end);
-        setLoading(false);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          setHasNextPage(false);
-        }
-      });
-  }, []);
-  const handleChange = useCallback((event, newValue) => {
-    setValue(newValue);
-  }, []);
-  const a11yProps = useCallback((index) => {
-    return {
-      id: `tab-${index}`,
-      "aria-controls": `tabpanel-${index}`,
-    };
-  }, []);
-  const handleMouseDown = useCallback((event) => {
-    event.preventDefault();
-  }, []);
-  const detailChange = useCallback((e) => {
-    setError((prev) => ({ ...prev, detail: false }));
-
-    const { value } = e.target;
-    setDetail(value);
-  }, []);
-  const clearAddress = useCallback(() => {
-    setAddr("");
-  }, []);
-  const addressExit = useCallback(() => {
-    addrRef.current.blur();
-  }, []);
-  const addressClose = useCallback(() => {
-    setAOpen(false);
-  }, []);
-  const loadNextPage = useCallback(
-    ({ startIndex }) => {
-      const page = Math.ceil(startIndex / 10) + 1;
-      getAddress(query, page);
-    },
-    [query, getAddress]
-  );
-  const queryOnChange = useCallback(
-    (e) => {
-      const { value } = e.target;
-      setQuery(value);
-      getAddress(value, 1);
-    },
-    [getAddress]
-  );
-  const handleClickOpen = useCallback(() => {
-    if (platform) {
-      //모바일
-      setAOpen(true);
-      setError((prev) => ({ ...prev, addr: false }));
-
-      return;
-    } else {
-      //PC
-      new window.daum.Postcode({
-        oncomplete: (data) => {
-          setAddr(data.address);
-          detailRef.current.focus();
-        },
-        onclose: () => {
-          addrRef.current.blur();
-        },
-      }).open({
-        popupName: "postcodePopup",
-      });
-    }
-  }, [platform]);
-  const confirmPhone = useCallback(() => {
-    if (code === "") {
-      return;
-    }
-
-    userAPI
-      .post("/api/user/temp", { code, phone })
-      .then(() => {
-        dispatch(setInfoPhone(phone));
-
-        setError((prev) => ({ ...prev, code: false }));
-        setConfirm(true);
-        setVerify(false);
-        setSse(null);
-        setEnd(null);
-
-        es.current.close();
-      })
-      .catch((error) => {
-        setError((prev) => ({ ...prev, code: true }));
-        setConfirm(false);
-
-        if (error) {
-          if (error.response) {
-            if (error.response.status === 419) {
-              setHelper("인증번호가 만료되었습니다.");
-            } else if (error.response.status === 404) {
-              setHelper("인증번호가 틀렸습니다.");
-            } else if (error.response.status === 403) {
-              setHelper("전화번호가 다릅니다.");
-            } else {
-              alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
-            }
-
-            return;
-          }
-
-          alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
-        }
-      });
-  }, [code, phone, dispatch]);
-
-  useEffect(() => {
-    const filter = "win16|win32|win64|macintel|mac";
-    setPlatform(navigator.platform &&
-      filter.indexOf(navigator.platform.toLowerCase()) < 0);
-
-    return () => {
-      if (es && es.current) {
-        es.current.close();
-      }
-
-      setAddr("");
-      setDetail("");
-      setPhone("");
-    };
-  }, []);
-  useEffect(() => {
-    if (verify) {
-      es.current = new EventSource("http://localhost:9090/api/user/timer", {
-        withCredentials: true,
-      });
-
-      es.current.onmessage = (e) => {
-        setSse(new Date(parseInt(e.data, 10)));
-      };
-    }
-  }, [verify]);
-  useEffect(() => {
-    if (value === 0) {
-      if (info) {
-        setAddr(info.address ? info.address : "");
-        setDetail(info.detail ? info.detail : "");
-      } else {
-        setAddr("");
-        setDetail("");
-      }
-    } else if (value === 1) {
-      setAddr("경기도 수원시 팔달구 일월로18번길 4-26");
-      setDetail("172동 1901호");
-    }
-  }, [info, value]);
-  useEffect(() => {
-    if (info) {
-      setPhone(info.phone ? info.phone : "");
-    }
-  }, [info]);
 
   return (
     <>
@@ -374,8 +130,8 @@ const Payment = ({ open, handleClose, deli, info }) => {
                 indicatorColor="primary"
                 className={classes.tabs}
               >
-                <Tab label="배달 정보" {...a11yProps(0)} />
-                <Tab label="최근 정보" {...a11yProps(1)} />
+                <Tab label="배달 주소" {...a11yProps(0)} />
+                <Tab label="최근 주소" {...a11yProps(1)} />
               </Tabs>
               <div
                 role="tabpanel"
@@ -422,10 +178,24 @@ const Payment = ({ open, handleClose, deli, info }) => {
               confirmPhone={confirmPhone}
               value={0}
             />
+            <div className={classes.total}>
+              <div className={classes.small}>메뉴 : </div>
+              <div className={classes.small}>{insertComma(getTotal)}</div>
+            </div>
+            <div className={classes.total}>
+              <div className={classes.small}>배달료 : </div>
+              <div className={classes.small}>{insertComma(charge)}</div>
+            </div>
+            <div className={classes.total}>
+              <div className={classes.sizeOne}>총액 : </div>
+              <div className={classes.sizeOne}>
+                {insertComma(getTotal + charge)}
+              </div>
+            </div>
           </Container>
         </div>
       </Dialog>
-      {!!deli&&platform && (
+      {!!deli && platform && (
         <AddrDialog
           open={aOpen}
           handleClose={addressClose}

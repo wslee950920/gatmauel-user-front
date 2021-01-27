@@ -6,14 +6,21 @@ const ADD_ORDER = "order/ADD";
 const REMOVE_ORDER = "order/REMOVE";
 const CHANGE_ORDER = "order/CHANGE";
 
+const SET_PHONE = "order/SET_PHONE";
+const SET_ADDRESS = "order/SET_ADDRESS";
+
 export const insertToCart = createAction(INSERT_TO_CART);
 export const subOrder = createAction(SUB_ORDER);
 export const addOrder = createAction(ADD_ORDER);
 export const removeOrder = createAction(REMOVE_ORDER);
 export const changeOrder = createAction(CHANGE_ORDER);
 
+export const setTempPhone = createAction(SET_PHONE, (phone) => phone);
+export const setTempAddress = createAction(SET_ADDRESS, (address) => address);
+
 const initialState = {
   order: [],
+  temp: {},
 };
 
 const order = handleActions(
@@ -43,6 +50,20 @@ const order = handleActions(
       order: state.order.map((v, i) =>
         payload.index === i ? { ...v, num: payload.num } : v
       ),
+    }),
+    [SET_PHONE]: (state, { payload: phone }) => ({
+      ...state,
+      temp: {
+        ...state.temp,
+        phone,
+      },
+    }),
+    [SET_ADDRESS]: (state, { payload: address }) => ({
+      ...state,
+      temp: {
+        ...state.temp,
+        address,
+      },
     }),
   },
   initialState

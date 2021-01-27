@@ -9,7 +9,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import OrderList from "./OrderList";
 import SelectTab from "./SelectTab";
-import Payment from "./Payment";
+import PaymentCon from "../../containers/payment/PaymentCon";
 
 const InfoDialog = loadable(() => import("../common/InfoDialog"));
 
@@ -39,10 +39,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Order = ({ order, info }) => {
+const Order = ({
+  order,
+  info,
+  temp,
+  distance,
+  changeDistance,
+  value,
+  handleChange,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = useState(0);
   const [iOpen, setIOpen] = useState(false);
   const [pOpen, setPOpen] = useState(false);
 
@@ -69,15 +76,17 @@ const Order = ({ order, info }) => {
   }, [order, value]);
 
   const insertComma = useCallback((total) => {
-    const result = String(total).split("");
-    result.push("원");
-    result.splice(-4, 0, ",");
+    if (total === 0) {
+      return "0원";
+    } else {
+      const result = String(total).split("");
+      result.push("원");
+      result.splice(-4, 0, ",");
 
-    return result.join("");
+      return result.join("");
+    }
   }, []);
-  const handleChange = useCallback((event, newValue) => {
-    setValue(newValue);
-  }, []);
+
   const DialogOpen = useCallback(() => {
     setIOpen(true);
   }, []);
@@ -133,11 +142,16 @@ const Order = ({ order, info }) => {
         </Container>
       </div>
       {value === 1 && <InfoDialog open={iOpen} handleClose={DialogClose} />}
-      <Payment
+      <PaymentCon
         open={pOpen}
         handleClose={PaymentClose}
         deli={value}
         info={info}
+        getTotal={getTotal}
+        insertComma={insertComma}
+        temp={temp}
+        distance={distance}
+        changeDistance={changeDistance}
       />
     </>
   );

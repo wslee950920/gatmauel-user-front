@@ -165,7 +165,7 @@ const InfoDialog=({open, handleClose})=>{
                                             clsx(classes.cell, classes.pRight)
                                         }
                                     >
-                                        2km이하
+                                        2km미만
                                     </TableCell>
                                     <TableCell 
                                         align="right" 
