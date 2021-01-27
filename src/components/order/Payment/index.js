@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import loadable from "@loadable/component";
 
 import Slide from "@material-ui/core/Slide";
@@ -13,7 +13,7 @@ import Tab from "@material-ui/core/Tab";
 
 import PhoneVerify from "../../common/Phone/PhoneVerify";
 import AddrInput from "../../common/Address/AddrInput";
-const AddrDialog = loadable(() => import("../../common/Address/AddrDialog"));
+const AddrCon = loadable(() => import("../../../containers/payment/AddrCon"));
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -67,7 +67,6 @@ const Payment = ({
   insertComma,
   value,
   handleChange,
-  a11yProps,
   handleMouseDown,
   clearAddress,
   addrRef,
@@ -89,17 +88,18 @@ const Payment = ({
   platform,
   aOpen,
   addressClose,
-  kakao,
-  loadNextPage,
-  loading,
-  hasNextPage,
-  queryOnChange,
-  query,
   addrOnClick,
   addressExit,
   charge,
 }) => {
   const classes = useStyles();
+
+  const a11yProps = useCallback((index) => {
+    return {
+      id: `tab-${index}`,
+      "aria-controls": `tabpanel-${index}`,
+    };
+  }, []);
 
   return (
     <>
@@ -179,7 +179,7 @@ const Payment = ({
               value={0}
             />
             <div className={classes.total}>
-              <div className={classes.small}>메뉴 : </div>
+              <div className={classes.small}>음식값 : </div>
               <div className={classes.small}>{insertComma(getTotal)}</div>
             </div>
             <div className={classes.total}>
@@ -196,15 +196,9 @@ const Payment = ({
         </div>
       </Dialog>
       {!!deli && platform && (
-        <AddrDialog
+        <AddrCon
           open={aOpen}
           handleClose={addressClose}
-          kakao={kakao}
-          loadNextPage={loadNextPage}
-          loading={loading}
-          hasNextPage={hasNextPage}
-          queryOnChange={queryOnChange}
-          query={query}
           addrOnClick={addrOnClick}
           handleOnExit={addressExit}
         />

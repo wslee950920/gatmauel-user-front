@@ -36,6 +36,19 @@ const OrderCon=({history})=>{
         if(order.length===0){
             alert('메뉴를 추가해주세요.');
             history.push('/menu');
+
+            return;
+        }
+
+        const total = order.reduce(
+          (prev, value) => prev + value.price * (value.num === "" ? 0 : value.num),
+          0
+        );
+        if(total<14000){
+          alert('14,000원 이상부터 주문하실 수 있습니다.');
+          history.push('/menu');
+
+          return;
         }
     }, [order, history]);
     useEffect(()=>{

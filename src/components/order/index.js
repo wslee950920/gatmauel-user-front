@@ -67,7 +67,7 @@ const Order = ({
         const result = temp + 500;
 
         return result;
-      } else if (temp >= 14000 && temp < 27000) {
+      } else if (temp < 27000) {
         const result = temp + 1000;
 
         return result;

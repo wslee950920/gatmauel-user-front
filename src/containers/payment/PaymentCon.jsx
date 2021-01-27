@@ -5,7 +5,6 @@ import React, {
     useRef,
     useMemo,
 } from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 
 import { user as userAPI } from "../../lib/api/client";
@@ -36,10 +35,6 @@ const PaymentCon=({
   });
   const addrRef = useRef(null);
   const [aOpen, setAOpen] = useState(false);
-  const [kakao, setKakao] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [hasNextPage, setHasNextPage] = useState(true);
-  const [query, setQuery] = useState("");
   const detailRef = useRef(null);
   const [phone, setPhone] = useState("");
   const [verify, setVerify] = useState(false);
@@ -215,55 +210,6 @@ const PaymentCon=({
       });
     }
   }, [platform, dispatch, changeDistance]);
-  const getAddress = useCallback((query, page) => {
-    setLoading(true);
-
-    axios
-      .get("https://dapi.kakao.com/v2/local/search/address.json", {
-        headers: {
-          Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
-        },
-        params: {
-          query,
-          page,
-        },
-      })
-      .then((response) => {
-        if (page === 1) {
-          setKakao(response.data.documents);
-        } else {
-          setKakao((prev) => [...prev, ...response.data.documents]);
-        }
-        setHasNextPage(!response.data.meta.is_end);
-        setLoading(false);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          setHasNextPage(false);
-        }
-      });
-  }, []);
-  const loadNextPage = useCallback(
-    ({ startIndex }) => {
-      const page = Math.ceil(startIndex / 10) + 1;
-      getAddress(query, page);
-    },
-    [query, getAddress]
-  );
-  const queryOnChange = useCallback(
-    (e) => {
-      const { value } = e.target;
-      setQuery(value);
-      getAddress(value, 1);
-    },
-    [getAddress]
-  );
-  const addressExit = useCallback(() => {
-    addrRef.current.blur();
-  }, []);
-  const addressClose = useCallback(() => {
-    setAOpen(false);
-  }, []);
   const addrOnClick = useCallback((addr) => {
     setTimeout(() => {
       detailRef.current.focus();
@@ -288,9 +234,18 @@ const PaymentCon=({
       }
     });
   }, [dispatch, changeDistance]);
+  const addressExit = useCallback(() => {
+    addrRef.current.blur();
+  }, []);
+  const addressClose = useCallback(() => {
+    setAOpen(false);
+  }, []);
   
   const clearAddress = useCallback(() => {
     setAddr("");
+  }, []);
+  const handleMouseDown = useCallback((event) => {
+    event.preventDefault();
   }, []);
   const detailChange = useCallback((e) => {
     setError((prev) => ({ ...prev, detail: false }));
@@ -298,18 +253,9 @@ const PaymentCon=({
     const { value } = e.target;
     setDetail(value);
   }, []);
-  const handleMouseDown = useCallback((event) => {
-    event.preventDefault();
-  }, []);
 
   const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
-  }, []);
-  const a11yProps = useCallback((index) => {
-    return {
-      id: `tab-${index}`,
-      "aria-controls": `tabpanel-${index}`,
-    };
   }, []);
 
   useEffect(() => {
@@ -391,7 +337,6 @@ const PaymentCon=({
             insertComma={insertComma} 
             value={value}
             handleChange={handleChange}
-            a11yProps={a11yProps}
             handleMouseDown={handleMouseDown}
             clearAddress={clearAddress}
             addrRef={addrRef}
@@ -413,12 +358,6 @@ const PaymentCon=({
             platform={platform}
             aOpen={aOpen}
             addressClose={addressClose}
-            kakao={kakao}
-            loadNextPage={loadNextPage}
-            loading={loading}
-            hasNextPage={hasNextPage}
-            queryOnChange={queryOnChange}
-            query={query}
             addrOnClick={addrOnClick}
             addressExit={addressExit}
             charge={charge}

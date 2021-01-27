@@ -147,12 +147,14 @@ const ProfileCon=({history})=>{
                 setKakao(prev=>[...prev, ...response.data.documents]);
             }
             setHasNextPage(!response.data.meta.is_end);
-            setLoading(false);
         })
         .catch((error)=>{
             if(error.response.status===400){
                 setHasNextPage(false);
             }
+        })
+        .finally(()=>{
+            setLoading(false);
         })
     }, [])
     const queryOnChange=useCallback((e)=>{

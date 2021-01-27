@@ -135,6 +135,9 @@ const FabBtn = ({ order }) => {
     },
     [dispatch]
   );
+  const onClick = useCallback(() => {
+    alert("14,000원 이상부터 주문하실 수 있습니다.");
+  }, []);
 
   useEffect(() => {
     if (order.length === 0) {
@@ -214,9 +217,15 @@ const FabBtn = ({ order }) => {
         <SnackbarContent
           message={`총액 : ${insertComma(getTotal)}`}
           action={
-            <Link component={RouterLink} to="/order">
-              주문하기
-            </Link>
+            getTotal >= 14000 ? (
+              <Link component={RouterLink} to="/order">
+                주문하기
+              </Link>
+            ) : (
+              <Link component="button" onClick={onClick} color="textSecondary">
+                주문하기
+              </Link>
+            )
           }
           className={classes.total}
         />

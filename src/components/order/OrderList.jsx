@@ -24,7 +24,8 @@ const useStyles=makeStyles((theme)=>({
     root:{
         width:'100%',
         maxHeight:'45vh',
-        overflow: 'auto',
+        overflow:'auto',
+        minHeight:132
     },
     textField: {
         width: "1.5rem",
