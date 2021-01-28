@@ -1,9 +1,10 @@
 import React from "react";
+import loadable from "@loadable/component";
 
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
-import Confirm from "./Confirm";
+const Confirm = loadable(() => import("./Confirm"));
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -19,6 +20,7 @@ const Withdraw = ({
   open,
   handleClickOpen,
   handleClose,
+  value,
 }) => {
   const classes = useStyles();
 
@@ -33,13 +35,15 @@ const Withdraw = ({
       >
         회원 탈퇴
       </Button>
-      <Confirm
-        open={open}
-        handleClose={handleClose}
-        onChange={onChange}
-        onSubmit={onSubmit}
-        error={error}
-      />
+      {value === 1 && (
+        <Confirm
+          open={open}
+          handleClose={handleClose}
+          onChange={onChange}
+          onSubmit={onSubmit}
+          error={error}
+        />
+      )}
     </>
   );
 };

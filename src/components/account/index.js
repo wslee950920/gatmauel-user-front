@@ -72,6 +72,7 @@ const Account = ({
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Withdraw
+              value={value}
               onChange={onChange}
               onSubmit={wdSubmit}
               error={wError}

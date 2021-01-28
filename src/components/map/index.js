@@ -1,14 +1,15 @@
 import React from "react";
 import { NaverMap, Marker } from "react-naver-maps";
+import loadable from "@loadable/component";
 
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 
-import ShareBtn from "./ShareBtn";
-import Fab from "../common/Fab";
-
 import usePlatform from "../../lib/usePlatform";
+
+import ShareBtn from "./ShareBtn";
+const Fab = loadable(() => import("../common/Fab"));
 
 const useStyles = makeStyles((theme) => ({
   map: {

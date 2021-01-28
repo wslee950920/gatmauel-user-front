@@ -20,9 +20,9 @@ import { StepProvider } from "./context/step";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import ReviewItem from "./ReviewItem";
 import EditReview from "./EditReview";
-import Fab from "../common/Fab";
+const ReviewItem = loadable(() => import("./ReviewItem"));
+const Fab = loadable(() => import("../common/Fab"));
 const DeleteDialog = loadable(() => import("./Delete"));
 const FullScreenDialog = loadable(() => import("./FullScreenDialog"));
 

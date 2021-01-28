@@ -1,5 +1,6 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import loadable from "@loadable/component";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -8,8 +9,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Link from "@material-ui/core/Link";
 
-import ListItemLink from "../ListItemLink";
 import Circular from "../../common/Circular";
+const ListItemLink = loadable(() => import("../ListItemLink"));
 
 const useStyles = makeStyles((theme) => ({
   root: {

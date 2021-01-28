@@ -2,13 +2,14 @@ import React, { useCallback, useMemo } from "react";
 import List from "react-virtualized/dist/commonjs/List";
 import WindowScroller from "react-virtualized/dist/commonjs/WindowScroller";
 import InfiniteLoader from "react-virtualized/dist/commonjs/InfiniteLoader";
+import loadable from "@loadable/component";
 
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import NoticeLitemLink from "./NoticeLitemLink";
 import Circular from "../common/Circular";
-import Fab from "../common/Fab";
+const NoticeItemLink = loadable(() => import("./NoticeItemLink"));
+const Fab = loadable(() => import("../common/Fab"));
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,7 +43,7 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading, order }) => {
   const rowRenderer = useCallback(
     ({ index, style, key }) => {
       return isRowLoaded({ index }) ? (
-        <NoticeLitemLink
+        <NoticeItemLink
           data={notices[index]}
           style={style}
           index={index}

@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useEffect } from "react";
+import loadable from "@loadable/component";
 
 import Grid from "@material-ui/core/Grid";
 
 import CarouselView from "./CarouselView";
 import ReviewList from "./ReviewList";
 import CarouselMenu from "./CarouselMenu";
-import CardDialog from "../common/CardDialog";
 import NoticeList from "./NoticeList";
-import Fab from "../common/Fab";
+const Fab = loadable(() => import("../common/Fab"));
+const CardDialog = loadable(() => import("../common/CardDialog"));
 
 const Main = ({ reviews, notices, food, order }) => {
   const [open, setOpen] = useState(false);

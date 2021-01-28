@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import loadable from "@loadable/component";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,9 +12,9 @@ import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 
-import AddrDialog from "../common/Address/AddrDialog";
 import AddrInput from "../common/Address/AddrInput";
 import PhoneVerify from "../common/Phone/PhoneVerify";
+const AddrDialog = loadable(() => import("../common/Address/AddrDialog"));
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -82,6 +83,14 @@ const Profile = ({
   helper,
 }) => {
   const classes = useStyles();
+  const [platform, setPlatform] = useState(null);
+
+  useEffect(() => {
+    const filter = "win16|win32|win64|macintel|mac";
+    setPlatform(
+      navigator.platform && filter.indexOf(navigator.platform.toLowerCase()) < 0
+    );
+  }, []);
 
   return (
     <>
@@ -182,18 +191,20 @@ const Profile = ({
           </form>
         </div>
       </Container>
-      <AddrDialog
-        open={open}
-        handleClose={handleClose}
-        kakao={kakao}
-        loadNextPage={loadNextPage}
-        loading={loading}
-        hasNextPage={hasNextPage}
-        queryOnChange={queryOnChange}
-        query={query}
-        addrOnClick={addrOnClick}
-        handleOnExit={handleOnExit}
-      />
+      {platform && (
+        <AddrDialog
+          open={open}
+          handleClose={handleClose}
+          kakao={kakao}
+          loadNextPage={loadNextPage}
+          loading={loading}
+          hasNextPage={hasNextPage}
+          queryOnChange={queryOnChange}
+          query={query}
+          addrOnClick={addrOnClick}
+          handleOnExit={handleOnExit}
+        />
+      )}
     </>
   );
 };

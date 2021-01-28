@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
+import loadable from "@loadable/component";
 
 import MenuBar from "./MenuBar";
 import MenuList from "./MenuList";
-import CardDialog from "../common/CardDialog";
-import Fab from "../common/Fab";
+const Fab = loadable(() => import("../common/Fab"));
+const CardDialog = loadable(() => import("../common/CardDialog"));
 
 const Menu = ({ categories, order }) => {
   const [open, setOpen] = useState(false);

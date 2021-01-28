@@ -9,8 +9,9 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import OrderList from "./OrderList";
 import SelectTab from "./SelectTab";
-import PaymentCon from "../../containers/payment/PaymentCon";
-
+const PaymentCon = loadable(() =>
+  import("../../containers/payment/PaymentCon")
+);
 const InfoDialog = loadable(() => import("../common/InfoDialog"));
 
 const useStyles = makeStyles((theme) => ({

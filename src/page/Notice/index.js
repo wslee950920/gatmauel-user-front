@@ -1,10 +1,13 @@
 import React from "react";
 import { Route } from "react-router-dom";
+import loadable from "@loadable/component";
 
 import HeaderCon from "../../containers/main/HeaderCon";
 import NoticeCon from "../../containers/notice/NoticeCon";
-import ReadNoticeCon from "../../containers/notice/ReadNoticeCon";
 import Footer from "../../components/footer";
+const ReadNoticeCon = loadable(() =>
+  import("../../containers/notice/ReadNoticeCon")
+);
 
 const NoticePage = ({ match }) => {
   return (
