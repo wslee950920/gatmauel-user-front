@@ -10,6 +10,9 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Button from "@material-ui/core/Button";
+
+import useInsertComma from "../../../lib/useInsertComma";
 
 import PhoneVerify from "../../common/Phone/PhoneVerify";
 import AddrInput from "../../common/Address/AddrInput";
@@ -43,6 +46,10 @@ const useStyles = makeStyles((theme) => ({
   top: {
     marginBottom: theme.spacing(0.8),
   },
+  submit: {
+    margin: theme.spacing(5, 0, 2),
+    backgroundColor: theme.palette.primary.light,
+  },
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -54,7 +61,6 @@ const Payment = ({
   handleClose,
   deli,
   getTotal,
-  insertComma,
   value,
   handleChange,
   handleMouseDown,
@@ -64,16 +70,13 @@ const Payment = ({
   error,
   handleClickOpen,
   detail,
-  detailChange,
   detailRef,
   phone,
   phoneChange,
   checkPhone,
   verify,
   timer,
-  codeOnChange,
   code,
-  helper,
   confirmPhone,
   platform,
   aOpen,
@@ -82,9 +85,12 @@ const Payment = ({
   addressExit,
   charge,
   radio,
-  radioOnChange,
+  text,
+  onSubmit,
+  onChange,
 }) => {
   const classes = useStyles();
+  const insertComma = useInsertComma;
 
   const a11yProps = useCallback((index) => {
     return {
@@ -141,7 +147,7 @@ const Payment = ({
                   }}
                   handleClickOpen={handleClickOpen}
                   detail={detail}
-                  detailChange={detailChange}
+                  detailChange={onChange}
                   detailRef={detailRef}
                   value={value}
                   dense
@@ -163,11 +169,13 @@ const Payment = ({
               phoneChange={phoneChange}
               checkPhone={checkPhone}
               verify={verify}
-              error={error.code}
+              error={{
+                code: error.code,
+                phone: error.phone,
+              }}
               timer={timer}
-              codeOnChange={codeOnChange}
+              codeOnChange={onChange}
               code={code}
-              helper={helper}
               confirmPhone={confirmPhone}
               value={0}
             />
@@ -179,12 +187,21 @@ const Payment = ({
             >
               <Tab label="요청사항" {...a11yProps(4)} />
             </Tabs>
-            <RequestText radio={radio} radioOnChange={radioOnChange} />
+            <RequestText radio={radio} text={text} onChange={onChange} />
             <Money
               insertComma={insertComma}
               getTotal={getTotal}
               charge={charge}
             />
+            <Button
+              onClick={onSubmit}
+              fullWidth
+              variant="contained"
+              className={classes.submit}
+              color="primary"
+            >
+              결제하기
+            </Button>
           </Container>
         </div>
       </Dialog>

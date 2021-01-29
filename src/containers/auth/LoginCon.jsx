@@ -13,7 +13,7 @@ const LoginCon=({history})=>{
     const [email, setEmail]=useState('');
     const [password, setPassword]=useState('');
     const [checked, setChecked]=useState(false);
-    const [empty, setEmpty]=useState({
+    const [error, setError]=useState({
         email:false,
         password:false
     });
@@ -23,7 +23,6 @@ const LoginCon=({history})=>{
         loginError:auth.loginError,
         user:user.user,
     }));
-    const [error, setError]=useState(false);
 
     const onClick=useCallback(()=>{
         window.Kakao.Auth.login({
@@ -66,10 +65,14 @@ const LoginCon=({history})=>{
     const onChange=useCallback((e)=>{
         const {name, value}=e.target;
 
-        if(name==='email')
+        if(name==='email'){
+            setError(prev=>({...prev, email:false}));
             setEmail(value);
-        else if(name==='password')
+        }
+        else if(name==='password'){
+            setError(prev=>({...prev, password:false}));
             setPassword(value);
+        }
     }, []);
     const onToggle=useCallback((e)=>{
         const {checked}=e.target;
@@ -79,26 +82,28 @@ const LoginCon=({history})=>{
     const onSubmit=useCallback((event)=>{
         event.preventDefault();
 
-        if(email===''){
-            setEmpty(prev=>({...prev, email:true}));
+        if(error.email||error.password){
+            return;
+        }
 
+        if(email===''||password===''){
+            if(email===''){
+                setError(prev=>({...prev, email:true}));
+            } 
             if(password===''){
-                setEmpty(prev=>({...prev, password:true}));
-                
-                return;
+                setError(prev=>({...prev, password:true}));
             }
-
             return;
         }
-        if(password===''){
-            setEmpty(prev=>({...prev, password:true}));
-            
+        if(!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))){
+            setError(prev=>({...prev, email:true}));
+            alert('이메일을 입력해주십시오');
             return;
         }
 
-        setEmpty({email:false, password:false});
+        setError({email:false, password:false});
         dispatch(fetchLogin({email, password, checked}));
-    }, [email, password, dispatch, checked]);
+    }, [email, password, dispatch, checked, error]);
 
     useEffect(()=>{
         if (window.Kakao) {
@@ -119,8 +124,14 @@ const LoginCon=({history})=>{
     useEffect(()=>{
         try{
             if(loginError&&loginError.response){
+                if(loginError.response.status===400){
+                    setError(prev=>({...prev, email:true}));
+                    alert('이메일을 입력해주십시오.');
+
+                    return;
+                }
                 if(loginError.response.status===401){
-                    setError(true);
+                    setError({email:true, password:false});
 
                     return;
                 }
@@ -146,7 +157,7 @@ const LoginCon=({history})=>{
                 dispatch(tempSetUser(login.data));
             }
         } catch(e){
-            console.error(e)
+            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오');
         }
     }, [login, loginError, dispatch]);
     useEffect(()=>{
@@ -169,7 +180,6 @@ const LoginCon=({history})=>{
                 password={password} 
                 checked={checked}
                 error={error}
-                empty={empty}
                 onClick={onClick}
             />
 };

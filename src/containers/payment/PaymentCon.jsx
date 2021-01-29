@@ -5,13 +5,13 @@ import React, {
     useRef,
     useMemo,
 } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { user as userAPI } from "../../lib/api/client";
 import {getPlatform} from '../../lib/usePlatform';
 import useTimer from '../../lib/useTimer';
 
-import { setTempPhone, setTempAddress } from "../../modules/order";
+import { setTempPhone, setTempAddress, makeOrder } from "../../modules/order";
 
 import Payment from '../../components/order/Payment';
 
@@ -19,9 +19,7 @@ const PaymentCon=({
   open, 
   handleClose, 
   deli, 
-  getTotal, 
-  insertComma, 
-  info, 
+  getTotal,  
   temp, 
   distance,
   changeDistance
@@ -33,7 +31,8 @@ const PaymentCon=({
   const [error, setError] = useState({
     addr: false,
     detail: false,
-    code: false,
+    code: '',
+    phone:false
   });
   const addrRef = useRef(null);
   const [aOpen, setAOpen] = useState(false);
@@ -44,10 +43,18 @@ const PaymentCon=({
   const [end, setEnd] = useState(null);
   const [sse, setSse] = useState(null);
   const [code, setCode] = useState("");
-  const [helper, setHelper] = useState("");
   const es = useRef(null);
   const [platform, setPlatform] = useState(null);
-  const [radio, setRadio]=useState('in');
+  const [radio, setRadio]=useState('5분이내 거리(조리)');
+  const [text, setText]=useState('');
+  const { info, order, result, oError }=useSelector(state=>(
+    {
+        info:state.user.info,
+        order:state.order.order,
+        result:state.order.result,
+        oError:state.order.error
+    }
+  ));
 
   const charge=useMemo(()=>{
     if(!!deli&&distance){
@@ -63,13 +70,83 @@ const PaymentCon=({
     }
   }, [distance, deli]);
 
-  const radioOnChange=useCallback((e)=>{
-    setRadio(e.target.value);
+  const onChange=useCallback((event)=>{
+    const {name, value}=event.target;
+    if(name==='text'){
+      setText(value);
+    } else if(name==='five'){
+      setRadio(value);
+    } else if(name==='code'){
+      setError((prev) => ({ ...prev, code:'' }));
+
+      const curValue = value;
+      const newValue = curValue.replace(/[^0-9]/g, "");
+      setCode(newValue);
+    } else if(name==='detail'){
+      setError((prev) => ({ ...prev, detail: false }));
+      setDetail(value);
+    }
   }, [])
+  const onSubmit=useCallback((e)=>{
+    e.preventDefault();
+
+    if(!confirm||phone===''){
+      setError(prev=>({
+        ...prev,
+        phone:true
+      }));
+
+      return;
+    }
+
+    if(!!deli&&(error.addr||error.detail)){
+      return;
+    }
+    if(error.phone){
+      return;
+    }
+
+    if(!!deli&&(addr===''||detail==='')){
+      if(addr===''){
+        setError(prev=>({
+          ...prev,
+          addr:true
+        }));
+      }
+      if(detail===''){
+        setError(prev=>({
+          ...prev,
+          detail:true
+        }));
+      }
+
+      return;
+    }
+
+    setError(prev=>({...prev, addr:false, detail:false, phone:false}))
+    dispatch(makeOrder({
+      addr, 
+      detail, 
+      phone, 
+      order:order.map((value)=>{
+        return({
+          id:value.id,
+          num:value.num
+        })
+      }), 
+      deli:!!deli, 
+      request:`${radio}\n${text}`,
+      total:!!deli?getTotal+charge:getTotal
+    }));
+  }, [dispatch, error, confirm, addr, detail, phone, order, text, radio, deli, getTotal, charge]);
   const phoneChange = useCallback(
     (e) => {
       const { value } = e.target;
       setPhone(value);
+      setError(prev=>({
+        ...prev,
+        phone:false
+      }));
 
       if (info && value === info.phone) {
         setConfirm(true);
@@ -80,7 +157,7 @@ const PaymentCon=({
     [info]
   );
   const checkPhone = useCallback(() => {
-    setError((prev) => ({ ...prev, code: false }));
+    setError((prev) => ({ ...prev, code: '' }));
     setCode("");
 
     if (confirm) {
@@ -112,13 +189,6 @@ const PaymentCon=({
         }
       });
   }, [phone, confirm]);
-  const codeOnChange = useCallback((e) => {
-    setError((prev) => ({ ...prev, code: false }));
-
-    const curValue = e.target.value;
-    const newValue = curValue.replace(/[^0-9]/g, "");
-    setCode(newValue);
-  }, []);
   const confirmPhone = useCallback(() => {
     if (code === "") {
       return;
@@ -129,7 +199,7 @@ const PaymentCon=({
       .then(() => {
         dispatch(setTempPhone(phone));
 
-        setError((prev) => ({ ...prev, code: false }));
+        setError((prev) => ({ ...prev, code:'', phone:false }));
         setConfirm(true);
         setVerify(false);
         setSse(null);
@@ -138,17 +208,16 @@ const PaymentCon=({
         es.current.close();
       })
       .catch((error) => {
-        setError((prev) => ({ ...prev, code: true }));
         setConfirm(false);
 
         if (error) {
           if (error.response) {
             if (error.response.status === 419) {
-              setHelper("인증번호가 만료되었습니다.");
+              setError(prev=>({...prev, code:"인증번호가 만료되었습니다."}));
             } else if (error.response.status === 404) {
-              setHelper("인증번호가 틀렸습니다.");
+              setError(prev=>({...prev, code:"인증번호가 틀렸습니다."}));
             } else if (error.response.status === 403) {
-              setHelper("전화번호가 다릅니다.");
+              setError(prev=>({...prev, code:"전화번호가 다릅니다."}));
             } else {
               alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
             }
@@ -160,16 +229,14 @@ const PaymentCon=({
         }
       });
   }, [code, phone, dispatch]);
-  
   const handleClickOpen = useCallback(() => {
+    setError((prev) => ({ ...prev, addr: false, detail:false }));
+
     if (platform) {
-      //모바일
       setAOpen(true);
-      setError((prev) => ({ ...prev, addr: false }));
 
       return;
     } else {
-      //PC
       new window.daum.Postcode({
         oncomplete: (data) => {
           setAddr(data.address);
@@ -231,24 +298,26 @@ const PaymentCon=({
   const addressClose = useCallback(() => {
     setAOpen(false);
   }, []);
-  
   const clearAddress = useCallback(() => {
     setAddr("");
   }, []);
   const handleMouseDown = useCallback((event) => {
     event.preventDefault();
   }, []);
-  const detailChange = useCallback((e) => {
-    setError((prev) => ({ ...prev, detail: false }));
-
-    const { value } = e.target;
-    setDetail(value);
-  }, []);
-
   const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
   }, []);
 
+  useEffect(()=>{
+    if(result){
+      alert('결제 성공!!!');
+    }
+  }, [result]);
+  useEffect(()=>{
+    if(oError){
+      alert('결제를 실패했습니다. 잠시 후 다시 시도해주십시오.');
+    }
+  }, [oError]);
   useEffect(() => {
     setPlatform(getPlatform());
 
@@ -321,8 +390,7 @@ const PaymentCon=({
             open={open} 
             handleClose={handleClose} 
             deli={deli} 
-            getTotal={getTotal} 
-            insertComma={insertComma} 
+            getTotal={getTotal}  
             value={value}
             handleChange={handleChange}
             handleMouseDown={handleMouseDown}
@@ -332,16 +400,13 @@ const PaymentCon=({
             error={error}
             handleClickOpen={handleClickOpen}
             detail={detail}
-            detailChange={detailChange}
             detailRef={detailRef}
             phone={phone}
             phoneChange={phoneChange}
             checkPhone={checkPhone}
             verify={verify}
             timer={useTimer(sse, end)}
-            codeOnChange={codeOnChange}
             code={code}
-            helper={helper}
             confirmPhone={confirmPhone}
             platform={platform}
             aOpen={aOpen}
@@ -350,7 +415,9 @@ const PaymentCon=({
             addressExit={addressExit}
             charge={charge}
             radio={radio}
-            radioOnChange={radioOnChange}
+            text={text}
+            onChange={onChange}
+            onSubmit={onSubmit}
         />
     );
 }

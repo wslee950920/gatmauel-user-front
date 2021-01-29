@@ -29,7 +29,7 @@ const ProfileCon=({history})=>{
         nick:false,
         addr:false,
         detail:false,
-        code:false
+        code:''
     });
     const [kakao, setKakao]=useState([]);
     const [hasNextPage, setHasNextPage]=useState(true);
@@ -47,21 +47,27 @@ const ProfileCon=({history})=>{
     const [sse, setSse]=useState(null);
     const [code, setCode]=useState('');
     const [confirm, setConfirm]=useState(true);
-    const [helper, setHelper]=useState('');
     const [platform, setPlatform]=useState(null);
 
+    const onChange=useCallback((event)=>{
+        const {name, value}=event.target;
+        if(name==='detail'){
+            setError(prev=>({
+                ...prev,
+                addr:false,
+                detail:false
+            }))
+            setDetail(value);
+        } else if(name==='code'){
+            setError(prev=>({...prev, code:''}));
+
+            const curValue = value;
+            const newValue = curValue.replace(/[^0-9]/g, "");
+            setCode(newValue);
+        }
+    }, [])
     const handleMouseDown = useCallback((event) => {
         event.preventDefault();
-    }, []);
-    const detailChange=useCallback((e)=>{
-        setError(prev=>({
-            ...prev,
-            addr:false,
-            detail:false
-        }))
-
-        const {value}=e.target;
-        setDetail(value);
     }, []);
     const phoneChange=useCallback((e)=>{
         const {value}=e.target;
@@ -82,13 +88,13 @@ const ProfileCon=({history})=>{
         setAddr('');
     }, []);
     const handleClickOpen = useCallback(() => {
+        setError(prev=>({...prev, addr:false, detail:false}));
+
         if(platform){
-            //모바일
             setOpen(true);
-            setError(prev=>({...prev, addr:false}));
 
             return;
-        } else{ //PC
+        } else{
             new window.daum.Postcode({
                 oncomplete:(data)=>{
                     setAddr(data.address);
@@ -155,7 +161,7 @@ const ProfileCon=({history})=>{
     const onLogout = useCallback(() => {
         dispatch(logout());
     }, [dispatch]);
-    const onChange=useCallback((e)=>{
+    const nickChange=useCallback((e)=>{
         const {value}=e.target;
         setNickname(value);
 
@@ -170,21 +176,18 @@ const ProfileCon=({history})=>{
         e.preventDefault();
 
         if(error.nick||error.addr||error.detail) return;
-
         if(nickname===user.nick&&addr===info.address&&detail===info.detail&&confirm){
             return;
         }
-
-        if(addr!==''&&detail===''){
-            setError(prev=>({...prev, detail:true}));
-
+        if(detail===''||addr===''){
+            if(detail===''){
+                setError(prev=>({...prev, detail:true}));
+            }
+            if(addr===''){
+                setError(prev=>({...prev, addr:true}));
+            }
             return;
         } 
-        if(addr===''&&detail!==''){
-            setError(prev=>({...prev, addr:true}));
-
-            return;
-        }
 
         dispatch(userUpdate({
             nickname, 
@@ -207,7 +210,7 @@ const ProfileCon=({history})=>{
         setConfirm(true);
     }, [nickname, dispatch, error, user, addr, detail, info, confirm]);
     const checkPhone=useCallback(()=>{
-        setError(prev=>({...prev, code:false}));
+        setError(prev=>({...prev, code:''}));
         setCode('');
 
         if(confirm){
@@ -238,13 +241,6 @@ const ProfileCon=({history})=>{
                 }
             })
     }, [phone, confirm]);
-    const codeOnChange=useCallback((e)=>{
-        setError(prev=>({...prev, code:false}));
-
-        const curValue = e.target.value;
-        const newValue = curValue.replace(/[^0-9]/g, "");
-        setCode(newValue);
-    }, [])
     const confirmPhone=useCallback(()=>{
         if(code===''){
             return;
@@ -254,7 +250,7 @@ const ProfileCon=({history})=>{
             .then(()=>{
                 dispatch(setInfoPhone(phone));
 
-                setError(prev=>({...prev, code:false}));
+                setError(prev=>({...prev, code:'', phone:false}));
                 setConfirm(true);
                 setVerify(false);
                 setSse(null);
@@ -263,17 +259,16 @@ const ProfileCon=({history})=>{
                 es.current.close();
             })
             .catch((error)=>{
-                setError(prev=>({...prev, code:true}));
                 setConfirm(false);
 
                 if(error){
                     if(error.response){
                         if(error.response.status===419){
-                            setHelper('인증번호가 만료되었습니다.');
+                            setError(prev=>({...prev, code:'인증번호가 만료되었습니다.'}));
                         } else if(error.response.status===404){
-                            setHelper('인증번호가 틀렸습니다.')
+                            setError(prev=>({...prev, code:'인증번호가 틀렸습니다.'}));
                         } else if(error.response.status===403){
-                            setHelper('전화번호가 다릅니다.')
+                            setError(prev=>({...prev, code:'전화번호가 다릅니다.'}));
                         } else{
                             alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
                         }
@@ -366,7 +361,7 @@ const ProfileCon=({history})=>{
                 info={info} 
                 nickname={nickname} 
                 error={error} 
-                onChange={onChange}
+                nickChange={nickChange}
                 onSubmit={onSubmit}
                 kakao={kakao}
                 loadNextPage={loadNextPage}
@@ -380,7 +375,7 @@ const ProfileCon=({history})=>{
                 handleClickOpen={handleClickOpen}
                 handleClose={handleClose}
                 detail={detail}
-                detailChange={detailChange}
+                onChange={onChange}
                 clearAddress={clearAddress}
                 addrRef={addrRef}
                 handleMouseDown={handleMouseDown}
@@ -392,9 +387,7 @@ const ProfileCon=({history})=>{
                 timer={useTimer(sse, end)}
                 verify={verify}
                 confirmPhone={confirmPhone}
-                codeOnChange={codeOnChange}
                 code={code}
-                helper={helper}
             />                
 };
 

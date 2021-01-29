@@ -52,7 +52,7 @@ const Profile = ({
   info,
   nickname,
   error,
-  onChange,
+  nickChange,
   onSubmit,
   kakao,
   loadNextPage,
@@ -66,7 +66,7 @@ const Profile = ({
   handleClickOpen,
   handleClose,
   detail,
-  detailChange,
+  onChange,
   clearAddress,
   addrRef,
   handleMouseDown,
@@ -78,9 +78,7 @@ const Profile = ({
   timer,
   verify,
   confirmPhone,
-  codeOnChange,
   code,
-  helper,
 }) => {
   const classes = useStyles();
   const [platform, setPlatform] = useState(null);
@@ -120,7 +118,7 @@ const Profile = ({
               size="small"
               InputProps={{ className: classes.fontMaple }}
               value={nickname}
-              onChange={onChange}
+              onChange={nickChange}
               error={error.nick}
             />
             <TextField
@@ -149,7 +147,7 @@ const Profile = ({
               }}
               handleClickOpen={handleClickOpen}
               detail={detail}
-              detailChange={detailChange}
+              onChange={onChange}
               detailRef={detailRef}
               value={0}
             />
@@ -158,11 +156,10 @@ const Profile = ({
               phoneChange={phoneChange}
               checkPhone={checkPhone}
               verify={verify}
-              error={error.code}
+              error={{ code: error.code }}
               timer={timer}
-              codeOnChange={codeOnChange}
+              codeOnChange={onChange}
               code={code}
-              helper={helper}
               confirmPhone={confirmPhone}
               value={1}
             />

@@ -59,7 +59,6 @@ const LogIn = ({
   onToggle,
   onSubmit,
   error,
-  empty,
   onClick,
 }) => {
   const classes = useStyles();
@@ -75,7 +74,7 @@ const LogIn = ({
               갯마을
             </Link>
           </Typography>
-          <form className={classes.form} onSubmit={onSubmit}>
+          <form className={classes.form} onSubmit={onSubmit} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
@@ -91,7 +90,7 @@ const LogIn = ({
               InputProps={{ className: classes.fontRobo }}
               onChange={onChange}
               value={email}
-              error={!!error || empty.email}
+              error={error.email}
             />
             <TextField
               variant="outlined"
@@ -106,7 +105,7 @@ const LogIn = ({
               size="small"
               onChange={onChange}
               value={password}
-              error={!!error || empty.password}
+              error={error.password}
             />
             <FormControlLabel
               control={

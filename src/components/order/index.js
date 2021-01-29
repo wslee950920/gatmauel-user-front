@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Order = ({
   order,
-  info,
   temp,
   distance,
   changeDistance,
@@ -138,9 +137,7 @@ const Order = ({
         open={pOpen}
         handleClose={PaymentClose}
         deli={value}
-        info={info}
         getTotal={getTotal}
-        insertComma={insertComma}
         temp={temp}
         distance={distance}
         changeDistance={changeDistance}

@@ -101,8 +101,7 @@ const OrderCon=({history})=>{
 
     return (
         <Order 
-            order={order} 
-            info={info} 
+            order={order}  
             temp={temp} 
             distance={distance} 
             changeDistance={changeDistance}

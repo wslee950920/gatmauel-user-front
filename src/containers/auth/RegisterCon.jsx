@@ -31,12 +31,15 @@ const RegisterCon = ({ history }) => {
         const { name, value } = e.target;
 
         if (name === 'email'){
+            setError(prev=>({...prev, email:false}));
             setEmail(value);
         }
         else if (name === 'password'){
+            setError(prev=>({...prev, same:false}));
             setPassword(value);
         }
         else if (name === 'confirm'){
+            setError(prev=>({...prev, same:false}));
             setConfirm(value);
         }
         else if (name === 'nickname') {
@@ -44,6 +47,7 @@ const RegisterCon = ({ history }) => {
 
             if (value === ''){
                 setError(prev=>({...prev, nick:false}));
+                
                 return;
             }
 
@@ -53,35 +57,23 @@ const RegisterCon = ({ history }) => {
     const onSubmit = useCallback((e) => {
         e.preventDefault();
 
+        if(nickname===''||nickError){
+            setError(prev=>({...prev, nick:true}));
+
+            return;
+        } 
+        if(email===''||!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))){
+            setError(prev=>({...prev, email:true}));
+            alert('이메일을 입력해주십시오');
+            return;
+        } 
         if ((password !== confirm)||(password==='')||(confirm==='')){
             setError(prev => ({ ...prev, same: true }))
 
-            if(email===''||!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))){
-                setError(prev=>({...prev, email:true}));
-
-                if(nickname===''||nickError){
-                    setError(prev=>({...prev, nick:true}));
-                    return;
-                }
-                return;
-            } else setError(prev=>({...prev, email:false}));
             return;
-        } else setError(prev=>({...prev, same:false}))
-        if(email===''||!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))){
-            setError(prev=>({...prev, email:true}));
+        }
 
-            if(nickname===''||nickError){
-                setError(prev=>({...prev, nick:true}));
-                return;
-            }
-            return;
-        } else setError(prev=>({...prev, email:false}));
-        if(nickname===''||nickError){
-            setError(prev=>({...prev, nick:true}));
-            return;
-        } 
-
-        setError(prev => ({ ...prev, email: false, same: false }))
+        setError(prev => ({ ...prev, email: false, same: false, nick:false }))
         dispatch(fetchRegister({ nick: nickname, email, password }));
     }, [nickname, email, password, confirm, dispatch, nickError]);
 
@@ -95,10 +87,13 @@ const RegisterCon = ({ history }) => {
     useEffect(() => {
         try{
             if (registerError) {
-                if (registerError.response&&registerError.response.status===409){
-                    setError(prev => ({ ...prev, email: true }));
-
-                    return;
+                if (registerError.response){
+                    if(registerError.response.status===409||
+                        registerError.response.status===400){
+                        setError(prev => ({ ...prev, email: true }));
+                        
+                        return;
+                    }
                 }
     
                 throw registerError;

@@ -24,7 +24,7 @@ const useStyles=makeStyles((theme)=>({
     }
 }));
 
-const RequestText=({radio, radioOnChange})=>{
+const RequestText=({radio, text, onChange})=>{
     const classes=useStyles();
 
     return(
@@ -34,7 +34,7 @@ const RequestText=({radio, radioOnChange})=>{
                 aria-label="five minutes" 
                 name="five" 
                 value={radio} 
-                onChange={radioOnChange}
+                onChange={onChange}
                 defaultValue='in'
             >
                 <FormControlLabel 
@@ -58,6 +58,9 @@ const RequestText=({radio, radioOnChange})=>{
                 rowsMin={3} 
                 rowsMax={3}
                 placeholder="ex)견과류 빼주세요. 덜 맵게 해주세요." 
+                value={text}
+                onChange={onChange}
+                name='text'
             />
         </>
     );    

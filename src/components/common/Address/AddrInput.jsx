@@ -38,8 +38,12 @@ const AddrInput=({
                 size="small"
                 fullWidth
                 margin={dense?'dense':"normal"}
+                focused={false}
             >
-                <InputLabel htmlFor="outlined-adornment-address">
+                <InputLabel 
+                    htmlFor="outlined-adornment-address" 
+                    error={error.addr}
+                >
                     시/군/구
                 </InputLabel>
                 <OutlinedInput

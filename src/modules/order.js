@@ -1,4 +1,9 @@
 import { createAction, handleActions } from "redux-actions";
+import { takeLatest } from "redux-saga/effects";
+import createRequestSaga, {
+  createRequestActionTypes,
+} from "../lib/createRequestSaga";
+import * as orderAPI from "../lib/api/order";
 
 const INSERT_TO_CART = "order/CART";
 const SUB_ORDER = "order/SUB";
@@ -9,6 +14,14 @@ const CHANGE_ORDER = "order/CHANGE";
 const SET_PHONE = "order/SET_PHONE";
 const SET_ADDRESS = "order/SET_ADDRESS";
 
+const [
+  MAKE_ORDER,
+  MAKE_ORDER_SUCCESS,
+  MAKE_ORDER_FAILURE,
+] = createRequestActionTypes("order/MAKE");
+
+export const makeOrder = createAction(MAKE_ORDER);
+
 export const insertToCart = createAction(INSERT_TO_CART);
 export const subOrder = createAction(SUB_ORDER);
 export const addOrder = createAction(ADD_ORDER);
@@ -18,13 +31,33 @@ export const changeOrder = createAction(CHANGE_ORDER);
 export const setTempPhone = createAction(SET_PHONE, (phone) => phone);
 export const setTempAddress = createAction(SET_ADDRESS, (address) => address);
 
+const makeOrderSaga = createRequestSaga(MAKE_ORDER, orderAPI.makeOrder);
+
+export function* orderSaga() {
+  yield takeLatest(MAKE_ORDER, makeOrderSaga);
+}
+
 const initialState = {
   order: [],
   temp: {},
+  result: null,
+  error: null,
 };
 
 const order = handleActions(
   {
+    [MAKE_ORDER_SUCCESS]: (state, { payload: result }) => ({
+      ...state,
+      result,
+      error: null,
+      order: [],
+      temp: {},
+    }),
+    [MAKE_ORDER_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      error,
+      result: null,
+    }),
     [INSERT_TO_CART]: (state, { payload }) => ({
       ...state,
       order: state.order.concat(payload),

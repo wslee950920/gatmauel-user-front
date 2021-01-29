@@ -56,7 +56,6 @@ const PhoneVerify=({
     timer, 
     code, 
     codeOnChange, 
-    helper, 
     confirmPhone,
     value
 })=>{
@@ -81,6 +80,7 @@ const PhoneVerify=({
                 type="tel"
                 value={phone}
                 onChange={phoneChange}
+                error={error.phone}
               />
               <Button
                 variant="contained"
@@ -103,15 +103,15 @@ const PhoneVerify=({
                   size="small"
                   fullWidth
                   margin="dense"
-                  error={error}
+                  error={error.code}
                 >
-                  <InputLabel htmlFor="outlined-adornment-verification">
+                  <InputLabel htmlFor="outlined-adornment-code">
                     인증번호
                   </InputLabel>
                   <OutlinedInput
                     fullWidth
-                    name="verification"
-                    id="outlined-adornment-verification"
+                    name="code"
+                    id="outlined-adornment-code"
                     label="인증번호"
                     endAdornment={
                       <InputAdornment position="end">
@@ -130,9 +130,9 @@ const PhoneVerify=({
                     onChange={codeOnChange}
                     value={code}
                   />
-                  {error && (
-                    <FormHelperText id="outlined-adornment-verification-error">
-                      {helper}
+                  {error.code && (
+                    <FormHelperText id="outlined-adornment-code-error">
+                      {error.code}
                     </FormHelperText>
                   )}
                 </FormControl>
