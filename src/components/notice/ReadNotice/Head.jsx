@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 
-import kTime from '../../../lib/kTime'
+import useTime from '../../../lib/useTime'
 
 const useStyles = makeStyles((theme) => ({
     inline: {
@@ -32,7 +32,7 @@ const Head=({title, time})=>{
                 className={classes.inline}
                 color="textPrimary"
               >
-                {kTime(time)}
+                {useTime(time)}
               </Typography>
             }
             classes={{ multiline: classes.multiline }}

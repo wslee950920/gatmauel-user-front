@@ -21,7 +21,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import EditReview from "./EditReview";
-const ReviewItem = loadable(() => import("./ReviewItem"));
+import ReviewItem from "./ReviewItem";
 const Fab = loadable(() => import("../common/Fab"));
 const DeleteDialog = loadable(() => import("./Delete"));
 const FullScreenDialog = loadable(() => import("./FullScreenDialog"));

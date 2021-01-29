@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import kTime from '../../lib/kTime';
+import useTime from '../../lib/useTime';
 
 const useStyles = makeStyles((theme) => ({
   inline: {
@@ -50,7 +50,7 @@ const NoticeLitemLink = ({ data, style, index, length }) => {
                   className={classes.inline}
                   color="textPrimary"
                 >
-                  {kTime(data.createdAt)}
+                  {useTime(data.createdAt)}
                 </Typography>
                 <br />
                 {data.content}

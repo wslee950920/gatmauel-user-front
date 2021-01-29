@@ -26,7 +26,8 @@ const AddrInput=({
     detail,
     detailChange,
     detailRef,
-    value
+    value,
+    dense
 })=>{
     const classes=useStyles();
     
@@ -36,7 +37,7 @@ const AddrInput=({
                 variant="outlined"
                 size="small"
                 fullWidth
-                margin="normal"
+                margin={dense?'dense':"normal"}
             >
                 <InputLabel htmlFor="outlined-adornment-address">
                     시/군/구
@@ -73,7 +74,7 @@ const AddrInput=({
             </FormControl>
             <TextField
                 variant="outlined"
-                margin="normal"
+                margin={dense?'dense':"normal"}
                 fullWidth
                 name="detail"
                 label="상세주소"

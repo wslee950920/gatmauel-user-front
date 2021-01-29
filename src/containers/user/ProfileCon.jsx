@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState, useRef, useMemo} from 'react';
+import React, {useEffect, useCallback, useState, useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -9,6 +9,8 @@ import { logout, getInfo, check, userUpdate, setInfoPhone } from "../../modules/
 import { checkNick, initAuth } from '../../modules/auth';
 
 import {user as userAPI} from '../../lib/api/client';
+import {getPlatform} from '../../lib/usePlatform';
+import useTimer from '../../lib/useTimer';
 
 const ProfileCon=({history})=>{
     const {user, info, nick, nickError, uError, iloading}=useSelector(
@@ -47,22 +49,6 @@ const ProfileCon=({history})=>{
     const [confirm, setConfirm]=useState(true);
     const [helper, setHelper]=useState('');
     const [platform, setPlatform]=useState(null);
-
-    const timer = useMemo(() => {
-        if(sse&&end){
-            if (sse >= end) {    
-              return "00:00";
-            } else {
-              const temp = end - sse;
-              const seconds = ("0" + Math.floor((temp / 1000) % 60)).slice(-2);
-              const minutes = ("0" + Math.floor((temp / 1000 / 60) % 60)).slice(-2);
-        
-              return minutes + ":" + seconds;
-            }
-        } else{
-            return '';
-        }
-      }, [sse, end]);
 
     const handleMouseDown = useCallback((event) => {
         event.preventDefault();
@@ -301,9 +287,7 @@ const ProfileCon=({history})=>{
     }, [code, phone, dispatch]);
 
     useEffect(()=>{
-        const filter = "win16|win32|win64|macintel|mac";
-        setPlatform(navigator.platform &&
-            filter.indexOf(navigator.platform.toLowerCase()) < 0);
+        setPlatform(getPlatform());
 
         return ()=>{
             if(es&&es.current){
@@ -405,7 +389,7 @@ const ProfileCon=({history})=>{
                 phone={phone}
                 phoneChange={phoneChange}
                 checkPhone={checkPhone}
-                timer={timer}
+                timer={useTimer(sse, end)}
                 verify={verify}
                 confirmPhone={confirmPhone}
                 codeOnChange={codeOnChange}

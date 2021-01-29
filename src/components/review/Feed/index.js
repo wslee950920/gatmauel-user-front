@@ -14,7 +14,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MobileStepper from "@material-ui/core/MobileStepper";
 
 import CarouselImg from "./CarouselImg";
-import kTime from "../../../lib/kTime";
+import useTime from "../../../lib/useTime";
 
 const FeedMenu = loadable(() => import("./FeedMenu"));
 
@@ -84,7 +84,7 @@ const Feed = ({ data, index, user, feedUpdate, openRemove, measure }) => {
             )
           }
           title={data.nick}
-          subheader={kTime(data.createdAt)}
+          subheader={useTime(data.createdAt)}
           subheaderTypographyProps={{
             variant: "caption",
             className: classes.subHeader,

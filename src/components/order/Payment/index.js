@@ -13,6 +13,8 @@ import Tab from "@material-ui/core/Tab";
 
 import PhoneVerify from "../../common/Phone/PhoneVerify";
 import AddrInput from "../../common/Address/AddrInput";
+import Money from "./Money";
+import RequestText from "./RequestText";
 const AddrCon = loadable(() => import("../../../containers/payment/AddrCon"));
 
 const useStyles = makeStyles((theme) => ({
@@ -40,18 +42,6 @@ const useStyles = makeStyles((theme) => ({
   },
   top: {
     marginBottom: theme.spacing(0.8),
-  },
-  total: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: theme.spacing(2, 1.5, 0),
-  },
-  sizeOne: {
-    fontSize: "1rem",
-  },
-  small: {
-    fontSize: "0.7rem",
   },
 }));
 
@@ -91,6 +81,8 @@ const Payment = ({
   addrOnClick,
   addressExit,
   charge,
+  radio,
+  radioOnChange,
 }) => {
   const classes = useStyles();
 
@@ -152,6 +144,7 @@ const Payment = ({
                   detailChange={detailChange}
                   detailRef={detailRef}
                   value={value}
+                  dense
                 />
               </div>
             </Container>
@@ -178,20 +171,20 @@ const Payment = ({
               confirmPhone={confirmPhone}
               value={0}
             />
-            <div className={classes.total}>
-              <div className={classes.small}>음식값 : </div>
-              <div className={classes.small}>{insertComma(getTotal)}</div>
-            </div>
-            <div className={classes.total}>
-              <div className={classes.small}>배달료 : </div>
-              <div className={classes.small}>{insertComma(charge)}</div>
-            </div>
-            <div className={classes.total}>
-              <div className={classes.sizeOne}>총액 : </div>
-              <div className={classes.sizeOne}>
-                {insertComma(getTotal + charge)}
-              </div>
-            </div>
+            <Tabs
+              aria-label="request tabs"
+              indicatorColor="primary"
+              className={classes.tabs}
+              value={0}
+            >
+              <Tab label="요청사항" {...a11yProps(4)} />
+            </Tabs>
+            <RequestText radio={radio} radioOnChange={radioOnChange} />
+            <Money
+              insertComma={insertComma}
+              getTotal={getTotal}
+              charge={charge}
+            />
           </Container>
         </div>
       </Dialog>

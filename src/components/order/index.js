@@ -7,6 +7,8 @@ import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
+import useInsertComma from "../../lib/useInsertComma";
+
 import OrderList from "./OrderList";
 import SelectTab from "./SelectTab";
 const PaymentCon = loadable(() =>
@@ -53,6 +55,7 @@ const Order = ({
   const theme = useTheme();
   const [iOpen, setIOpen] = useState(false);
   const [pOpen, setPOpen] = useState(false);
+  const insertComma = useInsertComma;
 
   const getTotal = useMemo(() => {
     const temp = order.reduce(
@@ -75,18 +78,6 @@ const Order = ({
       }
     }
   }, [order, value]);
-
-  const insertComma = useCallback((total) => {
-    if (total === 0) {
-      return "0원";
-    } else {
-      const result = String(total).split("");
-      result.push("원");
-      result.splice(-4, 0, ",");
-
-      return result.join("");
-    }
-  }, []);
 
   const DialogOpen = useCallback(() => {
     setIOpen(true);

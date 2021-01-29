@@ -8,6 +8,8 @@ import React, {
 import { useDispatch } from "react-redux";
 
 import { user as userAPI } from "../../lib/api/client";
+import {getPlatform} from '../../lib/usePlatform';
+import useTimer from '../../lib/useTimer';
 
 import { setTempPhone, setTempAddress } from "../../modules/order";
 
@@ -45,22 +47,8 @@ const PaymentCon=({
   const [helper, setHelper] = useState("");
   const es = useRef(null);
   const [platform, setPlatform] = useState(null);
+  const [radio, setRadio]=useState('in');
 
-  const timer = useMemo(() => {
-    if (sse && end) {
-      if (sse >= end) {
-        return "00:00";
-      } else {
-        const temp = end - sse;
-        const seconds = ("0" + Math.floor((temp / 1000) % 60)).slice(-2);
-        const minutes = ("0" + Math.floor((temp / 1000 / 60) % 60)).slice(-2);
-
-        return minutes + ":" + seconds;
-      }
-    } else {
-      return "";
-    }
-  }, [sse, end]);
   const charge=useMemo(()=>{
     if(!!deli&&distance){
       if(distance<2000){
@@ -75,6 +63,9 @@ const PaymentCon=({
     }
   }, [distance, deli]);
 
+  const radioOnChange=useCallback((e)=>{
+    setRadio(e.target.value);
+  }, [])
   const phoneChange = useCallback(
     (e) => {
       const { value } = e.target;
@@ -259,10 +250,7 @@ const PaymentCon=({
   }, []);
 
   useEffect(() => {
-    const filter = "win16|win32|win64|macintel|mac";
-    setPlatform(
-      navigator.platform && filter.indexOf(navigator.platform.toLowerCase()) < 0
-    );
+    setPlatform(getPlatform());
 
     return () => {
       if (es && es.current) {
@@ -350,7 +338,7 @@ const PaymentCon=({
             phoneChange={phoneChange}
             checkPhone={checkPhone}
             verify={verify}
-            timer={timer}
+            timer={useTimer(sse, end)}
             codeOnChange={codeOnChange}
             code={code}
             helper={helper}
@@ -361,6 +349,8 @@ const PaymentCon=({
             addrOnClick={addrOnClick}
             addressExit={addressExit}
             charge={charge}
+            radio={radio}
+            radioOnChange={radioOnChange}
         />
     );
 }

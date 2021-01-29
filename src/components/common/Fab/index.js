@@ -24,6 +24,8 @@ import {
   changeOrder,
 } from "../../../modules/order";
 
+import useInsertComma from "../../../lib/useInsertComma";
+
 const useStyles = makeStyles((theme) => ({
   fab: {
     position: "fixed",
@@ -65,6 +67,7 @@ const FabBtn = ({ order }) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
+  const insertComma = useInsertComma;
 
   const open = useMemo(() => {
     return Boolean(anchorEl);
@@ -79,13 +82,6 @@ const FabBtn = ({ order }) => {
     );
   }, [order]);
 
-  const insertComma = useCallback((total) => {
-    const result = String(total).split("");
-    result.push("원");
-    result.splice(-4, 0, ",");
-
-    return result.join("");
-  }, []);
   const handleOpen = useCallback((event) => {
     setAnchorEl(event.currentTarget);
   }, []);

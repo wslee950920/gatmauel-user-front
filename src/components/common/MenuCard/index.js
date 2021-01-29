@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import { insertToCart } from "../../../modules/order";
@@ -17,6 +17,8 @@ import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
 
 import Circular from "../Circular";
+
+import useInsertComma from "../../../lib/useInsertComma";
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -54,6 +56,7 @@ const MenuCard = ({ handleClose, food }) => {
   const [num, setNum] = useState(1);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const insertComma = useInsertComma;
 
   const onLoad = useCallback(() => {
     setLoading(false);
@@ -97,14 +100,6 @@ const MenuCard = ({ handleClose, food }) => {
     }, 500);
   }, [dispatch, food, num]);
 
-  const insertComma = useMemo(() => {
-    const result = String(food.price).split("");
-    result.push("원");
-    result.splice(-4, 0, ",");
-
-    return result.join("");
-  }, [food.price]);
-
   return (
     <Card className={classes.card}>
       <CardHeader
@@ -122,7 +117,7 @@ const MenuCard = ({ handleClose, food }) => {
           </IconButton>
         }
         title={food.name}
-        subheader={insertComma}
+        subheader={insertComma(food.price)}
         titleTypographyProps={{ className: classes.header }}
       />
       <CardMedia
