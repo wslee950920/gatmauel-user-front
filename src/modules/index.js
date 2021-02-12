@@ -51,7 +51,7 @@ const persistConfig = {
       },
       autoExpire: true,
     }),
-    createFilter("order", ["order", "temp"]),
+    createFilter("order", ["order", "temp", "result"]),
   ],
 };
 export default persistReducer(persistConfig, rootReducer);

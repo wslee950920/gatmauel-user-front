@@ -14,6 +14,8 @@ const CHANGE_ORDER = "order/CHANGE";
 const SET_PHONE = "order/SET_PHONE";
 const SET_ADDRESS = "order/SET_ADDRESS";
 
+const INIT_ORDER = "order/INIT";
+
 const [
   MAKE_ORDER,
   MAKE_ORDER_SUCCESS,
@@ -31,6 +33,8 @@ export const changeOrder = createAction(CHANGE_ORDER);
 export const setTempPhone = createAction(SET_PHONE, (phone) => phone);
 export const setTempAddress = createAction(SET_ADDRESS, (address) => address);
 
+export const initOrder = createAction(INIT_ORDER);
+
 const makeOrderSaga = createRequestSaga(MAKE_ORDER, orderAPI.makeOrder);
 
 export function* orderSaga() {
@@ -46,11 +50,13 @@ const initialState = {
 
 const order = handleActions(
   {
+    [INIT_ORDER]: () => ({
+      ...initialState,
+    }),
     [MAKE_ORDER_SUCCESS]: (state, { payload: result }) => ({
       ...state,
       result,
       error: null,
-      order: [],
       temp: {},
     }),
     [MAKE_ORDER_FAILURE]: (state, { payload: error }) => ({

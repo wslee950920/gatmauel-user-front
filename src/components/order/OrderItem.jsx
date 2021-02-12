@@ -36,7 +36,8 @@ const OrderItem=({
     subOnClick,
     onChange,
     index,
-    length
+    length,
+    result
 })=>{
     const classes=useStyles();
 
@@ -68,41 +69,43 @@ const OrderItem=({
                 />
             </ListItemAvatar>
             <ListItemText
-                primary={value.name}
+                primary={result?value.name+` x ${value.num}`:value.name}
                 secondary={insertComma(value.price)}
             />    
         </ListItem>
-        <ListItem 
-            component='div' 
-            divider={index!==length-1} 
-            className={classes.bottom}
-            classes={{root:classes.bottomRoot}}
-            disableGutters
-        >
-            <IconButton aria-label="sub" onClick={() => subOnClick(index)}>
-                <RemoveIcon fontSize="small" />
-            </IconButton>
-            <TextField
-                size="small"
-                className={classes.textField}
-                inputProps={{
-                    maxLength: 2,
-                    style: { 
-                        textAlign: "center", 
-                        fontFamily: "Roboto" 
-                    },
-                }}
-                value={value.num}
-                error={checkRange(value.num)}
-                onChange={(e) => onChange(e, index)}
-            />
-            <IconButton aria-label="add" onClick={() => addOnClick(index)}>
-                <AddIcon fontSize="small" />
-            </IconButton>
-            <IconButton aria-label="close" onClick={() => removeOnClick(index)}>
-                <CloseIcon fontSize="small" />
-            </IconButton>
-        </ListItem>
+        {!result&&(
+            <ListItem 
+                component='div' 
+                divider={index!==length-1} 
+                className={classes.bottom}
+                classes={{root:classes.bottomRoot}}
+                disableGutters
+            >
+                <IconButton aria-label="sub" onClick={() => subOnClick(index)}>
+                    <RemoveIcon fontSize="small" />
+                </IconButton>
+                <TextField
+                    size="small"
+                    className={classes.textField}
+                    inputProps={{
+                        maxLength: 2,
+                        style: { 
+                            textAlign: "center", 
+                            fontFamily: "Roboto" 
+                        },
+                    }}
+                    value={value.num}
+                    error={checkRange(value.num)}
+                    onChange={(e) => onChange(e, index)}
+                />
+                <IconButton aria-label="add" onClick={() => addOnClick(index)}>
+                    <AddIcon fontSize="small" />
+                </IconButton>
+                <IconButton aria-label="close" onClick={() => removeOnClick(index)}>
+                    <CloseIcon fontSize="small" />
+                </IconButton>
+            </ListItem>
+        )}
       </>
     );
 }

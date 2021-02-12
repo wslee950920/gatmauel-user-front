@@ -6,6 +6,7 @@ import React, {
     useMemo,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {useHistory} from 'react-router-dom';
 
 import { user as userAPI } from "../../lib/api/client";
 import {getPlatform} from '../../lib/usePlatform';
@@ -55,6 +56,7 @@ const PaymentCon=({
         oError:state.order.error
     }
   ));
+  const history=useHistory();
 
   const charge=useMemo(()=>{
     if(!!deli&&distance){
@@ -310,12 +312,13 @@ const PaymentCon=({
 
   useEffect(()=>{
     if(result){
-      alert('결제 성공!!!');
+      alert('결제가 완료되었습니다.');
+      history.push('/result');
     }
-  }, [result]);
+  }, [result, history]);
   useEffect(()=>{
     if(oError){
-      alert('결제를 실패했습니다. 잠시 후 다시 시도해주십시오.');
+      alert('결제에 실패했습니다. 잠시 후 다시 시도해주십시오.');
     }
   }, [oError]);
   useEffect(() => {

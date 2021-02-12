@@ -23,7 +23,8 @@ const useStyles=makeStyles((theme)=>({
     },
 }))
 
-const OrderList=({order})=>{
+const OrderList=({order, result})=>{
+    console.log(result);
     const classes=useStyles();
     const dispatch = useDispatch();
 
@@ -71,6 +72,7 @@ const OrderList=({order})=>{
                     onChange={onChange}
                     index={index}
                     length={order.length}
+                    result={result}
                   />
                 </li>
             ))}

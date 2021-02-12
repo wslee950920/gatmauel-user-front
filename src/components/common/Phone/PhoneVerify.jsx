@@ -103,7 +103,7 @@ const PhoneVerify=({
                   size="small"
                   fullWidth
                   margin="dense"
-                  error={error.code}
+                  error={!!error.code}
                 >
                   <InputLabel htmlFor="outlined-adornment-code">
                     인증번호
@@ -130,7 +130,7 @@ const PhoneVerify=({
                     onChange={codeOnChange}
                     value={code}
                   />
-                  {error.code && (
+                  {!!error.code && (
                     <FormHelperText id="outlined-adornment-code-error">
                       {error.code}
                     </FormHelperText>
