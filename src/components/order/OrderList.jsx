@@ -24,7 +24,6 @@ const useStyles=makeStyles((theme)=>({
 }))
 
 const OrderList=({order, result})=>{
-    console.log(result);
     const classes=useStyles();
     const dispatch = useDispatch();
 

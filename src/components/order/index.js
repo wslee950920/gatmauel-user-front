@@ -11,9 +11,6 @@ import useInsertComma from "../../lib/useInsertComma";
 
 import OrderList from "./OrderList";
 import SelectTab from "./SelectTab";
-const PaymentCon = loadable(() =>
-  import("../../containers/payment/PaymentCon")
-);
 const InfoDialog = loadable(() => import("../common/InfoDialog"));
 
 const useStyles = makeStyles((theme) => ({
@@ -42,18 +39,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Order = ({
-  order,
-  temp,
-  distance,
-  changeDistance,
-  value,
-  handleChange,
-}) => {
+const Order = ({ order, value, handleChange }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [iOpen, setIOpen] = useState(false);
-  const [pOpen, setPOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const insertComma = useInsertComma;
 
   const getTotal = useMemo(() => {
@@ -79,16 +68,10 @@ const Order = ({
   }, [order, value]);
 
   const DialogOpen = useCallback(() => {
-    setIOpen(true);
+    setOpen(true);
   }, []);
   const DialogClose = useCallback(() => {
-    setIOpen(false);
-  }, []);
-  const PaymentOpen = useCallback(() => {
-    setPOpen(true);
-  }, []);
-  const PaymentClose = useCallback(() => {
-    setPOpen(false);
+    setOpen(false);
   }, []);
 
   return (
@@ -126,22 +109,14 @@ const Order = ({
             color="primary"
             style={{ marginTop: theme.spacing(1.5) }}
             classes={{ label: classes.label }}
-            onClick={PaymentOpen}
+            component={RouterLink}
+            to={value === 0 ? "/payment/pickup" : "/payment/delivery"}
           >
             {value === 0 ? "포장 주문하기" : "배달 주문하기"}
           </Button>
         </Container>
       </div>
-      {value === 1 && <InfoDialog open={iOpen} handleClose={DialogClose} />}
-      <PaymentCon
-        open={pOpen}
-        handleClose={PaymentClose}
-        deli={value}
-        getTotal={getTotal}
-        temp={temp}
-        distance={distance}
-        changeDistance={changeDistance}
-      />
+      {value === 1 && <InfoDialog open={open} handleClose={DialogClose} />}
     </>
   );
 };

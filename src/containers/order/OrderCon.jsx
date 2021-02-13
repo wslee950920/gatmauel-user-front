@@ -6,28 +6,21 @@ import Order from '../../components/order';
 
 import { getInfo, check } from "../../modules/user";
 
-import { user as userAPI } from "../../lib/api/client";
-
 const OrderCon=({history})=>{
-    const { order, info, error, loading, temp }=useSelector(state=>(
+    const { order, info, error, loading }=useSelector(state=>(
         {
             order:state.order.order,
             info:state.user.info,
             error:state.user.error,
             loading:state.loading['user/GET_INFO'],
-            temp:state.order.temp
         }
     ));
-    const [distance, setDistance]=useState(null);
     const [value, setValue] = useState(0);
     const dispatch=useDispatch();
 
     const handleChange = useCallback((event, newValue) => {
         setValue(newValue);
       }, []);
-    const changeDistance=useCallback((d)=>{
-        setDistance(d);
-    }, []);
     
     useEffect(()=>{
         dispatch(check());
@@ -58,53 +51,10 @@ const OrderCon=({history})=>{
 
         dispatch(getInfo());
     }, [dispatch, info, error, loading]);
-    useEffect(()=>{ 
-        if(value===1){
-            if(!distance){
-                if(temp.address){
-                  userAPI.get('/api/order/distance', {
-                    params:{
-                      goal:temp.address
-                    }
-                  }).then((res)=>{
-                    setDistance(res.data.distance);
-                  }).catch((err)=>{
-                    if(err){
-                      if(err.response.status===404){
-                        alert('주소를 찾을 수 없습니다.');
-                      } else{
-                        alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-                      }
-                    }
-                  })
-                }
-                else if (info&&info.address) {
-                  userAPI.get('/api/order/distance', {
-                    params:{
-                      goal:info.address
-                    }
-                  }).then((res)=>{
-                    setDistance(res.data.distance);
-                  }).catch((err)=>{
-                    if(err){
-                      if(err.response.status===404){
-                        alert('주소를 찾을 수 없습니다.');
-                      } else{
-                        alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-                      }
-                    }
-                  })
-                }
-            }
-        }   
-      }, [distance, info, temp, value]);
 
     return (
         <Order 
             order={order}  
-            temp={temp} 
-            distance={distance} 
-            changeDistance={changeDistance}
             value={value}
             handleChange={handleChange}
         />

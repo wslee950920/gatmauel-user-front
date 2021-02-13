@@ -6,7 +6,7 @@ import React, {
     useMemo,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {useHistory} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 import { user as userAPI } from "../../lib/api/client";
 import {getPlatform} from '../../lib/usePlatform';
@@ -14,17 +14,13 @@ import useTimer from '../../lib/useTimer';
 
 import { setTempPhone, setTempAddress, makeOrder } from "../../modules/order";
 
-import Payment from '../../components/order/Payment';
+import Payment from '../../components/payment';
 
-const PaymentCon=({ 
-  open, 
-  handleClose, 
-  deli, 
-  getTotal,  
-  temp, 
-  distance,
-  changeDistance
+const PaymentCon=({
+  history,
+  match
 })=>{
+  const {method}=match.params;
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [addr, setAddr] = useState("");
@@ -36,7 +32,7 @@ const PaymentCon=({
     phone:false
   });
   const addrRef = useRef(null);
-  const [aOpen, setAOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const detailRef = useRef(null);
   const [phone, setPhone] = useState("");
   const [verify, setVerify] = useState(false);
@@ -48,18 +44,38 @@ const PaymentCon=({
   const [platform, setPlatform] = useState(null);
   const [radio, setRadio]=useState('5분이내 거리(조리)');
   const [text, setText]=useState('');
-  const { info, order, result, oError }=useSelector(state=>(
+  const { info, order, oError, temp }=useSelector(state=>(
     {
         info:state.user.info,
         order:state.order.order,
-        result:state.order.result,
-        oError:state.order.error
+        oError:state.order.error,
+        temp:state.order.temp
     }
   ));
-  const history=useHistory();
+  const [distance, setDistance]=useState(null);
 
+  const getTotal = useMemo(() => {
+    const temp = order.reduce(
+      (prev, value) => prev + value.price * (value.num === "" ? 0 : value.num),
+      0
+    );
+
+    if (method==='delivery') {
+      if (temp >= 40000) {
+        return temp;
+      } else if (temp >= 27000 && temp < 40000) {
+        const result = temp + 500;
+
+        return result;
+      } else if (temp < 27000) {
+        const result = temp + 1000;
+
+        return result;
+      }
+    } else return temp;
+  }, [order, method]);
   const charge=useMemo(()=>{
-    if(!!deli&&distance){
+    if(method==='delivery'&&distance){
       if(distance<2000){
         return 2000;
       } else if(distance>=2000&&distance<4000){
@@ -70,8 +86,11 @@ const PaymentCon=({
     } else{
       return 0
     }
-  }, [distance, deli]);
+  }, [distance, method]);
 
+  const changeDistance=useCallback((d)=>{
+    setDistance(d);
+}, []);
   const onChange=useCallback((event)=>{
     const {name, value}=event.target;
     if(name==='text'){
@@ -101,14 +120,14 @@ const PaymentCon=({
       return;
     }
 
-    if(!!deli&&(error.addr||error.detail)){
+    if(method==='delivery'&&(error.addr||error.detail)){
       return;
     }
     if(error.phone){
       return;
     }
 
-    if(!!deli&&(addr===''||detail==='')){
+    if(method==='delivery'&&(addr===''||detail==='')){
       if(addr===''){
         setError(prev=>({
           ...prev,
@@ -136,11 +155,11 @@ const PaymentCon=({
           num:value.num
         })
       }), 
-      deli:!!deli, 
+      deli:method==='delivery', 
       request:`${radio}\n${text}`,
-      total:!!deli?getTotal+charge:getTotal
+      total:method==='delivery'?getTotal+charge:getTotal
     }));
-  }, [dispatch, error, confirm, addr, detail, phone, order, text, radio, deli, getTotal, charge]);
+  }, [dispatch, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
   const phoneChange = useCallback(
     (e) => {
       const { value } = e.target;
@@ -235,13 +254,12 @@ const PaymentCon=({
     setError((prev) => ({ ...prev, addr: false, detail:false }));
 
     if (platform) {
-      setAOpen(true);
+      setOpen(true);
 
       return;
     } else {
       new window.daum.Postcode({
         oncomplete: (data) => {
-          setAddr(data.address);
           dispatch(setTempAddress(data.address));
 
           userAPI.get('/api/order/distance', {
@@ -274,8 +292,7 @@ const PaymentCon=({
     setTimeout(() => {
       detailRef.current.focus();
     }, 200);
-    setAddr(addr);
-    setAOpen(false);
+    setOpen(false);
     dispatch(setTempAddress(addr));
 
     userAPI.get('/api/order/distance', {
@@ -283,6 +300,13 @@ const PaymentCon=({
         goal:addr
       }
     }).then((res)=>{
+      if(res.data.distance>5000){
+        setError(prev=>({...prev, addr:true}))
+        alert('거리 5km이상 지역은 배달이 불가합니다.');
+
+        return;
+      }
+      
       changeDistance(res.data.distance);
     }).catch((err)=>{
       if(err){
@@ -298,7 +322,7 @@ const PaymentCon=({
     addrRef.current.blur();
   }, []);
   const addressClose = useCallback(() => {
-    setAOpen(false);
+    setOpen(false);
   }, []);
   const clearAddress = useCallback(() => {
     setAddr("");
@@ -310,15 +334,75 @@ const PaymentCon=({
     setValue(newValue);
   }, []);
 
+  useEffect(()=>{ 
+    if(method==='delivery'){
+        if(!distance){
+            if(temp.address){
+              userAPI.get('/api/order/distance', {
+                params:{
+                  goal:temp.address
+                }
+              }).then((res)=>{
+                if(res.data.distance>5000){
+                  setError(prev=>({...prev, addr:true}))
+                  alert('거리 5km이상 지역은 배달이 불가합니다.');
+
+                  return;
+                }
+
+                setDistance(res.data.distance);
+              }).catch((err)=>{
+                if(err){
+                  if(err.response.status===404){
+                    alert('주소를 찾을 수 없습니다.');
+                  } else{
+                    alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                  }
+                }
+              })
+            }
+            else if (info&&info.address) {
+              userAPI.get('/api/order/distance', {
+                params:{
+                  goal:info.address
+                }
+              }).then((res)=>{
+                setDistance(res.data.distance);
+              }).catch((err)=>{
+                if(err){
+                  if(err.response.status===404){
+                    alert('주소를 찾을 수 없습니다.');
+                  } else{
+                    alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                  }
+                }
+              })
+            }
+        }
+    }   
+  }, [distance, info, temp, method]);
   useEffect(()=>{
-    if(result){
-      alert('결제가 완료되었습니다.');
-      history.push('/result');
+    if(order.length===0){
+        alert('메뉴를 추가해주세요.');
+        history.push('/menu');
+
+        return;
     }
-  }, [result, history]);
+
+    const total = order.reduce(
+      (prev, value) => prev + value.price * (value.num === "" ? 0 : value.num),
+      0
+    );
+    if(total<14000){
+      alert('14,000원 이상부터 주문하실 수 있습니다.');
+      history.push('/menu');
+
+      return;
+    }
+  }, [order, history]);
   useEffect(()=>{
     if(oError){
-      alert('결제에 실패했습니다. 잠시 후 다시 시도해주십시오.');
+      alert('결제에 실패하였습니다. 잠시 후 다시 시도해주십시오.');
     }
   }, [oError]);
   useEffect(() => {
@@ -363,66 +447,48 @@ const PaymentCon=({
     }
   }, [value, temp.address, info]);
   useEffect(() => {
-    if(open){
-      if(temp.address){
-        setAddr(temp.address);
-        setDetail('');
-      } else if(info&&info.address){
-        setAddr(info.address);
-        setDetail(info.detail);
-      } else{
-        setAddr('');
-        setDetail('');
-      }
+    if(info&&info.phone){
+      setPhone(info.phone);
+    } else if(temp.phone){
+      setPhone(temp.phone);
+    } else{
+      setPhone('');
     }
-  }, [temp.address, info, open]);
-  useEffect(() => {
-    if(open){  
-      if(info&&info.phone){
-        setPhone(info.phone);
-      } else if(temp.phone){
-        setPhone(temp.phone);
-      } else{
-        setPhone('');
-      }
-    }
-  }, [info, temp.phone, open]);
+  }, [info, temp.phone]);
 
     return (
-        <Payment 
-            open={open} 
-            handleClose={handleClose} 
-            deli={deli} 
-            getTotal={getTotal}  
-            value={value}
-            handleChange={handleChange}
-            handleMouseDown={handleMouseDown}
-            clearAddress={clearAddress}
-            addrRef={addrRef}
-            addr={addr}
-            error={error}
-            handleClickOpen={handleClickOpen}
-            detail={detail}
-            detailRef={detailRef}
-            phone={phone}
-            phoneChange={phoneChange}
-            checkPhone={checkPhone}
-            verify={verify}
-            timer={useTimer(sse, end)}
-            code={code}
-            confirmPhone={confirmPhone}
-            platform={platform}
-            aOpen={aOpen}
-            addressClose={addressClose}
-            addrOnClick={addrOnClick}
-            addressExit={addressExit}
-            charge={charge}
-            radio={radio}
-            text={text}
-            onChange={onChange}
-            onSubmit={onSubmit}
-        />
+        <Payment  
+          deli={method==='delivery'} 
+          getTotal={getTotal}  
+          value={value}
+          handleChange={handleChange}
+          handleMouseDown={handleMouseDown}
+          clearAddress={clearAddress}
+          addrRef={addrRef}
+          addr={addr}
+          error={error}
+          handleClickOpen={handleClickOpen}
+          detail={detail}
+          detailRef={detailRef}
+          phone={phone}
+          phoneChange={phoneChange}
+          checkPhone={checkPhone}
+          verify={verify}
+          timer={useTimer(sse, end)}
+          code={code}
+          confirmPhone={confirmPhone}
+          platform={platform}
+          open={open}
+          addressClose={addressClose}
+          addrOnClick={addrOnClick}
+          addressExit={addressExit}
+          charge={charge}
+          radio={radio}
+          text={text}
+          onChange={onChange}
+          onSubmit={onSubmit}
+      />
     );
 }
 
-export default React.memo(PaymentCon);
+export default withRouter(PaymentCon);
