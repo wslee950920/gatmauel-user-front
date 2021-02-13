@@ -25,6 +25,7 @@ import {
 } from "../../../modules/order";
 
 import useInsertComma from "../../../lib/useInsertComma";
+import useGetTotal from "../../../lib/useGetTotal";
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -68,6 +69,7 @@ const FabBtn = ({ order }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
   const insertComma = useInsertComma;
+  const getTotal = useGetTotal(order);
 
   const open = useMemo(() => {
     return Boolean(anchorEl);
@@ -75,12 +77,6 @@ const FabBtn = ({ order }) => {
   const id = useMemo(() => {
     return open ? "order-popover" : undefined;
   }, [open]);
-  const getTotal = useMemo(() => {
-    return order.reduce(
-      (prev, value) => prev + value.price * (value.num === "" ? 0 : value.num),
-      0
-    );
-  }, [order]);
 
   const handleOpen = useCallback((event) => {
     setAnchorEl(event.currentTarget);

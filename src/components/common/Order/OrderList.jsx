@@ -10,7 +10,7 @@ import {
     addOrder,
     subOrder,
     changeOrder,
-} from "../../modules/order";
+} from "../../../modules/order";
 
 const OrderItem=loadable(()=>import('./OrderItem'));
 
@@ -19,7 +19,7 @@ const useStyles=makeStyles((theme)=>({
         width:'100%',
         maxHeight:'45vh',
         overflow:'auto',
-        minHeight:132
+        minHeight:64
     },
 }))
 

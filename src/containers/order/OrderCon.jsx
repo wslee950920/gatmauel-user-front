@@ -5,6 +5,7 @@ import {withRouter} from 'react-router-dom';
 import Order from '../../components/order';
 
 import { getInfo, check } from "../../modules/user";
+import useGetTotal from "../../lib/useGetTotal";
 
 const OrderCon=({history})=>{
     const { order, info, error, loading }=useSelector(state=>(
@@ -17,6 +18,7 @@ const OrderCon=({history})=>{
     ));
     const [value, setValue] = useState(0);
     const dispatch=useDispatch();
+    const getTotal = useGetTotal(order);
 
     const handleChange = useCallback((event, newValue) => {
         setValue(newValue);
@@ -33,17 +35,13 @@ const OrderCon=({history})=>{
             return;
         }
 
-        const total = order.reduce(
-          (prev, value) => prev + value.price * (value.num === "" ? 0 : value.num),
-          0
-        );
-        if(total<14000){
+        if(getTotal<14000){
           alert('14,000원 이상부터 주문하실 수 있습니다.');
           history.push('/menu');
 
           return;
         }
-    }, [order, history]);
+    }, [order, history, getTotal]);
     useEffect(()=>{
         if(info) return;
         if(error) return;
@@ -57,6 +55,7 @@ const OrderCon=({history})=>{
             order={order}  
             value={value}
             handleChange={handleChange}
+            getTotal={getTotal}
         />
     );
 }

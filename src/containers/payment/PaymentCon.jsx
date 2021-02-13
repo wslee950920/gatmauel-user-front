@@ -15,6 +15,7 @@ import useTimer from '../../lib/useTimer';
 import { setTempPhone, setTempAddress, makeOrder } from "../../modules/order";
 
 import Payment from '../../components/payment';
+import useGetTotal from "../../lib/useGetTotal";
 
 const PaymentCon=({
   history,
@@ -44,49 +45,44 @@ const PaymentCon=({
   const [platform, setPlatform] = useState(null);
   const [radio, setRadio]=useState('5분이내 거리(조리)');
   const [text, setText]=useState('');
-  const { info, order, oError, temp }=useSelector(state=>(
+  const { info, order, oError, temp, result }=useSelector(state=>(
     {
         info:state.user.info,
         order:state.order.order,
         oError:state.order.error,
-        temp:state.order.temp
+        temp:state.order.temp,
+        result:state.order.result
     }
   ));
   const [distance, setDistance]=useState(null);
+  const getTotal=useGetTotal(order);
 
-  const getTotal = useMemo(() => {
-    const temp = order.reduce(
-      (prev, value) => prev + value.price * (value.num === "" ? 0 : value.num),
-      0
-    );
-
-    if (method==='delivery') {
-      if (temp >= 40000) {
-        return temp;
-      } else if (temp >= 27000 && temp < 40000) {
-        const result = temp + 500;
-
-        return result;
-      } else if (temp < 27000) {
-        const result = temp + 1000;
-
-        return result;
-      }
-    } else return temp;
-  }, [order, method]);
   const charge=useMemo(()=>{
-    if(method==='delivery'&&distance){
-      if(distance<2000){
-        return 2000;
-      } else if(distance>=2000&&distance<4000){
-        return 2500;
-      } else if(distance>=4000){
-        return 3000;
+    let basic=0;
+    let extra=0;
+
+    if(method==='delivery'){
+      if(getTotal>=40000){
+        basic=0;
+      } else if(getTotal>=27000&&getTotal<40000){
+        basic=500;
+      } else if(getTotal<27000){
+        basic=1000;
       }
-    } else{
-      return 0
-    }
-  }, [distance, method]);
+
+      if(distance){
+        if(distance<2000){
+          extra=2000;
+        } else if(distance>=2000&&distance<4000){
+          extra=2500;
+        } else if(distance>=4000){
+          extra=3000;
+        }
+      }
+
+      return basic+extra;
+    } else return 0;
+  }, [distance, method, getTotal]);
 
   const changeDistance=useCallback((d)=>{
     setDistance(d);
@@ -306,7 +302,7 @@ const PaymentCon=({
 
         return;
       }
-      
+
       changeDistance(res.data.distance);
     }).catch((err)=>{
       if(err){
@@ -389,17 +385,19 @@ const PaymentCon=({
         return;
     }
 
-    const total = order.reduce(
-      (prev, value) => prev + value.price * (value.num === "" ? 0 : value.num),
-      0
-    );
-    if(total<14000){
+    if(getTotal<14000){
       alert('14,000원 이상부터 주문하실 수 있습니다.');
       history.push('/menu');
 
       return;
     }
-  }, [order, history]);
+  }, [order, history, getTotal]);
+  useEffect(()=>{
+    if(result){
+      alert('결제에 성공하였습니다.');
+      history.push('/result');
+    }
+  }, [result, history]);
   useEffect(()=>{
     if(oError){
       alert('결제에 실패하였습니다. 잠시 후 다시 시도해주십시오.');

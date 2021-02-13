@@ -2,7 +2,8 @@ import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
-import Result from '../../components/order/Result'; 
+import Result from '../../components/result'; 
+import useGetTotal from '../../lib/useGetTotal';
 
 import {initOrder} from '../../modules/order';
 
@@ -14,6 +15,7 @@ const ResultCon=({history})=>{
         }
     ));
     const dispatch=useDispatch();
+    const getTotal=useGetTotal(order);
 
     useEffect(()=>{
         if(!order||!result){
@@ -28,7 +30,9 @@ const ResultCon=({history})=>{
 
     return (
         <Result 
-            order={order}  
+            order={order}
+            getTotal={getTotal}
+            charge={result.data.newOrder.total-getTotal}
         />
     );
 }

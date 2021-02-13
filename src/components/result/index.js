@@ -4,7 +4,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 
-import OrderList from "../OrderList";
+import OrderList from "../common/Order/OrderList";
+import Money from "../common/Order/Money";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Result = ({ order }) => {
+const Result = ({ order, getTotal, charge }) => {
   const classes = useStyles();
 
   return (
@@ -25,6 +26,9 @@ const Result = ({ order }) => {
       <div className={classes.root}>
         <Container maxWidth="xs" className={classes.container}>
           <OrderList order={order} result />
+        </Container>
+        <Container maxWidth="xs" disableGutters>
+          <Money getTotal={getTotal} charge={charge} />
         </Container>
       </div>
     </>

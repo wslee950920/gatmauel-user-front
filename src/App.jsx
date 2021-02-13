@@ -13,7 +13,7 @@ const ReviewPage = loadable(() => import("./page/Review"));
 const MenuPage = loadable(()=>import('./page/Menu'));
 const MapPage=loadable(()=>import('./page/Map'), {ssr:false});
 const OrderPage=loadable(()=>import('./page/Order'));
-const ResultPage=loadable(()=>import('./page/Order/ResultPage'));
+const ResultPage=loadable(()=>import('./page/Result'));
 const PaymentPage=loadable(()=>import('./page/Payment'));
 
 const App = () => {

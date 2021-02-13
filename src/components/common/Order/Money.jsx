@@ -2,6 +2,8 @@ import React from 'react';
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import useInsertComma from '../../../lib/useInsertComma';
+
 const useStyles = makeStyles((theme) => ({
     total: {
       display: "flex",
@@ -17,8 +19,9 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const Money=({insertComma, getTotal, charge})=>{
+const Money=({getTotal, charge})=>{
     const classes=useStyles();
+    const insertComma=useInsertComma;
 
     return(
         <>

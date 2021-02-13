@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import loadable from "@loadable/component";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -9,7 +9,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import useInsertComma from "../../lib/useInsertComma";
 
-import OrderList from "./OrderList";
+import OrderList from "../common/Order/OrderList";
 import SelectTab from "./SelectTab";
 const InfoDialog = loadable(() => import("../common/InfoDialog"));
 
@@ -39,33 +39,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Order = ({ order, value, handleChange }) => {
+const Order = ({ order, value, handleChange, getTotal }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const insertComma = useInsertComma;
-
-  const getTotal = useMemo(() => {
-    const temp = order.reduce(
-      (prev, value) => prev + value.price * (value.num === "" ? 0 : value.num),
-      0
-    );
-
-    if (value === 0) return temp;
-    else if (value === 1) {
-      if (temp >= 40000) {
-        return temp;
-      } else if (temp >= 27000 && temp < 40000) {
-        const result = temp + 500;
-
-        return result;
-      } else if (temp < 27000) {
-        const result = temp + 1000;
-
-        return result;
-      }
-    }
-  }, [order, value]);
 
   const DialogOpen = useCallback(() => {
     setOpen(true);

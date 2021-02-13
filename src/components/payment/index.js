@@ -11,11 +11,9 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 
-import useInsertComma from "../../lib/useInsertComma";
-
 import PhoneVerify from "../common/Phone/PhoneVerify";
 import AddrInput from "../common/Address/AddrInput";
-import Money from "./Money";
+import Money from "../common/Order/Money";
 import RequestText from "./RequestText";
 const AddrCon = loadable(() => import("../../containers/payment/AddrCon"));
 
@@ -84,7 +82,6 @@ const Payment = ({
 }) => {
   const classes = useStyles();
   const history = useHistory();
-  const insertComma = useInsertComma;
 
   const a11yProps = useCallback((index) => {
     return {
@@ -180,11 +177,7 @@ const Payment = ({
             <Tab label="요청사항" {...a11yProps(4)} />
           </Tabs>
           <RequestText radio={radio} text={text} onChange={onChange} />
-          <Money
-            insertComma={insertComma}
-            getTotal={getTotal}
-            charge={charge}
-          />
+          <Money getTotal={getTotal} charge={charge} />
           <Button
             onClick={onSubmit}
             fullWidth
