@@ -18,7 +18,7 @@ const ResultCon=({history})=>{
     const getTotal=useGetTotal(order);
 
     useEffect(()=>{
-        if(!order||!result){
+        if(order.length===0||!result){
             history.push('/');
         }
     }, [order, result, history]);
@@ -28,11 +28,11 @@ const ResultCon=({history})=>{
         }
     }, [dispatch]);
 
-    return (
+    return (result&&
         <Result 
             order={order}
             getTotal={getTotal}
-            charge={result.data.newOrder.total-getTotal}
+            result={result.data.newOrder}
         />
     );
 }

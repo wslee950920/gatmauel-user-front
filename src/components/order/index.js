@@ -5,7 +5,7 @@ import { Link as RouterLink } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import useInsertComma from "../../lib/useInsertComma";
 
@@ -15,7 +15,7 @@ const InfoDialog = loadable(() => import("../common/InfoDialog"));
 
 const useStyles = makeStyles((theme) => ({
   btn: {
-    margin: theme.spacing(1, 0, 2),
+    margin: theme.spacing(2, 0),
     backgroundColor: theme.palette.primary.light,
   },
   label: {
@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Order = ({ order, value, handleChange, getTotal }) => {
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const insertComma = useInsertComma;
 
@@ -85,7 +84,6 @@ const Order = ({ order, value, handleChange, getTotal }) => {
             variant="contained"
             className={classes.btn}
             color="primary"
-            style={{ marginTop: theme.spacing(1.5) }}
             classes={{ label: classes.label }}
             component={RouterLink}
             to={value === 0 ? "/payment/pickup" : "/payment/delivery"}

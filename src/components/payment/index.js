@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(0.8),
   },
   submit: {
-    margin: theme.spacing(5, 0, 2),
+    margin: theme.spacing(3, 0, 2),
     backgroundColor: theme.palette.primary.light,
   },
 }));
@@ -94,7 +94,7 @@ const Payment = ({
     <>
       <div className={classes.root}>
         <CssBaseline />
-        <Container maxWidth="sm" className={classes.top}>
+        <Container maxWidth="xs" className={classes.top}>
           <div className={classes.header}>
             <IconButton
               edge="start"
@@ -109,7 +109,7 @@ const Payment = ({
           </div>
         </Container>
         {deli && (
-          <Container maxWidth="sm" className={classes.background}>
+          <Container maxWidth="xs" className={classes.background}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -144,7 +144,7 @@ const Payment = ({
             </div>
           </Container>
         )}
-        <Container maxWidth="sm" className={classes.background}>
+        <Container maxWidth="xs" className={classes.background}>
           <Tabs
             aria-label="phone tabs"
             indicatorColor="primary"

@@ -107,22 +107,6 @@ const PaymentCon=({
   const onSubmit=useCallback((e)=>{
     e.preventDefault();
 
-    if(!confirm||phone===''){
-      setError(prev=>({
-        ...prev,
-        phone:true
-      }));
-
-      return;
-    }
-
-    if(method==='delivery'&&(error.addr||error.detail)){
-      return;
-    }
-    if(error.phone){
-      return;
-    }
-
     if(method==='delivery'&&(addr===''||detail==='')){
       if(addr===''){
         setError(prev=>({
@@ -137,6 +121,21 @@ const PaymentCon=({
         }));
       }
 
+      return;
+    }
+    if(!confirm||phone===''){
+      setError(prev=>({
+        ...prev,
+        phone:true
+      }));
+
+      return;
+    }
+
+    if(method==='delivery'&&(error.addr||error.detail)){
+      return;
+    }
+    if(error.phone){
       return;
     }
 
@@ -256,14 +255,21 @@ const PaymentCon=({
     } else {
       new window.daum.Postcode({
         oncomplete: (data) => {
-          dispatch(setTempAddress(data.address));
-
           userAPI.get('/api/order/distance', {
             params:{
               goal:data.address
             }
           }).then((res)=>{
+            if(res.data.distance>5000){
+              setError(prev=>({...prev, addr:true}))
+              alert('거리 5km이상 지역은 배달이 불가합니다.');
+
+              return;
+            }
+
             changeDistance(res.data.distance);
+            dispatch(setTempAddress(data.address));
+            detailRef.current.focus();
           }).catch((err)=>{
             if(err){
               if(err.response.status===404){
@@ -273,8 +279,6 @@ const PaymentCon=({
               }
             }
           });
-
-          detailRef.current.focus();
         },
         onclose: () => {
           addrRef.current.blur();
@@ -288,8 +292,6 @@ const PaymentCon=({
     setTimeout(() => {
       detailRef.current.focus();
     }, 200);
-    setOpen(false);
-    dispatch(setTempAddress(addr));
 
     userAPI.get('/api/order/distance', {
       params:{
@@ -297,13 +299,15 @@ const PaymentCon=({
       }
     }).then((res)=>{
       if(res.data.distance>5000){
-        setError(prev=>({...prev, addr:true}))
+        setError(prev=>({...prev, addr:true}));
         alert('거리 5km이상 지역은 배달이 불가합니다.');
 
         return;
       }
 
       changeDistance(res.data.distance);
+      setOpen(false);
+      dispatch(setTempAddress(addr));
     }).catch((err)=>{
       if(err){
         if(err.response.status===404){
@@ -332,49 +336,32 @@ const PaymentCon=({
 
   useEffect(()=>{ 
     if(method==='delivery'){
-        if(!distance){
-            if(temp.address){
-              userAPI.get('/api/order/distance', {
-                params:{
-                  goal:temp.address
-                }
-              }).then((res)=>{
-                if(res.data.distance>5000){
-                  setError(prev=>({...prev, addr:true}))
-                  alert('거리 5km이상 지역은 배달이 불가합니다.');
-
-                  return;
-                }
-
-                setDistance(res.data.distance);
-              }).catch((err)=>{
-                if(err){
-                  if(err.response.status===404){
-                    alert('주소를 찾을 수 없습니다.');
-                  } else{
-                    alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-                  }
-                }
-              })
+      if(!distance){
+        if(temp.address||(info&&info.address)){
+          userAPI.get('/api/order/distance', {
+            params:{
+              goal:temp.address||info.address
             }
-            else if (info&&info.address) {
-              userAPI.get('/api/order/distance', {
-                params:{
-                  goal:info.address
-                }
-              }).then((res)=>{
-                setDistance(res.data.distance);
-              }).catch((err)=>{
-                if(err){
-                  if(err.response.status===404){
-                    alert('주소를 찾을 수 없습니다.');
-                  } else{
-                    alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-                  }
-                }
-              })
+          }).then((res)=>{
+            if(res.data.distance>5000){
+              setError(prev=>({...prev, addr:true}))
+              alert('거리 5km이상 지역은 배달이 불가합니다.');
+
+              return;
             }
+
+            setDistance(res.data.distance);
+          }).catch((err)=>{
+            if(err){
+              if(err.response.status===404){
+                alert('주소를 찾을 수 없습니다.');
+              } else{
+                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+              }
+            }
+          })
         }
+      }
     }   
   }, [distance, info, temp, method]);
   useEffect(()=>{
@@ -445,10 +432,10 @@ const PaymentCon=({
     }
   }, [value, temp.address, info]);
   useEffect(() => {
-    if(info&&info.phone){
-      setPhone(info.phone);
-    } else if(temp.phone){
+    if(temp.phone){
       setPhone(temp.phone);
+    } else if(info&&info.phone){
+      setPhone(info.phone);
     } else{
       setPhone('');
     }
