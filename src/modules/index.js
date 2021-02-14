@@ -36,7 +36,6 @@ const rootReducer = combineReducers({
   order,
 });
 
-//추후 result는 filter에서 빼기
 const persistConfig = {
   key: "order",
   storage: storageSession,
@@ -52,7 +51,7 @@ const persistConfig = {
       },
       autoExpire: true,
     }),
-    createFilter("order", ["order", "temp", "result"]),
+    createFilter("order", ["order", "temp"]),
   ],
 };
 export default persistReducer(persistConfig, rootReducer);

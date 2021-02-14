@@ -6,8 +6,12 @@ const useInsertComma = (total) => {
       return "0원";
     } else {
       const result = String(total).split("");
-      result.push("원");
-      result.splice(-4, 0, ",");
+      if (result.length > 3) {
+        result.push("원");
+        result.splice(-4, 0, ",");
+      } else {
+        result.push("원");
+      }
 
       return result.join("");
     }

@@ -13,6 +13,7 @@ import {getPlatform} from '../../lib/usePlatform';
 import useTimer from '../../lib/useTimer';
 
 import { setTempPhone, setTempAddress, makeOrder } from "../../modules/order";
+import { getInfo } from "../../modules/user";
 
 import Payment from '../../components/payment';
 import useGetTotal from "../../lib/useGetTotal";
@@ -45,17 +46,21 @@ const PaymentCon=({
   const [platform, setPlatform] = useState(null);
   const [radio, setRadio]=useState('5분이내 거리(조리)');
   const [text, setText]=useState('');
-  const { info, order, oError, temp, result }=useSelector(state=>(
+  const { info, order, oError, temp, result, user, uError, loading }=useSelector(state=>(
     {
         info:state.user.info,
         order:state.order.order,
         oError:state.order.error,
         temp:state.order.temp,
-        result:state.order.result
+        result:state.order.result,
+        user:state.user.user,
+        uError:state.user.error,
+        loading:state.loading['user/GET_INFO'],
     }
   ));
   const [distance, setDistance]=useState(null);
   const getTotal=useGetTotal(order);
+  const [measure, setMeasure]=useState(null);
 
   const charge=useMemo(()=>{
     let basic=0;
@@ -84,15 +89,14 @@ const PaymentCon=({
     } else return 0;
   }, [distance, method, getTotal]);
 
-  const changeDistance=useCallback((d)=>{
-    setDistance(d);
-}, []);
   const onChange=useCallback((event)=>{
     const {name, value}=event.target;
     if(name==='text'){
       setText(value);
     } else if(name==='five'){
       setRadio(value);
+    } else if(name==='measure'){
+      setMeasure(value);
     } else if(name==='code'){
       setError((prev) => ({ ...prev, code:'' }));
 
@@ -107,21 +111,36 @@ const PaymentCon=({
   const onSubmit=useCallback((e)=>{
     e.preventDefault();
 
-    if(method==='delivery'&&(addr===''||detail==='')){
-      if(addr===''){
-        setError(prev=>({
-          ...prev,
-          addr:true
-        }));
-      }
-      if(detail===''){
-        setError(prev=>({
-          ...prev,
-          detail:true
-        }));
+    if(!measure){
+      alert('결제수단을 선택해주세요.');
+      
+      return;
+    }
+
+    if(method==='delivery'){
+      if(addr===''||detail===''){
+        if(addr===''){
+          setError(prev=>({
+            ...prev,
+            addr:true
+          }));
+        }
+        if(detail===''){
+          setError(prev=>({
+            ...prev,
+            detail:true
+          }));
+        }
+  
+        return;
       }
 
-      return;
+      if(distance>5000){
+        alert('거리 5km이상 지역은 배달이 불가합니다.');
+        setError(prev=>({...prev, addr:true}));
+
+        return;
+      }
     }
     if(!confirm||phone===''){
       setError(prev=>({
@@ -152,9 +171,10 @@ const PaymentCon=({
       }), 
       deli:method==='delivery', 
       request:`${radio}\n${text}`,
-      total:method==='delivery'?getTotal+charge:getTotal
+      total:getTotal+charge,
+      measure
     }));
-  }, [dispatch, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
+  }, [dispatch, distance, measure, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
   const phoneChange = useCallback(
     (e) => {
       const { value } = e.target;
@@ -255,30 +275,7 @@ const PaymentCon=({
     } else {
       new window.daum.Postcode({
         oncomplete: (data) => {
-          userAPI.get('/api/order/distance', {
-            params:{
-              goal:data.address
-            }
-          }).then((res)=>{
-            if(res.data.distance>5000){
-              setError(prev=>({...prev, addr:true}))
-              alert('거리 5km이상 지역은 배달이 불가합니다.');
-
-              return;
-            }
-
-            changeDistance(res.data.distance);
-            dispatch(setTempAddress(data.address));
-            detailRef.current.focus();
-          }).catch((err)=>{
-            if(err){
-              if(err.response.status===404){
-                alert('주소를 찾을 수 없습니다.');
-              } else{
-                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-              }
-            }
-          });
+          dispatch(setTempAddress(data.address));
         },
         onclose: () => {
           addrRef.current.blur();
@@ -287,83 +284,65 @@ const PaymentCon=({
         popupName: "postcodePopup",
       });
     }
-  }, [platform, dispatch, changeDistance]);
+  }, [platform, dispatch]);
   const addrOnClick = useCallback((addr) => {
-    setTimeout(() => {
-      detailRef.current.focus();
-    }, 200);
-
-    userAPI.get('/api/order/distance', {
-      params:{
-        goal:addr
-      }
-    }).then((res)=>{
-      if(res.data.distance>5000){
-        setError(prev=>({...prev, addr:true}));
-        alert('거리 5km이상 지역은 배달이 불가합니다.');
-
-        return;
-      }
-
-      changeDistance(res.data.distance);
-      setOpen(false);
-      dispatch(setTempAddress(addr));
-    }).catch((err)=>{
-      if(err){
-        if(err.response.status===404){
-          alert('주소를 찾을 수 없습니다.');
-        } else{
-          alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-        }
-      }
-    });
-  }, [dispatch, changeDistance]);
+    setOpen(false);
+    dispatch(setTempAddress(addr));
+  }, [dispatch]);
   const addressExit = useCallback(() => {
     addrRef.current.blur();
   }, []);
   const addressClose = useCallback(() => {
+    if(distance>5000){
+      setError(prev=>({...prev, addr:true}));
+    }
+
     setOpen(false);
-  }, []);
+  }, [distance]);
   const clearAddress = useCallback(() => {
+    setError(prev=>({...prev, addr:false}));
+    detailRef.current.blur();
     setAddr("");
   }, []);
   const handleMouseDown = useCallback((event) => {
     event.preventDefault();
   }, []);
   const handleChange = useCallback((event, newValue) => {
-    setValue(newValue);
-  }, []);
+    if(user){
+      setDistance(null);
+      setError(prev=>({...prev, addr:false, detail:false}));
+      setValue(newValue);
+    }
+  }, [user]);
 
   useEffect(()=>{ 
     if(method==='delivery'){
-      if(!distance){
-        if(temp.address||(info&&info.address)){
-          userAPI.get('/api/order/distance', {
-            params:{
-              goal:temp.address||info.address
-            }
-          }).then((res)=>{
-            if(res.data.distance>5000){
-              setError(prev=>({...prev, addr:true}))
-              alert('거리 5km이상 지역은 배달이 불가합니다.');
+      if(addr){
+        userAPI.get('/api/order/distance', {
+          params:{
+            goal:addr
+          }
+        }).then((res)=>{
+          if(res.data.distance>5000){
+            alert('거리 5km이상 지역은 배달이 불가합니다.');
+            setError(prev=>({...prev, addr:true}));
+          } else{
+            detailRef.current.focus();
+          }
 
-              return;
+          setDistance(res.data.distance);
+        }).catch((err)=>{
+          if(err){
+            if(err.response.status===404){
+              alert('주소를 찾을 수 없습니다.');
+            } else{
+              alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
             }
-
-            setDistance(res.data.distance);
-          }).catch((err)=>{
-            if(err){
-              if(err.response.status===404){
-                alert('주소를 찾을 수 없습니다.');
-              } else{
-                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-              }
-            }
-          })
-        }
+          }
+        })
       }
-    }   
-  }, [distance, info, temp, method]);
+    }
+  }, [addr, method]);
   useEffect(()=>{
     if(order.length===0){
         alert('메뉴를 추가해주세요.');
@@ -381,26 +360,27 @@ const PaymentCon=({
   }, [order, history, getTotal]);
   useEffect(()=>{
     if(result){
-      alert('결제에 성공하였습니다.');
+      alert('결제를 성공했습니다.');
       history.push('/result');
     }
   }, [result, history]);
   useEffect(()=>{
     if(oError){
-      alert('결제에 실패하였습니다. 잠시 후 다시 시도해주십시오.');
+      alert('결제를 실패했습니다. 잠시 후 다시 시도해주십시오.');
     }
   }, [oError]);
   useEffect(() => {
-    setPlatform(getPlatform());
+    setPlatform(!getPlatform());
 
     return () => {
       if (es && es.current) {
         es.current.close();
       }
 
-      setAddr("");
-      setDetail("");
-      setPhone("");
+      //unmount state update failed
+      setAddr('');
+      setDetail('');
+      setPhone('');
     };
   }, []);
   useEffect(() => {
@@ -427,10 +407,16 @@ const PaymentCon=({
         setDetail("");
       }
     } else if (value === 1) {
-      setAddr("경기도 수원시 팔달구 일월로18번길 4-26");
-      setDetail("172동 1901호");
+      if(user){
+        userAPI.get('/api/order/recent').then((result)=>{
+          if(result.data.length===1){
+            setAddr(result.data[0].address);
+            setDetail(result.data[0].detail);
+          }
+        });
+      }
     }
-  }, [value, temp.address, info]);
+  }, [value, temp.address, info, method, user]);
   useEffect(() => {
     if(temp.phone){
       setPhone(temp.phone);
@@ -440,40 +426,48 @@ const PaymentCon=({
       setPhone('');
     }
   }, [info, temp.phone]);
+  useEffect(()=>{
+    if(info) return;
+    if(uError) return;
+    if(loading) return;
 
-    return (
-        <Payment  
-          deli={method==='delivery'} 
-          getTotal={getTotal}  
-          value={value}
-          handleChange={handleChange}
-          handleMouseDown={handleMouseDown}
-          clearAddress={clearAddress}
-          addrRef={addrRef}
-          addr={addr}
-          error={error}
-          handleClickOpen={handleClickOpen}
-          detail={detail}
-          detailRef={detailRef}
-          phone={phone}
-          phoneChange={phoneChange}
-          checkPhone={checkPhone}
-          verify={verify}
-          timer={useTimer(sse, end)}
-          code={code}
-          confirmPhone={confirmPhone}
-          platform={platform}
-          open={open}
-          addressClose={addressClose}
-          addrOnClick={addrOnClick}
-          addressExit={addressExit}
-          charge={charge}
-          radio={radio}
-          text={text}
-          onChange={onChange}
-          onSubmit={onSubmit}
-      />
-    );
+    dispatch(getInfo());
+  }, [dispatch, info, uError, loading]);
+
+  return (
+    <Payment  
+      deli={method==='delivery'} 
+      getTotal={getTotal}  
+      value={value}
+      handleChange={handleChange}
+      handleMouseDown={handleMouseDown}
+      clearAddress={clearAddress}
+      addrRef={addrRef}
+      addr={addr}
+      error={error}
+      handleClickOpen={handleClickOpen}
+      detail={detail}
+      detailRef={detailRef}
+      phone={phone}
+      phoneChange={phoneChange}
+      checkPhone={checkPhone}
+      verify={verify}
+      timer={useTimer(sse, end)}
+      code={code}
+      confirmPhone={confirmPhone}
+      platform={platform}
+      open={open}
+      addressClose={addressClose}
+      addrOnClick={addrOnClick}
+      addressExit={addressExit}
+      charge={charge}
+      radio={radio}
+      text={text}
+      onChange={onChange}
+      onSubmit={onSubmit}
+      measure={measure}
+    />
+  );
 }
 
 export default withRouter(PaymentCon);

@@ -35,18 +35,18 @@ const RequestText=({radio, text, onChange})=>{
                 name="five" 
                 value={radio} 
                 onChange={onChange}
-                defaultValue='in'
+                defaultValue='5분이내 거리(조리)'
             >
                 <FormControlLabel 
                     value='5분이내 거리(조리)' 
-                    control={<Radio color='primary' className={classes.radio}/>} 
+                    control={<Radio className={classes.radio}/>} 
                     label="5분이내 거리(조리)" 
                     classes={{label:classes.label}}
                     className={classes.fcl}
                 />
                 <FormControlLabel 
                     value='5분이상 거리(생면)' 
-                    control={<Radio color='primary' className={classes.radio}/>} 
+                    control={<Radio className={classes.radio}/>} 
                     label="5분이상 거리(생면)" 
                     classes={{label:classes.label}}
                     className={classes.fcl}

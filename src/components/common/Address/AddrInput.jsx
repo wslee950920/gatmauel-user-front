@@ -13,8 +13,13 @@ const useStyles = makeStyles((theme) => ({
     fontMaple: {
       fontFamily: "MaplestoryOTFBold",
       color:'black'
+    },
+    error:{
+        '& fieldset':{
+            borderColor:theme.palette.error.main
+        }
     }
-  }));
+}));
 
 const AddrInput=({
     handleMouseDown, 

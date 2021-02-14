@@ -15,6 +15,7 @@ import PhoneVerify from "../common/Phone/PhoneVerify";
 import AddrInput from "../common/Address/AddrInput";
 import Money from "../common/Order/Money";
 import RequestText from "./RequestText";
+import Measure from "./Measure";
 const AddrCon = loadable(() => import("../../containers/payment/AddrCon"));
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(0.8),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(1, 0, 3),
     backgroundColor: theme.palette.primary.light,
   },
 }));
@@ -79,6 +80,7 @@ const Payment = ({
   text,
   onSubmit,
   onChange,
+  measure,
 }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -178,6 +180,7 @@ const Payment = ({
           </Tabs>
           <RequestText radio={radio} text={text} onChange={onChange} />
           <Money getTotal={getTotal} charge={charge} />
+          <Measure measure={measure} onChange={onChange} />
           <Button
             onClick={onSubmit}
             fullWidth

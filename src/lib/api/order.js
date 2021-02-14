@@ -8,8 +8,9 @@ export const makeOrder = ({
   deli,
   addr: address,
   detail,
+  measure,
 }) =>
-  user.post("/api/order/pay", {
+  user.post(`/api/order/pay?measure=${measure}`, {
     phone,
     total,
     request,

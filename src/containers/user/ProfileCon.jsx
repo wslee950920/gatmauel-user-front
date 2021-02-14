@@ -98,7 +98,27 @@ const ProfileCon=({history})=>{
             new window.daum.Postcode({
                 oncomplete:(data)=>{
                     setAddr(data.address);
-                    detailRef.current.focus();
+
+                    userAPI.get('/api/order/distance', {
+                        params:{
+                          goal:data.address
+                        }
+                      }).then((res)=>{
+                        if(res.data.distance>5000){
+                            setError(prev=>({...prev, addr:true}))
+                            alert('거리 5km이상 지역은 배달이 불가합니다.');
+                        } else{
+                            detailRef.current.focus();
+                        }
+                      }).catch((err)=>{
+                        if(err){
+                          if(err.response.status===404){
+                            alert('주소를 찾을 수 없습니다.');
+                          } else{
+                            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                          }
+                        }
+                    });
                 },
                 onclose:()=>{
                     addrRef.current.blur();
@@ -115,9 +135,29 @@ const ProfileCon=({history})=>{
         setOpen(false);
     }, []);
     const addrOnClick=useCallback((addr)=>{
-        setTimeout(()=>{detailRef.current.focus()}, 200);
         setAddr(addr);
         setOpen(false);
+
+        userAPI.get('/api/order/distance', {
+            params:{
+              goal:addr
+            }
+          }).then((res)=>{
+            if(res.data.distance>5000){
+                setError(prev=>({...prev, addr:true}));
+                alert('거리 5km이상 지역은 배달이 불가합니다.');
+            } else{
+                setTimeout(()=>{detailRef.current.focus()}, 200);
+            }
+          }).catch((err)=>{
+            if(err){
+              if(err.response.status===404){
+                alert('주소를 찾을 수 없습니다.');
+              } else{
+                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+              }
+            }
+          });
     }, []);
     const getAddress=useCallback((query, page)=>{
         setLoading(true);

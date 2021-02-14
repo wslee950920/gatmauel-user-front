@@ -8,6 +8,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 import OrderList from "../common/Order/OrderList";
 import Money from "../common/Order/Money";
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     border: "solid #dcdcdc",
     borderRadius: "8px",
+    padding: theme.spacing(0, 1, 0.8),
   },
   root: {
     padding: theme.spacing(0.8),
@@ -42,11 +44,15 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
   },
   btn: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(3, 0, 1),
     backgroundColor: theme.palette.primary.light,
   },
   label: {
     color: theme.palette.common.white,
+  },
+  typo: {
+    fontFamily: "Roboto",
+    marginBottom: theme.spacing(3),
   },
 }));
 
@@ -159,23 +165,32 @@ const Result = ({ order, getTotal, result }) => {
             <Tab label="주문 메뉴" {...a11yProps(2)} />
           </Tabs>
         </Container>
-        <Container className={classes.container}>
+        <Container className={classes.container} maxWidth="xs">
           <OrderList order={order} result />
         </Container>
-        <Container maxWidth="xs" disableGutters>
+        <Container maxWidth="xs" className={classes.background}>
           <Money getTotal={getTotal} charge={result.total - getTotal} />
+          <Button
+            fullWidth
+            variant="contained"
+            className={classes.btn}
+            color="primary"
+            classes={{ label: classes.label }}
+            component={RouterLink}
+            to="/"
+          >
+            확인
+          </Button>
+          <Typography
+            align="right"
+            variant="caption"
+            display="block"
+            className={classes.typo}
+            color="textSecondary"
+          >
+            *문의사항은 홈 화면 아래 전화번호로 문의해주세요.
+          </Typography>
         </Container>
-        <Button
-          fullWidth
-          variant="contained"
-          className={classes.btn}
-          color="primary"
-          classes={{ label: classes.label }}
-          component={RouterLink}
-          to="/"
-        >
-          확인
-        </Button>
       </div>
     </>
   );

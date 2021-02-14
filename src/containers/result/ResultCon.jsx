@@ -28,13 +28,13 @@ const ResultCon=({history})=>{
         }
     }, [dispatch]);
 
-    return (result&&
+    return result?(
         <Result 
             order={order}
             getTotal={getTotal}
             result={result.data.newOrder}
         />
-    );
+    ):null
 }
 
 export default withRouter(ResultCon);
