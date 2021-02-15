@@ -2,31 +2,22 @@ import React from 'react';
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles=makeStyles((theme)=>({
     root:{
         marginTop:theme.spacing(3)
     },
-    col:{
-        display:'flex',
-        flexDirection:'row'
-    },
     radio:{
         padding:theme.spacing(0.8)
     },
-    text:{
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'center'
+    label:{
+        fontSize:'0.8rem',
     },
-    img:{
-        width:60,
-        height:30,
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'center'
-    }
+    fcl:{
+        margin:0
+    },
 }));
 
 const Measure=({measure, onChange})=>{
@@ -40,24 +31,27 @@ const Measure=({measure, onChange})=>{
             value={measure}
             onChange={onChange}
         >
-            <div className={classes.col}>
-                <Radio className={classes.radio} value='kakao'/>
-                <div className={classes.text}>
-                    카카오페이
-                </div>
-            </div>
-            <div className={classes.col}>
-                <Radio className={classes.radio} value='card'/>
-                <div className={classes.text}>
-                    카드결제
-                </div>
-            </div>
-            <div className={classes.col}>
-                <Radio className={classes.radio} value='later'/>
-                <div className={classes.text}>
-                    만나서 결제
-                </div>
-            </div>
+            <FormControlLabel 
+                value='kakao' 
+                control={<Radio className={classes.radio}/>} 
+                label="카카오페이" 
+                classes={{label:classes.label}}
+                className={classes.fcl}
+            />
+            <FormControlLabel 
+                value='card'
+                control={<Radio className={classes.radio}/>} 
+                label="카드결제" 
+                classes={{label:classes.label}}
+                className={classes.fcl}
+            />
+            <FormControlLabel 
+                value='later'
+                control={<Radio className={classes.radio}/>} 
+                label="만나서결제" 
+                classes={{label:classes.label}}
+                className={classes.fcl}
+            />
         </RadioGroup>
     );
 }

@@ -1,28 +1,28 @@
 import React, {
-    useState,
-    useCallback,
-    useEffect,
-    useRef,
-    useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import { user as userAPI } from "../../lib/api/client";
-import {getPlatform} from '../../lib/usePlatform';
+import { getPlatform } from '../../lib/usePlatform';
 import useTimer from '../../lib/useTimer';
 
-import { setTempPhone, setTempAddress, makeOrder } from "../../modules/order";
+import { setTempPhone, setTempAddress, makeOrder, finishOrder } from "../../modules/order";
 import { getInfo } from "../../modules/user";
 
 import Payment from '../../components/payment';
 import useGetTotal from "../../lib/useGetTotal";
 
-const PaymentCon=({
+const PaymentCon = ({
   history,
   match
-})=>{
-  const {method}=match.params;
+}) => {
+  const { method } = match.params;
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
   const [addr, setAddr] = useState("");
@@ -31,7 +31,7 @@ const PaymentCon=({
     addr: false,
     detail: false,
     code: '',
-    phone:false
+    phone: false
   });
   const addrRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -44,134 +44,135 @@ const PaymentCon=({
   const [code, setCode] = useState("");
   const es = useRef(null);
   const [platform, setPlatform] = useState(null);
-  const [radio, setRadio]=useState('5분이내 거리(조리)');
-  const [text, setText]=useState('');
-  const { info, order, oError, temp, result, user, uError, loading }=useSelector(state=>(
+  const [radio, setRadio] = useState('5분이내 거리(조리)');
+  const [text, setText] = useState('');
+  const { info, order, oError, temp, result, user, uError, loading } = useSelector(state => (
     {
-        info:state.user.info,
-        order:state.order.order,
-        oError:state.order.error,
-        temp:state.order.temp,
-        result:state.order.result,
-        user:state.user.user,
-        uError:state.user.error,
-        loading:state.loading['user/GET_INFO'],
+      info: state.user.info,
+      order: state.order.order,
+      oError: state.order.error,
+      temp: state.order.temp,
+      result: state.order.result,
+      user: state.user.user,
+      uError: state.user.error,
+      loading: state.loading['user/GET_INFO'],
     }
   ));
-  const [distance, setDistance]=useState(null);
-  const getTotal=useGetTotal(order);
-  const [measure, setMeasure]=useState(null);
+  const [distance, setDistance] = useState(null);
+  const getTotal = useGetTotal(order);
+  const [measure, setMeasure] = useState(null);
 
-  const charge=useMemo(()=>{
-    let basic=0;
-    let extra=0;
+  const charge = useMemo(() => {
+    let basic = 0;
+    let extra = 0;
 
-    if(method==='delivery'){
-      if(getTotal>=40000){
-        basic=0;
-      } else if(getTotal>=27000&&getTotal<40000){
-        basic=500;
-      } else if(getTotal<27000){
-        basic=1000;
+    if (method === 'delivery') {
+      if (getTotal >= 40000) {
+        basic = 0;
+      } else if (getTotal >= 27000 && getTotal < 40000) {
+        basic = 500;
+      } else if (getTotal < 27000) {
+        basic = 1000;
       }
 
-      if(distance){
-        if(distance<2000){
-          extra=2000;
-        } else if(distance>=2000&&distance<4000){
-          extra=2500;
-        } else if(distance>=4000){
-          extra=3000;
+      if (distance) {
+        if (distance < 2000) {
+          extra = 2000;
+        } else if (distance >= 2000 && distance < 4000) {
+          extra = 2500;
+        } else if (distance >= 4000) {
+          extra = 3000;
         }
       }
 
-      return basic+extra;
+      return basic + extra;
     } else return 0;
   }, [distance, method, getTotal]);
 
-  const onChange=useCallback((event)=>{
-    const {name, value}=event.target;
-    if(name==='text'){
+  const onChange = useCallback((event) => {
+    const { name, value } = event.target;
+    if (name === 'text') {
       setText(value);
-    } else if(name==='five'){
+    } else if (name === 'five') {
       setRadio(value);
-    } else if(name==='measure'){
+    } else if (name === 'measure') {
       setMeasure(value);
-    } else if(name==='code'){
-      setError((prev) => ({ ...prev, code:'' }));
+    } else if (name === 'code') {
+      setError((prev) => ({ ...prev, code: '' }));
 
       const curValue = value;
       const newValue = curValue.replace(/[^0-9]/g, "");
       setCode(newValue);
-    } else if(name==='detail'){
+    } else if (name === 'detail') {
       setError((prev) => ({ ...prev, detail: false }));
       setDetail(value);
     }
   }, [])
-  const onSubmit=useCallback((e)=>{
+  const onSubmit = useCallback((e) => {
     e.preventDefault();
 
-    if(!measure){
+    if (!measure) {
       alert('결제수단을 선택해주세요.');
-      
+
       return;
     }
 
-    if(method==='delivery'){
-      if(addr===''||detail===''){
-        if(addr===''){
-          setError(prev=>({
+    if (method === 'delivery') {
+      if (addr === '' || detail === '') {
+        if (addr === '') {
+          setError(prev => ({
             ...prev,
-            addr:true
+            addr: true
           }));
         }
-        if(detail===''){
-          setError(prev=>({
+        if (detail === '') {
+          setError(prev => ({
             ...prev,
-            detail:true
+            detail: true
           }));
         }
-  
+
         return;
       }
 
-      if(distance>5000){
+      if (distance > 5000) {
         alert('거리 5km이상 지역은 배달이 불가합니다.');
-        setError(prev=>({...prev, addr:true}));
+        setError(prev => ({ ...prev, addr: true }));
 
         return;
       }
     }
-    if(!confirm||phone===''){
-      setError(prev=>({
+    if (!confirm || phone === '') {
+      setError(prev => ({
         ...prev,
-        phone:true
+        phone: true
       }));
 
       return;
     }
 
-    if(method==='delivery'&&(error.addr||error.detail)){
+    if (method === 'delivery' && (error.addr || error.detail)) {
       return;
     }
-    if(error.phone){
+    if (error.phone) {
       return;
     }
 
-    setError(prev=>({...prev, addr:false, detail:false, phone:false}))
+    setError(prev => ({ ...prev, addr: false, detail: false, phone: false }))
     dispatch(makeOrder({
-      addr, 
-      detail, 
-      phone, 
-      order:order.map((value)=>{
-        return({
-          id:value.id,
-          num:value.num
+      addr,
+      detail,
+      phone,
+      order: order.map((value) => {
+        return ({
+          id: value.id,
+          num: value.num,
+          name: value.name
         })
-      }), 
-      deli:method==='delivery', 
-      request:`${radio}\n${text}`,
-      total:getTotal+charge,
+      }),
+      deli: method === 'delivery',
+      request: `${radio}\n${text}`,
+      total: getTotal + charge,
       measure
     }));
   }, [dispatch, distance, measure, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
@@ -179,9 +180,9 @@ const PaymentCon=({
     (e) => {
       const { value } = e.target;
       setPhone(value);
-      setError(prev=>({
+      setError(prev => ({
         ...prev,
-        phone:false
+        phone: false
       }));
 
       if (info && value === info.phone) {
@@ -235,7 +236,7 @@ const PaymentCon=({
       .then(() => {
         dispatch(setTempPhone(phone));
 
-        setError((prev) => ({ ...prev, code:'', phone:false }));
+        setError((prev) => ({ ...prev, code: '', phone: false }));
         setConfirm(true);
         setVerify(false);
         setSse(null);
@@ -249,11 +250,11 @@ const PaymentCon=({
         if (error) {
           if (error.response) {
             if (error.response.status === 419) {
-              setError(prev=>({...prev, code:"인증번호가 만료되었습니다."}));
+              setError(prev => ({ ...prev, code: "인증번호가 만료되었습니다." }));
             } else if (error.response.status === 404) {
-              setError(prev=>({...prev, code:"인증번호가 틀렸습니다."}));
+              setError(prev => ({ ...prev, code: "인증번호가 틀렸습니다." }));
             } else if (error.response.status === 403) {
-              setError(prev=>({...prev, code:"전화번호가 다릅니다."}));
+              setError(prev => ({ ...prev, code: "전화번호가 다릅니다." }));
             } else {
               alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
             }
@@ -266,7 +267,7 @@ const PaymentCon=({
       });
   }, [code, phone, dispatch]);
   const handleClickOpen = useCallback(() => {
-    setError((prev) => ({ ...prev, addr: false, detail:false }));
+    setError((prev) => ({ ...prev, addr: false, detail: false }));
 
     if (platform) {
       setOpen(true);
@@ -293,14 +294,14 @@ const PaymentCon=({
     addrRef.current.blur();
   }, []);
   const addressClose = useCallback(() => {
-    if(distance>5000){
-      setError(prev=>({...prev, addr:true}));
+    if (distance > 5000) {
+      setError(prev => ({ ...prev, addr: true }));
     }
 
     setOpen(false);
   }, [distance]);
   const clearAddress = useCallback(() => {
-    setError(prev=>({...prev, addr:false}));
+    setError(prev => ({ ...prev, addr: false }));
     detailRef.current.blur();
     setAddr("");
   }, []);
@@ -308,34 +309,34 @@ const PaymentCon=({
     event.preventDefault();
   }, []);
   const handleChange = useCallback((event, newValue) => {
-    if(user){
+    if (user) {
       setDistance(null);
-      setError(prev=>({...prev, addr:false, detail:false}));
+      setError(prev => ({ ...prev, addr: false, detail: false }));
       setValue(newValue);
     }
   }, [user]);
 
-  useEffect(()=>{ 
-    if(method==='delivery'){
-      if(addr){
+  useEffect(() => {
+    if (method === 'delivery') {
+      if (addr) {
         userAPI.get('/api/order/distance', {
-          params:{
-            goal:addr
+          params: {
+            goal: addr
           }
-        }).then((res)=>{
-          if(res.data.distance>5000){
+        }).then((res) => {
+          if (res.data.distance > 5000) {
             alert('거리 5km이상 지역은 배달이 불가합니다.');
-            setError(prev=>({...prev, addr:true}));
-          } else{
+            setError(prev => ({ ...prev, addr: true }));
+          } else {
             detailRef.current.focus();
           }
 
           setDistance(res.data.distance);
-        }).catch((err)=>{
-          if(err){
-            if(err.response.status===404){
+        }).catch((err) => {
+          if (err) {
+            if (err.response.status === 404) {
               alert('주소를 찾을 수 없습니다.');
-            } else{
+            } else {
               alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
             }
           }
@@ -343,34 +344,37 @@ const PaymentCon=({
       }
     }
   }, [addr, method]);
-  useEffect(()=>{
-    if(order.length===0){
-        alert('메뉴를 추가해주세요.');
-        history.push('/menu');
+  useEffect(() => {
+    if (order.length === 0) {
+      alert('메뉴를 추가해주세요.');
+      history.push('/menu');
 
-        return;
+      return;
     }
 
-    if(getTotal<14000){
+    if (getTotal < 14000) {
       alert('14,000원 이상부터 주문하실 수 있습니다.');
       history.push('/menu');
 
       return;
     }
   }, [order, history, getTotal]);
-  useEffect(()=>{
-    if(result){
-      alert('결제를 성공했습니다.');
-      history.push('/result');
+  useEffect(() => {
+    if (result) {
+      if(platform){
+        window.open(result.data.result.next_redirect_mobile_url, '_blank');        
+      } else{
+        window.open(result.data.result.next_redirect_pc_url, '카카오페이', 'width=450, height=650, left=100, top=150')
+      }
     }
-  }, [result, history]);
-  useEffect(()=>{
-    if(oError){
+  }, [result, platform]);
+  useEffect(() => {
+    if (oError) {
       alert('결제를 실패했습니다. 잠시 후 다시 시도해주십시오.');
     }
   }, [oError]);
   useEffect(() => {
-    setPlatform(!getPlatform());
+    setPlatform(getPlatform());
 
     return () => {
       if (es && es.current) {
@@ -383,6 +387,20 @@ const PaymentCon=({
       setPhone('');
     };
   }, []);
+  useEffect(()=>{
+    const msgCallback=(event)=>{
+      if(event.origin==='http://localhost:9090'){
+        dispatch(finishOrder(event.data));
+
+        history.push('/result');
+      }
+    }
+    window.addEventListener('message', msgCallback);
+
+    return ()=>{
+      window.removeEventListener('message', msgCallback);
+    }
+  }, [dispatch, history]);
   useEffect(() => {
     if (verify) {
       es.current = new EventSource("http://localhost:9090/api/user/timer", {
@@ -399,7 +417,7 @@ const PaymentCon=({
       if (temp.address) {
         setAddr(temp.address);
         setDetail('');
-      } else if(info&&info.address){
+      } else if (info && info.address) {
         setAddr(info.address);
         setDetail(info.detail);
       } else {
@@ -407,9 +425,9 @@ const PaymentCon=({
         setDetail("");
       }
     } else if (value === 1) {
-      if(user){
-        userAPI.get('/api/order/recent').then((result)=>{
-          if(result.data.length===1){
+      if (user) {
+        userAPI.get('/api/order/recent').then((result) => {
+          if (result.data.length === 1) {
             setAddr(result.data[0].address);
             setDetail(result.data[0].detail);
           }
@@ -418,26 +436,26 @@ const PaymentCon=({
     }
   }, [value, temp.address, info, method, user]);
   useEffect(() => {
-    if(temp.phone){
+    if (temp.phone) {
       setPhone(temp.phone);
-    } else if(info&&info.phone){
+    } else if (info && info.phone) {
       setPhone(info.phone);
-    } else{
+    } else {
       setPhone('');
     }
   }, [info, temp.phone]);
-  useEffect(()=>{
-    if(info) return;
-    if(uError) return;
-    if(loading) return;
+  useEffect(() => {
+    if (info) return;
+    if (uError) return;
+    if (loading) return;
 
     dispatch(getInfo());
   }, [dispatch, info, uError, loading]);
 
   return (
-    <Payment  
-      deli={method==='delivery'} 
-      getTotal={getTotal}  
+    <Payment
+      deli={method === 'delivery'}
+      getTotal={getTotal}
       value={value}
       handleChange={handleChange}
       handleMouseDown={handleMouseDown}

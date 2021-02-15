@@ -22,6 +22,10 @@ const [
   MAKE_ORDER_FAILURE,
 ] = createRequestActionTypes("order/MAKE");
 
+const FINISH_ORDER = "order/FINISH";
+
+export const finishOrder = createAction(FINISH_ORDER);
+
 export const makeOrder = createAction(MAKE_ORDER);
 
 export const insertToCart = createAction(INSERT_TO_CART);
@@ -46,10 +50,15 @@ const initialState = {
   temp: {},
   result: null,
   error: null,
+  finish: null,
 };
 
 const order = handleActions(
   {
+    [FINISH_ORDER]: (state, { payload: finish }) => ({
+      ...state,
+      finish,
+    }),
     [INIT_ORDER]: () => ({
       ...initialState,
     }),
