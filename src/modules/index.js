@@ -12,17 +12,10 @@ import auth, { authSaga } from "./auth";
 import user, { userSaga } from "./user";
 import review, { reviewSaga } from "./review";
 import food, { foodSaga } from "./food";
-import order, { orderSaga } from "./order";
+import order from "./order";
 
 export function* rootSaga() {
-  yield all([
-    noticesSaga(),
-    authSaga(),
-    userSaga(),
-    reviewSaga(),
-    foodSaga(),
-    orderSaga(),
-  ]);
+  yield all([noticesSaga(), authSaga(), userSaga(), reviewSaga(), foodSaga()]);
 }
 
 const rootReducer = combineReducers({

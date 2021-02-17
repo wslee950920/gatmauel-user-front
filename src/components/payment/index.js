@@ -81,6 +81,7 @@ const Payment = ({
   onSubmit,
   onChange,
   measure,
+  wait,
 }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -187,6 +188,7 @@ const Payment = ({
             variant="contained"
             className={classes.submit}
             color="primary"
+            disabled={wait}
           >
             결제하기
           </Button>

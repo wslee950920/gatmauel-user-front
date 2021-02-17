@@ -8,31 +8,31 @@ import useGetTotal from '../../lib/useGetTotal';
 import {initOrder} from '../../modules/order';
 
 const ResultCon=({history})=>{
-    const { order, finish }=useSelector(state=>(
+    const { order, result }=useSelector(state=>(
         {
             order:state.order.order,
-            finish:state.order.finish
+            result:state.order.result
         }
     ));
     const dispatch=useDispatch();
     const getTotal=useGetTotal(order);
 
     useEffect(()=>{
-        if(order.length===0||!finish){
+        if(order.length===0||!result){
             history.push('/');
         }
-    }, [order, finish, history]);
+    }, [order, result, history]);
     useEffect(()=>{
         return()=>{
             dispatch(initOrder());
         }
     }, [dispatch]);
 
-    return finish?(
+    return result?(
         <Result 
             order={order}
             getTotal={getTotal}
-            result={finish}
+            result={result}
         />
     ):null
 }

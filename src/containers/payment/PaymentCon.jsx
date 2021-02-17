@@ -12,7 +12,7 @@ import { user as userAPI } from "../../lib/api/client";
 import { getPlatform } from '../../lib/usePlatform';
 import useTimer from '../../lib/useTimer';
 
-import { setTempPhone, setTempAddress, makeOrder, finishOrder } from "../../modules/order";
+import { setTempPhone, setTempAddress, MakeOrder } from "../../modules/order";
 import { getInfo } from "../../modules/user";
 
 import Payment from '../../components/payment';
@@ -46,13 +46,11 @@ const PaymentCon = ({
   const [platform, setPlatform] = useState(null);
   const [radio, setRadio] = useState('5분이내 거리(조리)');
   const [text, setText] = useState('');
-  const { info, order, oError, temp, result, user, uError, loading } = useSelector(state => (
+  const { info, order, temp, user, uError, loading } = useSelector(state => (
     {
       info: state.user.info,
       order: state.order.order,
-      oError: state.order.error,
       temp: state.order.temp,
-      result: state.order.result,
       user: state.user.user,
       uError: state.user.error,
       loading: state.loading['user/GET_INFO'],
@@ -61,6 +59,9 @@ const PaymentCon = ({
   const [distance, setDistance] = useState(null);
   const getTotal = useGetTotal(order);
   const [measure, setMeasure] = useState(null);
+  const [wait, setWait]=useState(false);
+  const popup=useRef(null);
+  const timer=useRef(null);
 
   const charge = useMemo(() => {
     let basic = 0;
@@ -141,6 +142,10 @@ const PaymentCon = ({
 
         return;
       }
+
+      if(!distance){
+        return;
+      }
     }
     if (!confirm || phone === '') {
       setError(prev => ({
@@ -158,9 +163,11 @@ const PaymentCon = ({
       return;
     }
 
-    setError(prev => ({ ...prev, addr: false, detail: false, phone: false }))
-    dispatch(makeOrder({
-      addr,
+    setError(prev => ({ ...prev, addr: false, detail: false, phone: false }));
+    setWait(true);
+
+    userAPI.post(`/api/order/pay/${measure}`, {
+      address:addr,
       detail,
       phone,
       order: order.map((value) => {
@@ -173,9 +180,33 @@ const PaymentCon = ({
       deli: method === 'delivery',
       request: `${radio}\n${text}`,
       total: getTotal + charge,
-      measure
-    }));
-  }, [dispatch, distance, measure, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
+    }).then(({data})=>{
+      if(measure==='kakao'){
+        if(platform){
+          popup.current=window.open(data.result.next_redirect_mobile_url, '_blank');        
+        } else{
+          popup.current=window.open(data.result.next_redirect_pc_url, '카카오페이', 'width=450, height=650, left=100, top=150')
+        }
+      } else if(measure==='later'){
+        dispatch(MakeOrder(data));
+        history.push('/result');
+      }
+    }).catch((err)=>{
+      if(err.response){
+        if(err.response.status===406||
+          err.response.status===403||
+          err.response.status===401
+        ){
+          setError(prev=>({...prev, phone:true}));
+          alert('전화번호 인증을 해주세요.');
+
+          return;
+        }
+      }
+
+      alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+    })
+  }, [dispatch, history, measure, distance, platform, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
   const phoneChange = useCallback(
     (e) => {
       const { value } = e.target;
@@ -194,7 +225,7 @@ const PaymentCon = ({
     [info]
   );
   const checkPhone = useCallback(() => {
-    setError((prev) => ({ ...prev, code: '' }));
+    setError((prev) => ({ ...prev, code: '', phone:false }));
     setCode("");
 
     if (confirm) {
@@ -310,12 +341,25 @@ const PaymentCon = ({
   }, []);
   const handleChange = useCallback((event, newValue) => {
     if (user) {
-      setDistance(null);
       setError(prev => ({ ...prev, addr: false, detail: false }));
       setValue(newValue);
     }
   }, [user]);
 
+  useEffect(()=>{
+    if(wait){
+      const loop=()=>{
+        if(popup.current&&popup.current.closed){
+          setWait(false);
+
+          return;
+        }
+          
+        timer.current=setTimeout(loop, 300);     
+      }
+      setTimeout(loop, 1500);
+    }
+  }, [wait]);
   useEffect(() => {
     if (method === 'delivery') {
       if (addr) {
@@ -360,25 +404,15 @@ const PaymentCon = ({
     }
   }, [order, history, getTotal]);
   useEffect(() => {
-    if (result) {
-      if(platform){
-        window.open(result.data.result.next_redirect_mobile_url, '_blank');        
-      } else{
-        window.open(result.data.result.next_redirect_pc_url, '카카오페이', 'width=450, height=650, left=100, top=150')
-      }
-    }
-  }, [result, platform]);
-  useEffect(() => {
-    if (oError) {
-      alert('결제를 실패했습니다. 잠시 후 다시 시도해주십시오.');
-    }
-  }, [oError]);
-  useEffect(() => {
     setPlatform(getPlatform());
 
     return () => {
       if (es && es.current) {
         es.current.close();
+      }
+
+      if(timer&&timer.current){
+        clearTimeout(timer.current);
       }
 
       //unmount state update failed
@@ -390,9 +424,18 @@ const PaymentCon = ({
   useEffect(()=>{
     const msgCallback=(event)=>{
       if(event.origin==='http://localhost:9090'){
-        dispatch(finishOrder(event.data));
-
-        history.push('/result');
+        if(event.data){
+          if(event.data.success){
+            dispatch(MakeOrder(event.data.success));
+            history.push('/result');
+          } else if(event.data.cancel){
+            alert(event.data.cancel);
+            setWait(false);
+          } else if(event.data.fail){
+            alert(event.data.fail);
+            setWait(false);
+          }
+        }
       }
     }
     window.addEventListener('message', msgCallback);
@@ -484,6 +527,7 @@ const PaymentCon = ({
       onChange={onChange}
       onSubmit={onSubmit}
       measure={measure}
+      wait={wait}
     />
   );
 }
