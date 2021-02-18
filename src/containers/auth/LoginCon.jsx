@@ -31,11 +31,14 @@ const LoginCon=({history})=>{
                 window.Kakao.API.request({
                     url: '/v2/user/me',
                     success:(info)=>{
+                        const phone=info.kakao_account.phone_number.replace('+82 ', '0').replace(/-/g,'');
+
                         userAPI.post('/api/auth/kakao/v2', {
                           snsId:info.id,
                           email:info.kakao_account.email,
                           eVerified:info.kakao_account.is_email_verified,
-                          nick:info.kakao_account.profile.nickname
+                          nick:info.kakao_account.profile.nickname,
+                          phone
                         })
                         .then((res)=>{
                             dispatch(tempSetUser(res.data));
@@ -167,7 +170,7 @@ const LoginCon=({history})=>{
             try{
                 localStorage.setItem('user', JSON.stringify(user));
             } catch(e){
-                console.error('localStorage is not working');
+                console.log('localStorage is not working');
             }
         }
     }, [user, history]);

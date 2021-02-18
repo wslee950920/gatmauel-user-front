@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
 import querystring from 'querystring';
+import axios from 'axios';
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
@@ -61,13 +62,16 @@ const ReviewCon = ({ history, location }) => {
   const [progress, setProgress]=useState(0);
   const theme = useTheme();
   const small = useMediaQuery(theme.breakpoints.up("sm"));
+  const [hashtags, setHashtags]=useState([]);
+  const [search, setSearch]=useState('');
+  const [hloading, setHloading]=useState(false);
 
   const scrollToIndex=useMemo(()=>{
     const url=location.search.split('?')[1];
     const query=querystring.parse(url);
 
     return parseInt(query.index||-1);
-  }, [location]);
+  }, [location.search]);
 
   const handleClose = useCallback(() => {
     history.push('/review');
@@ -105,7 +109,7 @@ const ReviewCon = ({ history, location }) => {
             reader.readAsDataURL(files[i]);
           }
         } catch (e) {
-          console.error(e);
+          console.log('image add error');
         }
       } else {
         alert("이미지는 10개까지만 추가할 수 있습니다.");
@@ -166,17 +170,56 @@ const ReviewCon = ({ history, location }) => {
   const closeRemove=useCallback(()=>{
     setRopen(false);
   }, []);
+  
+  const getHashtags=useCallback((query, page)=>{
+    setHloading(true);
+
+    axios.get(`http://localhost:9090/api/review/hashtag?hashtag=${query}&page=${page}`)
+      .then((res)=>{
+        if(page===1){
+          setHashtags(res.data.reviews);
+        } else{
+          setHashtags(prev=>[...prev, ...res.data.reviews]);
+        }
+        setHasNextPage(!res.data.is_end);
+      })
+      .catch((err)=>{
+        if(err.response&&err.response.status===204){
+          setHasNextPage(false);
+        }
+      })
+      .finally(()=>{
+        setHloading(false);
+      })
+  }, []);
+  const searchOnChange=useCallback((event)=>{
+    const {value}=event.target;
+    setSearch(value);
+    if(value===''){
+      setHashtags([]);
+    } else{
+      getHashtags(value, 1);
+    }
+  }, [getHashtags]);
   const loadNextPage=useCallback(({startIndex})=>{
-    dispatch(getReviews(Math.ceil(startIndex/10)+1));
-  }, [dispatch]);
+    if(search){
+      getHashtags(search, Math.ceil(startIndex/10)+1)
+    } else{
+      dispatch(getReviews(Math.ceil(startIndex/10)+1));
+    }
+  }, [dispatch, search, getHashtags]);
 
   usePreloader(()=>dispatch(getReviews()));
 
   useEffect(()=>{
-    if(Math.ceil(reviews.length/10)===lastPage){
-      setHasNextPage(false);
+    if(!search){
+      if(Math.ceil(reviews.length/10)===lastPage){
+        setHasNextPage(false);
+      } else{
+        setHasNextPage(true);
+      }
     } 
-  }, [reviews, lastPage]);
+  }, [reviews, lastPage, search]);
   useEffect(() => {
     dispatch(check());
 
@@ -217,38 +260,38 @@ const ReviewCon = ({ history, location }) => {
         dispatch(getReviews());
       } 
     } catch(e){
-      console.error(e);
+      console.log('review CUD error');
     }
   }, [review, reviewError, dispatch]);
 
   return (
     <>
-    {!small && <SearchBar review/>}
-    <Review
-      reviews={reviews}
-      content={content}
-      imgs={imgs}
-      handleFileOnChange={handleFileOnChange}
-      handleFileRemove={handleFileRemove}
-      onSubmit={onSubmit}
-      open={open}
-      handleClose={handleClose}
-      handleClickOpen={handleClickOpen}
-      onCamera={onCamera}
-      user={user}
-      feedUpdate={feedUpdate}
-      feedRemove={feedRemove}
-      rOpen={rOpen}
-      openRemove={openRemove}
-      closeRemove={closeRemove}
-      gloading={gloading||false}
-      loadNextPage={loadNextPage}
-      hasNextPage={hasNextPage}
-      progress={progress}
-      wloading={wloading}
-      scrollToIndex={scrollToIndex}
-      order={order}
-    />
+      {!small && <SearchBar hashtag value={search} onChange={searchOnChange}/>}
+      <Review
+        reviews={search?hashtags:reviews}
+        content={content}
+        imgs={imgs}
+        handleFileOnChange={handleFileOnChange}
+        handleFileRemove={handleFileRemove}
+        onSubmit={onSubmit}
+        open={open}
+        handleClose={handleClose}
+        handleClickOpen={handleClickOpen}
+        onCamera={onCamera}
+        user={user}
+        feedUpdate={feedUpdate}
+        feedRemove={feedRemove}
+        rOpen={rOpen}
+        openRemove={openRemove}
+        closeRemove={closeRemove}
+        gloading={(search?hloading:gloading)||false}
+        loadNextPage={loadNextPage}
+        hasNextPage={hasNextPage}
+        progress={progress}
+        wloading={wloading}
+        scrollToIndex={scrollToIndex}
+        order={order}
+      />
     </>
   )
 }

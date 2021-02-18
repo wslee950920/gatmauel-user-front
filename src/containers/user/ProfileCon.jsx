@@ -355,7 +355,7 @@ const ProfileCon=({history})=>{
             try{
                 localStorage.setItem('user', JSON.stringify(user));
             } catch(e){
-                console.error('localStorage is not working');
+                console.log('localStorage is not working');
             }
         }
     }, [user, history]);
@@ -392,9 +392,9 @@ const ProfileCon=({history})=>{
                 setError(prev=>({...prev, nick:false}));
             }
         } catch(e){
-            console.error(e);
+            console.log('nick error');
         }
-    }, [nickError, nick, dispatch]);
+    }, [nickError, nick]);
 
     return  <Profile 
                 onLogout={onLogout} 

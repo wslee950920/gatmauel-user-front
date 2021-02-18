@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchBar = ({ review, address, onChange, value }) => {
+const SearchBar = ({ hashtag, address, onChange, value }) => {
   const classes = useStyles();
 
   return (
@@ -59,7 +59,7 @@ const SearchBar = ({ review, address, onChange, value }) => {
             <SearchIcon fontSize="default" />
           </div>
           <InputBase
-            placeholder={review?"HashTags...":address?"도로명주소(ex:일월로...)":"Search..."}
+            placeholder={hashtag?"HashTag...":address?"도로명주소(ex:일월로...)":"Search..."}
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput,
@@ -69,10 +69,10 @@ const SearchBar = ({ review, address, onChange, value }) => {
               type:'search',
             }}
             {...(address&&{
-              onChange,
-              value,
               autoFocus:true
             })}
+            value={value}
+            onChange={onChange}
           />
         </div>
       </Toolbar>

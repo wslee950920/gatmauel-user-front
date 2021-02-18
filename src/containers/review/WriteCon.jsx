@@ -62,7 +62,7 @@ const WriteCon=({history})=>{
                 reader.readAsDataURL(files[i]);
               }
             } catch (e) {
-              console.error(e);
+              console.log('file chage error');
             }
           } else {
             alert("이미지는 5개까지만 추가할 수 있습니다.");

@@ -103,19 +103,21 @@ const AccountCon=({history})=>{
 
     useEffect(()=>{
         try{
-            if(error&&error.response.status===401){
-                setPError(prev=>({...prev, res:true}));
-            }
-            else if(error&&error.response.status===409){
-                alert('SNS 로그인은 비밀번호를 변경할 수 없습니다.')
-            }
-            else if(error&&error.response.status===403){
-                setWError(true);
+            if(error&&error.response){
+                if(error.response.status===401){
+                    setPError(prev=>({...prev, res:true}));
+                }
+                else if(error.response.status===409){
+                    alert('SNS 로그인은 비밀번호를 변경할 수 없습니다.')
+                }
+                else if(error.response.status===403){
+                    setWError(true);
+                }
             }
 
             throw error
         } catch(e){
-            console.error(e);
+            console.log('login error');
         }
     }, [error]);
     useEffect(()=>{

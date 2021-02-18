@@ -103,9 +103,9 @@ const RegisterCon = ({ history }) => {
                 alert('이메일 인증을 해주세요.');
             }
         } catch(e){
-            console.error(e)
+            console.log('register error')
         }
-    }, [register, registerError, history, dispatch]);
+    }, [register, registerError, history]);
     useEffect(() => {
         if(user){
             history.push('/');
@@ -114,19 +114,17 @@ const RegisterCon = ({ history }) => {
         }
     }, [user, history]);
     useEffect(() => {
-        try{
-            if (nickError) {
-                setError(prev => ({ ...prev, nick: true }));
+        if (nickError) {
+            setError(prev => ({ ...prev, nick: true }));
     
-                return;
-            }
-            if (nick) {
-                setError(prev => ({ ...prev, nick: false }));
-            }
-        } catch(e){
-            console.error(e);
+            return;
         }
-    }, [nickError, nick, dispatch]);
+        if (nick) {
+            setError(prev => ({ ...prev, nick: false }));
+
+            return;
+        }
+    }, [nickError, nick]);
 
     return <Register
                 nickname={nickname}

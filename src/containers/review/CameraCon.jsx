@@ -43,7 +43,7 @@ const CameraCon=({history})=>{
                 };
                 reader.readAsDataURL(imgFile);
               } catch(e){
-                console.error(e);
+                console.log('cature error');
               }
               history.push('/review/write');
         })
@@ -68,7 +68,7 @@ const CameraCon=({history})=>{
             setLoading(false);
           })
           .catch((e) => {
-            console.error(e);
+            console.log('stream error');
           });
     
         return () => {
@@ -76,7 +76,7 @@ const CameraCon=({history})=>{
             const oTrack = vStream.current.getTracks();
             oTrack.map((pTrack) => pTrack.stop());
           } catch(e){
-            console.error(e);
+            console.log('stop error');
           }
         };
       }, []);
