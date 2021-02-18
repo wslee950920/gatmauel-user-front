@@ -16,7 +16,7 @@ import Tools from "./Tools";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: theme.spacing(1, 0),
+    margin: theme.spacing(0, 0, 1),
     width: "100%",
   },
   background: {

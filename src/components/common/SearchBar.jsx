@@ -14,9 +14,8 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     width: "100%",
-    padding: theme.spacing(0, 1),
     position: "fixed",
-    zIndex: theme.zIndex.appBar,
+    zIndex: theme.zIndex.appBar-1,
     backgroundColor: "#fafafa",
     maxWidth:theme.breakpoints.values.sm
   },
@@ -53,13 +52,13 @@ const SearchBar = ({ hashtag, address, onChange, value }) => {
 
   return (
     <div className={classes.root}>
-      <Toolbar className={classes.toolbar} disableGutters style={address&&{backgroundColor:'white'}}>
+      <Toolbar className={classes.toolbar} style={address&&{backgroundColor:'white'}}>
         <div className={classes.search}>
           <div className={classes.searchIcon}>
             <SearchIcon fontSize="default" />
           </div>
           <InputBase
-            placeholder={hashtag?"HashTag...":address?"도로명주소(ex:일월로...)":"Search..."}
+            placeholder={hashtag?"Hashtag...":address?"도로명주소(ex:일월로...)":"Search..."}
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput,

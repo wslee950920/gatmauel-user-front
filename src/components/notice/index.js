@@ -4,24 +4,13 @@ import WindowScroller from "react-virtualized/dist/commonjs/WindowScroller";
 import InfiniteLoader from "react-virtualized/dist/commonjs/InfiniteLoader";
 import loadable from "@loadable/component";
 
-import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Circular from "../common/Circular";
 const NoticeItemLink = loadable(() => import("./NoticeItemLink"));
 const Fab = loadable(() => import("../common/Fab"));
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    [theme.breakpoints.up("sm")]: {
-      marginTop: theme.spacing(1),
-    },
-  },
-}));
-
 const Notice = ({ notices, hasNextPage, loadNextPage, loading, order }) => {
-  const classes = useStyles();
-
   const rowCount = useMemo(
     () => (hasNextPage ? notices.length + 1 : notices.length),
     [hasNextPage, notices]
@@ -87,7 +76,6 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading, order }) => {
                   maxWidth: "100%",
                 }}
                 style={{ width: "100%", minHeight: "calc(100vh - 129.57px)" }}
-                className={classes.root}
                 height={height}
                 rowCount={rowCount}
                 rowHeight={100}

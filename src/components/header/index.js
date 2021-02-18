@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import loadable from "@loadable/component";
 
 import Link from "@material-ui/core/Link";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -12,12 +12,8 @@ import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import SearchIcon from "@material-ui/icons/Search";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import ScopedCssBaseline from "@material-ui/core/ScopedCssBaseline";
 
 import Drawer from "./Drawer";
-import SearchBar from "../common/SearchBar";
 const AccountMenu = loadable(() => import("./AccountMenu"));
 
 const useClasses = makeStyles((theme) => ({
@@ -46,15 +42,8 @@ const Header = ({ main, user }) => {
   const classes = useClasses();
   const [accountEl, setAccountEl] = useState(null);
   const [drawer, setDrawer] = useState(false);
-  const [search, setSearch] = useState(false);
   const isMenuOpen = Boolean(accountEl);
   const menuId = useRef("account-menu");
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
-
-  const handleSearch = useCallback(() => {
-    setSearch((prev) => !prev);
-  }, []);
 
   const handleMenuOpen = useCallback((event) => {
     setAccountEl(event.currentTarget);
@@ -97,23 +86,6 @@ const Header = ({ main, user }) => {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.section}>
-            {search ? (
-              <ScopedCssBaseline classes={{ root: classes.base }}>
-                <SearchBar />
-              </ScopedCssBaseline>
-            ) : (
-              !main &&
-              matches && (
-                <IconButton
-                  aria-label="search"
-                  className={classes.icon}
-                  onClick={handleSearch}
-                  disabled
-                >
-                  <SearchIcon />
-                </IconButton>
-              )
-            )}
             {user && (
               <IconButton
                 aria-label="show new notifications"

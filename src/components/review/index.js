@@ -17,7 +17,7 @@ import CellMeasurer, {
 
 import { StepProvider } from "./context/step";
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import EditReview from "./EditReview";
@@ -25,14 +25,6 @@ import ReviewItem from "./ReviewItem";
 const Fab = loadable(() => import("../common/Fab"));
 const DeleteDialog = loadable(() => import("./Delete"));
 const FullScreenDialog = loadable(() => import("./FullScreenDialog"));
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    [theme.breakpoints.up("sm")]: {
-      marginTop: theme.spacing(1),
-    },
-  },
-}));
 
 const WrappedItem = forwardRef((props, ref) => {
   return <ReviewItem {...props} forwardedRef={ref} />;
@@ -63,7 +55,6 @@ const Review = ({
   scrollToIndex,
   order,
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
   const small = useMediaQuery(theme.breakpoints.up("sm"));
@@ -145,7 +136,7 @@ const Review = ({
         index: scrollToIndex,
       });
       if (offset > -1) {
-        window.scrollTo(0, offset + 135);
+        window.scrollTo(0, offset + 135 + (scrollToIndex > 0 && 135));
 
         return;
       }
@@ -157,7 +148,7 @@ const Review = ({
   return (
     <>
       <StepProvider datas={reviews}>
-        <div className={classes.paper}>
+        <div>
           <EditReview
             handleClickOpen={handleClickOpen}
             rOnly

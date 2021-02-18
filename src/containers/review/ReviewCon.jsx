@@ -5,9 +5,6 @@ import FormData from 'form-data';
 import querystring from 'querystring';
 import axios from 'axios';
 
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { useTheme } from "@material-ui/core/styles";
-
 import {usePreloader} from '../../lib/PreloadContext';
 
 import { getReviews, modReview, subReview } from '../../modules/reviews';
@@ -60,8 +57,6 @@ const ReviewCon = ({ history, location }) => {
   const [reviewId, setReviewId]=useState(null);
   const [hasNextPage, setHasNextPage]=useState(true);
   const [progress, setProgress]=useState(0);
-  const theme = useTheme();
-  const small = useMediaQuery(theme.breakpoints.up("sm"));
   const [hashtags, setHashtags]=useState([]);
   const [search, setSearch]=useState('');
   const [hloading, setHloading]=useState(false);
@@ -266,7 +261,7 @@ const ReviewCon = ({ history, location }) => {
 
   return (
     <>
-      {!small && <SearchBar hashtag value={search} onChange={searchOnChange}/>}
+      <SearchBar hashtag value={search} onChange={searchOnChange}/>
       <Review
         reviews={search?hashtags:reviews}
         content={content}
