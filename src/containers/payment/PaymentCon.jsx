@@ -59,9 +59,10 @@ const PaymentCon = ({
   const [distance, setDistance] = useState(null);
   const getTotal = useGetTotal(order);
   const [measure, setMeasure] = useState(null);
-  const [wait, setWait]=useState(false);
-  const popup=useRef(null);
-  const timer=useRef(null);
+  const [wait, setWait] = useState(false);
+  const popup = useRef(null);
+  const timer = useRef(null);
+  const msgCallback=useRef(null);
 
   const charge = useMemo(() => {
     let basic = 0;
@@ -143,7 +144,7 @@ const PaymentCon = ({
         return;
       }
 
-      if(!distance){
+      if (!distance) {
         return;
       }
     }
@@ -167,7 +168,7 @@ const PaymentCon = ({
     setWait(true);
 
     userAPI.post(`/api/order/pay/${measure}`, {
-      address:addr,
+      address: addr,
       detail,
       phone,
       order: order.map((value) => {
@@ -178,26 +179,26 @@ const PaymentCon = ({
         })
       }),
       deli: method === 'delivery',
-      request: `${radio}\n${text}`,
+      request: `${radio} ${text}`,
       total: getTotal + charge,
-    }).then(({data})=>{
-      if(measure==='kakao'){
-        if(platform){
-          popup.current=window.open(data.result.next_redirect_mobile_url, '_blank');        
-        } else{
-          popup.current=window.open(data.result.next_redirect_pc_url, '카카오페이', 'width=450, height=650, left=100, top=150')
+    }).then(({ data }) => {
+      if (measure === 'kakao') {
+        if (platform) {
+          popup.current = window.open(data.result.next_redirect_mobile_url, '_blank');
+        } else {
+          popup.current = window.open(data.result.next_redirect_pc_url, '카카오페이', 'width=450, height=650, left=100, top=150')
         }
-      } else if(measure==='later'){
+      } else if (measure === 'later') {
         dispatch(MakeOrder(data));
         history.push('/result');
       }
-    }).catch((err)=>{
-      if(err.response){
-        if(err.response.status===406||
-          err.response.status===403||
-          err.response.status===401
-        ){
-          setError(prev=>({...prev, phone:true}));
+    }).catch((err) => {
+      if (err.response) {
+        if (err.response.status === 406 ||
+          err.response.status === 403 ||
+          err.response.status === 401
+        ) {
+          setError(prev => ({ ...prev, phone: true }));
           alert('전화번호 인증을 해주세요.');
 
           return;
@@ -205,6 +206,8 @@ const PaymentCon = ({
       }
 
       alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+    }).finally(()=>{
+      setWait(false);
     })
   }, [dispatch, history, measure, distance, platform, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
   const phoneChange = useCallback(
@@ -225,7 +228,7 @@ const PaymentCon = ({
     [info]
   );
   const checkPhone = useCallback(() => {
-    setError((prev) => ({ ...prev, code: '', phone:false }));
+    setError((prev) => ({ ...prev, code: '', phone: false }));
     setCode("");
 
     if (confirm) {
@@ -346,18 +349,18 @@ const PaymentCon = ({
     }
   }, [user]);
 
-  useEffect(()=>{
-    if(wait){
-      const loop=()=>{
-        if(popup.current&&popup.current.closed){
+  useEffect(() => {
+    if (wait) {
+      const loop = () => {
+        if (popup.current && popup.current.closed) {
           setWait(false);
 
           return;
         }
-          
-        timer.current=setTimeout(loop, 300);     
+
+        timer.current = setTimeout(loop, 300);
       }
-      setTimeout(loop, 1500);
+      timer.current=setTimeout(loop, 1500);
     }
   }, [wait]);
   useEffect(() => {
@@ -411,7 +414,7 @@ const PaymentCon = ({
         es.current.close();
       }
 
-      if(timer&&timer.current){
+      if (timer && timer.current) {
         clearTimeout(timer.current);
       }
 
@@ -419,30 +422,30 @@ const PaymentCon = ({
       setAddr('');
       setDetail('');
       setPhone('');
+      setText('');
+      setWait(false);
+
+      window.removeEventListener('message', msgCallback.current);
     };
   }, []);
-  useEffect(()=>{
-    const msgCallback=(event)=>{
-      if(event.origin==='http://localhost:9090'){
-        if(event.data){
-          if(event.data.success){
+  useEffect(() => {
+    msgCallback.current = (event) => {
+      if (event.origin === 'http://localhost:9090') {
+        if (event.data) {
+          if (event.data.success) {
             dispatch(MakeOrder(event.data.success));
             history.push('/result');
-          } else if(event.data.cancel){
+          } else if (event.data.cancel) {
             alert(event.data.cancel);
             setWait(false);
-          } else if(event.data.fail){
+          } else if (event.data.fail) {
             alert(event.data.fail);
             setWait(false);
           }
         }
       }
     }
-    window.addEventListener('message', msgCallback);
-
-    return ()=>{
-      window.removeEventListener('message', msgCallback);
-    }
+    window.addEventListener('message', msgCallback.current);
   }, [dispatch, history]);
   useEffect(() => {
     if (verify) {

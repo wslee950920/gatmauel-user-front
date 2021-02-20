@@ -111,7 +111,7 @@ const EditReview = ({
             }}
             disabled={loading}
           />
-          {(review || imgs.length > 0) && (
+          {((review && review.imgs) || (imgs && imgs.length > 0)) && (
             <>
               <div className={classes.end}>
                 <Typography variant="caption" className={classes.fontRobo}>
