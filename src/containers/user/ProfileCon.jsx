@@ -219,15 +219,6 @@ const ProfileCon=({history})=>{
         if(nickname===user.nick&&addr===info.address&&detail===info.detail&&confirm){
             return;
         }
-        if(detail===''||addr===''){
-            if(detail===''){
-                setError(prev=>({...prev, detail:true}));
-            }
-            if(addr===''){
-                setError(prev=>({...prev, addr:true}));
-            }
-            return;
-        } 
 
         dispatch(userUpdate({
             nickname, 

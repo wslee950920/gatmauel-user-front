@@ -54,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "inherit",
     minWidth: 0,
   },
+  primary: {
+    color: theme.palette.info.dark,
+  },
 }));
 
 const Feed = ({
@@ -145,6 +148,7 @@ const Feed = ({
                             classes={{
                               text: classes.text,
                               root: classes.root,
+                              textPrimary: classes.primary,
                             }}
                             className={classes.btn}
                             color="primary"
