@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchBar = ({ hashtag, address, onChange, value }) => {
+const SearchBar = ({ hashtag, address, onChange, value, searchBar }) => {
   const classes = useStyles();
 
   return (
@@ -66,6 +66,7 @@ const SearchBar = ({ hashtag, address, onChange, value }) => {
             inputProps={{ 
               "aria-label": "search", 
               type:'search',
+              ref:searchBar
             }}
             {...(address&&{
               autoFocus:true

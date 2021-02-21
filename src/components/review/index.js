@@ -54,6 +54,7 @@ const Review = ({
   wloading,
   scrollToIndex,
   order,
+  hashtagOnClick,
 }) => {
   const theme = useTheme();
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
@@ -118,12 +119,13 @@ const Review = ({
               measure={measure}
               index={index}
               isRowLoaded={isRowLoaded}
+              hashtagOnClick={hashtagOnClick}
             />
           )}
         </CellMeasurer>
       );
     },
-    [reviews, user, feedUpdate, openRemove, cache, isRowLoaded]
+    [reviews, user, feedUpdate, openRemove, cache, isRowLoaded, hashtagOnClick]
   );
 
   useEffect(() => {

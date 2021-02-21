@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useContext } from "react";
-import StepContext from "../context/step";
 import loadable from "@loadable/component";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,8 +11,11 @@ import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import MobileStepper from "@material-ui/core/MobileStepper";
+import Button from "@material-ui/core/Button";
 
 import CarouselImg from "./CarouselImg";
+import StepContext from "../context/step";
+
 import useTime from "../../../lib/useTime";
 
 const FeedMenu = loadable(() => import("./FeedMenu"));
@@ -38,13 +40,31 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 2),
     minHeight: "8rem",
   },
-  pTag: {
+  typo: {
     fontFamily: "NanumSquare",
-    whiteSpace: "pre-wrap",
+  },
+  text: {
+    padding: 0,
+  },
+  btn: {
+    fontFamily: "NanumSquare",
+  },
+  root: {
+    fontSize: "1rem",
+    lineHeight: "inherit",
+    minWidth: 0,
   },
 }));
 
-const Feed = ({ data, index, user, feedUpdate, openRemove, measure }) => {
+const Feed = ({
+  data,
+  index,
+  user,
+  feedUpdate,
+  openRemove,
+  measure,
+  hashtagOnClick,
+}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const { state, action } = useContext(StepContext);
@@ -113,8 +133,37 @@ const Feed = ({ data, index, user, feedUpdate, openRemove, measure }) => {
           ) : (
             data.imgs && <br />
           )}
-          <Typography variant="body1" className={classes.pTag}>
-            {data.content}
+          <Typography variant="body1" className={classes.typo}>
+            {data.content.split("\n").map((line, outer) => {
+              return (
+                <span key={`${index}-${outer}`}>
+                  {line.split(" ").map((value, inner) => {
+                    if (/#[^\s]*/.test(value)) {
+                      return (
+                        <span key={`${value}-${inner}-${index}`}>
+                          <Button
+                            classes={{
+                              text: classes.text,
+                              root: classes.root,
+                            }}
+                            className={classes.btn}
+                            color="primary"
+                            disableRipple={true}
+                            onClick={() => hashtagOnClick(value)}
+                          >
+                            {value}
+                          </Button>
+                          <span> </span>
+                        </span>
+                      );
+                    } else {
+                      return `${value} `;
+                    }
+                  })}
+                  <br />
+                </span>
+              );
+            })}
           </Typography>
         </CardContent>
       </Card>

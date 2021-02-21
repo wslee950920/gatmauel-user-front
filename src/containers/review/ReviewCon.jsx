@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useMemo } from 'react';
+import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
@@ -60,6 +60,7 @@ const ReviewCon = ({ history, location }) => {
   const [hashtags, setHashtags]=useState([]);
   const [search, setSearch]=useState('');
   const [hloading, setHloading]=useState(false);
+  const searchBar=useRef(null);
 
   const scrollToIndex=useMemo(()=>{
     const url=location.search.split('?')[1];
@@ -168,6 +169,7 @@ const ReviewCon = ({ history, location }) => {
   
   const getHashtags=useCallback((query, page)=>{
     setHloading(true);
+    setHasNextPage(true);
 
     axios.get(`http://localhost:9090/api/review/hashtag?hashtag=${query}&page=${page}`)
       .then((res)=>{
@@ -185,6 +187,7 @@ const ReviewCon = ({ history, location }) => {
       })
       .finally(()=>{
         setHloading(false);
+        window.scrollTo(0, 0);
       })
   }, []);
   const searchOnChange=useCallback((event)=>{
@@ -203,6 +206,11 @@ const ReviewCon = ({ history, location }) => {
       dispatch(getReviews(Math.ceil(startIndex/10)+1));
     }
   }, [dispatch, search, getHashtags]);
+  const hashtagOnClick=useCallback((value)=>{
+    setSearch(value.replace('#', ''));
+    getHashtags(value.replace('#', ''), 1);
+    searchBar.current.focus();
+  }, [getHashtags])
 
   usePreloader(()=>dispatch(getReviews()));
 
@@ -261,7 +269,7 @@ const ReviewCon = ({ history, location }) => {
 
   return (
     <>
-      <SearchBar hashtag value={search} onChange={searchOnChange}/>
+      <SearchBar hashtag value={search} onChange={searchOnChange} searchBar={searchBar}/>
       <Review
         reviews={search?hashtags:reviews}
         content={content}
@@ -286,6 +294,7 @@ const ReviewCon = ({ history, location }) => {
         wloading={wloading}
         scrollToIndex={scrollToIndex}
         order={order}
+        hashtagOnClick={hashtagOnClick}
       />
     </>
   )

@@ -18,7 +18,8 @@ const ReviewItem = ({
   openRemove, 
   measure, 
   forwardedRef,
-  isRowLoaded
+  isRowLoaded,
+  hashtagOnClick
 }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
@@ -38,6 +39,7 @@ const ReviewItem = ({
               feedUpdate={feedUpdate} 
               openRemove={openRemove}
               measure={measure}
+              hashtagOnClick={hashtagOnClick}
             />
           )
         }
