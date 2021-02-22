@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useCallback, useState, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
@@ -60,7 +60,6 @@ const ReviewCon = ({ history, location }) => {
   const [hashtags, setHashtags]=useState([]);
   const [search, setSearch]=useState('');
   const [hloading, setHloading]=useState(false);
-  const searchBar=useRef(null);
 
   const scrollToIndex=useMemo(()=>{
     const url=location.search.split('?')[1];
@@ -209,7 +208,6 @@ const ReviewCon = ({ history, location }) => {
   const hashtagOnClick=useCallback((value)=>{
     setSearch(value.replace('#', ''));
     getHashtags(value.replace('#', ''), 1);
-    searchBar.current.focus();
   }, [getHashtags])
 
   usePreloader(()=>dispatch(getReviews()));
@@ -269,7 +267,7 @@ const ReviewCon = ({ history, location }) => {
 
   return (
     <>
-      <SearchBar hashtag value={search} onChange={searchOnChange} searchBar={searchBar}/>
+      <SearchBar hashtag value={search} onChange={searchOnChange} />
       <Review
         reviews={search?hashtags:reviews}
         content={content}

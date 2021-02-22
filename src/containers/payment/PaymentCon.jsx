@@ -63,6 +63,7 @@ const PaymentCon = ({
   const popup = useRef(null);
   const timer = useRef(null);
   const msgCallback=useRef(null);
+  const imp=useRef(null);
 
   const charge = useMemo(() => {
     let basic = 0;
@@ -407,6 +408,11 @@ const PaymentCon = ({
     }
   }, [order, history, getTotal]);
   useEffect(() => {
+    if(!imp.current){
+      imp.current=window.IMP;
+      imp.current.init('imp41611750');
+    }
+
     setPlatform(getPlatform());
 
     return () => {
