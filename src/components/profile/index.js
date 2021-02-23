@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   fontMaple: {
     fontFamily: "MaplestoryOTFBold",
+    backgroundColor: "white",
   },
   fontRobo: {
     fontFamily: "Roboto",
@@ -147,7 +148,7 @@ const Profile = ({
               }}
               handleClickOpen={handleClickOpen}
               detail={detail}
-              onChange={onChange}
+              detailChange={onChange}
               detailRef={detailRef}
               value={0}
             />

@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
   input: {
     fontFamily: "MaplestoryOTFBold",
     color: "black",
+    backgroundColor: "white",
   },
   btn: {
     margin: theme.spacing(3, 0, 1),

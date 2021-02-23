@@ -14,8 +14,10 @@ import FormControl from "@material-ui/core/FormControl";
 import PhoneFormatter from './PhoneFormatter';
 
 const useStyles = makeStyles((theme) => ({
-    fontMaple: {
+    input: {
       fontFamily: "MaplestoryOTFBold",
+      backgroundColor:'white',
+      color:'black'
     },
     fontRobo: {
       fontFamily: "Roboto",
@@ -74,7 +76,7 @@ const PhoneVerify=({
                 })}
                 size="small"
                 InputProps={{
-                  className: classes.fontMaple,
+                  className: classes.input,
                   inputComponent: PhoneFormatter,
                 }}
                 type="tel"
@@ -125,7 +127,7 @@ const PhoneVerify=({
                       </InputAdornment>
                     }
                     inputProps={{
-                      className: classes.fontMaple,
+                      className: classes.input,
                     }}
                     onChange={codeOnChange}
                     value={code}

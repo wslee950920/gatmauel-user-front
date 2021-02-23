@@ -10,14 +10,18 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-    fontMaple: {
+    input: {
       fontFamily: "MaplestoryOTFBold",
-      color:'black'
+      color:'black',
+      backgroundColor:'white'
     },
     error:{
         '& fieldset':{
             borderColor:theme.palette.error.main
         }
+    },
+    fctl:{
+        backgroundColor:'white'
     }
 }));
 
@@ -44,6 +48,7 @@ const AddrInput=({
                 fullWidth
                 margin={dense?'dense':"normal"}
                 focused={false}
+                className={classes.fctl}
             >
                 <InputLabel 
                     htmlFor="outlined-adornment-address" 
@@ -73,7 +78,7 @@ const AddrInput=({
                     })}
                     inputRef={addrRef}
                     inputProps={{
-                        className: classes.fontMaple,
+                        className: classes.input,
                         onClick: handleClickOpen,
                     }}
                     value={addr}
@@ -89,7 +94,7 @@ const AddrInput=({
                 label="상세주소"
                 size="small"
                 inputProps={{ 
-                    className: classes.fontMaple,
+                    className: classes.input,
                 }}
                 value={detail}
                 onChange={detailChange}
