@@ -103,6 +103,7 @@ const Payment = ({
               edge="start"
               size="small"
               onClick={() => history.goBack()}
+              disabled={wait}
             >
               <ArrowBackIosIcon />
             </IconButton>

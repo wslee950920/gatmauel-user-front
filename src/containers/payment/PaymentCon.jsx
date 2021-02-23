@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter } from 'react-router-dom';
+import crypto from 'crypto';
 
 import { user as userAPI } from "../../lib/api/client";
 import { getPlatform } from '../../lib/usePlatform';
@@ -111,7 +112,7 @@ const PaymentCon = ({
       setDetail(value);
     }
   }, [])
-  const onSubmit = useCallback((e) => {
+  const onSubmit = useCallback(async (e) => {
     e.preventDefault();
 
     if (!measure) {
@@ -168,49 +169,113 @@ const PaymentCon = ({
     setError(prev => ({ ...prev, addr: false, detail: false, phone: false }));
     setWait(true);
 
-    userAPI.post(`/api/order/pay/${measure}`, {
-      address: addr,
-      detail,
-      phone,
-      order: order.map((value) => {
-        return ({
-          id: value.id,
-          num: value.num,
-          name: value.name
-        })
-      }),
-      deli: method === 'delivery',
-      request: `${radio} ${text}`,
-      total: getTotal + charge,
-    }).then(({ data }) => {
-      if (measure === 'kakao') {
-        if (platform) {
-          popup.current = window.open(data.result.next_redirect_mobile_url, '_blank');
-        } else {
-          popup.current = window.open(data.result.next_redirect_pc_url, '카카오페이', 'width=450, height=650, left=100, top=150')
+    try{
+      const orderId=await crypto.randomBytes(5).toString('hex').toUpperCase();
+    
+      if(measure==='card'){     
+        if(imp.current){
+          await imp.current.request_pay({
+            pg:'html5_inicis',
+            pay_method:'card',
+            merchant_uid:orderId,
+            name:`${order[0].name}`+(order.length>1?` 외 ${order.length-1}`:''),
+            amount:getTotal+charge,
+            tax_free:0,
+            buyer_tel:phone,
+            buyer_name:user?user.nick:`gatmauel${phone.slice(-4)}`,
+            buyer_email:'',
+            m_redirect_url:`http://localhost:3000/result?orderId=${orderId}`
+          }, async (resp)=>{
+            if(resp.success){
+              await userAPI.post(`/api/order/pay/${measure}`, {
+                orderId,
+                address: addr,
+                detail,
+                phone,
+                order: order.map((value) => {
+                  return ({
+                    id: value.id,
+                    num: value.num,
+                    name: value.name
+                  })
+                }),
+                deli: method === 'delivery',
+                request: `${radio} ${text}`,
+                total: getTotal + charge,
+                imp:resp.imp_uid
+              }).then(({ data }) => {
+                dispatch(MakeOrder(data));
+                history.push('/result?orderId=test');
+              }).catch((err) => {
+                if (err.response) {
+                  if (err.response.status === 406 ||
+                    err.response.status === 403 ||
+                    err.response.status === 401
+                  ) {
+                    setError(prev => ({ ...prev, phone: true }));
+                    alert('전화번호 인증을 해주세요.');
+          
+                    return;
+                  }
+                }
+                
+                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+              })
+            }
+            else {
+              alert('결제에 실패하였습니다. 잠시 후 다시 시도해주십시오.');
+              setWait(false);
+            }
+          })
         }
-      } else if (measure === 'later') {
-        dispatch(MakeOrder(data));
-        history.push('/result');
+      } else{
+        await userAPI.post(`/api/order/pay/${measure}`, {
+          orderId,
+          address: addr,
+          detail,
+          phone,
+          order: order.map((value) => {
+            return ({
+              id: value.id,
+              num: value.num,
+              name: value.name
+            })
+          }),
+          deli: method === 'delivery',
+          request: `${radio} ${text}`,
+          total: getTotal + charge,
+        }).then(({ data }) => {
+          if (measure === 'kakao') {
+            if (platform) {
+              popup.current = window.open(data.result.next_redirect_mobile_url, '_blank');
+            } else {
+              popup.current = window.open(data.result.next_redirect_pc_url, '카카오페이', 'width=450, height=650, left=100, top=150')
+            }
+          } else if (measure === 'later') {
+            dispatch(MakeOrder(data));
+            history.push('/result?orderId=test');
+          }
+        }).catch((err) => {
+          if (err.response) {
+            if (err.response.status === 406 ||
+              err.response.status === 403 ||
+              err.response.status === 401
+            ) {
+              setError(prev => ({ ...prev, phone: true }));
+              alert('전화번호 인증을 해주세요.');
+              setWait(false);
+    
+              return;
+            }
+          }
+          
+          alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+        });
       }
-    }).catch((err) => {
-      if (err.response) {
-        if (err.response.status === 406 ||
-          err.response.status === 403 ||
-          err.response.status === 401
-        ) {
-          setError(prev => ({ ...prev, phone: true }));
-          alert('전화번호 인증을 해주세요.');
-
-          return;
-        }
-      }
-
-      alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-    }).finally(()=>{
-      setWait(false);
-    })
-  }, [dispatch, history, measure, distance, platform, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
+    } catch(error){
+      console.log('submit error');
+    }
+  }, [dispatch, history, user, measure, distance, platform, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
   const phoneChange = useCallback(
     (e) => {
       const { value } = e.target;
@@ -222,11 +287,13 @@ const PaymentCon = ({
 
       if (info && value === info.phone) {
         setConfirm(true);
+      } else if(temp && value === temp.phone){
+        setConfirm(true);
       } else {
         setConfirm(false);
       }
     },
-    [info]
+    [info, temp]
   );
   const checkPhone = useCallback(() => {
     setError((prev) => ({ ...prev, code: '', phone: false }));
@@ -410,7 +477,7 @@ const PaymentCon = ({
   useEffect(() => {
     if(!imp.current){
       imp.current=window.IMP;
-      imp.current.init('imp41611750');
+      imp.current.init(process.env.REACT_APP_IAMPORT);
     }
 
     setPlatform(getPlatform());
@@ -440,7 +507,7 @@ const PaymentCon = ({
         if (event.data) {
           if (event.data.success) {
             dispatch(MakeOrder(event.data.success));
-            history.push('/result');
+            history.push('/result?orderId=test');
           } else if (event.data.cancel) {
             alert(event.data.cancel);
             setWait(false);

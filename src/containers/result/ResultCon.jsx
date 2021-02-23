@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import querystring from 'querystring';
 
 import Result from '../../components/result'; 
 import useGetTotal from '../../lib/useGetTotal';
 
 import {initOrder} from '../../modules/order';
 
-const ResultCon=({history})=>{
+const ResultCon=({history, location})=>{
     const { order, result }=useSelector(state=>(
         {
             order:state.order.order,
@@ -27,6 +28,10 @@ const ResultCon=({history})=>{
             dispatch(initOrder());
         }
     }, [dispatch]);
+    useEffect(()=>{
+        const query=querystring.parse(location.search.split('?')[1]);
+        console.log(query);
+    }, [location]);
 
     return result?(
         <Result 
