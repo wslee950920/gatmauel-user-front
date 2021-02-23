@@ -57,7 +57,7 @@ const RequestText=({radio, text, onChange})=>{
                 aria-label="request text area" 
                 rowsMin={3} 
                 rowsMax={3}
-                placeholder="ex)견과류 빼주세요. 덜 맵게 해주세요." 
+                placeholder="ex)견과류 빼주세요. 청양고추 넣어주세요." 
                 value={text}
                 onChange={onChange}
                 name='text'

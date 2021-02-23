@@ -39,8 +39,6 @@ const persistConfig = {
       expiredState: {
         order: [],
         temp: {},
-        result: null,
-        error: null,
       },
       autoExpire: true,
     }),

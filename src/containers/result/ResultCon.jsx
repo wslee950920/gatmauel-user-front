@@ -1,43 +1,65 @@
-import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, {useState, useEffect, useMemo} from 'react';
+
 import {withRouter} from 'react-router-dom';
 import querystring from 'querystring';
+import { useDispatch } from "react-redux";
 
 import Result from '../../components/result'; 
-import useGetTotal from '../../lib/useGetTotal';
 
-import {initOrder} from '../../modules/order';
+import { initOrder } from "../../modules/order";
+import { user as userAPI } from "../../lib/api/client";
 
 const ResultCon=({history, location})=>{
-    const { order, result }=useSelector(state=>(
-        {
-            order:state.order.order,
-            result:state.order.result
-        }
-    ));
+    const [details, setDetails]=useState(null);
+    const [order, setOrder]=useState(null);
     const dispatch=useDispatch();
-    const getTotal=useGetTotal(order);
+
+    const getTotal = useMemo(() => {
+        if(details){
+            return details.reduce(
+                (prev, value) => prev + value.price * (value.num === "" ? 0 : value.num),
+                0
+            );
+        } else{
+            return 0;
+        }
+      }, [details]);
+    
 
     useEffect(()=>{
-        if(order.length===0||!result){
+        const query=querystring.parse(location.search.split('?')[1]);
+        if(!query.orderId){
             history.push('/');
+
+            return;
         }
-    }, [order, result, history]);
+
+        userAPI.get(`api/order/result/${query.orderId}`)
+            .then(({data})=>{
+                setOrder(data.order);
+                setDetails(data.details.map((value)=>{
+                    return {
+                        num:value.num,
+                        ...value.food
+                    }
+                }));
+            })
+            .catch(()=>{
+                alert('데이터가 없습니다.');
+                history.push('/');
+            })
+    }, [location, history]);
     useEffect(()=>{
         return()=>{
             dispatch(initOrder());
         }
     }, [dispatch]);
-    useEffect(()=>{
-        const query=querystring.parse(location.search.split('?')[1]);
-        console.log(query);
-    }, [location]);
 
-    return result?(
+    return order&&details?(
         <Result 
-            order={order}
+            details={details}
             getTotal={getTotal}
-            result={result}
+            order={order}
         />
     ):null
 }

@@ -11,10 +11,6 @@ const SET_ADDRESS = "order/SET_ADDRESS";
 
 const INIT_ORDER = "order/INIT";
 
-const MAKE_ORDER = "order/FINISH";
-
-export const MakeOrder = createAction(MAKE_ORDER);
-
 export const insertToCart = createAction(INSERT_TO_CART);
 export const subOrder = createAction(SUB_ORDER);
 export const addOrder = createAction(ADD_ORDER);
@@ -29,15 +25,10 @@ export const initOrder = createAction(INIT_ORDER);
 const initialState = {
   order: [],
   temp: {},
-  result: null,
 };
 
 const order = handleActions(
   {
-    [MAKE_ORDER]: (state, { payload: result }) => ({
-      ...state,
-      result,
-    }),
     [INIT_ORDER]: () => ({
       ...initialState,
     }),

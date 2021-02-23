@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     border: "solid #dcdcdc",
     borderRadius: "8px",
+    backgroundColor: "white",
   },
   root: {
     padding: theme.spacing(0.8),
