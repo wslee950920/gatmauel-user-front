@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import TextField from "@material-ui/core/TextField";
@@ -6,6 +6,8 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
+
+import PhoneFomatter from "../../common/Phone/PhoneFormatter";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -20,37 +22,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FindPW = () => {
+const FindPW = ({ nickname, phone, email, onChange, error, onSubmit }) => {
   const classes = useStyles();
 
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
-  }, []);
-
   return (
-    <form className={classes.form} onSubmit={onSubmit}>
+    <form className={classes.form} onSubmit={onSubmit} noValidate>
       <TextField
         variant="outlined"
         margin="normal"
         required
         fullWidth
-        id="name"
-        label="이름"
-        name="name"
+        label="닉네임"
+        name="nickname"
         size="small"
         InputProps={{ className: classes.fontRobo }}
+        value={nickname}
+        onChange={onChange}
+        error={error.nickname}
       />
       <TextField
         variant="outlined"
         margin="normal"
         required
         fullWidth
-        id="email"
         label="이메일"
         name="email"
         size="small"
         InputProps={{ className: classes.fontRobo }}
         type="email"
+        value={email}
+        onChange={onChange}
+        error={error.email}
       />
       <TextField
         variant="outlined"
@@ -59,10 +61,15 @@ const FindPW = () => {
         fullWidth
         name="phone"
         label="전화번호"
-        id="phone"
         size="small"
-        InputProps={{ className: classes.fontRobo }}
+        InputProps={{
+          className: classes.fontRobo,
+          inputComponent: PhoneFomatter,
+        }}
         type="tel"
+        value={phone}
+        onChange={onChange}
+        error={error.phone}
       />
       <Button
         type="submit"

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 
 import LockIcon from "@material-ui/icons/Lock";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -35,13 +35,18 @@ const a11yProps = (index) => {
   };
 };
 
-const FindInfo = () => {
+const FindInfo = ({
+  nickname,
+  phone,
+  email,
+  onChange,
+  handleChange,
+  value,
+  error,
+  onSubmit,
+  result,
+}) => {
   const classes = useStyles();
-  const [value, setValue] = useState(0);
-
-  const handleChange = useCallback((event, newValue) => {
-    setValue(newValue);
-  }, []);
 
   return (
     <>
@@ -57,10 +62,24 @@ const FindInfo = () => {
             <Tab label="PW찾기" {...a11yProps(1)} />
           </FullWidthTabs>
           <TabPanel value={value} index={0}>
-            <FindID />
+            <FindID
+              nickname={nickname}
+              phone={phone}
+              onChange={onChange}
+              error={error}
+              onSubmit={onSubmit}
+              result={result}
+            />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <FindPW />
+            <FindPW
+              nickname={nickname}
+              phone={phone}
+              email={email}
+              onChange={onChange}
+              error={error}
+              onSubmit={onSubmit}
+            />
           </TabPanel>
         </div>
       </Container>
@@ -68,4 +87,4 @@ const FindInfo = () => {
   );
 };
 
-export default FindInfo;
+export default React.memo(FindInfo);

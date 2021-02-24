@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
       fontFamily: "Roboto",
       backgroundColor: theme.palette.primary.light,
     },
+    fctrl:{
+      backgroundColor:'white'
+    }
   }));
 
 const PhoneVerify=({
@@ -65,90 +68,91 @@ const PhoneVerify=({
     
     return(
         <>
+          <div className={classes.field}>
+            <TextField
+              variant="outlined"
+              margin={value===0?'dense':"normal"}
+              fullWidth
+              name="phone"
+              {...(value!==0&&{
+                label:'전화번호'
+              })}
+              size="small"
+              InputProps={{
+                className: classes.input,
+                inputComponent: PhoneFormatter,
+              }}
+              type="tel"
+              value={phone}
+              onChange={phoneChange}
+              error={error.phone}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              className={clsx(value===0?classes.value:classes.button)}
+              {...(!!phone && {
+                onClick: checkPhone,
+              })}
+              {...(verify && {
+                style: { fontSize: "0.65rem" },
+              })}
+            >
+              {!verify ? "인증" : "재전송"}
+            </Button>
+          </div>
+          {verify && (
             <div className={classes.field}>
-              <TextField
+              <FormControl
                 variant="outlined"
-                margin={value===0?'dense':"normal"}
-                fullWidth
-                name="phone"
-                {...(value!==0&&{
-                  label:'전화번호'
-                })}
                 size="small"
-                InputProps={{
-                  className: classes.input,
-                  inputComponent: PhoneFormatter,
-                }}
-                type="tel"
-                value={phone}
-                onChange={phoneChange}
-                error={error.phone}
-              />
+                fullWidth
+                margin="dense"
+                error={!!error.code}
+                className={classes.fctrl}
+              >
+                <InputLabel htmlFor="outlined-adornment-code">
+                  인증번호
+                </InputLabel>
+                <OutlinedInput
+                  fullWidth
+                  name="code"
+                  id="outlined-adornment-code"
+                  label="인증번호"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Typography
+                        variant="body2"
+                        className={classes.fontRobo}
+                        color="error"
+                      >
+                        {timer}
+                      </Typography>
+                    </InputAdornment>
+                  }
+                  inputProps={{
+                    className: classes.input,
+                  }}
+                  onChange={codeOnChange}
+                  value={code}
+                />
+                {!!error.code && (
+                  <FormHelperText id="outlined-adornment-code-error">
+                    {error.code}
+                  </FormHelperText>
+                )}
+              </FormControl>
               <Button
                 variant="contained"
                 color="primary"
-                className={clsx(value===0?classes.value:classes.button)}
-                {...(!!phone && {
-                  onClick: checkPhone,
-                })}
-                {...(verify && {
-                  style: { fontSize: "0.65rem" },
-                })}
+                className={classes.verify}
+                onClick={confirmPhone}
               >
-                {!verify ? "인증" : "재전송"}
+                확인
               </Button>
             </div>
-            {verify && (
-              <div className={classes.field}>
-                <FormControl
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  margin="dense"
-                  error={!!error.code}
-                >
-                  <InputLabel htmlFor="outlined-adornment-code">
-                    인증번호
-                  </InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    name="code"
-                    id="outlined-adornment-code"
-                    label="인증번호"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <Typography
-                          variant="body2"
-                          className={classes.fontRobo}
-                          color="error"
-                        >
-                          {timer}
-                        </Typography>
-                      </InputAdornment>
-                    }
-                    inputProps={{
-                      className: classes.input,
-                    }}
-                    onChange={codeOnChange}
-                    value={code}
-                  />
-                  {!!error.code && (
-                    <FormHelperText id="outlined-adornment-code-error">
-                      {error.code}
-                    </FormHelperText>
-                  )}
-                </FormControl>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.verify}
-                  onClick={confirmPhone}
-                >
-                  확인
-                </Button>
-              </div>
-            )}
-        </>
+          )}
+      </>
     )
 }
 

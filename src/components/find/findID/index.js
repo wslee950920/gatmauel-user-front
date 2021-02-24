@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import TextField from "@material-ui/core/TextField";
@@ -6,6 +6,8 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
+
+import PhoneFomatter from "../../common/Phone/PhoneFormatter";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -18,40 +20,50 @@ const useStyles = makeStyles((theme) => ({
   fontRobo: {
     fontFamily: "Roboto",
   },
+  result: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: theme.spacing(2),
+  },
 }));
 
-const FindId = () => {
+const FindId = ({ nickname, phone, onChange, error, onSubmit, result }) => {
   const classes = useStyles();
 
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
-  }, []);
-
   return (
-    <form className={classes.form} onSubmit={onSubmit}>
+    <form className={classes.form} onSubmit={onSubmit} noValidate>
       <TextField
         variant="outlined"
         margin="normal"
         required
         fullWidth
-        id="name"
-        label="이름"
-        name="name"
+        label="닉네임"
+        name="nickname"
         size="small"
         InputProps={{ className: classes.fontRobo }}
+        value={nickname}
+        onChange={onChange}
+        error={error.nickname}
       />
       <TextField
         variant="outlined"
         margin="normal"
         required
         fullWidth
-        id="phone"
         label="전화번호"
         name="phone"
         size="small"
-        InputProps={{ className: classes.fontRobo }}
+        InputProps={{
+          className: classes.fontRobo,
+          inputComponent: PhoneFomatter,
+        }}
         type="tel"
+        value={phone}
+        onChange={onChange}
+        error={error.phone}
       />
+      {result && <div className={classes.result}>{result}</div>}
       <Button
         type="submit"
         fullWidth
