@@ -220,6 +220,21 @@ const ProfileCon=({history})=>{
             return;
         }
 
+        if(addr!==''&&detail===''){
+            setError(prev=>({
+                ...prev,
+                detail:true
+            }))
+            return;
+        }
+        if(addr===''&&detail!==''){
+            setError(prev=>({
+                ...prev,
+                addr:true
+            }))
+            return;
+        }
+
         dispatch(userUpdate({
             nickname, 
             address:addr, 

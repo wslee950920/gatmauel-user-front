@@ -170,19 +170,24 @@ const ReviewCon = ({ history, location }) => {
     setHloading(true);
     setHasNextPage(true);
 
-    axios.get(`http://localhost:9090/api/review/hashtag?hashtag=${query}&page=${page}`)
-      .then((res)=>{
+    axios.post(`http://localhost:9090/api/review/hashtag`, {
+      hashtag:query,
+      page
+    }).then((res)=>{
         if(page===1){
           setHashtags(res.data.reviews);
         } else{
           setHashtags(prev=>[...prev, ...res.data.reviews]);
         }
         setHasNextPage(!res.data.is_end);
-      })
-      .catch((err)=>{
+      }).catch((err)=>{
         if(err.response&&err.response.status===204){
           setHasNextPage(false);
+
+          return;
         }
+
+        alert('오류가 발생하였습니다. 잠시 후 다시 시도해주십시오.');
       })
       .finally(()=>{
         setHloading(false);
