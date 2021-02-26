@@ -184,7 +184,7 @@ const PaymentCon = ({
             buyer_tel:phone,
             buyer_name:user?user.nick:`gatmauel${phone.slice(-4)}`,
             buyer_email:'',
-            m_redirect_url:`http://localhost:3000/result?orderId=${orderId}`
+            m_redirect_url:`https://www.gatmauel.com/result?orderId=${orderId}`
           }, async (resp)=>{
             if(resp.success){
               await userAPI.post(`/api/order/pay/${measure}`, {
@@ -509,7 +509,7 @@ const PaymentCon = ({
   }, []);
   useEffect(() => {
     msgCallback.current = (event) => {
-      if (event.origin === 'http://localhost:9090') {
+      if (event.origin === 'https://www.gatmauel.com/@user') {
         if (event.data) {
           if (event.data.success) {
             history.push(`/result?orderId=${event.data.success}`);
@@ -527,7 +527,7 @@ const PaymentCon = ({
   }, [dispatch, history]);
   useEffect(() => {
     if (verify) {
-      es.current = new EventSource("http://localhost:9090/api/user/timer", {
+      es.current = new EventSource("https://www.gatmauel.com/@user/user/timer", {
         withCredentials: true,
       });
 

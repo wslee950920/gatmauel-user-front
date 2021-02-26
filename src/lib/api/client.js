@@ -1,10 +1,10 @@
 import axios from "axios";
 
 export const user = axios.create({
-  baseURL: "http://localhost:9090",
+  baseURL: "https://www.gatmauel.com/@user",
   withCredentials: true,
 });
 
 export const admin = axios.create({
-  baseURL: "http://localhost:9091",
+  baseURL: "https://www.gatmauel.com/@admin",
 });

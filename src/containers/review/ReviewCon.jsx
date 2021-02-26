@@ -170,7 +170,7 @@ const ReviewCon = ({ history, location }) => {
     setHloading(true);
     setHasNextPage(true);
 
-    axios.post(`http://localhost:9090/api/review/hashtag`, {
+    axios.post(`https://www.gatmauel.com/@user/review/hashtag`, {
       hashtag:query,
       page
     }).then((res)=>{

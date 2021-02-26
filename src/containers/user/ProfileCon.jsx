@@ -338,7 +338,7 @@ const ProfileCon=({history})=>{
     }, [])
     useEffect(()=>{
         if(verify){
-            es.current=new EventSource('http://localhost:9090/api/user/timer',{
+            es.current=new EventSource('https://www.gatmauel.com/@user/user/timer',{
                 withCredentials: true
             });
 

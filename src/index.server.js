@@ -79,6 +79,4 @@ const serve = express.static(path.resolve("./build"), { index: false });
 app.use(serve);
 app.use(serverRender);
 
-app.listen(5000, () => {
-  console.log("Running on http://localhost:5000");
-});
+app.listen(5000);
