@@ -99,7 +99,7 @@ const ProfileCon=({history})=>{
                 oncomplete:(data)=>{
                     setAddr(data.address);
 
-                    userAPI.get('/api/order/distance', {
+                    userAPI.get('/order/distance', {
                         params:{
                           goal:data.address
                         }
@@ -138,7 +138,7 @@ const ProfileCon=({history})=>{
         setAddr(addr);
         setOpen(false);
 
-        userAPI.get('/api/order/distance', {
+        userAPI.get('/order/distance', {
             params:{
               goal:addr
             }
@@ -263,7 +263,7 @@ const ProfileCon=({history})=>{
             return;
         }
 
-        userAPI.post('/api/user/phone', {phone})
+        userAPI.post('/user/phone', {phone})
             .then((res)=>{
                 setVerify(true);
 
@@ -292,7 +292,7 @@ const ProfileCon=({history})=>{
             return;
         }
 
-        userAPI.post('/api/user/callback', {code, phone})
+        userAPI.post('/user/callback', {code, phone})
             .then(()=>{
                 dispatch(setInfoPhone(phone));
 

@@ -33,7 +33,7 @@ const LoginCon=({history})=>{
                     success:(info)=>{
                         const phone=info.kakao_account.phone_number.replace('+82 ', '0').replace(/-/g,'');
 
-                        userAPI.post('/api/auth/kakao/v2', {
+                        userAPI.post('/auth/kakao/v2', {
                           snsId:info.id,
                           email:info.kakao_account.email,
                           eVerified:info.kakao_account.is_email_verified,

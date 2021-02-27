@@ -1,4 +1,3 @@
 import { admin } from "./client";
 
-export const notices = (page) =>
-  admin.get(`/api/notice/list?page=${page || 1}`);
+export const notices = (page) => admin.get(`/notice/list?page=${page || 1}`);

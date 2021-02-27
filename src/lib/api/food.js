@@ -1,8 +1,8 @@
 import { admin } from "./client";
 
 export const category = () => {
-  return admin.get(`/api/category/list`);
+  return admin.get(`/category/list`);
 };
 export const food = () => {
-  return admin.get("/api/food/list");
+  return admin.get("/food/list");
 };

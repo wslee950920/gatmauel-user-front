@@ -82,7 +82,7 @@ const FindCon=({history})=>{
             return;
         }
 
-        userAPI.post(`/api/auth/find/${value===0?'email':'password'}`, {
+        userAPI.post(`/auth/find/${value===0?'email':'password'}`, {
             nickname,
             phone,
             ...(value===1&&{

@@ -184,10 +184,10 @@ const PaymentCon = ({
             buyer_tel:phone,
             buyer_name:user?user.nick:`gatmauel${phone.slice(-4)}`,
             buyer_email:'',
-            m_redirect_url:`https://www.gatmauel.com/result?orderId=${orderId}`
+            m_redirect_url:(process.env.NODE_ENV==='production'?`https://www.gatmauel.com/result?orderId=${orderId}`:`http://localhost:3000/result?orderId=${orderId}`)
           }, async (resp)=>{
             if(resp.success){
-              await userAPI.post(`/api/order/pay/${measure}`, {
+              await userAPI.post(`/order/pay/${measure}`, {
                 orderId,
                 address: addr,
                 detail,
@@ -233,7 +233,7 @@ const PaymentCon = ({
           })
         }
       } else{
-        await userAPI.post(`/api/order/pay/${measure}`, {
+        await userAPI.post(`/order/pay/${measure}`, {
           orderId,
           address: addr,
           detail,
@@ -310,7 +310,7 @@ const PaymentCon = ({
     }
 
     userAPI
-      .post("/api/user/phone", { phone })
+      .post("/user/phone", { phone })
       .then((res) => {
         setVerify(true);
 
@@ -340,7 +340,7 @@ const PaymentCon = ({
     }
 
     userAPI
-      .post("/api/user/temp", { code, phone })
+      .post("/user/temp", { code, phone })
       .then(() => {
         dispatch(setTempPhone(phone));
 
@@ -440,7 +440,7 @@ const PaymentCon = ({
   useEffect(() => {
     if (method === 'delivery') {
       if (addr) {
-        userAPI.get('/api/order/distance', {
+        userAPI.get('/order/distance', {
           params: {
             goal: addr
           }
@@ -509,7 +509,7 @@ const PaymentCon = ({
   }, []);
   useEffect(() => {
     msgCallback.current = (event) => {
-      if (event.origin === 'https://www.gatmauel.com/@user') {
+      if (event.origin === (process.env.NODE_ENV==='production'?'https://www.gatmauel.com/@user':'http://localhost:9090')) {
         if (event.data) {
           if (event.data.success) {
             history.push(`/result?orderId=${event.data.success}`);
@@ -527,7 +527,7 @@ const PaymentCon = ({
   }, [dispatch, history]);
   useEffect(() => {
     if (verify) {
-      es.current = new EventSource("https://www.gatmauel.com/@user/user/timer", {
+      es.current = new EventSource((process.env.NODE_ENV==='production'?"https://www.gatmauel.com/@user/user/timer":"http://localhost:9090/@user/user/timer"), {
         withCredentials: true,
       });
 
@@ -550,7 +550,7 @@ const PaymentCon = ({
       }
     } else if (value === 1) {
       if (user) {
-        userAPI.get('/api/order/recent').then((result) => {
+        userAPI.get('/order/recent').then((result) => {
           if (result.data.length === 1) {
             setAddr(result.data[0].address);
             setDetail(result.data[0].detail);

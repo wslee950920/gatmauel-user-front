@@ -34,7 +34,7 @@ const ResultCon=({history, location})=>{
             return;
         }
 
-        userAPI.get(`api/order/result/${query.orderId}`)
+        userAPI.get(`/order/result/${query.orderId}`)
             .then(({data})=>{
                 setOrder(data.order);
                 setDetails(data.details.map((value)=>{
