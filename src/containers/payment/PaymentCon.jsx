@@ -184,7 +184,7 @@ const PaymentCon = ({
             buyer_tel:phone,
             buyer_name:user?user.nick:`gatmauel${phone.slice(-4)}`,
             buyer_email:'',
-            m_redirect_url:(process.env.NODE_ENV==='production'?`https://www.gatmauel.com/result?orderId=${orderId}`:`http://localhost:3000/result?orderId=${orderId}`)
+            m_redirect_url:(process.env.NODE_ENV==='production'?`https://www.gatmauel.com/result?orderId=${orderId}`:`https://localhost/result?orderId=${orderId}`)
           }, async (resp)=>{
             if(resp.success){
               await userAPI.post(`/order/pay/${measure}`, {
@@ -509,7 +509,7 @@ const PaymentCon = ({
   }, []);
   useEffect(() => {
     msgCallback.current = (event) => {
-      if (event.origin === (process.env.NODE_ENV==='production'?'https://www.gatmauel.com/@user':'http://localhost:9090')) {
+      if (event.origin === (process.env.NODE_ENV==='production'?'https://www.gatmauel.com':'https://localhost')) {
         if (event.data) {
           if (event.data.success) {
             history.push(`/result?orderId=${event.data.success}`);
@@ -527,9 +527,7 @@ const PaymentCon = ({
   }, [dispatch, history]);
   useEffect(() => {
     if (verify) {
-      es.current = new EventSource((process.env.NODE_ENV==='production'?"https://www.gatmauel.com/@user/user/timer":"http://localhost:9090/@user/user/timer"), {
-        withCredentials: true,
-      });
+      es.current = new EventSource((process.env.NODE_ENV==='production'?"https://www.gatmauel.com/@user/user/timer":"https://localhost/@user/user/timer"));
 
       es.current.onmessage = (e) => {
         setSse(new Date(parseInt(e.data, 10)));

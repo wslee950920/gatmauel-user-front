@@ -172,7 +172,7 @@ const ReviewCon = ({ history, location }) => {
 
     axios.post(process.env.NODE_ENV==='production'
       ?`https://www.gatmauel.com/@user/review/hashtag`
-      :'http://localhost:9090/@user/review/hashtag', {
+      :'https://localhost/@user/review/hashtag', {
       hashtag:query,
       page
     }).then((res)=>{

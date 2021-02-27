@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
       fontFamily: "Roboto",
       backgroundColor: theme.palette.primary.light,
     },
-    fctrl:{
+    outlined:{
       backgroundColor:'white'
     }
   }));
@@ -109,7 +109,6 @@ const PhoneVerify=({
                 fullWidth
                 margin="dense"
                 error={!!error.code}
-                className={classes.fctrl}
               >
                 <InputLabel htmlFor="outlined-adornment-code">
                   인증번호
@@ -135,6 +134,7 @@ const PhoneVerify=({
                   }}
                   onChange={codeOnChange}
                   value={code}
+                  className={classes.outlined}
                 />
                 {!!error.code && (
                   <FormHelperText id="outlined-adornment-code-error">
