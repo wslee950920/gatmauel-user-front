@@ -3,7 +3,7 @@ import axios from "axios";
 export const user = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://www.gatmauel.com/@user"
+      ? "https://user.gatmauel.com/@user"
       : "https://localhost/@user",
   withCredentials: true,
 });
@@ -11,6 +11,6 @@ export const user = axios.create({
 export const admin = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://www.gatmauel.com/@admin"
+      ? "https://admin.gatmauel.com/@admin"
       : "https://localhost/@admin",
 });

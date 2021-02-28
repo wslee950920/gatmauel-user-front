@@ -171,7 +171,7 @@ const ReviewCon = ({ history, location }) => {
     setHasNextPage(true);
 
     axios.post(process.env.NODE_ENV==='production'
-      ?`https://www.gatmauel.com/@user/review/hashtag`
+      ?`https://user.gatmauel.com/@user/review/hashtag`
       :'https://localhost/@user/review/hashtag', {
       hashtag:query,
       page

@@ -52,6 +52,7 @@
     "mdbreact": "^4.27.0",
     "mini-css-extract-plugin": "0.9.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
+    "pm2": "^4.5.5",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",
@@ -72,6 +73,7 @@
     "react-virtualized": "^9.22.2",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
+    "redux-devtools-extension": "^2.13.8",
     "redux-persist": "^6.0.0",
     "redux-persist-expire": "^1.1.0",
     "redux-persist-transform-filter": "^0.0.20",
@@ -98,7 +100,7 @@
     "test": "node scripts/test.js",
     "predeploy": "node scripts/build.js",
     "deploy": "gh-pages -d build",
-    "start:server": "node dist/server.js",
+    "start:server": "./node_modules/.bin/pm2-runtime dist/server.js -i 0",
     "build:server": "node scripts/build.server.js"
   },
   "eslintConfig": {
@@ -175,8 +177,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^3.1.0",
-    "redux-devtools-extension": "^2.13.8",
-    "redux-logger": "^3.0.6"
+    "gh-pages": "^3.1.0"
   }
 }

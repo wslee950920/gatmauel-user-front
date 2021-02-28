@@ -265,6 +265,7 @@ const PaymentCon = ({
               err.response.status === 401
             ) {
               setError(prev => ({ ...prev, phone: true }));
+              setConfirm(false);
               alert('전화번호 인증을 해주세요.');
               setWait(false);
       
@@ -509,7 +510,7 @@ const PaymentCon = ({
   }, []);
   useEffect(() => {
     msgCallback.current = (event) => {
-      if (event.origin === (process.env.NODE_ENV==='production'?'https://www.gatmauel.com':'https://localhost')) {
+      if (event.origin === (process.env.NODE_ENV==='production'?'https://user.gatmauel.com':'https://localhost')) {
         if (event.data) {
           if (event.data.success) {
             history.push(`/result?orderId=${event.data.success}`);
@@ -527,7 +528,9 @@ const PaymentCon = ({
   }, [dispatch, history]);
   useEffect(() => {
     if (verify) {
-      es.current = new EventSource((process.env.NODE_ENV==='production'?"https://www.gatmauel.com/@user/user/timer":"https://localhost/@user/user/timer"));
+      es.current = new EventSource((process.env.NODE_ENV==='production'
+        ?"https://user.gatmauel.com/@user/user/timer"
+        :"https://localhost/@user/user/timer"));
 
       es.current.onmessage = (e) => {
         setSse(new Date(parseInt(e.data, 10)));

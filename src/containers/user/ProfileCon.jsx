@@ -338,7 +338,9 @@ const ProfileCon=({history})=>{
     }, [])
     useEffect(()=>{
         if(verify){
-            es.current=new EventSource((process.env.NODE_ENV==='production'?'https://www.gatmauel.com/@user/user/timer':'https://localhost/@user/user/timer'));
+            es.current=new EventSource((process.env.NODE_ENV==='production'
+                ?'https://user.gatmauel.com/@user/user/timer'
+                :'https://localhost/@user/user/timer'));
 
             es.current.onmessage=(e)=>{
                 setSse(new Date(parseInt(e.data, 10)));
