@@ -32,4 +32,4 @@ const ReadNoticeCon=({match})=>{
     return <ReadNotice notice={notices[id]}/>;
 }
 
-export default ReadNoticeCon;
+export default React.memo(ReadNoticeCon);

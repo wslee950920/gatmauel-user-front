@@ -30,7 +30,7 @@ const App = () => {
       <Route path={'/menu'} component={MenuPage} exact/>
       <Route path={'/map'} component={MapPage} exact/>
       <Route path={'/order'} component={OrderPage} exact/>
-      <Route path={'/result'} component={ResultPage} exact/>
+      <Route path={'/result'} component={ResultPage} />
       <Route path={'/payment/:method'} component={PaymentPage} exact/>
       <Route
         render={() => (

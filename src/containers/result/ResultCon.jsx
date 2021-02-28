@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useMemo} from 'react';
 
-import {withRouter} from 'react-router-dom';
 import querystring from 'querystring';
 import { useDispatch } from "react-redux";
 
@@ -64,4 +63,4 @@ const ResultCon=({history, location})=>{
     ):null
 }
 
-export default withRouter(ResultCon);
+export default React.memo(ResultCon);

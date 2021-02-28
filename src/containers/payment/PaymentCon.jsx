@@ -61,9 +61,6 @@ const PaymentCon = ({
   const getTotal = useGetTotal(order);
   const [measure, setMeasure] = useState(null);
   const [wait, setWait] = useState(false);
-  const popup = useRef(null);
-  const timer = useRef(null);
-  const msgCallback=useRef(null);
   const imp=useRef(null);
 
   const charge = useMemo(() => {
@@ -213,6 +210,7 @@ const PaymentCon = ({
                   ) {
                     setError(prev => ({ ...prev, phone: true }));
                     alert('전화번호 인증을 해주세요.');
+                    setConfirm(false);
                     setWait(false);
             
                     return;
@@ -251,9 +249,9 @@ const PaymentCon = ({
         }).then(({ data }) => {
           if (measure === 'kakao') {
             if (platform) {
-              popup.current = window.open(data.result.next_redirect_mobile_url, '_blank');
+              window.location.href=data.result.next_redirect_mobile_url;
             } else {
-              popup.current = window.open(data.result.next_redirect_pc_url, '카카오페이', 'width=450, height=650, left=100, top=150')
+              window.location.href=data.result.next_redirect_pc_url;
             }
           } else if (measure === 'later') {
             history.push(`/result?orderId=${data.orderId}`);
@@ -265,8 +263,8 @@ const PaymentCon = ({
               err.response.status === 401
             ) {
               setError(prev => ({ ...prev, phone: true }));
-              setConfirm(false);
               alert('전화번호 인증을 해주세요.');
+              setConfirm(false);
               setWait(false);
       
               return;
@@ -425,20 +423,6 @@ const PaymentCon = ({
   }, [user]);
 
   useEffect(() => {
-    if (wait) {
-      const loop = () => {
-        if (popup.current && popup.current.closed) {
-          setWait(false);
-
-          return;
-        }
-
-        timer.current = setTimeout(loop, 300);
-      }
-      timer.current=setTimeout(loop, 1500);
-    }
-  }, [wait]);
-  useEffect(() => {
     if (method === 'delivery') {
       if (addr) {
         userAPI.get('/order/distance', {
@@ -482,7 +466,7 @@ const PaymentCon = ({
     }
   }, [order, history, getTotal]);
   useEffect(() => {
-    if(!imp.current){
+    if(!imp.current&&window.IMP){
       imp.current=window.IMP;
       imp.current.init(process.env.REACT_APP_IAMPORT);
     }
@@ -494,38 +478,14 @@ const PaymentCon = ({
         es.current.close();
       }
 
-      if (timer && timer.current) {
-        clearTimeout(timer.current);
-      }
-
       //unmount state update failed
       setAddr('');
       setDetail('');
       setPhone('');
       setText('');
       setWait(false);
-
-      window.removeEventListener('message', msgCallback.current);
     };
   }, []);
-  useEffect(() => {
-    msgCallback.current = (event) => {
-      if (event.origin === (process.env.NODE_ENV==='production'?'https://user.gatmauel.com':'https://localhost')) {
-        if (event.data) {
-          if (event.data.success) {
-            history.push(`/result?orderId=${event.data.success}`);
-          } else if (event.data.cancel) {
-            alert(event.data.cancel);
-            setWait(false);
-          } else if (event.data.fail) {
-            alert(event.data.fail);
-            setWait(false);
-          }
-        }
-      }
-    }
-    window.addEventListener('message', msgCallback.current);
-  }, [dispatch, history]);
   useEffect(() => {
     if (verify) {
       es.current = new EventSource((process.env.NODE_ENV==='production'
