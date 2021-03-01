@@ -168,115 +168,93 @@ const PaymentCon = ({
 
     try{
       const orderId=await crypto.randomBytes(5).toString('hex').toUpperCase();
-
-      if(measure==='card'){     
-        if(imp.current){
-          await imp.current.request_pay({
-            pg:'html5_inicis',
-            pay_method:'card',
-            merchant_uid:orderId,
-            name:`${order[0].name}`+(order.length>1?` 외 ${order.length-1}`:''),
-            amount:getTotal+charge,
-            tax_free:0,
-            buyer_tel:phone,
-            buyer_name:user?user.nick:`gatmauel${phone.slice(-4)}`,
-            buyer_email:'',
-            m_redirect_url:(process.env.NODE_ENV==='production'?`https://www.gatmauel.com/result?orderId=${orderId}`:`https://localhost/result?orderId=${orderId}`)
-          }, async (resp)=>{
-            if(resp.success){
-              await userAPI.post(`/order/pay/${measure}`, {
-                orderId,
-                address: addr,
-                detail,
-                phone,
-                order: order.map((value) => {
-                  return ({
-                    id: value.id,
-                    num: value.num,
-                    name: value.name
-                  })
-                }),
-                deli: method === 'delivery',
-                request: `${radio}. ${text}`,
-                total: getTotal + charge,
-                imp:resp.imp_uid
-              }).then(({ data }) => {
-                history.push(`/result?orderId=${data.orderId}`);
-              }).catch((err) => {
-                if (err.response) {
-                  if (err.response.status === 406 ||
-                    err.response.status === 403 ||
-                    err.response.status === 401
-                  ) {
-                    setError(prev => ({ ...prev, phone: true }));
-                    alert('전화번호 인증을 해주세요.');
-                    setConfirm(false);
-                    setWait(false);
-            
-                    return;
-                  }
-                }
-                
-                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-                setWait(false);
-
-                return;
-              });
-            } else {
-              alert('결제에 실패하였습니다. 잠시 후 다시 시도해주십시오.');
-              setWait(false);
-
-              return;
-            }
+      await userAPI.post(`/order/pay/${measure}`, {
+        orderId,
+        address: addr,
+        detail,
+        phone,
+        order: order.map((value) => {
+          return ({
+            id: value.id,
+            num: value.num,
+            name: value.name
           })
+        }),
+        deli: method === 'delivery',
+        request: `${radio}. ${text}`,
+        total: getTotal + charge,
+      }).then(({ data }) => {
+        if (measure === 'kakao') {
+          if (platform) {
+            window.location.href=data.result.next_redirect_mobile_url;
+          } else {
+            window.location.href=data.result.next_redirect_pc_url;
+          }
+        } else if (measure === 'later') {
+          history.push(`/result?orderId=${orderId}`);
+        } else if(measure==='card'){
+          if(imp.current){
+            imp.current.request_pay({
+              pg:'html5_inicis',
+              pay_method:'card',
+              merchant_uid:orderId,
+              name:`${order[0].name}`+(order.length>1?` 외 ${order.length-1}`:''),
+              amount:getTotal+charge,
+              tax_free:0,
+              buyer_tel:phone,
+              buyer_name:user?user.nick:`gatmauel${phone.slice(-4)}`,
+              buyer_email:'',
+              m_redirect_url:(process.env.NODE_ENV==='production'?`https://www.gatmauel.com/result?orderId=${orderId}`:`https://localhost/result?orderId=${orderId}`)
+            }, (resp)=>{
+              if(resp.success){
+                history.push(`/result?orderId=${orderId}`);
+              } else{
+                if(resp.error_msg==="사용자가 결제를 취소하셨습니다"){
+                  userAPI.get(`/order/cancel?orderId=${orderId}`).then(()=>{
+                    alert(resp.error_msg);
+                    history.push('/order');
+                  }).catch(()=>{
+                    alert('오류가 발생하였습니다. 관리자에게 문의해주세요.');
+                    setWait(false);
+                  })
+                } else{
+                  userAPI.get(`/order/fail?orderId=${orderId}`).then(()=>{
+                    alert(resp.error_msg);
+                  }).catch(()=>{
+                    alert('오류가 발생하였습니다. 관리자에게 문의해주세요.');
+                  }).finally(()=>{
+                    setWait(false);
+                  })  
+                }
+              }
+            });
+          }
         }
-      } else{
-        await userAPI.post(`/order/pay/${measure}`, {
-          orderId,
-          address: addr,
-          detail,
-          phone,
-          order: order.map((value) => {
-            return ({
-              id: value.id,
-              num: value.num,
-              name: value.name
-            })
-          }),
-          deli: method === 'delivery',
-          request: `${radio}. ${text}`,
-          total: getTotal + charge,
-        }).then(({ data }) => {
-          if (measure === 'kakao') {
-            if (platform) {
-              window.location.href=data.result.next_redirect_mobile_url;
-            } else {
-              window.location.href=data.result.next_redirect_pc_url;
-            }
-          } else if (measure === 'later') {
-            history.push(`/result?orderId=${data.orderId}`);
-          }
-        }).catch((err) => {
-          if (err.response) {
-            if (err.response.status === 406 ||
-              err.response.status === 403 ||
-              err.response.status === 401
-            ) {
-              setError(prev => ({ ...prev, phone: true }));
-              alert('전화번호 인증을 해주세요.');
-              setConfirm(false);
-              setWait(false);
-      
-              return;
-            }
-          }
-          
-          alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-          setWait(false);
+      }).catch((err) => {
+        if (err.response) {
+          if (err.response.status === 406 ||
+            err.response.status === 403 ||
+            err.response.status === 401
+          ) {
+            setError(prev => ({ ...prev, phone: true }));
+            alert('전화번호 인증을 해주세요.');
+            setConfirm(false);
+            setWait(false);
 
-          return;
-        });
-      }
+            return;
+          } else{
+            alert('결제를 실패하였습니다. 잠시 후 다시 시도해주십시오.');
+            setWait(false);
+
+            return;
+          }
+        }
+    
+        alert('오류가 발생했습니다. 관리자에게 문의해주세요.');
+        setWait(false);
+
+        return;
+      });
     } catch(error){
       console.log('submit error');
     }
@@ -329,7 +307,7 @@ const PaymentCon = ({
             return;
           }
 
-          alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
+          alert("오류가 발생했습니다. 관리자에게 문의해주세요.");
         }
       });
   }, [phone, confirm]);
@@ -369,7 +347,7 @@ const PaymentCon = ({
             return;
           }
 
-          alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
+          alert("오류가 발생했습니다. 관리자에게 문의해주세요.");
         }
       });
   }, [code, phone, dispatch]);
@@ -440,10 +418,10 @@ const PaymentCon = ({
           setDistance(res.data.distance);
         }).catch((err) => {
           if (err) {
-            if (err.response.status === 404) {
+            if (err.response&&err.response.status === 404) {
               alert('주소를 찾을 수 없습니다.');
             } else {
-              alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+              alert('오류가 발생했습니다. 관리자에게 문의해주세요.');
             }
           }
         })

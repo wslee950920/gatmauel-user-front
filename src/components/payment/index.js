@@ -102,7 +102,7 @@ const Payment = ({
             <IconButton
               edge="start"
               size="small"
-              onClick={() => history.goBack()}
+              onClick={() => history.push("/order")}
               disabled={wait}
             >
               <ArrowBackIosIcon />

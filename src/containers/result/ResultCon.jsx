@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
 
 import querystring from 'querystring';
 import { useDispatch } from "react-redux";
+import {withRouter} from 'react-router-dom';
 
 import Result from '../../components/result'; 
 
@@ -12,6 +13,7 @@ const ResultCon=({history, location})=>{
     const [details, setDetails]=useState(null);
     const [order, setOrder]=useState(null);
     const dispatch=useDispatch();
+    const deleted=useRef(true);
 
     const getTotal = useMemo(() => {
         if(details){
@@ -23,7 +25,6 @@ const ResultCon=({history, location})=>{
             return 0;
         }
       }, [details]);
-    
 
     useEffect(()=>{
         const query=querystring.parse(location.search.split('?')[1]);
@@ -43,14 +44,33 @@ const ResultCon=({history, location})=>{
                     }
                 }));
             })
-            .catch(()=>{
-                alert('데이터가 없습니다.');
+            .catch((error)=>{
+                if(error.response){
+                    deleted.current=false;
+
+                    if(error.response.status===400){
+                        alert('데이터가 없습니다.');
+                        history.push('/');
+                    } else if(error.response.status===410){
+                        alert('결제가 취소되었습니다.');
+                        history.push('/order');
+                    } else {
+                        alert('결제를 실패하였습니다. 잠시 후 다시 시도해주십시오.');
+                        history.push(`/payment/${error.response.message}`);
+                    }
+
+                    return;
+                }
+
+                alert('오류가 발생하였습니다. 관리자에게 문의해주세요.');
                 history.push('/');
             })
     }, [location, history]);
     useEffect(()=>{
-        return()=>{
-            dispatch(initOrder());
+        return ()=>{
+            if(deleted.current){
+                dispatch(initOrder());
+            }
         }
     }, [dispatch]);
 
@@ -63,4 +83,4 @@ const ResultCon=({history, location})=>{
     ):null
 }
 
-export default React.memo(ResultCon);
+export default withRouter(ResultCon);
