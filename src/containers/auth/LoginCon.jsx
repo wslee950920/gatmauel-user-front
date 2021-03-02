@@ -44,15 +44,17 @@ const LoginCon=({history})=>{
                             dispatch(tempSetUser(res.data));
                         })
                         .catch((err)=>{
-                          if(err.response&&err.response.status===409){
-                              alert('이미 가입된 이메일입니다.');
-                          }
-                          else if(err.response&&err.response.status===403){
-                              alert('이메일 인증을 해주세요.');
-                          }
-                          else if(err.response&&err.response.status===406){
-                              dispatch(check());
-                          }
+                            if(err.response){
+                                if(err.response.status===409){
+                                    alert('이미 가입된 이메일입니다.');
+                                }
+                                else if(err.response.status===403){
+                                    alert('이메일 인증을 해주세요.');
+                                }
+                                else if(err.response.status===406){
+                                    dispatch(check());
+                                }   
+                            }
                         })
                     },
                     fail:()=>{

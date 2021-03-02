@@ -238,19 +238,20 @@ const ReviewCon = ({ history, location }) => {
   useEffect(() => {
     try{
       if(reviewError) {
-        if(reviewError.response&&reviewError.response.status===403){
-          dispatch(check());
-          alert('로그인을 해주세요.');
-          dispatch(closeDialog());
-          dispatch(initialize());
-
-          return;
-        } else if(reviewError.response&&reviewError.response.status===400){
-            alert('내용을 입력해주세요.');
-
+        if(reviewError.response){
+          if(reviewError.response.status===403){
+            dispatch(check());
+            alert('로그인을 해주세요.');
+            dispatch(closeDialog());
+            dispatch(initialize());
+  
             return;
+          } else if(reviewError.response.status===400){
+            alert('내용을 입력해주세요.');
+  
+            return;
+          }
         }
-
         throw reviewError;
       }
 

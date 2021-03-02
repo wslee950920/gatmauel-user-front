@@ -49,21 +49,21 @@ const ResultCon=({history, location})=>{
                     deleted.current=false;
 
                     if(error.response.status===400){
-                        alert('데이터가 없습니다.');
+                        alert('데이터가 없습니다. 관리자에게 문의해주세요.');
                         history.push('/');
+                    } else if(error.response.status===409) {
+                        alert('결제를 실패하였습니다. 잠시 후 다시 시도해주십시오.');
+                        history.push(`/payment/${error.response.data}`);
                     } else if(error.response.status===410){
                         alert('결제가 취소되었습니다.');
                         history.push('/order');
-                    } else {
-                        alert('결제를 실패하였습니다. 잠시 후 다시 시도해주십시오.');
-                        history.push(`/payment/${error.response.message}`);
-                    }
-
+                    } 
                     return;
                 }
 
                 alert('오류가 발생하였습니다. 관리자에게 문의해주세요.');
                 history.push('/');
+                return;
             })
     }, [location, history]);
     useEffect(()=>{

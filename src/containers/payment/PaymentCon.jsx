@@ -170,8 +170,8 @@ const PaymentCon = ({
       const orderId=await crypto.randomBytes(5).toString('hex').toUpperCase();
       await userAPI.post(`/order/pay/${measure}`, {
         orderId,
-        address: addr,
-        detail,
+        address:(method === 'delivery'?addr:''),
+        detail:(method === 'delivery'?detail:''),
         phone,
         order: order.map((value) => {
           return ({
@@ -190,8 +190,6 @@ const PaymentCon = ({
           } else {
             window.location.href=data.result.next_redirect_pc_url;
           }
-        } else if (measure === 'later') {
-          history.push(`/result?orderId=${orderId}`);
         } else if(measure==='card'){
           if(imp.current){
             imp.current.request_pay({
@@ -204,7 +202,7 @@ const PaymentCon = ({
               buyer_tel:phone,
               buyer_name:user?user.nick:`gatmauel${phone.slice(-4)}`,
               buyer_email:'',
-              m_redirect_url:(process.env.NODE_ENV==='production'?`https://www.gatmauel.com/result?orderId=${orderId}`:`https://localhost/result?orderId=${orderId}`)
+              m_redirect_url:`https://user.gatmauel.com/@user/order/mobile`
             }, (resp)=>{
               if(resp.success){
                 history.push(`/result?orderId=${orderId}`);
@@ -220,16 +218,18 @@ const PaymentCon = ({
                 } else{
                   userAPI.get(`/order/fail?orderId=${orderId}`).then(()=>{
                     alert(resp.error_msg);
+                    setWait(false);
                   }).catch(()=>{
                     alert('오류가 발생하였습니다. 관리자에게 문의해주세요.');
-                  }).finally(()=>{
                     setWait(false);
-                  })  
+                  });
                 }
               }
             });
           }
-        }
+        } else if (measure === 'later') {
+          history.push(`/result?orderId=${orderId}`);
+        } 
       }).catch((err) => {
         if (err.response) {
           if (err.response.status === 406 ||
@@ -296,19 +296,12 @@ const PaymentCon = ({
         setEnd(temp);
       })
       .catch((e) => {
-        if (e) {
-          if (e.response) {
-            if (e.response.status === 409) {
-              alert("이미 사용 중인 전화번호입니다.");
-            } else {
-              alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
-            }
-
-            return;
-          }
-
-          alert("오류가 발생했습니다. 관리자에게 문의해주세요.");
+        if (e.response) {
+          alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
+          return;
         }
+
+        alert("오류가 발생했습니다. 관리자에게 문의해주세요.");
       });
   }, [phone, confirm]);
   const confirmPhone = useCallback(() => {
@@ -403,10 +396,8 @@ const PaymentCon = ({
   useEffect(() => {
     if (method === 'delivery') {
       if (addr) {
-        userAPI.get('/order/distance', {
-          params: {
-            goal: addr
-          }
+        userAPI.post('/order/distance', {
+          goal: addr
         }).then((res) => {
           if (res.data.distance > 5000) {
             alert('거리 5km이상 지역은 배달이 불가합니다.');

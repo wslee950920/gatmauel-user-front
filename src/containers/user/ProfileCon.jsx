@@ -99,10 +99,8 @@ const ProfileCon=({history})=>{
                 oncomplete:(data)=>{
                     setAddr(data.address);
 
-                    userAPI.get('/order/distance', {
-                        params:{
+                    userAPI.post('/order/distance', {
                           goal:data.address
-                        }
                       }).then((res)=>{
                         if(res.data.distance>5000){
                             setError(prev=>({...prev, addr:true}))
@@ -138,10 +136,8 @@ const ProfileCon=({history})=>{
         setAddr(addr);
         setOpen(false);
 
-        userAPI.get('/order/distance', {
-            params:{
+        userAPI.post('/order/distance', {
               goal:addr
-            }
           }).then((res)=>{
             if(res.data.distance>5000){
                 setError(prev=>({...prev, addr:true}));
@@ -272,19 +268,11 @@ const ProfileCon=({history})=>{
                 setEnd(temp);
             })
             .catch((e)=>{
-                if(e){
-                    if(e.response){
-                        if(e.response.status===409){
-                            alert('이미 사용 중인 전화번호입니다.');
-                        } else{
-                            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-                        }
-
-                        return;
-                    }
-
+                if(e.response){  
                     alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+                    return;
                 }
+                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
             })
     }, [phone, confirm]);
     const confirmPhone=useCallback(()=>{
@@ -307,23 +295,21 @@ const ProfileCon=({history})=>{
             .catch((error)=>{
                 setConfirm(false);
 
-                if(error){
-                    if(error.response){
-                        if(error.response.status===419){
-                            setError(prev=>({...prev, code:'인증번호가 만료되었습니다.'}));
-                        } else if(error.response.status===404){
-                            setError(prev=>({...prev, code:'인증번호가 틀렸습니다.'}));
-                        } else if(error.response.status===403){
-                            setError(prev=>({...prev, code:'전화번호가 다릅니다.'}));
-                        } else{
-                            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-                        }
-
-                        return;
+                if(error.response){
+                    if(error.response.status===419){
+                        setError(prev=>({...prev, code:'인증번호가 만료되었습니다.'}));
+                    } else if(error.response.status===404){
+                        setError(prev=>({...prev, code:'인증번호가 틀렸습니다.'}));
+                    } else if(error.response.status===403){
+                        setError(prev=>({...prev, code:'전화번호가 다릅니다.'}));
+                    } else{
+                        alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
                     }
-                    
-                    alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
+
+                    return;
                 }
+                
+                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
             });
     }, [code, phone, dispatch]);
 

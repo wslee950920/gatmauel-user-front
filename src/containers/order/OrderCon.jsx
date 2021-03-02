@@ -22,6 +22,9 @@ const OrderCon=({history})=>{
       }, []);
     
     useEffect(()=>{
+        window.scrollTo(0, 0);
+    }, [])
+    useEffect(()=>{
         dispatch(check());
     }, [dispatch]);
     useEffect(()=>{

@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import TextField from "@material-ui/core/TextField";
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     fontFamily: "MaplestoryOTFBold",
-    color: "black",
+    color: theme.palette.common.black,
     backgroundColor: "white",
   },
   btn: {
@@ -62,13 +62,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     borderColor: "rgba(0, 0, 0, 0.23)",
     borderRadius: theme.spacing(0.5),
-    color: "black",
+    color: theme.palette.common.black,
     backgroundColor: "white",
   },
 }));
 
 const Result = ({ details, getTotal, order }) => {
   const classes = useStyles();
+  const theme = useTheme();
 
   const phone = useMemo(() => {
     const temp = order.phone.split("");
@@ -121,7 +122,9 @@ const Result = ({ details, getTotal, order }) => {
                 value={order.address}
                 disabled={true}
                 label="시/군/구"
-                InputLabelProps={{ style: { color: "rgba(0, 0, 0, 0.54)" } }}
+                InputLabelProps={{
+                  style: { color: theme.palette.text.secondary },
+                }}
               />
               <TextField
                 variant="outlined"
@@ -134,7 +137,9 @@ const Result = ({ details, getTotal, order }) => {
                 value={order.detail}
                 disabled={true}
                 label="상세주소"
-                InputLabelProps={{ style: { color: "rgba(0, 0, 0, 0.54)" } }}
+                InputLabelProps={{
+                  style: { color: theme.palette.text.secondary },
+                }}
               />
             </div>
           </Container>
