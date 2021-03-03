@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
 import querystring from 'querystring';
-import axios from 'axios';
 
 import {usePreloader} from '../../lib/PreloadContext';
+import {user as userAPI} from '../../lib/api/client'
 
 import { getReviews, modReview, subReview } from '../../modules/reviews';
 import { 
@@ -149,10 +149,12 @@ const ReviewCon = ({ history, location }) => {
   const feedUpdate=useCallback((index)=>{
     history.push(`/review/update/${index}`);
     dispatch(openDialog());
-    dispatch(changeField({
-      key:'content',
-      value:reviews[index].content
-    }));
+    setTimeout(()=>{
+      dispatch(changeField({
+        key:'content',
+        value:reviews[index].content
+      }));
+    }, 300);
   }, [history, dispatch, reviews]);
   const feedRemove=useCallback(()=>{
     dispatch(removeReview(reviewId));
@@ -170,9 +172,7 @@ const ReviewCon = ({ history, location }) => {
     setHloading(true);
     setHasNextPage(true);
 
-    axios.post(process.env.NODE_ENV==='production'
-      ?`https://user.gatmauel.com/@user/review/hashtag`
-      :'https://localhost/@user/review/hashtag', {
+    userAPI.post('/review/hashtag', {
       hashtag:query,
       page
     }).then((res)=>{
