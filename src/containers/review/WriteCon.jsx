@@ -1,6 +1,5 @@
 import React, {useCallback, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {withRouter} from 'react-router-dom';
 
 import {
     closeDialog, 
@@ -102,4 +101,4 @@ const WriteCon=({history})=>{
     );
 };
 
-export default withRouter(WriteCon);
+export default React.memo(WriteCon);

@@ -157,9 +157,13 @@ const ReviewCon = ({ history, location }) => {
     }, 300);
   }, [history, dispatch, reviews]);
   const feedRemove=useCallback(()=>{
+    if(hashtags.length>0&&search!==''){
+      setHashtags(prev=>prev.filter(current=>current.id!==reviewId));
+    }
+
     dispatch(removeReview(reviewId));
     setRopen(false);
-  }, [dispatch, reviewId]);
+  }, [dispatch, reviewId, hashtags, search]);
   const openRemove=useCallback((id)=>{
     setRopen(true);
     setReviewId(id);
@@ -168,6 +172,18 @@ const ReviewCon = ({ history, location }) => {
     setRopen(false);
   }, []);
   
+  const hashtagUpdate=useCallback((id, content)=>{
+    if(hashtags.length<1||search==='') return;
+
+    setHashtags(prev=>prev.map((current)=>
+      current.id===id
+      ?{
+        ...current,
+        content
+      }
+      :current
+    ));
+  }, [hashtags, search]);
   const getHashtags=useCallback((query, page)=>{
     setHloading(true);
     setHasNextPage(true);
@@ -179,7 +195,11 @@ const ReviewCon = ({ history, location }) => {
         if(page===1){
           setHashtags(res.data.reviews);
         } else{
-          setHashtags(prev=>[...prev, ...res.data.reviews]);
+          setHashtags(prev=>[
+            ...new Set([...prev, ...res.data.reviews]
+              .map(JSON.stringify))]
+              .map(JSON.parse)
+          );
         }
         setHasNextPage(!res.data.is_end);
       }).catch((err)=>{
@@ -301,6 +321,7 @@ const ReviewCon = ({ history, location }) => {
         scrollToIndex={scrollToIndex}
         order={order}
         hashtagOnClick={hashtagOnClick}
+        hashtagUpdate={hashtagUpdate}
       />
     </>
   )

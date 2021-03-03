@@ -1,6 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 
 import {closeDialog, addImage} from '../../modules/review';
 
@@ -92,4 +91,4 @@ const CameraCon=({history})=>{
     );
 };
 
-export default withRouter(CameraCon);
+export default React.memo(CameraCon);

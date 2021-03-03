@@ -55,6 +55,7 @@ const Review = ({
   scrollToIndex,
   order,
   hashtagOnClick,
+  hashtagUpdate,
 }) => {
   const theme = useTheme();
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
@@ -209,7 +210,11 @@ const Review = ({
       </StepProvider>
       {user && (
         <>
-          <FullScreenDialog open={open} handleClose={handleClose} />
+          <FullScreenDialog
+            open={open}
+            handleClose={handleClose}
+            hashtagUpdate={hashtagUpdate}
+          />
           <DeleteDialog
             rOpen={rOpen}
             closeRemove={closeRemove}

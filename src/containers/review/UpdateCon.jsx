@@ -1,17 +1,16 @@
 import React, {useCallback} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {withRouter} from 'react-router-dom';
 
 import {
     closeDialog, 
-    changeField,   
+    changeField,
     updateReview,
     initialize 
 } from '../../modules/review'
 
 import Write from '../../components/review/FullScreenDialog/Write'
 
-const UpdateCon=({history, match})=>{
+const UpdateCon=({history, match, hashtagUpdate})=>{
     const { content, reviews, loading } = useSelector(state => (
         {
           content:state.review.content,
@@ -39,9 +38,10 @@ const UpdateCon=({history, match})=>{
           e.preventDefault();
           if (content === '') return;
     
+          hashtagUpdate(reviews[match.params.index].id, content);
           dispatch(updateReview({id:reviews[match.params.index].id, content}));
         },
-        [content, reviews, match.params.index, dispatch]
+        [content, reviews, match.params.index, dispatch, hashtagUpdate]
       );
 
     return (
@@ -56,4 +56,4 @@ const UpdateCon=({history, match})=>{
     );
 };
 
-export default withRouter(UpdateCon);
+export default React.memo(UpdateCon);
