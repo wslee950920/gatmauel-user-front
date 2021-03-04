@@ -21,7 +21,6 @@ const WriteCon=({history})=>{
         }
     ));
     const dispatch=useDispatch();
-    const formData=new FormData();
     const [progress, setProgress]=useState(0);
 
     const handleClose = useCallback(() => {
@@ -55,13 +54,13 @@ const WriteCon=({history})=>{
                 reader.onload = () => {
                   dispatch(addImage({
                     file: files[i],
-                    previewURL: reader.result,
+                    uri: reader.result,
                   }))        
                 };
                 reader.readAsDataURL(files[i]);
               }
             } catch (e) {
-              console.log('file chage error');
+              alert(e.message);
             }
           } else {
             alert("이미지는 5개까지만 추가할 수 있습니다.");
@@ -71,18 +70,42 @@ const WriteCon=({history})=>{
         [imgs, dispatch]
     );
     const onSubmit = useCallback(
-        async (e) => {
+        (e) => {
           e.preventDefault();
 
           if (content === '' && imgs.length === 0) return;
     
-          await formData.append("content", content);
-          await imgs.forEach((img) => {
-            formData.append("imgs", img.file);
-          });
-          await dispatch(writeReview({formData, setProgress}));
+          const formData=new FormData();
+          const promises=imgs.map((img)=>
+            new Promise((resolve, reject)=>{
+              try{
+                console.log('img file', img.file.type, img.file.name, img.uri);
+                formData.append("imgs", img.file);
+                resolve();    
+              } catch(e){
+                reject(e);
+              }
+            })
+          );
+          promises.push(
+            new Promise((resolve, reject)=>{
+              try{
+                formData.append("content", content);
+                resolve();
+              } catch(e){
+                reject(e);
+              }
+            })
+          );
+          Promise.all(promises)
+            .then(()=>{
+              dispatch(writeReview({formData, setProgress}));
+            })
+            .catch((e)=>{
+              alert(e.message);
+            });
         },
-        [content, formData, imgs, dispatch]
+        [content, imgs, dispatch]
       );
 
     return (

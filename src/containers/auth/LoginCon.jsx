@@ -54,6 +54,8 @@ const LoginCon=({history})=>{
                                 else if(err.response.status===406){
                                     dispatch(check());
                                 }   
+                            } else{
+                                alert(err.message);
                             }
                         })
                     },
@@ -127,42 +129,29 @@ const LoginCon=({history})=>{
         }
     }, [dispatch]);
     useEffect(()=>{
-        try{
-            if(loginError&&loginError.response){
+        if(loginError){
+            if(loginError.response){
                 if(loginError.response.status===400){
                     setError(prev=>({...prev, email:true}));
                     alert('이메일을 입력해주십시오.');
-
-                    return;
                 }
                 if(loginError.response.status===401){
                     setError({email:true, password:false});
-
-                    return;
                 }
                 else if(loginError.response.status===403){
                     alert('이메일 인증을 해주세요.');
-                    
-                    return;
                 }
                 else if(loginError.response.status===406){
                     dispatch(check());
-
-                    return;
                 }
                 else if(loginError.response.status===409){
                     alert('SNS 로그인을 해주세요.');
-
-                    return;
                 }
-
-                throw loginError;
+            } else{
+                alert(loginError.message);
             }
-            if(login){
-                dispatch(tempSetUser(login.data));
-            }
-        } catch(e){
-            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오');
+        } else if(login){
+            dispatch(tempSetUser(login.data));
         }
     }, [login, loginError, dispatch]);
     useEffect(()=>{
@@ -172,7 +161,7 @@ const LoginCon=({history})=>{
             try{
                 localStorage.setItem('user', JSON.stringify(user));
             } catch(e){
-                console.log('localStorage is not working');
+                alert(e.message);
             }
         }
     }, [user, history]);

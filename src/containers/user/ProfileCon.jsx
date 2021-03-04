@@ -109,12 +109,13 @@ const ProfileCon=({history})=>{
                             detailRef.current.focus();
                         }
                       }).catch((err)=>{
-                        if(err){
-                          if(err.response.status===404){
-                            alert('주소를 찾을 수 없습니다.');
-                          } else{
-                            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-                          }
+                        if(err.response){
+                            if(err.response.status===404){
+                                alert('주소를 찾을 수 없습니다.');
+                            }
+                        }
+                        else{
+                            alert(err.message);
                         }
                     });
                 },
@@ -146,12 +147,12 @@ const ProfileCon=({history})=>{
                 setTimeout(()=>{detailRef.current.focus()}, 200);
             }
           }).catch((err)=>{
-            if(err){
+            if(err.response){
               if(err.response.status===404){
                 alert('주소를 찾을 수 없습니다.');
-              } else{
-                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
               }
+            }else{
+                alert(err.message);
             }
           });
     }, []);
@@ -175,13 +176,16 @@ const ProfileCon=({history})=>{
                 setKakao(prev=>[...prev, ...response.data.documents]);
             }
             setHasNextPage(!response.data.meta.is_end);
+            setLoading(false);
         })
         .catch((error)=>{
-            if(error.response.status===400){
-                setHasNextPage(false);
+            if(error.response){
+                if(error.response.status===400){
+                    setHasNextPage(false);
+                }
+            } else{
+                alert(error.message);
             }
-        })
-        .finally(()=>{
             setLoading(false);
         })
     }, [])
@@ -270,9 +274,9 @@ const ProfileCon=({history})=>{
             .catch((e)=>{
                 if(e.response){  
                     alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
-                    return;
+                } else{
+                    alert(e.message);
                 }
-                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
             })
     }, [phone, confirm]);
     const confirmPhone=useCallback(()=>{
@@ -305,11 +309,9 @@ const ProfileCon=({history})=>{
                     } else{
                         alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
                     }
-
-                    return;
+                } else{
+                    alert(error.message);
                 }
-                
-                alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오.');
             });
     }, [code, phone, dispatch]);
 
@@ -347,7 +349,7 @@ const ProfileCon=({history})=>{
             try{
                 localStorage.setItem('user', JSON.stringify(user));
             } catch(e){
-                console.log('localStorage is not working');
+                alert(e.message);
             }
         }
     }, [user, history]);
@@ -368,23 +370,17 @@ const ProfileCon=({history})=>{
         }
     }, [info]);
     useEffect(() => {
-        try{
-            if (nickError) {
-                if(nickError.response&&
-                    (nickError.response.status===400||
-                        nickError.response.status===409)){
-                    setError(prev=>({...prev, nick:true}));
-    
-                    return;
-                }
-
-                throw nickError;
+        if (nickError) {
+            if(nickError.response&&
+                (nickError.response.status===400||
+                    nickError.response.status===409)){
+                setError(prev=>({...prev, nick:true}));
+            } else{
+                alert(nickError.message);
             }
-            if (nick) {
-                setError(prev=>({...prev, nick:false}));
-            }
-        } catch(e){
-            console.log('nick error');
+        }
+        else if (nick) {
+            setError(prev=>({...prev, nick:false}));
         }
     }, [nickError, nick]);
 

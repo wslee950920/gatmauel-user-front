@@ -102,8 +102,8 @@ const AccountCon=({history})=>{
     }, [confirm, newPassword, dispatch, oldPassword]);
 
     useEffect(()=>{
-        try{
-            if(error&&error.response){
+        if(error){
+            if(error.response){
                 if(error.response.status===401){
                     setPError(prev=>({...prev, res:true}));
                 }
@@ -113,11 +113,9 @@ const AccountCon=({history})=>{
                 else if(error.response.status===403){
                     setWError(true);
                 }
+            } else{
+                alert(error.message);
             }
-
-            throw error
-        } catch(e){
-            console.log('login error');
         }
     }, [error]);
     useEffect(()=>{

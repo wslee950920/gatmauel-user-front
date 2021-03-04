@@ -50,9 +50,9 @@ export const removeReview = createAction(REMOVE_REVIEW, (id) => id);
 export const openDialog = createAction(OPEN_DIALOG);
 export const closeDialog = createAction(CLOSE_DIALOG);
 
-export const addImage = createAction(ADD_IMAGE, ({ file, previewURL }) => ({
+export const addImage = createAction(ADD_IMAGE, ({ file, uri }) => ({
   file,
-  previewURL,
+  uri,
 }));
 export const removeImage = createAction(REMOVE_IMAGE, (index) => index);
 
@@ -128,7 +128,7 @@ const review = handleActions(
       ...state,
       open: false,
     }),
-    [ADD_IMAGE]: (state, { payload: { file, previewURL } }) =>
+    [ADD_IMAGE]: (state, { payload: { file, uri } }) =>
       state.imgs.length < 5
         ? {
             ...state,
@@ -136,7 +136,7 @@ const review = handleActions(
               ...state.imgs,
               {
                 file,
-                previewURL,
+                uri,
               },
             ],
           }

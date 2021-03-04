@@ -58,12 +58,10 @@ const ResultCon=({history, location})=>{
                         alert('결제가 취소되었습니다.');
                         history.push('/order');
                     } 
-                    return;
+                } else{
+                    alert(error.message);
+                    history.push('/');
                 }
-
-                alert('오류가 발생하였습니다. 관리자에게 문의해주세요.');
-                history.push('/');
-                return;
             })
     }, [location, history]);
     useEffect(()=>{

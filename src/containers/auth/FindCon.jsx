@@ -105,16 +105,12 @@ const FindCon=({history})=>{
             if(error.response){
                 if(error.response.status===404){
                     alert('존재하지 않는 회원입니다.');
-
-                    return;
                 } else if(error.response.status===403){
                     alert('SNS로그인 회원입니다.');
-
-                    return;
                 }
+            }else{
+                alert(error.message);
             }
-            
-            alert('오류가 발생했습니다. 잠시 후 다시 시도해주십시오');
         })
     }, [nickname, phone, email, value]);
 

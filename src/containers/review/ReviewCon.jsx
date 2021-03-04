@@ -52,7 +52,6 @@ const ReviewCon = ({ history, location }) => {
       order:state.order.order
     }
   ));
-  const formData=new FormData();
   const [rOpen, setRopen]=useState(false);
   const [reviewId, setReviewId]=useState(null);
   const [hasNextPage, setHasNextPage]=useState(true);
@@ -90,7 +89,7 @@ const ReviewCon = ({ history, location }) => {
     (e) => {
       e.preventDefault();
 
-      if (imgs.length < 10) {
+      if (imgs.length < 5) {
         const files = e.target.files;
         try {
           for (let i = 0; i < files.length; i++) {
@@ -98,16 +97,16 @@ const ReviewCon = ({ history, location }) => {
             reader.onload = () => {
               dispatch(addImage({
                 file: files[i],
-                previewURL: reader.result,
+                uri: reader.result,
               }))        
             };
             reader.readAsDataURL(files[i]);
           }
-        } catch (e) {
-          console.log('image add error');
+        } catch (err) {
+          alert(err.message);
         }
       } else {
-        alert("이미지는 10개까지만 추가할 수 있습니다.");
+        alert("이미지는 5개까지만 추가할 수 있습니다.");
         return;
       }
     },
@@ -117,7 +116,7 @@ const ReviewCon = ({ history, location }) => {
     dispatch(removeImage(index));
   }, [dispatch]);
   const onSubmit = useCallback(
-    async (e) => {
+    (e) => {
       e.preventDefault();
 
       if(!user){
@@ -129,13 +128,36 @@ const ReviewCon = ({ history, location }) => {
       
       if (content === '' && imgs.length === 0) return;
 
-      await formData.append("content", content);
-      await imgs.forEach((img) => {
-        formData.append("imgs", img.file);
-      });
-      await dispatch(writeReview({formData, setProgress}));
+      const formData=new FormData();
+      const promises=imgs.map((img)=>
+        new Promise((resolve, reject)=>{
+          try{
+            formData.append("imgs", img.file);
+            resolve();    
+          } catch(e){
+            reject(e);
+          }
+        })
+      );
+      promises.push(
+        new Promise((resolve, reject)=>{
+          try{
+            formData.append("content", content);
+            resolve();
+          } catch(e){
+            reject(e);
+          }
+        })
+      );
+      Promise.all(promises)
+        .then(()=>{
+          dispatch(writeReview({formData, setProgress}));
+        })
+        .catch((err)=>{
+          alert(err.message);
+        });
     },
-    [content, formData, imgs, dispatch, history, user]
+    [content, imgs, dispatch, history, user]
   );
   const onCamera=useCallback(()=>{
     if(!user){
@@ -205,11 +227,9 @@ const ReviewCon = ({ history, location }) => {
       }).catch((err)=>{
         if(err.response&&err.response.status===204){
           setHasNextPage(false);
-
-          return;
+        } else{
+          alert(err.message); 
         }
-
-        alert('오류가 발생하였습니다. 잠시 후 다시 시도해주십시오.');
       })
       .finally(()=>{
         setHloading(false);
@@ -256,41 +276,31 @@ const ReviewCon = ({ history, location }) => {
     }
   }, [dispatch]);
   useEffect(() => {
-    try{
-      if(reviewError) {
-        if(reviewError.response){
-          if(reviewError.response.status===403){
-            dispatch(check());
-            alert('로그인을 해주세요.');
-            dispatch(closeDialog());
-            dispatch(initialize());
-  
-            return;
-          } else if(reviewError.response.status===400){
-            alert('내용을 입력해주세요.');
-  
-            return;
-          }
-        }
-        throw reviewError;
-      }
-
-      if (review) {
-        if(review.hasOwnProperty('updated')){
-          dispatch(modReview(review));
-        }
-
-        if(review.hasOwnProperty('deleted')){
-          dispatch(subReview(review));
-        } else{
-          dispatch(initialize());
+    if(reviewError) {
+      if(reviewError.response){
+        if(reviewError.response.status===403){
+          dispatch(check());
+          alert('로그인을 해주세요.');
           dispatch(closeDialog());
+          dispatch(initialize());
+        } else if(reviewError.response.status===400){
+          alert('내용을 입력해주세요.');
         }
-        dispatch(getReviews());
-      } 
-    } catch(e){
-      console.log('review CUD error');
-    }
+      } else{
+        alert(reviewError.message);
+      }
+      return;
+    } else if (review) {
+      if(review.hasOwnProperty('updated')){
+        dispatch(modReview(review));
+      } else if(review.hasOwnProperty('deleted')){
+        dispatch(subReview(review));
+      } else{
+        dispatch(initialize());
+        dispatch(closeDialog());
+      }
+      dispatch(getReviews());
+    } 
   }, [review, reviewError, dispatch]);
 
   return (

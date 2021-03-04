@@ -125,7 +125,7 @@ const EditReview = ({
                       src={
                         review
                           ? process.env.REACT_APP_CF_DOMAIN_NAME + img
-                          : img.previewURL
+                          : img.uri
                       }
                       alt="리뷰 이미지"
                       className={classes.img}
@@ -177,6 +177,7 @@ const EditReview = ({
             loading={loading}
             progress={progress}
             review={review}
+            rOnly={rOnly}
           />
         </div>
       </Container>

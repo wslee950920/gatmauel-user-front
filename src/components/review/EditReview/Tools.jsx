@@ -35,7 +35,8 @@ const Tools=({
     inputId, 
     loading,
     progress,
-    review
+    review,
+    rOnly
   })=>{
     const classes=useStyles();
 
@@ -51,15 +52,17 @@ const Tools=({
               >
                 <CameraAltIcon color="action" />
               </IconButton>
-              <input 
-                accept="image/*" 
-                className={classes.input} 
-                id={inputId} 
-                type="file" 
-                multiple
-                onChange={handleFileOnChange}
-                disabled={!!review||loading}
-              />
+              {!rOnly&&(
+                <input 
+                  accept="image/*" 
+                  className={classes.input} 
+                  id={inputId} 
+                  type="file" 
+                  multiple
+                  onChange={handleFileOnChange}
+                  disabled={!!review||loading}
+                />
+              )}
               <label htmlFor={inputId} className={classes.label}>                 
                 <IconButton 
                   size="small" 

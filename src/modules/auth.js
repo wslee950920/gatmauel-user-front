@@ -59,18 +59,26 @@ const initialState = {
 
 const auth = handleActions(
   {
+    [LOGIN]: (state) => ({
+      ...state,
+      login: null,
+      loginError: null,
+    }),
     [LOGIN_SUCCESS]: (state, { payload: login }) => ({
       ...state,
       login,
-      loginError: null,
     }),
     [LOGIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loginError: error,
     }),
+    [REGISTER]: (state) => ({
+      ...state,
+      register: null,
+      registerError: null,
+    }),
     [REGISTER_SUCCESS]: (state, { payload: register }) => ({
       ...state,
-      registerError: null,
       register,
     }),
     [REGISTER_FAILURE]: (state, { payload: error }) => ({

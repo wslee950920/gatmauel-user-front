@@ -211,16 +211,16 @@ const PaymentCon = ({
                   userAPI.get(`/order/cancel?orderId=${orderId}`).then(()=>{
                     alert(resp.error_msg);
                     history.push('/order');
-                  }).catch(()=>{
-                    alert('오류가 발생하였습니다. 관리자에게 문의해주세요.');
+                  }).catch((err)=>{
+                    alert(err.message);
                     setWait(false);
                   })
                 } else{
                   userAPI.get(`/order/fail?orderId=${orderId}`).then(()=>{
                     alert(resp.error_msg);
                     setWait(false);
-                  }).catch(()=>{
-                    alert('오류가 발생하였습니다. 관리자에게 문의해주세요.');
+                  }).catch((err)=>{
+                    alert(err.message);
                     setWait(false);
                   });
                 }
@@ -240,23 +240,17 @@ const PaymentCon = ({
             alert('전화번호 인증을 해주세요.');
             setConfirm(false);
             setWait(false);
-
-            return;
           } else{
             alert('결제를 실패하였습니다. 잠시 후 다시 시도해주십시오.');
             setWait(false);
-
-            return;
           }
+        } else{
+          alert(err.message);
+          setWait(false);
         }
-    
-        alert('오류가 발생했습니다. 관리자에게 문의해주세요.');
-        setWait(false);
-
-        return;
       });
     } catch(error){
-      console.log('submit error');
+      alert(error.message)
     }
   }, [history, user, measure, distance, platform, error, confirm, addr, detail, phone, order, text, radio, method, getTotal, charge]);
   const phoneChange = useCallback(
@@ -298,10 +292,9 @@ const PaymentCon = ({
       .catch((e) => {
         if (e.response) {
           alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
-          return;
+        } else{
+          alert(e.message);
         }
-
-        alert("오류가 발생했습니다. 관리자에게 문의해주세요.");
       });
   }, [phone, confirm]);
   const confirmPhone = useCallback(() => {
@@ -325,23 +318,19 @@ const PaymentCon = ({
       .catch((error) => {
         setConfirm(false);
 
-        if (error) {
-          if (error.response) {
-            if (error.response.status === 419) {
-              setError(prev => ({ ...prev, code: "인증번호가 만료되었습니다." }));
-            } else if (error.response.status === 404) {
-              setError(prev => ({ ...prev, code: "인증번호가 틀렸습니다." }));
-            } else if (error.response.status === 403) {
-              setError(prev => ({ ...prev, code: "전화번호가 다릅니다." }));
-            } else {
-              alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
-            }
-
-            return;
+        if (error.response) {
+          if (error.response.status === 419) {
+            setError(prev => ({ ...prev, code: "인증번호가 만료되었습니다." }));
+          } else if (error.response.status === 404) {
+            setError(prev => ({ ...prev, code: "인증번호가 틀렸습니다." }));
+          } else if (error.response.status === 403) {
+            setError(prev => ({ ...prev, code: "전화번호가 다릅니다." }));
+          } else {
+            alert("오류가 발생했습니다. 잠시 후 다시 시도해주십시오.");
           }
-
-          alert("오류가 발생했습니다. 관리자에게 문의해주세요.");
-        }
+        } else{
+          alert(error.message);
+        }        
       });
   }, [code, phone, dispatch]);
   const handleClickOpen = useCallback(() => {
@@ -408,12 +397,10 @@ const PaymentCon = ({
 
           setDistance(res.data.distance);
         }).catch((err) => {
-          if (err) {
-            if (err.response&&err.response.status === 404) {
-              alert('주소를 찾을 수 없습니다.');
-            } else {
-              alert('오류가 발생했습니다. 관리자에게 문의해주세요.');
-            }
+          if (err.response&&err.response.status === 404) {
+            alert('주소를 찾을 수 없습니다.');
+          } else {
+            alert(err.message);
           }
         })
       }

@@ -85,25 +85,18 @@ const RegisterCon = ({ history }) => {
         }
     }, [dispatch]);
     useEffect(() => {
-        try{
-            if (registerError) {
-                if (registerError.response){
-                    if(registerError.response.status===409||
-                        registerError.response.status===400){
-                        setError(prev => ({ ...prev, email: true }));
-                        
-                        return;
-                    }
+        if (registerError) {
+            if (registerError.response){
+                if(registerError.response.status===409||
+                    registerError.response.status===400){
+                    setError(prev => ({ ...prev, email: true }));
                 }
-    
-                throw registerError;
+            } else{
+                alert(registerError.message);
             }
-            if (register) {
-                history.push('/login');
-                alert('이메일 인증을 해주세요.');
-            }
-        } catch(e){
-            console.log('register error')
+        } else if (register) {
+            alert('이메일 인증을 해주세요.');
+            history.push('/login');
         }
     }, [register, registerError, history]);
     useEffect(() => {
