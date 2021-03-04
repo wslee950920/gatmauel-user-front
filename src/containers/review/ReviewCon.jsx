@@ -69,8 +69,8 @@ const ReviewCon = ({ history, location }) => {
 
   const handleClose = useCallback(() => {
     history.push('/review');
-    dispatch(closeDialog());
-  }, [history, dispatch]);
+    window.scrollTo(0, 0);
+  }, [history]);
   const handleClickOpen = useCallback(
     () => {
       if (!user) {
@@ -91,8 +91,11 @@ const ReviewCon = ({ history, location }) => {
 
       if (imgs.length < 5) {
         const files = e.target.files;
+        if(files.length>5){
+          alert("이미지는 5개까지만 추가할 수 있습니다.");
+        }
         try {
-          for (let i = 0; i < files.length; i++) {
+          for (let i = 0; i < 5; i++) {
             const reader = new FileReader();
             reader.onload = () => {
               dispatch(addImage({
@@ -105,9 +108,6 @@ const ReviewCon = ({ history, location }) => {
         } catch (err) {
           alert(err.message);
         }
-      } else {
-        alert("이미지는 5개까지만 추가할 수 있습니다.");
-        return;
       }
     },
     [imgs, dispatch]
@@ -280,9 +280,9 @@ const ReviewCon = ({ history, location }) => {
       if(reviewError.response){
         if(reviewError.response.status===403){
           dispatch(check());
-          alert('로그인을 해주세요.');
-          dispatch(closeDialog());
           dispatch(initialize());
+          dispatch(closeDialog());
+          alert('로그인을 해주세요.');
         } else if(reviewError.response.status===400){
           alert('내용을 입력해주세요.');
         }
@@ -295,10 +295,9 @@ const ReviewCon = ({ history, location }) => {
         dispatch(modReview(review));
       } else if(review.hasOwnProperty('deleted')){
         dispatch(subReview(review));
-      } else{
-        dispatch(initialize());
-        dispatch(closeDialog());
       }
+
+      dispatch(initialize());
       dispatch(getReviews());
     } 
   }, [review, reviewError, dispatch]);

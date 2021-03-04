@@ -5,7 +5,6 @@ import {
     closeDialog, 
     changeField, 
     removeImage, 
-    openDialog, 
     addImage,
     writeReview 
     } from '../../modules/review'
@@ -24,9 +23,8 @@ const WriteCon=({history})=>{
     const [progress, setProgress]=useState(0);
 
     const handleClose = useCallback(() => {
-        history.push('/review');
         dispatch(closeDialog());
-    }, [history, dispatch]);
+    }, [dispatch]);
     const onChange=useCallback(e=>{
         const {value, name}=e.target;
 
@@ -40,8 +38,7 @@ const WriteCon=({history})=>{
     }, [dispatch]);
     const onCamera=useCallback(()=>{
         history.push('/review/camera');
-        dispatch(openDialog());
-      }, [history, dispatch]);
+      }, [history]);
     const handleFileOnChange = useCallback(
         (e) => {
           e.preventDefault();
@@ -79,7 +76,6 @@ const WriteCon=({history})=>{
           const promises=imgs.map((img)=>
             new Promise((resolve, reject)=>{
               try{
-                console.log('img file', img.file.type, img.file.name, img.uri);
                 formData.append("imgs", img.file);
                 resolve();    
               } catch(e){
@@ -101,10 +97,10 @@ const WriteCon=({history})=>{
             .then(()=>{
               dispatch(writeReview({formData, setProgress}));
             })
-            .catch((e)=>{
-              alert(e.message);
+            .catch((err)=>{
+              alert(err.message);
             });
-        },
+          },
         [content, imgs, dispatch]
       );
 

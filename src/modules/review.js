@@ -89,6 +89,7 @@ const review = handleActions(
     [WRITE_REVIEW_SUCCESS]: (state, { payload: review }) => ({
       ...state,
       review: review.data,
+      open: false,
     }),
     [WRITE_REVIEW_FAILURE]: (state, { payload: reviewError }) => ({
       ...state,
@@ -102,6 +103,7 @@ const review = handleActions(
     [UPDATE_REVIEW_SUCCESS]: (state, { payload: review }) => ({
       ...state,
       review: review.data,
+      open: false,
     }),
     [UPDATE_REVIEW_FAILURE]: (state, { payload: reviewError }) => ({
       ...state,

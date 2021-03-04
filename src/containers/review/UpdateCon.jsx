@@ -10,7 +10,7 @@ import {
 
 import Write from '../../components/review/FullScreenDialog/Write'
 
-const UpdateCon=({history, match, hashtagUpdate})=>{
+const UpdateCon=({match, hashtagUpdate})=>{
     const { content, reviews, loading } = useSelector(state => (
         {
           content:state.review.content,
@@ -22,9 +22,8 @@ const UpdateCon=({history, match, hashtagUpdate})=>{
 
     const handleClose = useCallback(() => {
         dispatch(initialize());
-        history.push('/review');
         dispatch(closeDialog());
-    }, [history, dispatch]);
+    }, [dispatch]);
     const onChange=useCallback(e=>{
         const {value, name}=e.target;
 

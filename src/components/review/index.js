@@ -139,7 +139,11 @@ const Review = ({
         index: scrollToIndex,
       });
       if (offset > -1) {
-        window.scrollTo(0, offset + 135 + (scrollToIndex > 0 && 135));
+        window.scroll({
+          top: offset + 135 + (scrollToIndex > 0 ? 135 : 0),
+          left: 0,
+          behavior: "smooth",
+        });
 
         return;
       }

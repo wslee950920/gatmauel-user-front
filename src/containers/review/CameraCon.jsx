@@ -12,9 +12,8 @@ const CameraCon=({history})=>{
     const vStream = useRef(null);
 
     const handleClose=useCallback(()=>{
-        history.push('/review');
         dispatch(closeDialog());
-    }, [dispatch, history]);
+    }, [dispatch]);
     const getCapture=useCallback(()=>{
         setLoading(true);
 
