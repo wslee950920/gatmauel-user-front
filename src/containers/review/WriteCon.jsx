@@ -28,7 +28,8 @@ const WriteCon=({history})=>{
     }, []);
     const handleClose = useCallback(() => {
         dispatch(closeDialog());
-    }, [dispatch]);
+        history.push('/review');
+    }, [dispatch, history]);
     const onChange=useCallback(e=>{
         const {value, name}=e.target;
 

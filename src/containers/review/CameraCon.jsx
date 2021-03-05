@@ -13,7 +13,8 @@ const CameraCon=({history})=>{
 
     const handleClose=useCallback(()=>{
         dispatch(closeDialog());
-    }, [dispatch]);
+        history.push('/review');
+    }, [dispatch, history]);
     const getCapture=useCallback(()=>{
         setLoading(true);
 
