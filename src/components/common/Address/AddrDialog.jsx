@@ -101,47 +101,45 @@ const AddrDialog=({
             TransitionComponent={Transition} 
             onExited={handleOnExit}
         >
-            <>
-                <CssBaseline />
-                <Container maxWidth="sm">
-                    <div className={classes.header}>
-                        <IconButton 
-                            onClick={handleClose}
-                            edge='start'
-                            size='small'
-                        >
-                            <ArrowBackIosIcon/>
-                        </IconButton>
-                        <div className={classes.text}>
-                            배달 받는 주소
-                        </div>
+            <CssBaseline />
+            <Container maxWidth="sm">
+                <div className={classes.header}>
+                    <IconButton 
+                        onClick={handleClose}
+                        edge='start'
+                        size='small'
+                    >
+                        <ArrowBackIosIcon/>
+                    </IconButton>
+                    <div className={classes.text}>
+                        배달 받는 주소
                     </div>
-                </Container>
-                <SearchBar address onChange={queryOnChange} value={query}/>
-                <InfiniteLoader
-                    rowCount={rowCount}
-                    isRowLoaded={isRowLoaded}
-                    loadMoreRows={loadMoreRows}
-                    threshold={1}
-                >
-                    {({ onRowsRendered, registerChild }) => (
-                        <AutoSizer>
-                            {({ height, width }) => (
-                                <List
-                                    width={width}
-                                    height={height-94}
-                                    rowCount={rowCount}
-                                    rowHeight={100}
-                                    ref={registerChild}
-                                    onRowsRendered={onRowsRendered}
-                                    rowRenderer={rowRenderer}
-                                    overscanRowCount={6}
-                                />
-                            )}
-                        </AutoSizer>
-                    )}
-                </InfiniteLoader>
-            </>
+                </div>
+            </Container>
+            <SearchBar address onChange={queryOnChange} value={query}/>
+            <InfiniteLoader
+                rowCount={rowCount}
+                isRowLoaded={isRowLoaded}
+                loadMoreRows={loadMoreRows}
+                threshold={1}
+            >
+                {({ onRowsRendered, registerChild }) => (
+                    <AutoSizer>
+                        {({ height, width }) => (
+                            <List
+                                width={width}
+                                height={height-94}
+                                rowCount={rowCount}
+                                rowHeight={100}
+                                ref={registerChild}
+                                onRowsRendered={onRowsRendered}
+                                rowRenderer={rowRenderer}
+                                overscanRowCount={6}
+                            />
+                        )}
+                    </AutoSizer>
+                )}
+            </InfiniteLoader>
         </Dialog>
     );
 };

@@ -38,7 +38,6 @@ const Tools=({
     review,
     rOnly
   })=>{
-    console.log(rOnly);
     const classes=useStyles();
 
     return(

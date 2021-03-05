@@ -1,8 +1,7 @@
-import React, { useEffect, useCallback, useState, useMemo } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
-import querystring from 'querystring';
 
 import {usePreloader} from '../../lib/PreloadContext';
 import {user as userAPI} from '../../lib/api/client'
@@ -22,7 +21,7 @@ import {check} from '../../modules/user';
 import Review from '../../components/review';
 import SearchBar from "../../components/common/SearchBar";
 
-const ReviewCon = ({ history, location }) => {
+const ReviewCon = ({ history }) => {
   const dispatch = useDispatch();
   const { 
     reviews, 
@@ -59,16 +58,8 @@ const ReviewCon = ({ history, location }) => {
   const [search, setSearch]=useState('');
   const [hloading, setHloading]=useState(false);
 
-  const scrollToIndex=useMemo(()=>{
-    const url=location.search.split('?')[1];
-    const query=querystring.parse(url);
-
-    return parseInt(query.index||-1);
-  }, [location.search]);
-
   const handleClose = useCallback(() => {
     history.push('/review');
-    window.scrollTo(0, 0);
   }, [history]);
   const handleClickOpen = useCallback(
     () => {
@@ -298,7 +289,6 @@ const ReviewCon = ({ history, location }) => {
         hasNextPage={hasNextPage}
         progress={progress}
         wloading={wloading}
-        scrollToIndex={scrollToIndex}
         order={order}
         hashtagOnClick={hashtagOnClick}
         hashtagUpdate={hashtagUpdate}
