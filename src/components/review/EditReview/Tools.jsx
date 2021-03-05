@@ -36,7 +36,8 @@ const Tools=({
     loading,
     progress,
     review,
-    rOnly
+    rOnly,
+    length
   })=>{
     const classes=useStyles();
 
@@ -48,7 +49,7 @@ const Tools=({
               <IconButton 
                 size="small" 
                 onClick={onCamera} 
-                disabled={!!review||loading}
+                disabled={!!review||loading||!length}
               >
                 <CameraAltIcon color="action" />
               </IconButton>
@@ -69,7 +70,7 @@ const Tools=({
                   aria-label="upload picture" 
                   component="span"
                   onClick={handleClickOpen}
-                  disabled={!!review||loading}
+                  disabled={!!review||loading||!length}
                 >
                   <PhotoAlbumIcon color="action" />
                 </IconButton>

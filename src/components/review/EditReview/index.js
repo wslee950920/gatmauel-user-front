@@ -178,6 +178,7 @@ const EditReview = ({
             progress={progress}
             review={review}
             rOnly={rOnly}
+            length={!review && imgs.length < 5}
           />
         </div>
       </Container>

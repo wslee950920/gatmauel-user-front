@@ -9,7 +9,6 @@ const CameraCon=({history})=>{
     const dispatch=useDispatch();
     const [loading, setLoading]=useState(true);
     const video = useRef(null);
-    const vStream = useRef(null);
 
     const handleClose=useCallback(()=>{
         dispatch(closeDialog());
@@ -18,52 +17,54 @@ const CameraCon=({history})=>{
     const getCapture=useCallback(()=>{
         setLoading(true);
 
-        const vTrack=vStream.current.getVideoTracks()[0];
-        let capturedImg=new window.ImageCapture(vTrack);
-        const options={
-            imageHeight:640, imageWidth:640, fillLightMode:'off'
-        };
+        const temp=video.current;
 
-        return capturedImg.takePhoto(options).then(imgData=>{
-            try{
-                const oTrack = vStream.current.getTracks();
-                oTrack.map((pTrack) => pTrack.stop());
+        const videoCanvas=document.createElement('canvas');
+        videoCanvas.height = temp.videoHeight;
+        videoCanvas.width = temp.videoWidth;
 
-                const imgFile=new File(
-                  [imgData], 
-                  `${vTrack.id}.${imgData.type.split('/')[1]}`
-                );
-                const reader = new FileReader();
-                reader.onload = () => {
-                    dispatch(addImage({
-                      file: imgFile,
-                      uri: reader.result,
-                    }))
-                };
-                reader.readAsDataURL(imgFile);
-              } catch(e){
-                alert(e.message);
-              }
-              history.push('/review/write');
-        })
+        const videoContext = videoCanvas.getContext('2d');
+        videoContext.drawImage(temp, 0, 0);
+
+        videoCanvas.toBlob((imgData)=>{
+          try{
+            const imgFile=new File(
+              [imgData], 
+              `${Date.now()}_${parseInt(imgData.size*Math.random())}.${imgData.type.split('/')[1]}`
+            );
+            const reader = new FileReader();
+            reader.onload = () => {
+                dispatch(addImage({
+                  file: imgFile,
+                  uri: reader.result,
+                }));
+                history.push('/review/write');
+            };
+            reader.readAsDataURL(imgFile);
+          }catch(e){
+            setLoading(false);
+            alert(e.message);
+          }
+        });
     }, [history, dispatch]);
 
     useEffect(() => {
+        const cleanup=video.current;
+
         navigator.mediaDevices
           .getUserMedia({
             video: {
               facingMode: { exact: "environment" },
-              width: { min: 640 },
-              height: { min: 640 },
-              aspectRatio: 1,
+              width: { min: 640, ideal:1080, max:1350},
+              height: { min: 640, ideal:1080, max:1350 },
+              aspectRatio: {
+                exact:1
+              },
             },
             audio: false,
           })
-          .then((pStream) => {
-            vStream.current = pStream;
-    
-            video.current.srcObject = pStream;
-            video.current.play();
+          .then((stream) => {    
+            video.current.srcObject = stream;
             setLoading(false);
           })
           .catch((e) => {
@@ -72,8 +73,8 @@ const CameraCon=({history})=>{
     
         return () => {
           try{
-            const oTrack = vStream.current.getTracks();
-            oTrack.map((pTrack) => pTrack.stop());
+            cleanup.srcObject.getVideoTracks()
+              .map((track) => track.stop());
           } catch(e){
             alert(e.message);
           }
@@ -81,6 +82,7 @@ const CameraCon=({history})=>{
       }, []);
 
     return (
+      <>
         <Camera 
             handleClose={handleClose} 
             loading={loading} 
@@ -88,6 +90,7 @@ const CameraCon=({history})=>{
             video={video}
             getCapture={getCapture}
         />
+      </>
     );
 };
 
