@@ -32,8 +32,7 @@ const Write=({
     loading,
     progress,
     review,
-    gallery,
-    onClick
+    rOnly,
 })=>{
     const classes = useStyles();
 
@@ -65,8 +64,7 @@ const Write=({
                 loading={loading}
                 progress={progress}
                 review={review}
-                rOnly={gallery}
-                handleClickOpen={onClick}
+                rOnly={rOnly}
             />
         </>
     );

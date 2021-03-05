@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { Route } from "react-router-dom";
 import loadable from "@loadable/component";
 
@@ -18,14 +18,29 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const FullScreenDialog = ({ open, handleClose, hashtagUpdate }) => {
+  const [rOnly, setROnly] = useState(true);
+
+  const onEntered = useCallback(() => {
+    setROnly(false);
+  }, []);
+  const onExit = useCallback(() => {
+    setROnly(true);
+  }, []);
+
   return (
     <Dialog
       fullScreen
       open={open}
       onClose={handleClose}
       TransitionComponent={Transition}
+      onEntered={onEntered}
+      onExit={onExit}
     >
-      <Route path={"/review/write"} component={WriteCon} exact />
+      <Route
+        path={"/review/write"}
+        render={(routeProps) => <WriteCon {...routeProps} rOnly={rOnly} />}
+        exact
+      />
       <Route path={"/review/camera"} component={CameraCon} exact />
       <Route
         path={"/review/update/:index"}

@@ -11,7 +11,7 @@ import {
 
 import Write from '../../components/review/FullScreenDialog/Write'
 
-const WriteCon=({history})=>{
+const WriteCon=({history, rOnly})=>{
     const { content, imgs, loading } = useSelector(state => (
         {
           content:state.review.content,
@@ -21,11 +21,7 @@ const WriteCon=({history})=>{
     ));
     const dispatch=useDispatch();
     const [progress, setProgress]=useState(0);
-    const [gallery, setGallery]=useState(true);
 
-    const onClick=useCallback(()=>{
-      setGallery(false);
-    }, []);
     const handleClose = useCallback(() => {
         dispatch(closeDialog());
         history.push('/review');
@@ -121,8 +117,7 @@ const WriteCon=({history})=>{
             onSubmit={onSubmit}
             loading={loading}
             progress={progress}
-            gallery={gallery}
-            onClick={onClick}
+            rOnly={rOnly}
         />
     );
 };
