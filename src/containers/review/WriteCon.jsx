@@ -21,7 +21,11 @@ const WriteCon=({history})=>{
     ));
     const dispatch=useDispatch();
     const [progress, setProgress]=useState(0);
+    const [gallery, setGallery]=useState(true);
 
+    const onClick=useCallback(()=>{
+      setGallery(false);
+    }, []);
     const handleClose = useCallback(() => {
         dispatch(closeDialog());
     }, [dispatch]);
@@ -56,12 +60,12 @@ const WriteCon=({history})=>{
                 };
                 reader.readAsDataURL(files[i]);
               }
+              if(files.length>5){
+                alert("이미지는 5개까지만 추가할 수 있습니다.");
+              }
             } catch (e) {
               alert(e.message);
             }
-          } else {
-            alert("이미지는 5개까지만 추가할 수 있습니다.");
-            return;
           }
         },
         [imgs, dispatch]
@@ -116,6 +120,8 @@ const WriteCon=({history})=>{
             onSubmit={onSubmit}
             loading={loading}
             progress={progress}
+            gallery={gallery}
+            onClick={onClick}
         />
     );
 };

@@ -23,7 +23,7 @@ const Main = ({ reviews, notices, food, order }) => {
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scroll(0, 0);
   }, []);
 
   return (

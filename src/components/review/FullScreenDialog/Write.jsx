@@ -1,4 +1,4 @@
-import React,{useRef} from 'react';
+import React from 'react';
 
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
@@ -31,10 +31,11 @@ const Write=({
     onSubmit,
     loading,
     progress,
-    review
+    review,
+    gallery,
+    onClick
 })=>{
     const classes = useStyles();
-    const inputId=useRef('write-input-id');
 
     return(
         <>
@@ -59,12 +60,13 @@ const Write=({
                 onChange={onChange} 
                 handleFileRemove={handleFileRemove}
                 onCamera={onCamera}
-                inputId={inputId.current}
                 handleFileOnChange={handleFileOnChange}
                 onSubmit={onSubmit}
                 loading={loading}
                 progress={progress}
                 review={review}
+                rOnly={gallery}
+                handleClickOpen={onClick}
             />
         </>
     );

@@ -39,7 +39,7 @@ const Menu = ({ categories, order }) => {
       jump.current = true;
       setValue(newValue);
 
-      window.scrollTo({
+      window.scroll({
         top: yOffset[newValue].top - yOffset[0].top,
         behavior: "smooth",
       });
@@ -123,7 +123,7 @@ const Menu = ({ categories, order }) => {
   }, [yOffset]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scroll(0, 0);
 
     setYoffset(
       listRefs.current.map((compo) => ({

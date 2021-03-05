@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -79,13 +79,13 @@ const EditReview = ({
   content,
   onSubmit,
   onCamera,
-  inputId,
   loading,
   progress,
   onChange,
   review,
 }) => {
   const classes = useStyles();
+  const inputId = useRef("review-image-input");
 
   return (
     <div className={classes.root}>

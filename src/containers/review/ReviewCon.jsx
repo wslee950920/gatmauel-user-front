@@ -11,8 +11,7 @@ import { getReviews, modReview, subReview } from '../../modules/reviews';
 import { 
   writeReview, 
   openDialog, 
-  closeDialog, 
-  addImage, 
+  closeDialog,
   removeImage,
   initialize,
   changeField,
@@ -84,33 +83,6 @@ const ReviewCon = ({ history, location }) => {
       dispatch(openDialog());
     },
     [user, history, dispatch]
-  );
-  const handleFileOnChange = useCallback(
-    (e) => {
-      e.preventDefault();
-
-      if (imgs.length < 5) {
-        const files = e.target.files;
-        if(files.length>5){
-          alert("이미지는 5개까지만 추가할 수 있습니다.");
-        }
-        try {
-          for (let i = 0; i < 5; i++) {
-            const reader = new FileReader();
-            reader.onload = () => {
-              dispatch(addImage({
-                file: files[i],
-                uri: reader.result,
-              }))        
-            };
-            reader.readAsDataURL(files[i]);
-          }
-        } catch (err) {
-          alert(err.message);
-        }
-      }
-    },
-    [imgs, dispatch]
   );
   const handleFileRemove = useCallback((index) => {
     dispatch(removeImage(index));
@@ -233,7 +205,7 @@ const ReviewCon = ({ history, location }) => {
       })
       .finally(()=>{
         setHloading(false);
-        window.scrollTo(0, 0);
+        window.scroll(0, 0);
       })
   }, []);
   const searchOnChange=useCallback((event)=>{
@@ -309,7 +281,6 @@ const ReviewCon = ({ history, location }) => {
         reviews={search?hashtags:reviews}
         content={content}
         imgs={imgs}
-        handleFileOnChange={handleFileOnChange}
         handleFileRemove={handleFileRemove}
         onSubmit={onSubmit}
         open={open}
