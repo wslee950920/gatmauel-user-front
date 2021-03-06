@@ -64,7 +64,7 @@ const ReviewCon = ({ history }) => {
   const handleClickOpen = useCallback(
     (e) => {
       e.preventDefault();
-      
+
       if (!user) {
         history.push("/login");
         alert("로그인을 해주세요.");
@@ -266,6 +266,16 @@ const ReviewCon = ({ history }) => {
       dispatch(getReviews());
     } 
   }, [review, reviewError, dispatch]);
+  useEffect(()=>{
+    //To unsubscribe history listening
+    //return unlisten.current; //no ();
+    //or
+    return history.listen((location, action) => {
+      if (location.pathname === "/review") {
+        dispatch(closeDialog());
+      }
+    });
+  }, [history, dispatch]);
 
   return (
     <>
