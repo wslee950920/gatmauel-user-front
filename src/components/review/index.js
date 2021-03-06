@@ -198,7 +198,11 @@ const Review = ({
       </StepProvider>
       {user && (
         <>
-          <FullScreenDialog open={open} handleClose={handleClose} />
+          <FullScreenDialog
+            open={open}
+            handleClose={handleClose}
+            reviews={reviews}
+          />
           <DeleteDialog
             rOpen={rOpen}
             closeRemove={closeRemove}

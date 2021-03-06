@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FullScreenDialog = ({ open, handleClose }) => {
+const FullScreenDialog = ({ open, handleClose, reviews }) => {
   return (
     <Dialog
       fullScreen
@@ -27,7 +27,13 @@ const FullScreenDialog = ({ open, handleClose }) => {
     >
       <Route path={"/review/write"} component={WriteCon} exact />
       <Route path={"/review/camera"} component={CameraCon} exact />
-      <Route path={"/review/update/:index"} component={UpdateCon} exact />
+      <Route
+        path={"/review/update/:index"}
+        render={({ match, history }) => (
+          <UpdateCon match={match} history={history} reviews={reviews} />
+        )}
+        exact
+      />
     </Dialog>
   );
 };

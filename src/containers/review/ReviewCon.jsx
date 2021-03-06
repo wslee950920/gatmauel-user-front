@@ -288,8 +288,6 @@ const ReviewCon = ({ history, location }) => {
       } else if(review.hasOwnProperty('deleted')){
         setHashtags(prev=>prev.filter(obj=>obj.id!==parseInt(review.deleted)));
       }
-
-      setSearch('');
     }
   }, [review, hashtags, search, content]);
   useEffect(()=>{

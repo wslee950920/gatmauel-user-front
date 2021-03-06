@@ -10,11 +10,10 @@ import {
 
 import Write from '../../components/review/FullScreenDialog/Write'
 
-const UpdateCon=({match, history})=>{
-    const { content, reviews, loading } = useSelector(state => (
+const UpdateCon=({match, history, reviews})=>{
+    const { content, loading } = useSelector(state => (
         {
           content:state.review.content,
-          reviews:state.reviews.reviews,
           loading:state.loading['update/UPDATE_REVIEW']
         }
     ));
