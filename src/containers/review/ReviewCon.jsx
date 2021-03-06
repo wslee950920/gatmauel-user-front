@@ -22,7 +22,7 @@ import {check} from '../../modules/user';
 import Review from '../../components/review';
 import SearchBar from "../../components/common/SearchBar";
 
-const ReviewCon = ({ history }) => {
+const ReviewCon = ({ history, location }) => {
   const dispatch = useDispatch();
   const { 
     reviews, 
@@ -65,7 +65,9 @@ const ReviewCon = ({ history }) => {
   }, [history]);
   const handleClickOpen = useCallback(
     (e) => {
-      e.preventDefault();
+      if (location.pathname === "/review"){
+        e.preventDefault();
+      }
 
       if (!user) {
         history.push("/login");
@@ -77,7 +79,7 @@ const ReviewCon = ({ history }) => {
       history.push('/review/write');
       dispatch(openDialog());
     },
-    [user, history, dispatch]
+    [user, history, dispatch, location]
   );
   const handleFileRemove = useCallback((index) => {
     dispatch(removeImage(index));

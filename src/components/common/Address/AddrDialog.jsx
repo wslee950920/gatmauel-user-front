@@ -44,7 +44,6 @@ const AddrDialog=({
     loading, 
     hasNextPage, 
     queryOnChange,
-    handleOnExit
 })=>{
     const classes=useStyles();
 
@@ -99,7 +98,6 @@ const AddrDialog=({
             open={open} 
             onClose={handleClose} 
             TransitionComponent={Transition} 
-            onExit={handleOnExit}
         >
             <CssBaseline />
             <Container maxWidth="sm">

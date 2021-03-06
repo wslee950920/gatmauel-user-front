@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import loadable from "@loadable/component";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -72,7 +72,6 @@ const Profile = ({
   addrRef,
   handleMouseDown,
   detailRef,
-  handleOnExit,
   phone,
   phoneChange,
   checkPhone,
@@ -80,16 +79,9 @@ const Profile = ({
   verify,
   confirmPhone,
   code,
+  platform,
 }) => {
   const classes = useStyles();
-  const [platform, setPlatform] = useState(null);
-
-  useEffect(() => {
-    const filter = "win16|win32|win64|macintel|mac";
-    setPlatform(
-      navigator.platform && filter.indexOf(navigator.platform.toLowerCase()) < 0
-    );
-  }, []);
 
   return (
     <>
@@ -200,7 +192,6 @@ const Profile = ({
           queryOnChange={queryOnChange}
           query={query}
           addrOnClick={addrOnClick}
-          handleOnExit={handleOnExit}
         />
       )}
     </>

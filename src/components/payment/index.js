@@ -74,7 +74,6 @@ const Payment = ({
   open,
   addressClose,
   addrOnClick,
-  addressExit,
   charge,
   radio,
   text,
@@ -200,7 +199,6 @@ const Payment = ({
           open={open}
           handleClose={addressClose}
           addrOnClick={addrOnClick}
-          handleOnExit={addressExit}
         />
       )}
     </>

@@ -84,6 +84,7 @@ const AddrInput=({
                     value={addr}
                     error={error.addr}
                     disabled={value === 1}
+                    readOnly
                 />
             </FormControl>
             <TextField

@@ -49,6 +49,7 @@ const ProfileCon=({history})=>{
     const [confirm, setConfirm]=useState(true);
     const [platform, setPlatform]=useState(null);
     const source=useRef(null);
+    const [distance, setDistance]=useState(0);
 
     const onChange=useCallback((event)=>{
         const {name, value}=event.target;
@@ -87,6 +88,7 @@ const ProfileCon=({history})=>{
             detail:false
         }))
         setAddr('');
+        detailRef.current.blur();
     }, []);
     const handleClickOpen = useCallback(() => {
         setError(prev=>({...prev, addr:false, detail:false}));
@@ -103,7 +105,10 @@ const ProfileCon=({history})=>{
                     userAPI.get('/order/distance', {
                         params:{goal:data.address}
                       }).then((res)=>{
+                        setDistance(res.data.distance);
+                        
                         if(res.data.distance>5000){
+                            addrRef.current.blur();
                             setError(prev=>({...prev, addr:true}))
                             alert('거리 5km이상 지역은 배달이 불가합니다.');
                         } else{
@@ -113,6 +118,7 @@ const ProfileCon=({history})=>{
                         if(err.response){
                             if(err.response.status===404){
                                 alert('주소를 찾을 수 없습니다.');
+                                addrRef.current.blur();
                             }
                         }
                         else{
@@ -121,20 +127,26 @@ const ProfileCon=({history})=>{
                     });
                 },
                 onclose:()=>{
+                    if (distance > 5000&&addr) {
+                        setError(prev => ({ ...prev, addr: true }));
+                        alert('거리 5km이상 지역은 배달이 불가합니다.');
+                    }
                     addrRef.current.blur();
                 }
             }).open({
                 popupName: 'postcodePopup'
             });
         }
-    }, [platform]);
-    const handleOnExit=useCallback(()=>{
-        addrRef.current.blur();
-        window.scroll(0, 0);
-    }, []);
+    }, [platform, distance, addr]);
     const handleClose = useCallback(() => {
+        addrRef.current.blur();
         setOpen(false);
-    }, []);
+
+        if (distance > 5000&&addr) {
+            setError(prev => ({ ...prev, addr: true }));
+            alert('거리 5km이상 지역은 배달이 불가합니다.');
+        }
+    }, [distance, addr]);
     const addrOnClick=useCallback((addr)=>{
         setAddr(addr);
         setOpen(false);
@@ -142,16 +154,21 @@ const ProfileCon=({history})=>{
         userAPI.get('/order/distance', {
               params:{goal:addr},
           }).then((res)=>{
+            setDistance(res.data.distance);
+
             if(res.data.distance>5000){
+                addrRef.current.blur();
                 setError(prev=>({...prev, addr:true}));
                 alert('거리 5km이상 지역은 배달이 불가합니다.');
             } else{
-                setTimeout(()=>{detailRef.current.focus()}, 200);
+                detailRef.current.focus();
             }
           }).catch((err)=>{
             if(err.response){
               if(err.response.status===404){
+                setError(prev => ({ ...prev, addr: true }));
                 alert('주소를 찾을 수 없습니다.');
+                addrRef.current.blur();
               }
             }else{
                 alert(err.message);
@@ -421,7 +438,6 @@ const ProfileCon=({history})=>{
                 addrRef={addrRef}
                 handleMouseDown={handleMouseDown}
                 detailRef={detailRef}
-                handleOnExit={handleOnExit}
                 phone={phone}
                 phoneChange={phoneChange}
                 checkPhone={checkPhone}
@@ -429,6 +445,7 @@ const ProfileCon=({history})=>{
                 verify={verify}
                 confirmPhone={confirmPhone}
                 code={code}
+                platform={platform}
             />                
 };
 

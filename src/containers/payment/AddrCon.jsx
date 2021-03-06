@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import AddrDialog from '../../components/common/Address/AddrDialog'
 
-const AddrCon=({open, handleClose, addrOnClick, handleOnExit})=>{
+const AddrCon=({open, handleClose, addrOnClick})=>{
     const [loading, setLoading] = useState(false);
     const [kakao, setKakao] = useState([]);
     const [hasNextPage, setHasNextPage] = useState(true);
@@ -68,7 +68,6 @@ const AddrCon=({open, handleClose, addrOnClick, handleOnExit})=>{
           queryOnChange={queryOnChange}
           query={query}
           addrOnClick={addrOnClick}
-          handleOnExit={handleOnExit}
         />
     )
 }

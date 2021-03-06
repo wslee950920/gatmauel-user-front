@@ -346,33 +346,36 @@ const PaymentCon = ({
           dispatch(setTempAddress(data.address));
         },
         onclose: () => {
+          if (distance > 5000&&addr) {
+            setError(prev => ({ ...prev, addr: true }));
+            alert('거리 5km이상 지역은 배달이 불가합니다.');
+          }
           addrRef.current.blur();
         },
       }).open({
         popupName: "postcodePopup",
       });
     }
-  }, [platform, dispatch]);
+  }, [platform, dispatch, distance, addr]);
   const addrOnClick = useCallback((addr) => {
     setOpen(false);
     dispatch(setTempAddress(addr));
   }, [dispatch]);
-  const addressExit = useCallback(() => {
-    addrRef.current.blur();
-    window.scroll(0, 0);
-  }, []);
   const addressClose = useCallback(() => {
-    if (distance > 5000) {
+    if (distance > 5000&&addr) {
       setError(prev => ({ ...prev, addr: true }));
+      alert('거리 5km이상 지역은 배달이 불가합니다.');
     }
 
     setOpen(false);
-  }, [distance]);
+    addrRef.current.blur();
+  }, [distance, addr]);
   const clearAddress = useCallback(() => {
     setError(prev => ({ ...prev, addr: false }));
+    dispatch(setTempAddress(''));
     detailRef.current.blur();
     setAddr("");
-  }, []);
+  }, [dispatch]);
   const handleMouseDown = useCallback((event) => {
     event.preventDefault();
   }, []);
@@ -390,6 +393,7 @@ const PaymentCon = ({
           params:{goal: addr}
         }).then((res) => {
           if (res.data.distance > 5000) {
+            addrRef.current.blur();
             alert('거리 5km이상 지역은 배달이 불가합니다.');
             setError(prev => ({ ...prev, addr: true }));
           } else {
@@ -399,7 +403,9 @@ const PaymentCon = ({
           setDistance(res.data.distance);
         }).catch((err) => {
           if (err.response&&err.response.status === 404) {
+            setError(prev => ({ ...prev, addr: true }));
             alert('주소를 찾을 수 없습니다.');
+            addrRef.current.blur();
           } else {
             alert(err.message);
           }
@@ -519,7 +525,6 @@ const PaymentCon = ({
       open={open}
       addressClose={addressClose}
       addrOnClick={addrOnClick}
-      addressExit={addressExit}
       charge={charge}
       radio={radio}
       text={text}
