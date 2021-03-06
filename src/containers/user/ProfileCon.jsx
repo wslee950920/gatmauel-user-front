@@ -48,6 +48,7 @@ const ProfileCon=({history})=>{
     const [code, setCode]=useState('');
     const [confirm, setConfirm]=useState(true);
     const [platform, setPlatform]=useState(null);
+    const source=useRef(null);
 
     const onChange=useCallback((event)=>{
         const {name, value}=event.target;
@@ -139,7 +140,7 @@ const ProfileCon=({history})=>{
         setOpen(false);
 
         userAPI.get('/order/distance', {
-              params:{goal:addr}
+              params:{goal:addr},
           }).then((res)=>{
             if(res.data.distance>5000){
                 setError(prev=>({...prev, addr:true}));
@@ -160,6 +161,12 @@ const ProfileCon=({history})=>{
     const getAddress=useCallback((query, page)=>{
         setLoading(true);
 
+        if(source.current){
+            source.current.cancel("consecutive requests");
+        }
+        const CancelToken = axios.CancelToken;
+        source.current = CancelToken.source();
+
         axios.get('https://dapi.kakao.com/v2/local/search/address.json', {
             headers: {
                 'Authorization' : `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`
@@ -167,7 +174,8 @@ const ProfileCon=({history})=>{
             params:{
                 query,
                 page
-            }
+            },
+            cancelToken:source.current.token
         })
         .then((response)=>{
             if(page===1){
@@ -180,14 +188,18 @@ const ProfileCon=({history})=>{
             setLoading(false);
         })
         .catch((error)=>{
-            if(error.response){
-                if(error.response.status===400){
-                    setHasNextPage(false);
-                }
+            if (axios.isCancel(error)) {
+                console.log('Request cancelled', error.message);
             } else{
-                alert(error.message);
+                if(error.response){
+                    if(error.response.status===400){
+                        setHasNextPage(false);
+                    }
+                } else{
+                    alert(error.message);
+                }
+                setLoading(false);
             }
-            setLoading(false);
         })
     }, [])
     const queryOnChange=useCallback((e)=>{

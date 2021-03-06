@@ -1,7 +1,8 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import FormData from 'form-data';
+import axios from 'axios';
 
 import {usePreloader} from '../../lib/PreloadContext';
 import {user as userAPI} from '../../lib/api/client'
@@ -57,6 +58,7 @@ const ReviewCon = ({ history }) => {
   const [hashtags, setHashtags]=useState([]);
   const [search, setSearch]=useState('');
   const [hloading, setHloading]=useState(false);
+  const source=useRef(null);
 
   const handleClose = useCallback(() => {
     history.push('/review');
@@ -159,11 +161,18 @@ const ReviewCon = ({ history }) => {
     setHloading(true);
     setHasNextPage(true);
 
+    if(source.current){
+      source.current.cancel("consecutive requests");
+    }
+    const CancelToken = axios.CancelToken;
+    source.current = CancelToken.source();
+
     userAPI.get('/review/hashtag', {
       params:{
         hashtag:query,
         page
-      }
+      },
+      cancelToken:source.current.token
     }).then((res)=>{
         if(page===1){
           setHashtags(res.data.reviews);
@@ -182,15 +191,19 @@ const ReviewCon = ({ history }) => {
         setHloading(false);
         window.scroll(0, 0);
       }).catch((err)=>{
-        if(err.response&&err.response.status===204){
-          setHasNextPage(false);
+        if (axios.isCancel(err)) {
+          console.log('Request cancelled', err.message);
         } else{
-          alert(err.message); 
+          if(err.response&&err.response.status===204){
+            setHasNextPage(false);
+          } else{
+            alert(err.message); 
+          }
+          setHloading(false);
+          window.scroll(0, 0);
         }
-        setHloading(false);
-        window.scroll(0, 0);
       });
-  }, []);
+  }, [source]);
   const searchOnChange=useCallback((event)=>{
     const {value}=event.target;
     setSearch(value);
@@ -254,8 +267,9 @@ const ReviewCon = ({ history }) => {
 
       dispatch(initialize());
       dispatch(getReviews());
+      history.push('/review');
     } 
-  }, [review, reviewError, dispatch]);
+  }, [review, reviewError, dispatch, history]);
   useEffect(()=>{
     if(review){
       if(hashtags.length<1||search==='') return;
@@ -274,9 +288,8 @@ const ReviewCon = ({ history }) => {
       }
 
       setSearch('');
-      history.push('/review');
     }
-  }, [review, hashtags, search, content, history]);
+  }, [review, hashtags, search, content]);
   useEffect(()=>{
     //To unsubscribe history listening
     //return unlisten.current; without ();
