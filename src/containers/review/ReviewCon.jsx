@@ -139,18 +139,14 @@ const ReviewCon = ({ history }) => {
     setTimeout(()=>{
       dispatch(changeField({
         key:'content',
-        value:reviews[index].content
+        value:(search===''?reviews:hashtags)[index].content
       }));
     }, 300);
-  }, [history, dispatch, reviews]);
+  }, [history, dispatch, reviews, hashtags, search]);
   const feedRemove=useCallback(()=>{
-    if(hashtags.length>0&&search!==''){
-      setHashtags(prev=>prev.filter(current=>current.id!==reviewId));
-    }
-
     dispatch(removeReview(reviewId));
     setRopen(false);
-  }, [dispatch, reviewId, hashtags, search]);
+  }, [dispatch, reviewId]);
   const openRemove=useCallback((id)=>{
     setRopen(true);
     setReviewId(id);
@@ -159,18 +155,6 @@ const ReviewCon = ({ history }) => {
     setRopen(false);
   }, []);
   
-  const hashtagUpdate=useCallback((id, content)=>{
-    if(hashtags.length<1||search==='') return;
-
-    setHashtags(prev=>prev.map((current)=>
-      current.id===id
-      ?{
-        ...current,
-        content
-      }
-      :current
-    ));
-  }, [hashtags, search]);
   const getHashtags=useCallback((query, page)=>{
     setHloading(true);
     setHasNextPage(true);
@@ -273,12 +257,34 @@ const ReviewCon = ({ history }) => {
     } 
   }, [review, reviewError, dispatch]);
   useEffect(()=>{
+    if(review){
+      if(hashtags.length<1||search==='') return;
+
+      if(review.hasOwnProperty('updated')){
+        setHashtags(prev=>prev.map((obj)=>
+          obj.id===parseInt(review.updated)
+          ?{
+            ...obj,
+            content
+          }
+          :obj
+        ));
+      } else if(review.hasOwnProperty('deleted')){
+        setHashtags(prev=>prev.filter(obj=>obj.id!==parseInt(review.deleted)));
+      }
+
+      setSearch('');
+      history.push('/review');
+    }
+  }, [review, hashtags, search, content, history]);
+  useEffect(()=>{
     //To unsubscribe history listening
     //return unlisten.current; without ();
     //or
     return history.listen((location, action) => {
       if (location.pathname === "/review") {
         dispatch(closeDialog());
+        dispatch(initialize());
       }
     });
   }, [history, dispatch]);
@@ -309,7 +315,6 @@ const ReviewCon = ({ history }) => {
         wloading={wloading}
         order={order}
         hashtagOnClick={hashtagOnClick}
-        hashtagUpdate={hashtagUpdate}
       />
     </>
   )

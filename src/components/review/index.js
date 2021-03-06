@@ -54,7 +54,6 @@ const Review = ({
   wloading,
   order,
   hashtagOnClick,
-  hashtagUpdate,
 }) => {
   const theme = useTheme();
   const xSmall = useMediaQuery(theme.breakpoints.up("xs"));
@@ -164,7 +163,7 @@ const Review = ({
           isRowLoaded={isRowLoaded}
           loadMoreRows={loadMoreRows}
           rowCount={rowCount}
-          threshold={8}
+          threshold={6}
         >
           {({ onRowsRendered, registerChild }) => (
             <WindowScroller serverWidth={600} serverHeight={2700}>
@@ -199,11 +198,7 @@ const Review = ({
       </StepProvider>
       {user && (
         <>
-          <FullScreenDialog
-            open={open}
-            handleClose={handleClose}
-            hashtagUpdate={hashtagUpdate}
-          />
+          <FullScreenDialog open={open} handleClose={handleClose} />
           <DeleteDialog
             rOpen={rOpen}
             closeRemove={closeRemove}

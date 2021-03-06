@@ -10,7 +10,7 @@ import {
 
 import Write from '../../components/review/FullScreenDialog/Write'
 
-const UpdateCon=({match, hashtagUpdate, history})=>{
+const UpdateCon=({match, history})=>{
     const { content, reviews, loading } = useSelector(state => (
         {
           content:state.review.content,
@@ -34,14 +34,13 @@ const UpdateCon=({match, hashtagUpdate, history})=>{
         }));
     }, [dispatch]);
     const onSubmit = useCallback(
-        async (e) => {
+        (e) => {
           e.preventDefault();
           if (content === '') return;
     
-          hashtagUpdate(reviews[match.params.index].id, content);
           dispatch(updateReview({id:reviews[match.params.index].id, content}));
         },
-        [content, reviews, match.params.index, dispatch, hashtagUpdate]
+        [content, reviews, match.params.index, dispatch]
       );
 
     return (
