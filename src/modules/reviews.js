@@ -47,16 +47,15 @@ const reviews = (state = initialState, action) => {
     case GET_REVIEWS_SUCCESS:
       return {
         ...state,
-        reviews: [
-          ...state.reviews.filter((item) => {
-            return (
-              action.payload.data.findIndex(({ id }) => item.id === id) === -1
-            );
-          }),
-          ...action.payload.data,
-        ].sort((l, r) => r.id - l.id),
+        reviews: [...state.reviews, ...action.payload.data]
+          .reduce((acc, cur) => {
+            if (acc.findIndex(({ id }) => id === cur.id) === -1) {
+              acc.push(cur);
+            }
+            return acc;
+          }, [])
+          .sort((l, r) => r.id - l.id),
         lastPage: parseInt(action.payload.headers["last-page"]),
-        error:null
       };
     case GET_REVIEWS_FAILURE:
       return {

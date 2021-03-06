@@ -175,31 +175,37 @@ const ReviewCon = ({ history }) => {
     setHloading(true);
     setHasNextPage(true);
 
-    userAPI.post('/review/hashtag', {
-      hashtag:query,
-      page
+    userAPI.get('/review/hashtag', {
+      params:{
+        hashtag:query,
+        page
+      }
     }).then((res)=>{
         if(page===1){
           setHashtags(res.data.reviews);
         } else{
-          setHashtags(prev=>[
-            ...new Set([...prev, ...res.data.reviews]
-              .map(JSON.stringify))]
-              .map(JSON.parse)
+          setHashtags(prev=>[...prev, ...res.data.reviews]
+            .reduce((acc, cur)=>{
+              if (acc.findIndex(({ id }) => id === cur.id) === -1) {
+                acc.push(cur);
+              }
+              return acc;
+            }, [])
+            .sort((l, r) => r.id - l.id)
           );
         }
         setHasNextPage(!res.data.is_end);
+        setHloading(false);
+        window.scroll(0, 0);
       }).catch((err)=>{
         if(err.response&&err.response.status===204){
           setHasNextPage(false);
         } else{
           alert(err.message); 
         }
-      })
-      .finally(()=>{
         setHloading(false);
         window.scroll(0, 0);
-      })
+      });
   }, []);
   const searchOnChange=useCallback((event)=>{
     const {value}=event.target;

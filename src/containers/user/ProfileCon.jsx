@@ -99,8 +99,8 @@ const ProfileCon=({history})=>{
                 oncomplete:(data)=>{
                     setAddr(data.address);
 
-                    userAPI.post('/order/distance', {
-                          goal:data.address
+                    userAPI.get('/order/distance', {
+                        params:{goal:data.address}
                       }).then((res)=>{
                         if(res.data.distance>5000){
                             setError(prev=>({...prev, addr:true}))
@@ -129,6 +129,7 @@ const ProfileCon=({history})=>{
     }, [platform]);
     const handleOnExit=useCallback(()=>{
         addrRef.current.blur();
+        window.scroll(0, 0);
     }, []);
     const handleClose = useCallback(() => {
         setOpen(false);
@@ -137,8 +138,8 @@ const ProfileCon=({history})=>{
         setAddr(addr);
         setOpen(false);
 
-        userAPI.post('/order/distance', {
-              goal:addr
+        userAPI.get('/order/distance', {
+              params:{goal:addr}
           }).then((res)=>{
             if(res.data.distance>5000){
                 setError(prev=>({...prev, addr:true}));

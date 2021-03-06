@@ -24,7 +24,7 @@ input[type="search"]::-webkit-search-cancel-button {
   cursor: pointer;
 }
 
-input[type="search"]:focus::-webkit-search-cancel-button {
+input[type="search"]:valid::-webkit-search-cancel-button {
   opacity: 0.3;
   pointer-events: all;
 }

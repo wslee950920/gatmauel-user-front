@@ -72,6 +72,7 @@ const SearchBar = ({ hashtag, address, onChange, value }) => {
             })}
             value={value}
             onChange={onChange}
+            required
           />
         </div>
       </Toolbar>

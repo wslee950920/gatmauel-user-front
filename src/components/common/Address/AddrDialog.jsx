@@ -99,7 +99,7 @@ const AddrDialog=({
             open={open} 
             onClose={handleClose} 
             TransitionComponent={Transition} 
-            onExited={handleOnExit}
+            onExit={handleOnExit}
         >
             <CssBaseline />
             <Container maxWidth="sm">

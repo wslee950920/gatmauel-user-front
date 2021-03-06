@@ -359,6 +359,7 @@ const PaymentCon = ({
   }, [dispatch]);
   const addressExit = useCallback(() => {
     addrRef.current.blur();
+    window.scroll(0, 0);
   }, []);
   const addressClose = useCallback(() => {
     if (distance > 5000) {
@@ -385,8 +386,8 @@ const PaymentCon = ({
   useEffect(() => {
     if (method === 'delivery') {
       if (addr) {
-        userAPI.post('/order/distance', {
-          goal: addr
+        userAPI.get('/order/distance', {
+          params:{goal: addr}
         }).then((res) => {
           if (res.data.distance > 5000) {
             alert('거리 5km이상 지역은 배달이 불가합니다.');

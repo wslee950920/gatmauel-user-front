@@ -45,12 +45,11 @@ const notices = (state = initialState, action) => {
         ...state,
         notices: [...state.notices, ...action.payload.data],
         lastPage: parseInt(action.payload.headers["last-page"]),
-        error: null,
       };
     case GET_NOTICES_FAILURE:
       return {
         ...state,
-        error: action.payload.data,
+        error: action.payload,
       };
     default:
       return state;
