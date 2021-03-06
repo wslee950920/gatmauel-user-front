@@ -32,7 +32,6 @@ const Write=({
     loading,
     progress,
     review,
-    rOnly,
 })=>{
     const classes = useStyles();
 
@@ -64,7 +63,6 @@ const Write=({
                 loading={loading}
                 progress={progress}
                 review={review}
-                rOnly={rOnly}
             />
         </>
     );

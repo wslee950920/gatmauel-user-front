@@ -62,7 +62,9 @@ const ReviewCon = ({ history }) => {
     history.push('/review');
   }, [history]);
   const handleClickOpen = useCallback(
-    () => {
+    (e) => {
+      e.preventDefault();
+      
       if (!user) {
         history.push("/login");
         alert("로그인을 해주세요.");

@@ -11,7 +11,7 @@ import {
 
 import Write from '../../components/review/FullScreenDialog/Write'
 
-const WriteCon=({history, rOnly})=>{
+const WriteCon=({history})=>{
     const { content, imgs, loading } = useSelector(state => (
         {
           content:state.review.content,
@@ -117,7 +117,6 @@ const WriteCon=({history, rOnly})=>{
             onSubmit={onSubmit}
             loading={loading}
             progress={progress}
-            rOnly={rOnly}
         />
     );
 };
