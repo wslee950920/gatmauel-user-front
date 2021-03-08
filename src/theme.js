@@ -10,6 +10,9 @@ const rk = {
 const theme = createMuiTheme({
   typography: {
     fontFamily: "Recipe Korea",
+    button: {
+      textTransform: "none",
+    },
   },
   palette: {
     primary: {

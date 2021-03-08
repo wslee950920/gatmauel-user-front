@@ -9,11 +9,13 @@ import ReadNotice from '../../components/notice/ReadNotice';
 
 const ReadNoticeCon=({match})=>{
     const dispatch=useDispatch();
-    const {notices, loading, error}=useSelector(state=>(
+    const {notices, loading, error, search, result}=useSelector(state=>(
         {
             notices:state.notices.notices,
             loading:state.loading['notices/GET'],
-            error:state.notices.error 
+            error:state.notices.error,
+            search:state.notices.search,
+            result:state.notices.result 
         }
     ));
 
@@ -30,9 +32,12 @@ const ReadNoticeCon=({match})=>{
         window.scroll(0, 0);
     }, []);
 
-    const {id}=match.params;
-    if(notices.length<1||!notices[id]) return null;
-    return <ReadNotice notice={notices[id]}/>;
+    const {index}=match.params;
+    if(search
+        ?(result.docs.length<1||!result.docs[index])
+        :notices.length<1||!notices[index]
+    ) return null;
+    return <ReadNotice notice={search?result.docs[index]:notices[index]}/>;
 }
 
 export default React.memo(ReadNoticeCon);

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useEffect } from "react";
 import List from "react-virtualized/dist/commonjs/List";
 import WindowScroller from "react-virtualized/dist/commonjs/WindowScroller";
 import InfiniteLoader from "react-virtualized/dist/commonjs/InfiniteLoader";
@@ -55,6 +55,10 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading, order }) => {
     },
     [notices, isRowLoaded]
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

@@ -176,44 +176,37 @@ const ReviewCon = ({ history, location }) => {
       },
       cancelToken:source.current.token
     }).then((res)=>{
-        if(page===1){
-          setHashtags(res.data.reviews);
-        } else{
-          setHashtags(prev=>[...prev, ...res.data.reviews]
-            .reduce((acc, cur)=>{
-              if (acc.findIndex(({ id }) => id === cur.id) === -1) {
-                acc.push(cur);
-              }
-              return acc;
-            }, [])
-            .sort((l, r) => r.id - l.id)
-          );
-        }
+        setHashtags(prev=>[...prev, ...res.data.reviews]
+          .reduce((acc, cur)=>{
+            if (acc.findIndex(({ id }) => id === cur.id) === -1) {
+              acc.push(cur);
+            }
+            return acc;
+          }, [])
+          .sort((l, r) => r.id - l.id)
+        );  
         setHasNextPage(!res.data.is_end);
         setHloading(false);
-        window.scroll(0, 0);
       }).catch((err)=>{
         if (axios.isCancel(err)) {
-          console.log('Request cancelled', err.message);
+          return;
         } else{
-          if(err.response&&err.response.status===204){
-            setHasNextPage(false);
-          } else{
-            alert(err.message); 
-          }
+          alert(err.message); 
           setHloading(false);
-          window.scroll(0, 0);
+          setHasNextPage(false);
         }
       });
   }, [source]);
   const searchOnChange=useCallback((event)=>{
+    setHashtags([]);
+    
     const {value}=event.target;
     setSearch(value);
-    if(value===''){
-      setHashtags([]);
-    } else{
+    if(value){
       getHashtags(value, 1);
     }
+
+    window.scroll(0, 0);
   }, [getHashtags]);
   const loadNextPage=useCallback(({startIndex})=>{
     if(search){

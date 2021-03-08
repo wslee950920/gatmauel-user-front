@@ -63,7 +63,7 @@ const ReviewList = ({ reviews }) => {
           </div>
           <div>
             <List>
-              {reviews.length >= 0 ? (
+              {reviews.length > 0 ? (
                 <div style={{ height: 192 }}>
                   {reviews.slice(0, 4).map((review, index) => (
                     <ListItemLink
