@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -48,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
 
 const ReadNotice = ({ notice }) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
 
   return (
     <div className={classes.root}>

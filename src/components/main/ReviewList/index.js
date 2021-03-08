@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReviewList = ({ reviews }) => {
+const ReviewList = ({ reviews, error, loading }) => {
   const classes = useStyles();
 
   return (
@@ -63,7 +63,7 @@ const ReviewList = ({ reviews }) => {
           </div>
           <div>
             <List>
-              {reviews.length > 0 ? (
+              {!loading && !error ? (
                 <div style={{ height: 192 }}>
                   {reviews.slice(0, 4).map((review, index) => (
                     <ListItemLink

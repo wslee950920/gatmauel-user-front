@@ -10,7 +10,7 @@ import NoticeList from "./NoticeList";
 const Fab = loadable(() => import("../common/Fab"));
 const CardDialog = loadable(() => import("../common/CardDialog"));
 
-const Main = ({ reviews, notices, food, order }) => {
+const Main = ({ reviews, notices, food, order, error, loading }) => {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -31,8 +31,16 @@ const Main = ({ reviews, notices, food, order }) => {
       <CarouselView />
       <Grid container>
         <Grid item xs={12} md={6}>
-          <NoticeList notices={notices} />
-          <ReviewList reviews={reviews} />
+          <NoticeList
+            notices={notices}
+            error={error.notices}
+            loading={loading.notices}
+          />
+          <ReviewList
+            reviews={reviews}
+            error={error.reviews}
+            loading={loading.reviews}
+          />
         </Grid>
         <Grid item xs={12} md={6}>
           <CarouselMenu handleOpen={handleOpen} food={food} />

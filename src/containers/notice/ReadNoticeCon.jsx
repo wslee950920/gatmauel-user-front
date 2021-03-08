@@ -28,9 +28,6 @@ const ReadNoticeCon=({match})=>{
 
         dispatch(getNotices());
     }, [dispatch, notices, loading, error]);
-    useEffect(()=>{
-        window.scroll(0, 0);
-    }, []);
 
     const {index}=match.params;
     if(search

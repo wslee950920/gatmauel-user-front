@@ -6,13 +6,39 @@ const GET_NOTICES = "notices/GET_NOTICES";
 const GET_NOTICES_SUCCESS = "notices/GET_NOTICES_SUCCESS";
 const GET_NOTICES_FAILURE = "notices/GET_NOTICES_FAILURE";
 
+const GET_RESULTS_SUCCESS = "notices/GET_RESULTS_SUCCESS";
+const GET_RESULTS_FAILURE = "notices/GET_RESULTS_FAILURE";
+const GET_RESULTS = "notices/GET_RESULT";
+
 const CHANGE_SEARCH = "notices/CHANGE_QUERY";
-const SET_RESULT = "notices/SET_RESULT";
-const INIT_RESULT = "notices/INIT_RESULT";
+const INIT_RESULTS = "notices/INIT_RESULT";
 
 export const setSearch = (query) => ({ type: CHANGE_SEARCH, payload: query });
-export const initResult = () => ({ type: INIT_RESULT });
-export const setResult = (docs) => ({ type: SET_RESULT, payload: docs });
+export const initResults = () => ({ type: INIT_RESULTS });
+export const getResults = (query, page) => ({
+  type: GET_RESULTS,
+  payload: { query, page },
+});
+const getResultsSuccess = (data) => ({
+  type: GET_RESULTS_SUCCESS,
+  payload: data,
+});
+const getResultsFailure = (error) => ({
+  type: GET_RESULTS_FAILURE,
+  payload: error,
+});
+
+function* getResultsSaga(action) {
+  yield put(startLoading("notices/GET"));
+
+  try {
+    const response = yield call(noticesAPI.search, action.payload);
+    yield put(getResultsSuccess(response));
+  } catch (e) {
+    yield put(getResultsFailure(e));
+  }
+  yield put(finishLoading("notices/GET"));
+}
 
 export const getNotices = (page) => ({ type: GET_NOTICES, payload: page });
 const getNoticesSuccess = (data) => ({
@@ -38,6 +64,7 @@ function* getNoticesSaga(action) {
 
 export function* noticesSaga() {
   yield takeLatest(GET_NOTICES, getNoticesSaga);
+  yield takeLatest(GET_RESULTS, getResultsSaga);
 }
 
 const initialState = {
@@ -50,11 +77,11 @@ const initialState = {
 
 const notices = (state = initialState, action) => {
   switch (action.type) {
-    case SET_RESULT:
+    case GET_RESULTS_SUCCESS:
       return {
         ...state,
         result: {
-          docs: [...state.result.docs, ...action.payload.docs]
+          docs: [...state.result.docs, ...action.payload.data.docs]
             .reduce((acc, cur) => {
               if (acc.findIndex(({ id }) => id === cur.id) === -1) {
                 acc.push(cur);
@@ -62,10 +89,15 @@ const notices = (state = initialState, action) => {
               return acc;
             }, [])
             .sort((l, r) => r.id - l.id),
-          is_end: action.payload.is_end,
+          is_end: action.payload.data.is_end,
         },
       };
-    case INIT_RESULT:
+    case GET_RESULTS_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case INIT_RESULTS:
       return {
         ...state,
         result: {

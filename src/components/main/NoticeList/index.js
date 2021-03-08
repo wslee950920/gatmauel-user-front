@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NoticeList = ({ notices }) => {
+const NoticeList = ({ notices, error, loading }) => {
   const classes = useStyles();
 
   const kTime = useCallback((time) => {
@@ -73,7 +73,7 @@ const NoticeList = ({ notices }) => {
           </div>
           <div>
             <List>
-              {notices.length > 0 ? (
+              {!loading && !error ? (
                 <div style={{ height: 144 }}>
                   {notices.slice(0, 2).map((notice, index) => (
                     <ListItemLink

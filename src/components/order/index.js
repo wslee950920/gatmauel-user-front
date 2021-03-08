@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import loadable from "@loadable/component";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -50,6 +50,10 @@ const Order = ({ order, value, handleChange, getTotal }) => {
   }, []);
   const DialogClose = useCallback(() => {
     setOpen(false);
+  }, []);
+
+  useEffect(() => {
+    window.scroll(0, 0);
   }, []);
 
   return (

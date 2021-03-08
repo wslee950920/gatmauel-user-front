@@ -86,7 +86,20 @@ const MainContainer=()=>{
         dispatch(getFood());
     }, [dispatch, food, floading, fError]);
 
-    return <Main reviews={reviews} notices={notices} food={food} order={order}/>
+    return <Main 
+                reviews={reviews} 
+                notices={notices} 
+                food={food} 
+                order={order} 
+                loading={{
+                    reviews:rloading,
+                    notices:nloading
+                }}
+                error={{
+                    reviews:rError, 
+                    notices:nError
+                }}
+            />
 };
 
 export default MainContainer;
