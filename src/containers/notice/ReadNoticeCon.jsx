@@ -26,6 +26,9 @@ const ReadNoticeCon=({match})=>{
 
         dispatch(getNotices());
     }, [dispatch, notices, loading, error]);
+    useEffect(()=>{
+        window.scroll(0, 0);
+    }, []);
 
     const {id}=match.params;
     if(notices.length<1||!notices[id]) return null;

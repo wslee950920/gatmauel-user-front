@@ -78,6 +78,15 @@ const Result = ({ details, getTotal, order }) => {
 
     return temp.join("");
   }, [order]);
+  const measure = useMemo(() => {
+    if (order.measure === "later") {
+      return "나중에결제";
+    } else if (order.measure === "card") {
+      return "카드결제";
+    } else if (order.measure === "kakao") {
+      return "카카오페이";
+    }
+  }, [order]);
 
   const a11yProps = useCallback((index) => {
     return {
@@ -209,7 +218,11 @@ const Result = ({ details, getTotal, order }) => {
           <OrderList order={details} result />
         </Container>
         <Container maxWidth="xs" className={classes.background}>
-          <Money getTotal={getTotal} charge={order.total - getTotal} />
+          <Money
+            getTotal={getTotal}
+            charge={order.total - getTotal}
+            measure={measure}
+          />
           <Button
             fullWidth
             variant="contained"

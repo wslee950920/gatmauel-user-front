@@ -48,7 +48,7 @@ const Measure=({measure, onChange})=>{
             <FormControlLabel 
                 value='later'
                 control={<Radio className={classes.radio}/>} 
-                label="만나서결제" 
+                label="나중에결제" 
                 classes={{label:classes.label}}
                 className={classes.fcl}
             />

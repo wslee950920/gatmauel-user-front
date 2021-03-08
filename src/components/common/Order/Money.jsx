@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const Money=({getTotal, charge})=>{
+const Money=({getTotal, charge, measure})=>{
     const classes=useStyles();
     const insertComma=useInsertComma;
 
@@ -33,6 +33,14 @@ const Money=({getTotal, charge})=>{
               <div className={classes.small}>배달료 : </div>
               <div className={classes.small}>{insertComma(charge)}</div>
             </div>
+            {measure&&(
+              <div className={classes.total}>
+                <div className={classes.sizeOne}>결제방법 : </div>
+                <div className={classes.sizeOne}>
+                  {measure}
+                </div>
+            </div>
+            )}
             <div className={classes.total}>
               <div className={classes.sizeOne}>총액 : </div>
               <div className={classes.sizeOne}>
