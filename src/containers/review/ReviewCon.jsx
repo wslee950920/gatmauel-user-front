@@ -284,9 +284,6 @@ const ReviewCon = ({ history, location }) => {
     }
   }, [review, hashtags, search, content]);
   useEffect(()=>{
-    //To unsubscribe history listening
-    //return unlisten.current; without ();
-    //or
     return history.listen((location, action) => {
       if (location.pathname === "/review") {
         dispatch(closeDialog());

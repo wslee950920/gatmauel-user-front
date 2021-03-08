@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {getNotices} from '../../modules/notices';
+import {getNotices, setSearch, initResults} from '../../modules/notices';
 
 import {usePreloader} from '../../lib/PreloadContext';
 
 import ReadNotice from '../../components/notice/ReadNotice';
 
-const ReadNoticeCon=({match})=>{
+const ReadNoticeCon=({match, history})=>{
     const dispatch=useDispatch();
     const {notices, loading, error, search, result}=useSelector(state=>(
         {
@@ -28,6 +28,14 @@ const ReadNoticeCon=({match})=>{
 
         dispatch(getNotices());
     }, [dispatch, notices, loading, error]);
+    useEffect(()=>{
+        return history.listen((location, action) => {
+          if (location.pathname.indexOf("/notice")<0) {
+            dispatch(initResults());
+            dispatch(setSearch(''));
+          }
+        });
+      }, [history, dispatch]);
 
     const {index}=match.params;
     if(search

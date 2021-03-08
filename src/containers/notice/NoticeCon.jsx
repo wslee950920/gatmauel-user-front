@@ -8,7 +8,7 @@ import {usePreloader} from '../../lib/PreloadContext';
 import Notice from '../../components/notice';
 import SearchBar from "../../components/common/SearchBar";
 
-const NoticeCon=()=>{
+const NoticeCon=({history})=>{
     const dispatch=useDispatch();
     const {notices, loading, lastPage, order, search, result}=useSelector(state=>(
         {
@@ -55,6 +55,14 @@ const NoticeCon=()=>{
           setHasNextPage(!result.is_end);
         }    
     }, [notices, lastPage, search, result]);
+    useEffect(()=>{
+        return history.listen((location, action) => {
+          if (location.pathname.indexOf("/notice")<0) {
+            dispatch(initResults());
+            dispatch(setSearch(''));
+          }
+        });
+      }, [history, dispatch]);
 
     return (
         <>
@@ -70,4 +78,4 @@ const NoticeCon=()=>{
     );
 }
 
-export default NoticeCon;
+export default React.memo(NoticeCon);
