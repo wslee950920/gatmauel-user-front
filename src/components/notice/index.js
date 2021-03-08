@@ -84,7 +84,7 @@ const Notice = ({ notices, hasNextPage, loadNextPage, loading, order }) => {
                 rowRenderer={rowRenderer}
                 isScrolling={isScrolling}
                 scrollTop={scrollTop}
-                overscanRowCount={6}
+                overscanRowCount={8}
                 onScroll={onChildScroll}
               />
             )}
