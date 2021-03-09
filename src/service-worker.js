@@ -5,7 +5,8 @@ workbox.setConfig({
 workbox.precaching.precacheAndRoute(self.__precacheManifest);
 
 workbox.routing.registerRoute(
-  new RegExp("images/*"),
+  // prettier-ignore
+  new RegExp("/images/.*\.(jpg|jpeg|png|gif)$", "i"),
   new workbox.strategies.CacheFirst({
     cacheName: "public-images",
     plugins: [
@@ -18,7 +19,8 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-  new RegExp("https://d1epr7eytlws04.cloudfront.net/view/*"),
+  // prettier-ignore
+  new RegExp("https://d1epr7eytlws04\.cloudfront\.net/view/.*\.(jpg|jpeg|png|gif)$", "i"),
   new workbox.strategies.CacheFirst({
     cacheName: "cf-view-images",
     plugins: [
@@ -31,7 +33,8 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-  new RegExp("https://d1epr7eytlws04.cloudfront.net/menu/*"),
+  // prettier-ignore
+  new RegExp("https://d1epr7eytlws04\.cloudfront\.net/menu/.*\.(jpg|jpeg|png|gif)$", "i"),
   new workbox.strategies.CacheFirst({
     cacheName: "cf-food-images",
     plugins: [
@@ -44,7 +47,8 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-  new RegExp("https://d1epr7eytlws04.cloudfront.net/resized/*"),
+  // prettier-ignore
+  new RegExp("https://d1epr7eytlws04\.cloudfront\.net/resized/.*\.(jpg|jpeg|png|gif)$", "i"),
   new workbox.strategies.CacheFirst({
     cacheName: "cf-review-images",
     plugins: [
@@ -57,6 +61,7 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
+  // prettier-ignore
   new RegExp(`(.*?)\.(woff|eot|woff2|ttf|svg)$`, "i"),
   new workbox.strategies.CacheFirst({
     cacheName: "cdn-fonts",

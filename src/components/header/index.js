@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import loadable from "@loadable/component";
 
 import Link from "@material-ui/core/Link";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -12,6 +12,7 @@ import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import Drawer from "./Drawer";
 const AccountMenu = loadable(() => import("./AccountMenu"));
@@ -38,7 +39,16 @@ const useClasses = makeStyles((theme) => ({
   },
 }));
 
-const Header = ({ user }) => {
+const FontTooltip = withStyles((theme) => ({
+  tooltip: {
+    fontSize: theme.typography.pxToRem(18),
+    fontFamily: "MaplestoryOTFBold",
+    padding: theme.spacing(1),
+    marginTop: theme.spacing(0.7),
+  },
+}))(Tooltip);
+
+const Header = ({ user, granted, onClick, push }) => {
   const classes = useClasses();
   const [accountEl, setAccountEl] = useState(null);
   const [drawer, setDrawer] = useState(false);
@@ -86,15 +96,22 @@ const Header = ({ user }) => {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.section}>
-            <IconButton
-              aria-label="show new notifications"
-              className={classes.icon}
-              disabled
-            >
-              <Badge badgeContent={0} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <FontTooltip title={granted ? "" : "공지사항 알림 버튼"} arrow>
+              <IconButton
+                aria-label="show new notifications"
+                className={classes.icon}
+                onClick={onClick}
+              >
+                <Badge
+                  {...(granted && { badgeContent: push.length })}
+                  color="secondary"
+                >
+                  <NotificationsIcon
+                    color={push.length > 0 ? "inherit" : "disabled"}
+                  />
+                </Badge>
+              </IconButton>
+            </FontTooltip>
             <IconButton
               edge="end"
               aria-label="account-menu"

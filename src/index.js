@@ -49,7 +49,7 @@ function loadUser() {
     store.dispatch(tempSetUser(user));
     store.dispatch(check());
   } catch (e) {
-    console.error("localStorage is not working");
+    alert(e.message);
   }
 }
 
