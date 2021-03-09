@@ -7,7 +7,7 @@ import Copyright from "../../components/footer/Copyright";
 const RegisterPage = () => {
   return (
     <>
-      <HeaderCon main />
+      <HeaderCon />
       <RegisterCon />
       <Copyright />
     </>

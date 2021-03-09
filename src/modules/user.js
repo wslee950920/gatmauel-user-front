@@ -52,7 +52,7 @@ function checkFailureSaga() {
   try {
     localStorage.removeItem("user");
   } catch (e) {
-    console.error("localStorage is not working");
+    alert(e);
   }
 }
 function* logoutSaga() {
@@ -63,7 +63,7 @@ function* logoutSaga() {
     });
     yield localStorage.removeItem("user");
   } catch (e) {
-    console.error(e);
+    alert(e);
   }
 }
 

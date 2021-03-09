@@ -38,7 +38,7 @@ const useClasses = makeStyles((theme) => ({
   },
 }));
 
-const Header = ({ main, user }) => {
+const Header = ({ user }) => {
   const classes = useClasses();
   const [accountEl, setAccountEl] = useState(null);
   const [drawer, setDrawer] = useState(false);
@@ -86,17 +86,15 @@ const Header = ({ main, user }) => {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.section}>
-            {user && (
-              <IconButton
-                aria-label="show new notifications"
-                className={classes.icon}
-                disabled
-              >
-                <Badge badgeContent={0} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-            )}
+            <IconButton
+              aria-label="show new notifications"
+              className={classes.icon}
+              disabled
+            >
+              <Badge badgeContent={0} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
             <IconButton
               edge="end"
               aria-label="account-menu"

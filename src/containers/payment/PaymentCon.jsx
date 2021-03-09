@@ -482,7 +482,7 @@ const PaymentCon = ({
         });
       }
     }
-  }, [value, temp.address, info, method, user]);
+  }, [value, temp, info, method, user]);
   useEffect(() => {
     if (temp.phone) {
       setPhone(temp.phone);
@@ -491,7 +491,7 @@ const PaymentCon = ({
     } else {
       setPhone('');
     }
-  }, [info, temp.phone]);
+  }, [info, temp]);
   useEffect(() => {
     if (info) return;
     if (uError) return;

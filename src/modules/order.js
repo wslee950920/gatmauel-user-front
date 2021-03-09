@@ -24,7 +24,10 @@ export const initOrder = createAction(INIT_ORDER);
 
 const initialState = {
   order: [],
-  temp: {},
+  temp: {
+    address: null,
+    phone: null,
+  },
 };
 
 const order = handleActions(

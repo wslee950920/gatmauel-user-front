@@ -7,7 +7,7 @@ import Footer from "../../components/footer";
 const OrderPage = () => {
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <HeaderCon main />
+      <HeaderCon />
       <OrderCon />
       <Footer map />
     </div>

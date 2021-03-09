@@ -7,7 +7,7 @@ import Footer from "../../components/footer";
 const MainPage = () => {
   return (
     <div style={{ position: "relative" }}>
-      <HeaderCon main />
+      <HeaderCon />
       <MainCon />
       <Footer main />
     </div>

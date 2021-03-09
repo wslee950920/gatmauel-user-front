@@ -7,7 +7,7 @@ import MenuFooter from "../../components/footer/MenuFooter";
 const MenuPage = () => {
   return (
     <>
-      <HeaderCon main />
+      <HeaderCon />
       <MenuCon />
       <MenuFooter />
     </>

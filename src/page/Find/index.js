@@ -1,13 +1,13 @@
 import React from "react";
 
 import FindCon from "../../containers/auth/FindCon";
-import Header from "../../components/header";
+import HeaderCon from "../../containers/main/HeaderCon";
 import Copyright from "../../components/footer/Copyright";
 
 const FindPage = () => {
   return (
     <>
-      <Header main />
+      <HeaderCon />
       <FindCon />
       <Copyright />
     </>

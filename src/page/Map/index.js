@@ -7,7 +7,7 @@ import Footer from "../../components/footer";
 const MapPage = () => {
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <HeaderCon main />
+      <HeaderCon />
       <MapCon />
       <Footer map />
     </div>
