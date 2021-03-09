@@ -17,74 +17,67 @@ const HeaderCon = () => {
   );
 
   const onClick = useCallback(() => {
-    try {
-      if (Notification) {
-        if (Notification.permission !== "granted") {
-          Notification.requestPermission((result) => {
-            if (result !== "granted") {
-              alert("푸시 알림 기능이 허용되지 않았습니다.");
-            } else {
-              if (navigator && navigator.serviceWorker) {
-                navigator.serviceWorker.ready
-                  .then((swreg) => {
-                    return swreg.pushManager.getSubscription();
-                  })
-                  .then((sub) => {
-                    if (sub === null) {
-                      navigator.serviceWorker.ready.then((swreg) => {
-                        return swreg.pushManager
-                          .subscribe({
-                            userVisibleOnly: true,
-                            applicationServerKey: converted,
-                          })
-                          .then((newSub) => {
-                            const filteredSub = JSON.parse(
-                              JSON.stringify(newSub)
-                            );
-                            const pushConfig = {
-                              endpoint: filteredSub.endpoint,
-                              keys: {
-                                p256dh: filteredSub.keys.p256dh,
-                                auth: filteredSub.keys.auth,
-                              },
-                            };
+    if ("Notification" in window) {
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission(async (result) => {
+          if (result !== "granted") {
+            alert("푸시 알림 기능이 허용되지 않았습니다.");
+          } else {
+            if (navigator && navigator.serviceWorker) {
+              const swreg = await navigator.serviceWorker.getRegistration();
+              const sub = await swreg.pushManager.getSubscription();
+              if (!sub) {
+                const newSub = await swreg.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: converted,
+                });
+                const filteredSub = JSON.parse(JSON.stringify(newSub));
+                const pushConfig = {
+                  endpoint: filteredSub.endpoint,
+                  keys: {
+                    p256dh: filteredSub.keys.p256dh,
+                    auth: filteredSub.keys.auth,
+                  },
+                };
 
-                            return adminAPI.post("/notice/push", pushConfig);
-                          });
-                      });
-                    } else {
-                      alert("이미 구독 중 입니다.");
-                    }
+                adminAPI
+                  .post("/notice/push", pushConfig)
+                  .then(async () => {
+                    const title = "갯마을 공지사항";
+                    const options = {
+                      body: "갯마을 공지사항 알림 서비스 구독",
+                      icon: "favicons/favicon-32x32.png",
+                      vibrate: [500, 100, 500],
+                    };
+                    await swreg.showNotification(title, options);
+
+                    setGranted(true);
                   })
-                  .catch((err) => {
-                    alert(err.message);
+                  .catch((e) => {
+                    alert(e.message);
                   });
               } else {
-                alert("푸시 알림을 지원하지 않습니다.");
-                return;
+                alert("이미 구독 중 입니다.");
               }
+            } else {
+              alert("푸시 알림을 지원하지 않습니다.");
+              return;
             }
-          });
-        } else {
-          return;
-        }
+          }
+        });
       } else {
-        alert("푸시 알림을 지원하지 않습니다.");
+        return;
       }
-    } catch (error) {
-      alert(error.message);
+    } else {
+      alert("푸시 알림을 지원하지 않습니다.");
     }
   }, [converted]);
 
   useEffect(() => {
-    try {
-      if (Notification) {
-        setGranted(Notification.permission === "granted");
-      } else {
-        setGranted(true);
-      }
-    } catch (e) {
-      alert(e);
+    if ("Notification" in window) {
+      setGranted(Notification.permission === "granted");
+    } else {
+      setGranted(true);
     }
   }, []);
 
