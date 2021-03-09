@@ -20,16 +20,15 @@ export function* rootSaga() {
 }
 
 const pushConfig = {
-  key: "gatmauel",
+  key: "gatmauel_local",
   storage: storageLocal,
 };
 const rootConfig = {
-  key: "gatmauel", //세션 스토리지에 저장될 객체의 이름
+  key: "gatmauel_session", //세션 스토리지에 저장될 객체의 이름
   storage: storageSession,
-  whitelist: ["order"], //root reducer에 있는 리듀서 중 order리듀서만 session storage의 root객체에 저장
-  blacklist: ["push"], //root reducer에 있는 리듀서 중 push리듀서는 session storage의 root객체에 저장하지 않음
+  whitelist: ["order"], //root reducer에 있는 리듀서 중 order리듀서만 session storage의 gatmauel_session객체에 저장
   transforms: [
-    //세션 스토리지에 있는 root객체에서 order값을 expire
+    //세션 스토리지에 있는 gatmauel_session객체에서 order값을 expire
     expireReducer("order", {
       expireSeconds: 1800,
       expiredState: {
