@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { admin as adminAPI } from "../../lib/api/client";
 import urlBase64ToUint8Array from "../../lib/useUrlBase64ToUint8Array";
+
+import { getPush, readPush } from "../../modules/push";
 
 import Header from "../../components/header";
 
@@ -15,6 +17,7 @@ const HeaderCon = () => {
   const converted = urlBase64ToUint8Array(
     process.env.REACT_APP_PUSH_PUBLIC_KEY
   );
+  const dispatch = useDispatch();
 
   const onClick = useCallback(() => {
     if ("Notification" in window) {
@@ -67,12 +70,12 @@ const HeaderCon = () => {
           }
         });
       } else {
-        return;
+        dispatch(readPush());
       }
     } else {
       alert("푸시 알림을 지원하지 않습니다.");
     }
-  }, [converted]);
+  }, [converted, dispatch]);
 
   useEffect(() => {
     if ("Notification" in window) {
@@ -81,6 +84,13 @@ const HeaderCon = () => {
       setGranted("unSupport");
     }
   }, []);
+  useEffect(() => {
+    if (navigator && navigator.serviceWorker) {
+      navigator.serviceWorker.addEventListener("message", (event) => {
+        dispatch(getPush(event.data));
+      });
+    }
+  }, [dispatch]);
 
   return <Header user={user} granted={granted} onClick={onClick} push={push} />;
 };

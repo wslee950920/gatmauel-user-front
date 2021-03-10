@@ -4,43 +4,6 @@ workbox.setConfig({
 
 workbox.precaching.precacheAndRoute(self.__precacheManifest);
 
-self.addEventListener("push", (event) => {
-  console.log("event", event);
-  let data = null;
-
-  if (event.data) {
-    data = JSON.parse(event.data.text());
-  } else {
-    return;
-  }
-
-  const options = {
-    body: data.body,
-    icon: "favicons/favicon-32x32.png",
-    vibrate: [500, 100, 500],
-    actions: [
-      {
-        action: "notice",
-        title: "공지사항 페이지로 이동합니다.",
-        icon: "images/icons/push-info.png",
-      },
-    ],
-  };
-
-  event.waitUntil(self.registration.showNotification(data.title, options));
-});
-self.addEventListener(
-  "notificationclick",
-  (event) => {
-    if (event.action === "notice") {
-      clients.openWindow("https://www.gatmauel.com/notice");
-    }
-
-    event.notification.close();
-  },
-  false
-);
-
 workbox.routing.registerRoute(
   // prettier-ignore
   new RegExp("/images/.*\.(jpg|jpeg|png|gif)$", "i"),
@@ -109,4 +72,57 @@ workbox.routing.registerRoute(
       }),
     ],
   })
+);
+
+self.addEventListener("push", (event) => {
+  let data = null;
+
+  if (event.data) {
+    data = JSON.parse(event.data.text());
+  } else {
+    return;
+  }
+
+  const options = {
+    body: data.content,
+    icon: "favicons/favicon-32x32.png",
+    vibrate: [500, 100, 500],
+    actions: [
+      {
+        action: "notice",
+        title: "공지사항 페이지로 이동합니다.",
+      },
+    ],
+  };
+  event.waitUntil(
+    new Promise(async (resolve, reject) => {
+      try {
+        const clientList = await clients.matchAll();
+        for (let i = 0; i < clientList.length; i++) {
+          if (clientList[i].url.includes("https://www.gatmauel.com")) {
+            clientList[i].postMessage(data);
+          }
+        }
+
+        await self.registration.showNotification(data.title, options);
+
+        resolve();
+      } catch (err) {
+        alert(err.message);
+
+        reject();
+      }
+    })
+  );
+});
+self.addEventListener(
+  "notificationclick",
+  (event) => {
+    if (event.action === "notice") {
+      clients.openWindow("https://www.gatmauel.com/notice");
+    }
+
+    event.notification.close();
+  },
+  false
 );
