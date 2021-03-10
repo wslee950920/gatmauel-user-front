@@ -96,22 +96,24 @@ const Header = ({ user, granted, onClick, push }) => {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.section}>
-            <FontTooltip title={granted ? "" : "공지사항 알림 버튼"} arrow>
-              <IconButton
-                aria-label="show new notifications"
-                className={classes.icon}
-                onClick={onClick}
+            {granted !== "unSupport" && (
+              <FontTooltip
+                title={granted === "granted" ? "" : "공지사항 알림 버튼"}
+                arrow
               >
-                <Badge
-                  {...(granted && { badgeContent: push.length })}
-                  color="secondary"
+                <IconButton
+                  aria-label="show new notifications"
+                  className={classes.icon}
+                  onClick={onClick}
                 >
-                  <NotificationsIcon
-                    color={push.length > 0 ? "inherit" : "disabled"}
-                  />
-                </Badge>
-              </IconButton>
-            </FontTooltip>
+                  <Badge badgeContent={push.length} color="secondary">
+                    <NotificationsIcon
+                      color={push.length > 0 ? "inherit" : "disabled"}
+                    />
+                  </Badge>
+                </IconButton>
+              </FontTooltip>
+            )}
             <IconButton
               edge="end"
               aria-label="account-menu"

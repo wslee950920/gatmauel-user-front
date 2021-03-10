@@ -11,7 +11,7 @@ const HeaderCon = () => {
     user: state.user.user,
     push: state.push.push,
   }));
-  const [granted, setGranted] = useState(false);
+  const [granted, setGranted] = useState(null);
   const converted = urlBase64ToUint8Array(
     process.env.REACT_APP_PUSH_PUBLIC_KEY
   );
@@ -20,8 +20,9 @@ const HeaderCon = () => {
     if ("Notification" in window) {
       if (Notification.permission !== "granted") {
         Notification.requestPermission(async (result) => {
+          //한번 물어보고는 안 물어본다. 이전에 설정한 값이 result로 그대로 넘어가는 듯.
           if (result !== "granted") {
-            alert("푸시 알림 기능이 허용되지 않았습니다.");
+            alert("푸시 알림이 허용되지 않았습니다.");
           } else {
             if (navigator && navigator.serviceWorker) {
               const swreg = await navigator.serviceWorker.getRegistration();
@@ -51,7 +52,7 @@ const HeaderCon = () => {
                     };
                     await swreg.showNotification(title, options);
 
-                    setGranted(true);
+                    setGranted(Notification.permission);
                   })
                   .catch((e) => {
                     alert(e.message);
@@ -75,9 +76,9 @@ const HeaderCon = () => {
 
   useEffect(() => {
     if ("Notification" in window) {
-      setGranted(Notification.permission === "granted");
+      setGranted(Notification.permission);
     } else {
-      setGranted(true);
+      setGranted("unSupport");
     }
   }, []);
 
