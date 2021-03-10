@@ -98,10 +98,8 @@ self.addEventListener("push", (event) => {
     new Promise(async (resolve, reject) => {
       try {
         const clientList = await clients.matchAll();
-        for (let i = 0; i < clientList.length; i++) {
-          if (clientList[i].url.includes("https://www.gatmauel.com")) {
-            clientList[i].postMessage(data);
-          }
+        if (clientList[0].url.includes("https://www.gatmauel.com")) {
+          clientList[0].postMessage(data);
         }
 
         await self.registration.showNotification(data.title, options);
@@ -118,11 +116,26 @@ self.addEventListener("push", (event) => {
 self.addEventListener(
   "notificationclick",
   (event) => {
-    if (event.action === "notice") {
-      clients.openWindow("https://www.gatmauel.com/notice");
-    }
-
     event.notification.close();
+
+    if (event.action === "notice") {
+      event.waitUntil(
+        clients.matchAll().then((clientList) => {
+          const focus = clientList.some((windowClient) =>
+            windowClient.url.includes("https://www.gatmauel.com")
+              ? (windowClient.focus(), true)
+              : false
+          );
+          if (!focus) {
+            clients
+              .openWindow("https://www.gatmauel.com/notice")
+              .then((windowClient) =>
+                windowClient ? windowClient.focus() : null
+              );
+          }
+        })
+      );
+    }
   },
   false
 );

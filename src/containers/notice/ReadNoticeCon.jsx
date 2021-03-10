@@ -44,9 +44,13 @@ const ReadNoticeCon = ({ match, history }) => {
     search
       ? result.docs.length < 1 || !result.docs[index]
       : notices.length < 1 || !notices[index]
-  )
+  ) {
     return null;
-  return <ReadNotice notice={search ? result.docs[index] : notices[index]} />;
+  } else {
+    return !loading ? (
+      <ReadNotice notice={search ? result.docs[index] : notices[index]} />
+    ) : null;
+  }
 };
 
 export default React.memo(ReadNoticeCon);
