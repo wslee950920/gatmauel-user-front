@@ -44,9 +44,9 @@ const HeaderCon = () => {
                 adminAPI
                   .post("/notice/push", pushConfig)
                   .then(async () => {
-                    const title = "갯마을 공지사항";
+                    const title = "공지사항 알림 서비스";
                     const options = {
-                      body: "갯마을 공지사항 알림 서비스 구독",
+                      body: "공지사항 알림을 구독해주셔서 감사합니다!!!",
                       icon: "favicons/favicon-32x32.png",
                       vibrate: [500, 100, 500],
                     };
