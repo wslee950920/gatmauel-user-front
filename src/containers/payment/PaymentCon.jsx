@@ -10,7 +10,7 @@ import { withRouter } from "react-router-dom";
 import crypto from "crypto";
 
 import { user as userAPI } from "../../lib/api/client";
-import usePlatform from "../../lib/usePlatform";
+import getPlatform from "../../lib/getPlatform";
 import useTimer from "../../lib/useTimer";
 
 import { setTempPhone, setTempAddress } from "../../modules/order";
@@ -56,7 +56,7 @@ const PaymentCon = ({ history, match }) => {
   const [measure, setMeasure] = useState(null);
   const [wait, setWait] = useState(false);
   const imp = useRef(null);
-  const platform = usePlatform();
+  const platform = useRef(true);
 
   const charge = useMemo(() => {
     let basic = 0;
@@ -191,7 +191,7 @@ const PaymentCon = ({ history, match }) => {
           })
           .then(({ data }) => {
             if (measure === "kakao") {
-              if (platform) {
+              if (platform.current) {
                 window.location.href = data.result.next_redirect_mobile_url;
               } else {
                 window.location.href = data.result.next_redirect_pc_url;
@@ -277,7 +277,6 @@ const PaymentCon = ({ history, match }) => {
       user,
       measure,
       distance,
-      platform,
       error,
       confirm,
       addr,
@@ -377,7 +376,7 @@ const PaymentCon = ({ history, match }) => {
   const handleClickOpen = useCallback(() => {
     setError((prev) => ({ ...prev, addr: false, detail: false }));
 
-    if (platform) {
+    if (platform.current) {
       setOpen(true);
 
       return;
@@ -397,7 +396,7 @@ const PaymentCon = ({ history, match }) => {
         popupName: "postcodePopup",
       });
     }
-  }, [platform, dispatch, distance, addr]);
+  }, [dispatch, distance, addr]);
   const addrOnClick = useCallback(
     (addr) => {
       setOpen(false);
@@ -483,6 +482,8 @@ const PaymentCon = ({ history, match }) => {
       imp.current = window.IMP;
       imp.current.init(process.env.REACT_APP_IAMPORT);
     }
+
+    platform.current = getPlatform();
 
     return () => {
       if (es && es.current) {
@@ -571,7 +572,7 @@ const PaymentCon = ({ history, match }) => {
       timer={useTimer(sse, end)}
       code={code}
       confirmPhone={confirmPhone}
-      platform={platform}
+      platform={platform.current}
       open={open}
       addressClose={addressClose}
       addrOnClick={addrOnClick}

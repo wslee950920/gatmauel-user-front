@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { admin as adminAPI } from "../../lib/api/client";
-import urlBase64ToUint8Array from "../../lib/useUrlBase64ToUint8Array";
+import getUrlBase64ToUint8Array from "../../lib/getUrlBase64ToUint8Array";
 
 import { getPush } from "../../modules/push";
 import { getNotices } from "../../modules/notices";
@@ -15,9 +15,6 @@ const HeaderCon = () => {
     push: state.push.push,
   }));
   const [granted, setGranted] = useState(null);
-  const converted = urlBase64ToUint8Array(
-    process.env.REACT_APP_PUSH_PUBLIC_KEY
-  );
   const dispatch = useDispatch();
 
   const onClick = useCallback(() => {
@@ -32,6 +29,9 @@ const HeaderCon = () => {
               const swreg = await navigator.serviceWorker.getRegistration();
               const sub = await swreg.pushManager.getSubscription();
               if (!sub) {
+                const converted = getUrlBase64ToUint8Array(
+                  process.env.REACT_APP_PUSH_PUBLIC_KEY
+                );
                 const newSub = await swreg.pushManager.subscribe({
                   userVisibleOnly: true,
                   applicationServerKey: converted,
@@ -76,7 +76,7 @@ const HeaderCon = () => {
     } else {
       alert("푸시 알림을 지원하지 않습니다.");
     }
-  }, [converted]);
+  }, []);
 
   useEffect(() => {
     if ("Notification" in window) {

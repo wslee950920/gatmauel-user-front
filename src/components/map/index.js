@@ -6,7 +6,7 @@ import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 
-import usePlatform from "../../lib/usePlatform";
+import getPlatform from "../../lib/getPlatform";
 
 import ShareBtn from "./ShareBtn";
 const Fab = loadable(() => import("../common/Fab"));
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 const Map = ({ order }) => {
   const navermaps = window.naver.maps;
   const classes = useStyles();
-  const platform = usePlatform();
+  const platform = getPlatform();
 
   return (
     <>

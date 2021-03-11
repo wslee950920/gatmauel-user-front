@@ -15,7 +15,7 @@ import {
 import { checkNick, initAuth } from "../../modules/auth";
 
 import { user as userAPI } from "../../lib/api/client";
-import usePlatform from "../../lib/usePlatform";
+import getPlatform from "../../lib/getPlatform";
 import useTimer from "../../lib/useTimer";
 
 const ProfileCon = ({ history }) => {
@@ -55,7 +55,7 @@ const ProfileCon = ({ history }) => {
   const [confirm, setConfirm] = useState(true);
   const source = useRef(null);
   const [distance, setDistance] = useState(0);
-  const platform = usePlatform();
+  const platform = useRef(true);
 
   const onChange = useCallback((event) => {
     const { name, value } = event.target;
@@ -102,7 +102,7 @@ const ProfileCon = ({ history }) => {
   const handleClickOpen = useCallback(() => {
     setError((prev) => ({ ...prev, addr: false, detail: false }));
 
-    if (platform) {
+    if (platform.current) {
       setOpen(true);
 
       return;
@@ -148,7 +148,7 @@ const ProfileCon = ({ history }) => {
         popupName: "postcodePopup",
       });
     }
-  }, [platform, distance, addr]);
+  }, [distance, addr]);
   const handleClose = useCallback(() => {
     addrRef.current.blur();
     setOpen(false);
@@ -384,6 +384,8 @@ const ProfileCon = ({ history }) => {
   }, [code, phone, dispatch]);
 
   useEffect(() => {
+    platform.current = getPlatform();
+
     return () => {
       if (es && es.current) {
         es.current.close();
@@ -484,7 +486,7 @@ const ProfileCon = ({ history }) => {
       verify={verify}
       confirmPhone={confirmPhone}
       code={code}
-      platform={platform}
+      platform={platform.current}
     />
   );
 };
