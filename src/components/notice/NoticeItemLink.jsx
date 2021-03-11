@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import useTime from '../../lib/useTime';
+import useTime from "../../lib/useTime";
 
 const useStyles = makeStyles((theme) => ({
   inline: {
@@ -26,9 +26,9 @@ const NoticeLitemLink = ({ data, style, index, length }) => {
   const renderLink = useMemo(
     () =>
       React.forwardRef((itemProps, ref) => (
-        <RouterLink to={`/notice/${index}`} ref={ref} {...itemProps} />
+        <RouterLink to={`/notice/${data.id}`} ref={ref} {...itemProps} />
       )),
-    [index]
+    [data]
   );
   const divider = useMemo(() => {
     if (index !== length - 1) return true;

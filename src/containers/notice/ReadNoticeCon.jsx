@@ -1,32 +1,56 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getNotices, setSearch, initResults } from "../../modules/notices";
+import { setSearch, initResults, getNotices } from "../../modules/notices";
 import { readPush } from "../../modules/push";
 
 import { usePreloader } from "../../lib/PreloadContext";
+import { admin as adminAPI } from "../../lib/api/client";
 
 import ReadNotice from "../../components/notice/ReadNotice";
 
 const ReadNoticeCon = ({ match, history }) => {
   const dispatch = useDispatch();
-  const { notices, loading, error, search, result } = useSelector((state) => ({
+  const { notices, search, result } = useSelector((state) => ({
     notices: state.notices.notices,
-    loading: state.loading["notices/GET"],
-    error: state.notices.error,
     search: state.notices.search,
     result: state.notices.result,
   }));
+  const [read, setRead] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   usePreloader(() => dispatch(getNotices()));
 
   useEffect(() => {
-    if (notices.length > 0) return;
-    if (loading) return;
-    if (error) return;
+    setLoading(true);
 
-    dispatch(getNotices());
-  }, [dispatch, notices, loading, error]);
+    const index = (search ? result.docs : notices).findIndex((value) => {
+      return value.id === parseInt(match.params.id);
+    });
+    if (index >= 0) {
+      setRead((search ? result.docs : notices)[index]);
+
+      setLoading(false);
+    } else {
+      adminAPI
+        .get(`/notice/read/${match.params.id}`)
+        .then(({ data }) => {
+          setRead(data);
+
+          setLoading(false);
+        })
+        .catch((err) => {
+          if (err.response) {
+            if (err.response.status === 404) {
+              alert("데이터가 없습니다.");
+            }
+          } else {
+            alert(err.message);
+          }
+          history.push("/notice");
+        });
+    }
+  }, [search, result, notices, match, history]);
   useEffect(() => {
     return history.listen((location, action) => {
       if (location.pathname.indexOf("/notice") < 0) {
@@ -39,18 +63,7 @@ const ReadNoticeCon = ({ match, history }) => {
     dispatch(readPush());
   }, [dispatch]);
 
-  const { index } = match.params;
-  if (
-    search
-      ? result.docs.length < 1 || !result.docs[index]
-      : notices.length < 1 || !notices[index]
-  ) {
-    return null;
-  } else {
-    return !loading ? (
-      <ReadNotice notice={search ? result.docs[index] : notices[index]} />
-    ) : null;
-  }
+  return !loading && read ? <ReadNotice notice={read} /> : null;
 };
 
 export default React.memo(ReadNoticeCon);

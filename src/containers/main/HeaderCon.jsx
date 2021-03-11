@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { admin as adminAPI } from "../../lib/api/client";
 import urlBase64ToUint8Array from "../../lib/useUrlBase64ToUint8Array";
 
-import { getPush, readPush } from "../../modules/push";
+import { getPush } from "../../modules/push";
 import { getNotices } from "../../modules/notices";
 
 import Header from "../../components/header";
@@ -71,14 +71,12 @@ const HeaderCon = () => {
           }
         });
       } else {
-        if (push.length > 0) {
-          dispatch(readPush());
-        }
+        return;
       }
     } else {
       alert("푸시 알림을 지원하지 않습니다.");
     }
-  }, [converted, dispatch, push]);
+  }, [converted]);
 
   useEffect(() => {
     if ("Notification" in window) {

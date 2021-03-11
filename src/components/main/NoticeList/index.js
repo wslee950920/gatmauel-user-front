@@ -75,11 +75,11 @@ const NoticeList = ({ notices, error, loading }) => {
             <List>
               {!loading && !error ? (
                 <div style={{ height: 144 }}>
-                  {notices.slice(0, 2).map((notice, index) => (
+                  {notices.slice(0, 2).map((notice) => (
                     <ListItemLink
                       key={notice.id}
                       primary={notice.title}
-                      to={`/notice/${index}`}
+                      to={`/notice/${notice.id}`}
                       secondary={kTime(notice.createdAt)}
                     />
                   ))}
