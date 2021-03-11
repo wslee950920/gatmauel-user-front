@@ -6,7 +6,18 @@ import App from "./App";
 import express from "express";
 import path from "path";
 import { ChunkExtractor } from "@loadable/server";
-import createPage from "./createPage";
+import cookieParser from "cookie-parser";
+import "./server/env";
+import createPage from "./server/createPage";
+import connection from "./server/mysql";
+import counter from "./server/counter";
+import logger from "./server/logger";
+
+connection.connect((err) => {
+  if (err) {
+    logger.error(err);
+  }
+});
 
 import { ThemeProvider, ServerStyleSheets } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -22,6 +33,9 @@ import createSagaMiddleware, { END } from "redux-saga";
 const statsFile = path.resolve("./build/loadable-stats.json");
 
 const app = express();
+
+app.use(cookieParser());
+app.use(counter);
 
 const serverRender = async (req, res, next) => {
   const sheets = new ServerStyleSheets();
