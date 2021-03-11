@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
+
+import { admin as adminAPI } from "../../lib/api/client";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -7,6 +9,7 @@ import Link from "@material-ui/core/Link";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ScheduleIcon from "@material-ui/icons/Schedule";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -44,12 +47,26 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  btn: {
+    padding: 0,
+  },
 }));
 
 const Footer = ({ main, map }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("xs"));
+
+  const onClick = useCallback(() => {
+    adminAPI
+      .get("/counter")
+      .then(({ data }) => {
+        alert(`Today:${data.today}, Total:${data.total}, Users:${data.users}`);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }, []);
 
   return (
     <footer
@@ -63,9 +80,11 @@ const Footer = ({ main, map }) => {
           </Typography>
         </div>
         {matches && (
-          <Typography variant="caption" className={classes.info}>
-            Gatmauel made by WSL
-          </Typography>
+          <Button className={classes.btn} onClick={onClick}>
+            <Typography variant="caption" className={classes.info}>
+              Gatmauel made by WSL
+            </Typography>
+          </Button>
         )}
       </div>
       <div className={classes.footer}>
