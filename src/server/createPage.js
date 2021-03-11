@@ -28,7 +28,7 @@ const createPage = (root, tags) => {
             <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
             <meta name="msapplication-TileColor" content="#ffffff">
             <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png">
-            <link rel="manifest" href="/manifest.json" />
+            <link rel="manifest" href="/manifest.json" crossorigin="use-credentials"/>
             <link
               rel="stylesheet"
               href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
