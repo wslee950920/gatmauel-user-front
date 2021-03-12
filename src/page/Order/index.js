@@ -6,10 +6,10 @@ import Footer from "../../components/footer";
 
 const OrderPage = () => {
   return (
-    <div style={{ position: "relative", height: "100vh" }}>
+    <div style={{ height: "100vh" }}>
       <HeaderCon />
       <OrderCon />
-      <Footer fixed />
+      <Footer />
     </div>
   );
 };
