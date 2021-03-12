@@ -9,7 +9,7 @@ const MapPage = () => {
     <div style={{ position: "relative", height: "100vh" }}>
       <HeaderCon />
       <MapCon />
-      <Footer map />
+      <Footer fixed />
     </div>
   );
 };

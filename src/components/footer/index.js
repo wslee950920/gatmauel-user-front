@@ -12,21 +12,21 @@ import ScheduleIcon from "@material-ui/icons/Schedule";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
-  main: {
+  scroll: {
     backgroundColor: "#dcdcdc",
     padding: theme.spacing(1),
     width: "100%",
     position: "absolute",
     bottom: -57.43,
   },
-  background: {
+  sticky: {
     backgroundColor: "#dcdcdc",
     padding: theme.spacing(1),
     width: "100%",
     position: "sticky",
     bottom: 0,
   },
-  map: {
+  fixed: {
     backgroundColor: "#dcdcdc",
     padding: theme.spacing(1),
     width: "100%",
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Footer = ({ main, map }) => {
+const Footer = ({ scroll, fixed }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("xs"));
@@ -70,7 +70,9 @@ const Footer = ({ main, map }) => {
 
   return (
     <footer
-      className={main ? classes.main : map ? classes.map : classes.background}
+      className={
+        scroll ? classes.scroll : fixed ? classes.fixed : classes.sticky
+      }
     >
       <div className={classes.footer}>
         <div>

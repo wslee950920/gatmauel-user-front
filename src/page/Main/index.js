@@ -9,7 +9,7 @@ const MainPage = () => {
     <div style={{ position: "relative" }}>
       <HeaderCon />
       <MainCon />
-      <Footer main />
+      <Footer scroll />
     </div>
   );
 };
