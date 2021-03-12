@@ -12,6 +12,11 @@ const createPage = (root, tags) => {
             <meta name="mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-title" content="갯마을" />
+            <meta property="og:type" content="website"> 
+            <meta property="og:title" content="갯마을">
+            <meta property="og:description" content="갯마을 바지락 칼국수 보쌈 홈페이지">
+            <meta property="og:image" content="https://d1epr7eytlws04.cloudfront.net/view/7.jpg">
+            <meta property="og:url" content="https://www.gatmauel.com">
             <link rel="apple-touch-icon" href="/favicon.ico" />
             <link rel="apple-touch-icon" sizes="57x57" href="/favicons/apple-icon-57x57.png">
             <link rel="apple-touch-icon" sizes="60x60" href="/favicons/apple-icon-60x60.png">
